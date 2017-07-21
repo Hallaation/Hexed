@@ -22,11 +22,11 @@ public class Gun : Weapon
         //player will only be allowed to attack once a shot is ready AND they have ammo. This is used to determine the time to wait in between shots.
         if (shotReady && m_iAmmo != 0) 
         {
-            GameObject go = Instantiate(bullet , this.transform.parent.position + this.transform.parent.up * m_fBulletSpawnOffSet , this.transform.rotation);
-            go.GetComponent<Bullet>().bulletOwner = GetComponentInParent<PlayerStatus>();
-            go.GetComponent<Bullet>().m_iDamage = this.m_iDamage;
-            go.transform.rotation = this.transform.parent.rotation * Quaternion.Euler(Vector3.forward * m_fSpreadJitter * Random.Range(-1.0f , 1.0f));
-            go.GetComponent<Rigidbody2D>().AddForce(go.transform.up * m_fFiringForce , ForceMode2D.Impulse);
+            GameObject FiredBullet = Instantiate(bullet , this.transform.parent.position + this.transform.parent.up * m_fBulletSpawnOffSet , this.transform.rotation);
+            FiredBullet.GetComponent<Bullet>().bulletOwner = GetComponentInParent<PlayerStatus>();
+FiredBullet.GetComponent<Bullet>().m_iDamage = this.m_iDamage;
+            FiredBullet.transform.rotation = this.transform.parent.rotation * Quaternion.Euler(Vector3.forward * m_fSpreadJitter * Random.Range(-1.0f , 1.0f));
+            FiredBullet.GetComponent<Rigidbody2D>().AddForce(FiredBullet.transform.up * m_fFiringForce , ForceMode2D.Impulse);
             shotReady = false;
             --m_iAmmo;
             return true;
