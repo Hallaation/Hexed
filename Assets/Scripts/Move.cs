@@ -67,6 +67,7 @@ public class Move : MonoBehaviour
                 CheckForPickup();
                 Attack();
                 CheckForDownedKill();
+                Special();
             }
             else //otherwise set the iskilling to false so it can return the animation to idle
             {
@@ -102,6 +103,11 @@ public class Move : MonoBehaviour
             Vector3 gravity = new Vector3(0 , -9.8f , 0);
             _characterController.Move(gravity * (1 - Time.fixedDeltaTime * 0.5f));
         }
+    }
+
+    void Special()
+    {
+
     }
     Vector3 CheckDeadZone(Vector3 controllerInput , float deadzone)
     {

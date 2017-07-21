@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+   
     Vector2 m_vVelocity;
     public Vector2 Velocity { get { return m_vVelocity; }  set { m_vVelocity = value; } }
 
@@ -11,6 +12,7 @@ public class Bullet : MonoBehaviour
     public PlayerStatus bulletOwner;
     void Start()
     {
+        
        // Destroy(this.gameObject , 5);
     }
 	// Update is called once per frame
