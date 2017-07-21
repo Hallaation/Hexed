@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerStatus : MonoBehaviour
 {
-    public int m_iHealth = 0; //health completely useless right now
+    public int m_iHealth = 3; //health completely useless right now
     int m_iTimesPunched = 0;
     bool m_bDead = false;
     bool m_bStunned = false;
@@ -30,6 +30,7 @@ public class PlayerStatus : MonoBehaviour
     }
     void Update()
     {
+
         //if im dead, set my colour to gray, turn of all physics simulations and exit the function
         if (m_bDead)
         {
