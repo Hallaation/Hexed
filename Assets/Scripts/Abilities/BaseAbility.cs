@@ -14,6 +14,7 @@ public class BaseAbility : MonoBehaviour
     public bool RepeatedUsage = false;
     public float repeatedManaCost = 0.5f;
     public float m_fMinimumManaRequired = 50;
+    public float m_fMovementSpeedSlowDown = 2.0f;
     //TODO if the shield is charged up to 100% of mana, the shield can deflect bullets, knock over players when run over with it
     //TODO otherwise all the shield is block bullets and knock over players when run over with it.
     
@@ -33,10 +34,9 @@ public class BaseAbility : MonoBehaviour
 }
 
 //editor script, shows/ hide the repeated mana cost in case the ability is something that of a shield.
-[CustomEditor(typeof(BaseAbility))]
+[CustomEditor(typeof(BaseAbility), true)]
 public class AbilityEditor : Editor
 {
-
     override public void OnInspectorGUI()
     {
         
@@ -54,6 +54,7 @@ public class AbilityEditor : Editor
         {
             AbilityScript.repeatedManaCost = EditorGUILayout.FloatField("Repeated Mana cost: " , AbilityScript.repeatedManaCost);
             AbilityScript.m_fMinimumManaRequired = EditorGUILayout.FloatField("Min mana required: " , AbilityScript.m_fMinimumManaRequired);
+            AbilityScript.m_fMovementSpeedSlowDown = EditorGUILayout.FloatField("Movement Speed Slowdown" , AbilityScript.m_fMovementSpeedSlowDown);
         }
         
     }
