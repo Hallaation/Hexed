@@ -30,11 +30,10 @@ public class Bullet : MonoBehaviour
             if (!hit.transform.GetComponent<PlayerStatus>().IsStunned && hit.transform.GetComponent<PlayerStatus>() != bulletOwner)
             {
                 Debug.Log("Raycast hit player");
-                hit.transform.GetComponent<PlayerStatus>().m_iHealth -= 1; //TODO Get damage from parent which should be the weapon.
+                hit.transform.GetComponent<PlayerStatus>().m_iHealth -= m_iDamage; //TODO Get damage from parent which should be the weapon.
                 if (hit.transform.GetComponent<PlayerStatus>().m_iHealth <= 0)
-                {
-                    hit.transform.GetComponent<PlayerStatus>().m_iHealth -= (int)m_iDamage;
-                    //hit.transform.GetComponent<PlayerStatus>().IsDead = true;
+                {   
+                    hit.transform.GetComponent<PlayerStatus>().IsDead = true;
                 }
                 hit.transform.GetComponent<Move>().StatusApplied();
                 Destroy(this.gameObject);
