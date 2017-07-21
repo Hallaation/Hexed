@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerStatus : MonoBehaviour
 {
-    public int m_iHealth = 3; //health completely useless right now
+    public float m_iHealth = 3; //health completely useless right now
     int m_iTimesPunched = 0;
     bool m_bDead = false;
     bool m_bStunned = false;

@@ -24,6 +24,7 @@ public class Gun : Weapon
         {
             GameObject go = Instantiate(bullet , this.transform.parent.position + this.transform.parent.up * m_fBulletSpawnOffSet , this.transform.rotation);
             go.GetComponent<Bullet>().bulletOwner = GetComponentInParent<PlayerStatus>();
+            go.GetComponent<Bullet>().m_iDamage = this.m_iDamage;
             go.transform.rotation = this.transform.parent.rotation * Quaternion.Euler(Vector3.forward * m_fSpreadJitter * Random.Range(-1.0f , 1.0f));
             go.GetComponent<Rigidbody2D>().AddForce(go.transform.up * m_fFiringForce , ForceMode2D.Impulse);
             shotReady = false;

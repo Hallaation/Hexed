@@ -9,6 +9,8 @@ public class Bullet : MonoBehaviour
 
     [HideInInspector]
     public PlayerStatus bulletOwner;
+    [HideInInspector]
+    public float m_iDamage;
     void Start()
     {
        // Destroy(this.gameObject , 5);
@@ -29,7 +31,8 @@ public class Bullet : MonoBehaviour
                 hit.transform.GetComponent<PlayerStatus>().m_iHealth -= 1; //TODO Get damage from parent which should be the weapon.
                 if (hit.transform.GetComponent<PlayerStatus>().m_iHealth <= 0)
                 {
-                    hit.transform.GetComponent<PlayerStatus>().IsDead = true;
+                    hit.transform.GetComponent<PlayerStatus>().m_iHealth -= (int)m_iDamage;
+                    //hit.transform.GetComponent<PlayerStatus>().IsDead = true;
                 }
                 hit.transform.GetComponent<Move>().StatusApplied();
                 Destroy(this.gameObject);
