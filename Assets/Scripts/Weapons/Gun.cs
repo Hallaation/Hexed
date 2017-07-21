@@ -5,6 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class Gun : Weapon
 {
+    public int m_iAmmo = 30;
     public GameObject bullet;
     [SerializeField]
     public float m_fSpreadJitter = 1.0f;
@@ -16,13 +17,18 @@ public class Gun : Weapon
 
     public override bool Attack()
     {
-        //player will only be allowed to attack once a shot is ready. This is used to determine the time to wait in between shots.
-        if (shotReady)
+        //player will only be allowed to attack once a shot is ready AND they have ammo. This is used to determine the time to wait in between shots.
+        if (shotReady && m_iAmmo != 0) 
         {
             GameObject go = Instantiate(bullet , this.transform.parent.position + this.transform.parent.up * 2 , this.transform.rotation);
             go.GetComponent<Rigidbody2D>().AddForce(transform.parent.up * 20 + transform.right * m_fSpreadJitter * Random.Range(-1.0f, 1.0f) , ForceMode2D.Impulse);
             shotReady = false;
+            --m_iAmmo;
             return true;
+        }
+        else if (m_iAmmo == 0)
+        {
+            //TODO Add gun click sound effect here.
         }
         return false;
     }
