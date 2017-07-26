@@ -26,6 +26,7 @@ GameObject:
   - component: {fileID: 60232819244934002}
   - component: {fileID: 114018766683465526}
   - component: {fileID: 114562922306742986}
+  - component: {fileID: 114458379330122386}
   m_Layer: 8
   m_Name: Teleport Player
   m_TagString: Player
@@ -209,7 +210,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1063190448550652}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.42, y: 0, z: 0}
+  m_LocalPosition: {x: -2.9915335, y: 1.7505423, z: -30.249485}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4491360864457088}
@@ -377,6 +378,28 @@ MonoBehaviour:
   m_fStunTime: 5
   killMePrompt: {fileID: 1117975142675102}
   killMeArea: {fileID: 1072692517627844}
+--- !u!114 &114458379330122386
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1063190448550652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 609449ed9bb771f428518c47f6a724dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mana: {fileID: 0}
+  currentMana: 100000
+  m_fMaximumMana: 100000
+  PassiveManaRegeneration: 1
+  ManaCost: 100
+  RepeatedUsage: 0
+  repeatedManaCost: 0.5
+  m_fMinimumManaRequired: 50
+  m_fMovementSpeedSlowDown: 2
+  m_TeleportForce: 0
+  test: 0
 --- !u!114 &114501485396689554
 MonoBehaviour:
   m_ObjectHideFlags: 1

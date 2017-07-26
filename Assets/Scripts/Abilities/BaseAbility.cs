@@ -8,7 +8,7 @@ public class BaseAbility : MonoBehaviour
 
     //abilities are going to cost mana.
     public UnityEngine.UI.Text mana;
-    public float currentMana = 0.0f;
+    public float currentMana = 0.0f; //TODO change back to protectd
     protected bool RegenMana;
     public float m_fMaximumMana = 100;
     public float PassiveManaRegeneration = 1.0f;
@@ -44,7 +44,6 @@ public class BaseAbility : MonoBehaviour
         }
 
         AdditionalLogic();
-        
     }
 
     public virtual void UseSpecialAbility(bool UsingAbility = false) { }
