@@ -111,6 +111,7 @@ public class Move : MonoBehaviour
         {
             GetComponent<BaseAbility>().UseSpecialAbility(true);
         }
+        
     }
     Vector3 CheckDeadZone(Vector3 controllerInput , float deadzone)
     {

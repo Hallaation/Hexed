@@ -8,7 +8,7 @@ public class BaseAbility : MonoBehaviour
 
     //abilities are going to cost mana.
     public UnityEngine.UI.Text mana;
-    protected float currentMana = 0.0f;
+    public float currentMana = 0.0f; //TODO change back to protectd
     protected bool RegenMana;
     public float m_fMaximumMana = 100;
     public float PassiveManaRegeneration = 1.0f;
@@ -24,7 +24,7 @@ public class BaseAbility : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        mana = GameObject.Find("Mana").GetComponent<UnityEngine.UI.Text>();
+       // mana = GameObject.Find("Mana").GetComponent<UnityEngine.UI.Text>();
         Debug.Log("Please not like this");
         Initialise();
     }
@@ -39,6 +39,8 @@ public class BaseAbility : MonoBehaviour
         if (RegenMana)
         {
             currentMana += PassiveManaRegeneration * Time.deltaTime;
+            if (currentMana >= m_fMaximumMana)
+                currentMana = m_fMaximumMana;
         }
 
         AdditionalLogic();

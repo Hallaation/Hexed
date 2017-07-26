@@ -374,13 +374,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 609449ed9bb771f428518c47f6a724dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_fMaximumMana: 100
-  PassiveManaRegeneration: 1
+  mana: {fileID: 0}
+  currentMana: 1000
+  m_fMaximumMana: 1000
+  PassiveManaRegeneration: 100
   ManaCost: 10
   RepeatedUsage: 0
   repeatedManaCost: 0.5
   m_fMinimumManaRequired: 50
   m_fMovementSpeedSlowDown: 2
+  m_TeleportForce: 10
   test: 0
 --- !u!114 &114018766683465526
 MonoBehaviour:
