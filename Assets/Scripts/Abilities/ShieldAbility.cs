@@ -8,15 +8,34 @@ public class ShieldAbility : BaseAbility
     [Space]
     [Header("Shield Variables")]
     public float testVariable;
+    [SerializeField]
+    public GameObject shieldObject;
+    
 	// Use this for initialization
-	void Start ()
+	public override void Initialise()
     {
-		
+        shieldObject = transform.FindChild("ShieldSprite").gameObject;
+        shieldObject.SetActive(false);
 	}
 	
-    public override void UseSpecialAbility()
+    public override void UseSpecialAbility(bool UsingAbility)
     {
+        Debug.Log("Special Ability");
+        RegenMana = false;
+        currentMana -= repeatedManaCost * Time.deltaTime;
+        shieldObject.SetActive(true);
         //TODO Shield logic goes here.
+    }
+
+    public override void AdditionalLogic()
+    {
+        if (shieldObject)
+        {
+            if (!shieldObject.activeInHierarchy)
+            {
+                RegenMana = true;
+            }
+        }
     }
 }
 

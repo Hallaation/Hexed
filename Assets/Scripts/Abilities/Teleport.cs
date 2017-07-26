@@ -7,10 +7,7 @@ public class Teleport : BaseAbility
     [Space]
     [Header("Teleport Variables")]
     public float test;
-    public float m_fMaximumMana = 100;
-    public float PassiveManaRegeneration = 1.0f;
 
-    public float ManaCost = 50.0f;
     // Use this for initialization
     void Start()
     {
@@ -22,7 +19,7 @@ public class Teleport : BaseAbility
 
     }
 
-    void UseSpecialAbility()
+    public override void UseSpecialAbility(bool UsingAbility)
     {
       
     }
