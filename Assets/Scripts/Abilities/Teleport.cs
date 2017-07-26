@@ -6,39 +6,67 @@ using XInputDotNetPure;
 
 public class Teleport : BaseAbility
 {
+    private bool ButtonHasBeenUp = true;
     [Space]
-    public float m_TeleportForce;
-    [Header("Teleport Variables")]
-    public float test;
    
+    [Header("Teleport Variables")]
+    public float m_TeleportForce;
+
     Rigidbody2D _rigidBody;
     ControllerSetter m_controller;
 
     // Use this for initialization
-    void Start()
+    //void Start()
+    //{
+    //    m_TeleportForce = 10;
+    //    m_fMaximumMana = 50f;
+    //    PassiveManaRegeneration = 1;
+    //    ManaCost = 50f;
+    //    m_controller = GetComponent<ControllerSetter>();
+    //    _rigidBody = GetComponent<Rigidbody2D>();
+    //}
+
+    public override void Initialise()
     {
-        m_TeleportForce = 10;
-        m_fMaximumMana = 50f;
-        PassiveManaRegeneration = 1;
         ManaCost = 50f;
         m_controller = GetComponent<ControllerSetter>();
         _rigidBody = GetComponent<Rigidbody2D>();
-    }
-    
-    // Update is called once per frame
-   
-    public override void AdditionalLogic()
-    {
-        if (XCI.GetButton(XboxButton.DPadUp, m_controller.mXboxController))
-        {
-            _rigidBody.position += new Vector2(transform.up.x * m_TeleportForce, transform.up.y * m_TeleportForce);
-            _rigidBody.AddForce(transform.up * 10);
-        }
+        RegenMana = true;
     }
 
-    void UseSpecialAbility()
+    // Update is called once per frame
+
+    public override void AdditionalLogic()
     {
-      
+
+        //if (XCI.GetButtonDown(XboxButton.DPadUp, m_controller.mXboxController) && currentMana >= ManaCost && ButtonHasBeenUp == true)
+        //{
+        //    _rigidBody.position += new Vector2(transform.up.x * m_TeleportForce, transform.up.y * m_TeleportForce);
+        //    ButtonHasBeenUp = false;
+        //    currentMana -= ManaCost;
+        //}
+        //if (XCI.GetButtonUp(XboxButton.DPadUp, m_controller.mXboxController))
+        //    ButtonHasBeenUp = true;
+
+    }
+
+    public override void UseSpecialAbility(bool UsedAbility)
+    {
+        ////XCI.GetButtonDown(XboxButton.DPadUp, m_controller.mXboxController)
+        if (currentMana >= ManaCost && ButtonHasBeenUp == true && UsedAbility == true )
+        {
+            _rigidBody.position += new Vector2(transform.up.x * m_TeleportForce, transform.up.y * m_TeleportForce);
+            ButtonHasBeenUp = false;
+            currentMana -= ManaCost;
+        }
+        if (XCI.GetAxis(XboxAxis.LeftTrigger, m_controller.mXboxController) < 0.1)
+        {
+            ButtonHasBeenUp = true;
+            Debug.Log("Reset");
+
+
+        }
+        Debug.Log(XCI.GetAxis(XboxAxis.LeftTrigger, m_controller.mXboxController));
     }
 }
 
