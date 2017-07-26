@@ -11,6 +11,7 @@ public class ControllerSetter : MonoBehaviour
     public XboxController mXboxController;
     public PlayerIndex mPlayerIndex;
 
+
     public void SetController(PlayerIndex a_playerIndex)
     {
         //sets my controller ID, for input management.
