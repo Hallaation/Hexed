@@ -24,8 +24,7 @@ public class BaseAbility : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        mana = GameObject.Find("Mana").GetComponent<UnityEngine.UI.Text>();
-        
+       // mana = GameObject.Find("Mana").GetComponent<UnityEngine.UI.Text>();
         Debug.Log("Please not like this");
         Initialise();
     }
@@ -40,6 +39,8 @@ public class BaseAbility : MonoBehaviour
         if (RegenMana)
         {
             currentMana += PassiveManaRegeneration * Time.deltaTime;
+            if (currentMana >= m_fMaximumMana)
+                currentMana = m_fMaximumMana;
         }
 
         AdditionalLogic();

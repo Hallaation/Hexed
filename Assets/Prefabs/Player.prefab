@@ -26,7 +26,7 @@ GameObject:
   - component: {fileID: 60232819244934002}
   - component: {fileID: 114018766683465526}
   - component: {fileID: 114562922306742986}
-  - component: {fileID: 114402333123673960}
+  - component: {fileID: 114010703396633500}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -76,10 +76,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4887104164458786}
   - component: {fileID: 212080057951339664}
-  - component: {fileID: 61897463435456212}
-  m_Layer: 9
-  m_Name: ShieldSprite
-  m_TagString: Shield
+  m_Layer: 0
+  m_Name: New Sprite
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -347,20 +346,6 @@ PolygonCollider2D:
       - {x: -0.955, y: -0.875}
       - {x: 0.275, y: -0.895}
       - {x: 0.885, y: -0.895}
---- !u!61 &61897463435456212
-BoxCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1168253748663722}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Size: {x: 6, y: 0.4}
 --- !u!95 &95024905969643556
 Animator:
   serializedVersion: 3
@@ -378,6 +363,28 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114010703396633500
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1063190448550652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 609449ed9bb771f428518c47f6a724dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mana: {fileID: 0}
+  currentMana: 1000
+  m_fMaximumMana: 1000
+  PassiveManaRegeneration: 100
+  ManaCost: 10
+  RepeatedUsage: 0
+  repeatedManaCost: 0.5
+  m_fMinimumManaRequired: 50
+  m_fMovementSpeedSlowDown: 2
+  m_TeleportForce: 10
+  test: 0
 --- !u!114 &114018766683465526
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -393,28 +400,6 @@ MonoBehaviour:
   m_fStunTime: 5
   killMePrompt: {fileID: 1117975142675102}
   killMeArea: {fileID: 1072692517627844}
---- !u!114 &114402333123673960
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1063190448550652}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ac4df475773f6b48a29ed94bc3177c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mana: {fileID: 0}
-  currentMana: 0
-  m_fMaximumMana: 100
-  PassiveManaRegeneration: 10
-  ManaCost: 10
-  RepeatedUsage: 0
-  repeatedManaCost: 0.5
-  m_fMinimumManaRequired: 50
-  m_fMovementSpeedSlowDown: 2
-  testVariable: 0
-  shieldObject: {fileID: 1168253748663722}
 --- !u!114 &114501485396689554
 MonoBehaviour:
   m_ObjectHideFlags: 1
