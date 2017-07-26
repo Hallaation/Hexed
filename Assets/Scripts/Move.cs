@@ -111,6 +111,10 @@ public class Move : MonoBehaviour
         {
             GetComponent<BaseAbility>().UseSpecialAbility(true);
         }
+        else if (XCI.GetAxis(XboxAxis.LeftTrigger, m_controller.mXboxController) <= 0.2f)
+        {
+            GetComponent<BaseAbility>().UseSpecialAbility(false);
+        }
     }
     Vector3 CheckDeadZone(Vector3 controllerInput , float deadzone)
     {

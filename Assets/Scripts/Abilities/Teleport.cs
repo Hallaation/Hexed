@@ -15,8 +15,10 @@ public class Teleport : BaseAbility
     ControllerSetter m_controller;
 
     // Use this for initialization
-    void Start()
+
+    public override void Initialise()
     {
+    
         m_TeleportForce = 10;
         m_fMaximumMana = 50f;
         PassiveManaRegeneration = 1;
@@ -24,13 +26,13 @@ public class Teleport : BaseAbility
         m_controller = GetComponent<ControllerSetter>();
         _rigidBody = GetComponent<Rigidbody2D>();
     }
-    
-    // Update is called once per frame
-    void Update()
+
+    public override void AdditionalLogic()
     {
-        if (XCI.GetButton(XboxButton.DPadUp, m_controller.mXboxController))
+        base.AdditionalLogic();
+        if (XCI.GetButton(XboxButton.DPadUp , m_controller.mXboxController))
         {
-            _rigidBody.position += new Vector2(transform.up.x * m_TeleportForce, transform.up.y * m_TeleportForce);
+            _rigidBody.position += new Vector2(transform.up.x * m_TeleportForce , transform.up.y * m_TeleportForce);
             _rigidBody.AddForce(transform.up * 10);
         }
     }
