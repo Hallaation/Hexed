@@ -8,9 +8,9 @@ public class Teleport : BaseAbility
 {
     private bool ButtonHasBeenUp = true;
     [Space]
-    public float m_TeleportForce;
+   
     [Header("Teleport Variables")]
-    public float test;
+    public float m_TeleportForce;
 
     Rigidbody2D _rigidBody;
     ControllerSetter m_controller;
@@ -28,9 +28,6 @@ public class Teleport : BaseAbility
 
     public override void Initialise()
     {
-        m_TeleportForce = 10;
-        m_fMaximumMana = 50f;
-        PassiveManaRegeneration = 1;
         ManaCost = 50f;
         m_controller = GetComponent<ControllerSetter>();
         _rigidBody = GetComponent<Rigidbody2D>();
@@ -53,10 +50,10 @@ public class Teleport : BaseAbility
 
     }
 
-    public override void UseSpecialAbility(bool ThisBoolIsUseless)
+    public override void UseSpecialAbility(bool UsedAbility)
     {
         ////XCI.GetButtonDown(XboxButton.DPadUp, m_controller.mXboxController)
-        if (currentMana >= ManaCost && ButtonHasBeenUp == true)
+        if (currentMana >= ManaCost && ButtonHasBeenUp == true && UsedAbility == true )
         {
             _rigidBody.position += new Vector2(transform.up.x * m_TeleportForce, transform.up.y * m_TeleportForce);
             ButtonHasBeenUp = false;
