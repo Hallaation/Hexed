@@ -26,7 +26,8 @@ public class Teleport : BaseAbility
     }
     
     // Update is called once per frame
-    void Update()
+   
+    public override void AdditionalLogic()
     {
         if (XCI.GetButton(XboxButton.DPadUp, m_controller.mXboxController))
         {
