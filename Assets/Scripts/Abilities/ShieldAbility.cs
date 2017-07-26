@@ -20,10 +20,17 @@ public class ShieldAbility : BaseAbility
 	
     public override void UseSpecialAbility(bool UsingAbility)
     {
-        Debug.Log("Special Ability");
-        RegenMana = false;
-        currentMana -= repeatedManaCost * Time.deltaTime;
-        shieldObject.SetActive(true);
+        if (UsingAbility)
+        {
+            Debug.Log("Special Ability");
+            RegenMana = false;
+            currentMana -= repeatedManaCost * Time.deltaTime;
+            shieldObject.SetActive(true);
+        }
+        else
+        {
+            shieldObject.SetActive(false);
+        }
         //TODO Shield logic goes here.
     }
 

@@ -20,28 +20,29 @@ public class BaseAbility : MonoBehaviour
     public float m_fMovementSpeedSlowDown = 2.0f;
     //TODO if the shield is charged up to 100% of mana, the shield can deflect bullets, knock over players when run over with it
     //TODO otherwise all the shield is block bullets and knock over players when run over with it.
-    
-	// Use this for initialization
-	void Start ()
+
+    // Use this for initialization
+    void Start()
     {
         mana = GameObject.Find("Mana").GetComponent<UnityEngine.UI.Text>();
         Debug.Log("Please not like this");
         Initialise();
-	}
-	
-	// Update is called once per frame
-	void Update ()
+    }
+
+    // Update is called once per frame
+    void Update()
     {
-
-        mana.text = currentMana.ToString() + " / " + m_fMaximumMana.ToString();
-
+        if (mana)
+        {
+            mana.text = currentMana.ToString() + " / " + m_fMaximumMana.ToString();
+        }
         if (RegenMana)
         {
             currentMana += PassiveManaRegeneration * Time.deltaTime;
         }
 
         AdditionalLogic();
-	}
+    }
 
     public virtual void UseSpecialAbility(bool UsingAbility = false) { }
     public virtual void AdditionalLogic() { }
