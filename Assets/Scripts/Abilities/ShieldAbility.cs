@@ -27,10 +27,6 @@ public class ShieldAbility : BaseAbility
             {
                 m_bPoweredUp = true;
             }
-            else
-            {
-                m_bPoweredUp = false;
-            }
             RegenMana = false;
             currentMana -= repeatedManaCost * Time.deltaTime;
             shieldObject.SetActive(true);
@@ -38,6 +34,7 @@ public class ShieldAbility : BaseAbility
         else
         {
             shieldObject.SetActive(false);
+            m_bPoweredUp = false;
         }
 
         //TODO Shield logic goes here.
@@ -58,9 +55,14 @@ public class ShieldAbility : BaseAbility
     {
         if (m_bPoweredUp)
         {
+            Debug.Log("taking bullet");
+            bullet.transform.position += this.transform.up * 1.2f;
+            bullet.transform.rotation = Quaternion.Inverse(bullet.transform.rotation);
+
             Vector3 velocity = bullet.GetComponent<Rigidbody2D>().velocity;
-            bullet.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
+           // velocity.x = -velocity.x
             bullet.GetComponent<Rigidbody2D>().velocity = -velocity;
+            //bullet.GetComponent<Rigidbody2D>().velocity = -velocity;
             //deflect the shield
         }
         else
@@ -70,5 +72,7 @@ public class ShieldAbility : BaseAbility
         }
         
     }
+
+
 }
 

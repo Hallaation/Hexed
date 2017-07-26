@@ -107,6 +107,7 @@ public class Move : MonoBehaviour
 
     void Special()
     {
+
         if (XCI.GetAxis(XboxAxis.LeftTrigger, m_controller.mXboxController) >= 1 )
         {
             GetComponent<BaseAbility>().UseSpecialAbility(true);

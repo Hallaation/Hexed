@@ -21,13 +21,12 @@ public class Bullet : MonoBehaviour
 	void Update ()
     {
         //raycasts in front for collision check
-        Ray2D ray = new Ray2D(this.transform.position , -this.transform.right);
+        Ray2D ray = new Ray2D(this.transform.position , -this.transform.up);
         Debug.DrawRay(ray.origin , ray.direction, Color.red);
 
-        RaycastHit2D hit = Physics2D.Raycast(ray.origin , ray.direction , 0.5f , (1 << 8 | 1 << 9));
+        RaycastHit2D hit = Physics2D.Raycast(ray.origin , ray.direction , 0.5f , (1 << 9 | 1 << 9));
         if (hit.collider)
         {
-            if (hit.collider.transform.tag == "Shield")
             {
                 Debug.Log("Hit shield");
                 hit.collider.GetComponentInParent<ShieldAbility>().TakeBullet(this.gameObject);
