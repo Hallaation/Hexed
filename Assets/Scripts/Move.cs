@@ -11,7 +11,8 @@ public class Move : MonoBehaviour
     ControllerSetter m_controller;
     CharacterController _characterController;
     PlayerStatus m_status;
-    GameObject heldWeapon = null;
+    [HideInInspector]
+    public GameObject heldWeapon = null;
     Rigidbody2D _rigidBody;
 
     bool m_bHoldingWeapon = false;
@@ -183,9 +184,8 @@ public class Move : MonoBehaviour
 
     void ThrowMyWeapon(Vector2 movement , Vector2 throwDirection , bool tossWeapon)
     {
-        if (heldWeapon)
+        if (heldWeapon && heldWeapon.GetComponent<Weapon>().m_bActive)
         {
-
             //throw the weapon away
             if (/*movement.magnitude == 0 ||*/ !tossWeapon)
             {
@@ -265,7 +265,7 @@ public class Move : MonoBehaviour
     {
         //attacks with weapon in hand, if no weapon, they do a melee punch instead.
         if (XCI.GetButton(XboxButton.RightBumper , m_controller.mXboxController))
-        {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+        {                                                   
             if (m_bHoldingWeapon)
             {
                 //attack using the weapon im holding. if an attack was done, set a vibration on my controller.
@@ -354,4 +354,23 @@ public class Move : MonoBehaviour
         }
         return averagePos / transforms.Length;
     }
+
+    public void HideWeapon(bool aHideWeapon)
+    {
+        if (aHideWeapon)
+        {
+            if (heldWeapon)
+            {
+                heldWeapon.GetComponent<Weapon>().m_bActive = false;
+            }
+        }
+        else
+        {
+            if (heldWeapon)
+            {
+                heldWeapon.GetComponent<Weapon>().m_bActive = true;
+            }
+        }
+    }
+
 }
