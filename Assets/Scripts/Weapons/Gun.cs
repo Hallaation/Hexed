@@ -19,8 +19,9 @@ public class Gun : Weapon
 
     public override bool Attack()
     {
+
         //player will only be allowed to attack once a shot is ready AND they have ammo. This is used to determine the time to wait in between shots.
-        if (shotReady && m_iAmmo != 0) 
+        if (shotReady && m_iAmmo != 0 && m_bActive) 
         {
             GameObject FiredBullet = Instantiate(bullet , this.transform.parent.position + this.transform.parent.up * m_fBulletSpawnOffSet , this.transform.rotation);
             FiredBullet.GetComponent<Bullet>().bulletOwner = GetComponentInParent<PlayerStatus>();
