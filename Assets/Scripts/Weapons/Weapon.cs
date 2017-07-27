@@ -12,23 +12,41 @@ public class Weapon : MonoBehaviour
     protected bool shotReady = true;
 
     protected bool stunPlayer = true;
+
+    public bool m_bActive = true;
     [HideInInspector]
     public GameObject previousOwner; //previous owner used to make sure when the weapon is thrown, it doesnt stun the thrower.
 
     // Use this for initialization
-    void Start ()
+    void Start()
     {
         TimerBetweenFiring = new Timer(m_fTimeBetweenShots);
         StartUp();
     }
-	
-	// Update is called once per frame
-	void Update ()
+
+    // Update is called once per frame
+    void Update()
     {
-        //do weapon things a virtual function, in case any weapons need to do anything extra
-        DoWeaponThings();
+        if (!transform.parent)
+        {
+            m_bActive = true;
+        }
+
+        if (m_bActive)
+        {
+            //do weapon things a virtual function, in case any weapons need to do anything extra
+            DoWeaponThings();
+            if (!GetComponent<Move>())
+                GetComponentInChildren<Renderer>().material.color = Color.white;
+        }
+        else
+        {
+            if (!GetComponent<Move>())
+                GetComponentInChildren<Renderer>().material.color = new Color(0.1f , 0.1f , 0.1f , 0.8f);
+        }
         //wait for next shot, ticks the timer until it is ready for the next shot
         waitForNextShot();
+
     }
 
     void waitForNextShot()
@@ -58,11 +76,15 @@ public class Weapon : MonoBehaviour
         //turn the physics back on set its parent to null, and apply the velocity. apply an angular velocity for it to spin.
         GetComponent<Rigidbody2D>().simulated = true;
         this.transform.SetParent(null);
-        GetComponent<Rigidbody2D>().AddForce(velocity, ForceMode2D.Impulse);
+        GetComponent<Rigidbody2D>().AddForce(velocity , ForceMode2D.Impulse);
         GetComponent<Rigidbody2D>().angularVelocity = 600.0f;
     }
     //virtual functions
-    public virtual bool Attack() { return false; }
+    public virtual bool Attack()
+    {
+        return false;
+    }
+
     public virtual void DoWeaponThings() { }
     public virtual void StartUp() { }
 

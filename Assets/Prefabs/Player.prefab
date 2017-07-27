@@ -330,7 +330,7 @@ PolygonCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_Offset: {x: 0, y: 0}
   m_Points:
@@ -452,10 +452,10 @@ MonoBehaviour:
   mana: {fileID: 0}
   currentMana: 100
   m_fMaximumMana: 100
-  PassiveManaRegeneration: 50
+  PassiveManaRegeneration: 10
   ManaCost: 10
   RepeatedUsage: 0
-  repeatedManaCost: 0.5
+  repeatedManaCost: 2
   m_fMinimumManaRequired: 50
   m_fMovementSpeedSlowDown: 2
   testVariable: 0

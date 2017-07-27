@@ -31,8 +31,6 @@ public class ControllerSetter : MonoBehaviour
                 mXboxController = XboxController.Fourth;
                 break;
         }
-
-
     }
 
     public void SetController(XboxController xboxController)
