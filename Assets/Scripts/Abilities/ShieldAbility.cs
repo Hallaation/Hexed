@@ -11,7 +11,8 @@ public class ShieldAbility : BaseAbility
     [SerializeField]
     public GameObject shieldObject;
 
-    bool m_bPoweredUp = false; 
+    bool m_bPoweredUp = false;
+    bool PowerReset = false;
 	// Use this for initialization
 	public override void Initialise()
     {
@@ -21,18 +22,32 @@ public class ShieldAbility : BaseAbility
 	
     public override void UseSpecialAbility(bool UsingAbility)
     {
+        //if the input calls for a power usage and the power hasnt been reset yet (trigger hasnt been let go yet)
+        //once I want to use the ability, power reset is true
         if (UsingAbility)
         {
+            if (currentMana >= m_fMinimumManaRequired)
+            {
+                PowerReset = true;
+            }
+        }
+
+        if (UsingAbility && PowerReset)
+        { 
             if (currentMana >= m_fMaximumMana)
             {
                 m_bPoweredUp = true;
             }
             RegenMana = false;
             currentMana -= repeatedManaCost * Time.deltaTime;
+            this.GetComponent<Move>().HideWeapon(true);
             shieldObject.SetActive(true);
         }
+        //once the left trigger is at value 0, power reset is fals;e
         else
         {
+            this.GetComponent<Move>().HideWeapon(false);
+            PowerReset = false;
             shieldObject.SetActive(false);
             m_bPoweredUp = false;
         }
@@ -49,21 +64,24 @@ public class ShieldAbility : BaseAbility
                 RegenMana = true;
             }
         }
-    }
+        
+        if (currentMana <= 0)
+        {
+            PowerReset = false;
+        }
 
-    public void TakeBullet(GameObject bullet)
+    }
+    
+    public void TakeBullet(GameObject bullet, RaycastHit2D rayHit)
     {
         if (m_bPoweredUp)
         {
-            Debug.Log("taking bullet");
             bullet.transform.position += this.transform.up * 1.2f;
             bullet.transform.rotation = Quaternion.Inverse(bullet.transform.rotation);
 
             Vector3 velocity = bullet.GetComponent<Rigidbody2D>().velocity;
-           // velocity.x = -velocity.x
-            bullet.GetComponent<Rigidbody2D>().velocity = -velocity;
-            //bullet.GetComponent<Rigidbody2D>().velocity = -velocity;
-            //deflect the shield
+            bullet.GetComponent<Rigidbody2D>().velocity = Vector3.Reflect(bullet.transform.up + velocity * 0.5f, rayHit.transform.up);
+            bullet.GetComponent<Bullet>().bulletOwner = null;
         }
         else
         {

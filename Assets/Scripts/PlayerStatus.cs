@@ -14,7 +14,8 @@ public class PlayerStatus : MonoBehaviour
 
     public float m_fStunTime = 1;
     Timer stunTimer;
-    Color _playerColour;
+    [HideInInspector]
+    public Color _playerColour;
 
     [HideInInspector]
     public GameObject killMePrompt = null;
@@ -45,17 +46,21 @@ public class PlayerStatus : MonoBehaviour
         {
             killMeArea.SetActive(true);
             this.GetComponent<Renderer>().material.color = Color.cyan;
+            this.GetComponent<Collider2D>().isTrigger = true;
             if (stunTimer.Tick(Time.deltaTime))
             {
                 m_bStunned = false;
             }
-        }
+        } 
+        //if not stunned dont kill me
         else
         {
+            this.GetComponent<Collider2D>().isTrigger = false;
             killMeArea.SetActive(false);
             killMePrompt.SetActive(false);
             this.GetComponent<Renderer>().material.color = _playerColour;
         }
+        //? should probably set a timer to reset these?
         if (m_iTimesPunched >= 2)
         {
             StunPlayer();
