@@ -16,7 +16,7 @@ public class ShieldAbility : BaseAbility
 	// Use this for initialization
 	public override void Initialise()
     {
-        shieldObject = transform.FindChild("ShieldSprite").gameObject;
+        shieldObject = transform.Find("ShieldSprite").gameObject;
         shieldObject.SetActive(false);
 	}
 	
