@@ -55,9 +55,23 @@ public class Teleport : BaseAbility
         ////XCI.GetButtonDown(XboxButton.DPadUp, m_controller.mXboxController)
         if (currentMana >= ManaCost && ButtonHasBeenUp == true && UsedAbility == true )
         {
-            _rigidBody.position += new Vector2(transform.up.x * m_TeleportForce, transform.up.y * m_TeleportForce);
-            ButtonHasBeenUp = false;
-            currentMana -= ManaCost;
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up, m_TeleportForce, 1 << LayerMask.NameToLayer("Wall"));
+            if (hit.collider != null)
+            {
+                float Xdistance = ((hit.point.x) - (transform.position.x));
+                float Ydistance = ((hit.point.y) - (transform.position.y));
+                _rigidBody.position = new Vector2(_rigidBody.position.x + Xdistance, _rigidBody.position.y + Ydistance);
+                Debug.Log("WallPrevention");
+                ButtonHasBeenUp = false;
+                currentMana -= ManaCost;
+
+            }
+            else
+            {
+                _rigidBody.position += new Vector2(transform.up.x * m_TeleportForce, transform.up.y * m_TeleportForce);
+                ButtonHasBeenUp = false;
+                currentMana -= ManaCost;
+            }
         }
         if (XCI.GetAxis(XboxAxis.LeftTrigger, m_controller.mXboxController) < 0.1)
         {
