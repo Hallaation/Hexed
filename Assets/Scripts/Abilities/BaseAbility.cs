@@ -31,6 +31,7 @@ public class BaseAbility : MonoBehaviour
         // mana = GameObject.Find("Mana").GetComponent<UnityEngine.UI.Text>();
         Initialise();
 
+        
         if (findUI)
         {
             GameObject UIElements = GameObject.FindGameObjectWithTag("PlayerUI");
