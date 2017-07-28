@@ -21,7 +21,7 @@ public class Move : MonoBehaviour
     [HideInInspector]
     public GameObject heldWeapon = null;
     Rigidbody2D _rigidBody;
-
+    private bool m_bTriggerReleased;
     bool m_bHoldingWeapon = false;
     bool runningAnimation = false;
     [HideInInspector]
@@ -115,6 +115,16 @@ public class Move : MonoBehaviour
         Debug.DrawLine(this.transform.position , new Vector2(this.transform.position.x - 1.0f , this.transform.position.y));
     }
 
+    bool TriggerReleaseCheck()
+    {
+        if (XCI.GetButton(XboxButton.RightBumper, m_controller.mXboxController))
+        {
+            return m_bTriggerReleased;
+        }
+        else
+            m_bTriggerReleased = true;
+        return m_bTriggerReleased;
+    }
     void FixedUpdate()
     {
         //Buggy with XBone controller with high frame rates.
@@ -290,7 +300,7 @@ public class Move : MonoBehaviour
         return false;
     }
 
-    void Attack()
+    void Attack(bool TriggerCheck)
     {
         //attacks with weapon in hand, if no weapon, they do a melee punch instead.
         if (XCI.GetButton(XboxButton.RightBumper , m_controller.mXboxController))
@@ -298,14 +308,15 @@ public class Move : MonoBehaviour
             if (m_bHoldingWeapon)
             {
                 //attack using the weapon im holding. if an attack was done, set a vibration on my controller.
-                if (heldWeapon.GetComponent<Weapon>().Attack())
+                if (heldWeapon.GetComponent<Weapon>().Attack(TriggerCheck))
                     vibrationValue.x = 0.45f;
+                m_bTriggerReleased = false;
             }
             else
             {
                 vibrationValue.x = 0.1f;
                 GamePad.SetVibration(m_controller.mPlayerIndex , vibrationValue.x , vibrationValue.y);
-                defaultWeapon.Attack();
+                defaultWeapon.Attack(TriggerCheck);
                 //currently doesnt actually do melee attacks. using controller vibration for testing purposes
             }
         }

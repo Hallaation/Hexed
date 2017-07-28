@@ -767,6 +767,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_fTimeBetweenShots: 0.2
   m_iDamage: 0
+  m_bAutomaticGun: 0
+  m_bBurstFire: 0
   m_bActive: 1
   previousOwner: {fileID: 0}
   m_iAmmo: 30
@@ -774,6 +776,9 @@ MonoBehaviour:
   m_fSpreadJitter: 1
   m_fBulletSpawnOffSet: 2
   m_fFiringForce: 20
+  m_bAutomatic: 0
+  m_iBurstFire: 0
+  m_fTimeBetweenBurstShots: 0
 --- !u!1001 &598927225
 Prefab:
   m_ObjectHideFlags: 0
@@ -1312,6 +1317,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_fTimeBetweenShots: 0.2
   m_iDamage: 0
+  m_bAutomaticGun: 0
+  m_bBurstFire: 1
   m_bActive: 1
   previousOwner: {fileID: 0}
   m_iAmmo: 30
@@ -1319,6 +1326,9 @@ MonoBehaviour:
   m_fSpreadJitter: 1
   m_fBulletSpawnOffSet: 2
   m_fFiringForce: 20
+  m_bAutomatic: 0
+  m_iBurstFire: 3
+  m_fTimeBetweenBurstShots: 5
 --- !u!50 &1531681540
 Rigidbody2D:
   serializedVersion: 4
