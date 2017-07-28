@@ -55,7 +55,7 @@ public class ControllerManager : MonoBehaviour
                 GameObject go = Instantiate(playerPrefab , spawnPoints[nextPlayer].position , Quaternion.identity , null);
                 go.GetComponent<ControllerSetter>().SetController(testIndex);
                 go.GetComponent<ControllerSetter>().m_playerNumber = i;
-                AddAbility(AbilityToAdd, go);
+               // AddAbility(AbilityToAdd, go);
                 addedAbility = true;
                 go.SetActive(true);
                 if (ref_cameraController)
