@@ -26,9 +26,9 @@ GameObject:
   - component: {fileID: 60232819244934002}
   - component: {fileID: 114018766683465526}
   - component: {fileID: 114562922306742986}
-  - component: {fileID: 114875984380278874}
+  - component: {fileID: 114225358176746676}
   m_Layer: 8
-  m_Name: Player
+  m_Name: GroundPound
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 4010270454768032}
   - component: {fileID: 212022293290242332}
   - component: {fileID: 58171353515754462}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: KillMeRadius
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -60,7 +60,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4107858917002282}
   - component: {fileID: 212741865053597474}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: KillMePrompt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -76,14 +76,13 @@ GameObject:
   m_Component:
   - component: {fileID: 4887104164458786}
   - component: {fileID: 212080057951339664}
-  - component: {fileID: 61156499635767416}
-  m_Layer: 9
-  m_Name: ShieldSprite
-  m_TagString: Shield
+  m_Layer: 0
+  m_Name: New Sprite
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1180499927594318
 GameObject:
   m_ObjectHideFlags: 0
@@ -92,7 +91,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4491360864457088}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: WeaponSpot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -155,7 +154,7 @@ GameObject:
   - component: {fileID: 4531079090191160}
   - component: {fileID: 212347253814743370}
   - component: {fileID: 95024905969643556}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: MyTexture_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -211,7 +210,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1063190448550652}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.42, y: 0, z: 0}
+  m_LocalPosition: {x: 0.2473386, y: -2.0625944, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4491360864457088}
@@ -330,7 +329,7 @@ PolygonCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_Offset: {x: 0, y: 0}
   m_Points:
@@ -347,20 +346,6 @@ PolygonCollider2D:
       - {x: -0.955, y: -0.875}
       - {x: 0.275, y: -0.895}
       - {x: 0.885, y: -0.895}
---- !u!61 &61156499635767416
-BoxCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1168253748663722}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Size: {x: 6, y: 0.5}
 --- !u!95 &95024905969643556
 Animator:
   serializedVersion: 3
@@ -394,6 +379,26 @@ MonoBehaviour:
   _playerColour: {r: 0, g: 0, b: 0, a: 0}
   killMePrompt: {fileID: 1117975142675102}
   killMeArea: {fileID: 1072692517627844}
+--- !u!114 &114225358176746676
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1063190448550652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8afc95fe87170034da865ae4473b7e8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentMana: 100
+  m_fMaximumMana: 100
+  PassiveManaRegeneration: 10
+  ManaCost: 10
+  RepeatedUsage: 0
+  repeatedManaCost: 0.5
+  m_fMinimumManaRequired: 50
+  m_fMovementSpeedSlowDown: 2
+  findUI: 1
 --- !u!114 &114501485396689554
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -445,28 +450,6 @@ MonoBehaviour:
   throwingForce: 40
   m_b2DMode: 1
   vibrationValue: {x: 0, y: 0}
---- !u!114 &114875984380278874
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1063190448550652}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ac4df475773f6b48a29ed94bc3177c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentMana: 100
-  m_fMaximumMana: 100
-  PassiveManaRegeneration: 10
-  ManaCost: 10
-  RepeatedUsage: 0
-  repeatedManaCost: 2
-  m_fMinimumManaRequired: 50
-  m_fMovementSpeedSlowDown: 2
-  findUI: 1
-  testVariable: 0
-  shieldObject: {fileID: 0}
 --- !u!212 &212011166948301414
 SpriteRenderer:
   m_ObjectHideFlags: 1

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerStatus : MonoBehaviour
 {
@@ -21,6 +22,8 @@ public class PlayerStatus : MonoBehaviour
     public GameObject killMePrompt = null;
     [HideInInspector]
     public GameObject killMeArea = null;
+
+    private UnityEngine.UI.Text _healthText;
     //if the player is dead, the renderer will change their colour to gray, and all physics simulation of the player's rigidbody will be turned off.
     void Start()
     {
@@ -28,9 +31,17 @@ public class PlayerStatus : MonoBehaviour
         stunTimer = new Timer(m_fStunTime);
         _playerColour = GetComponent<Renderer>().material.color;
         killMePrompt.SetActive(false);
+
+        GameObject UIElements = GameObject.FindGameObjectWithTag("PlayerUI");
+        _healthText = UIElements.GetComponent<PlayerUIArray>().playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_HealthText.GetComponent<Text>();
+
     }
     void Update()
     {
+        if (_healthText)
+        {
+            _healthText.text = (m_iHealth > 0) ? m_iHealth.ToString() : "You're dead";
+        }
 
         //if im dead, set my colour to gray, turn of all physics simulations and exit the function
         if (m_bDead)
@@ -79,6 +90,7 @@ public class PlayerStatus : MonoBehaviour
     public void KillPlayer()
     {
         //kill the player, called outside of class (mostly used for downed kills)
+        m_iHealth = 0;
         m_bDead = true;
     }
 }

@@ -1,8 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using XboxCtrlrInput;
 using XInputDotNetPure;
+//////////////////////
+//                  //
+//   Louis Nguyen   //
+//   21/07/2017     //
+//                  //
+//////////////////////
 
 [RequireComponent(typeof(ControllerSetter))]
 [RequireComponent(typeof(PlayerStatus))]
@@ -14,7 +21,7 @@ public class Move : MonoBehaviour
     [HideInInspector]
     public GameObject heldWeapon = null;
     Rigidbody2D _rigidBody;
-
+    private bool m_bTriggerReleased;
     bool m_bHoldingWeapon = false;
     bool runningAnimation = false;
     [HideInInspector]
@@ -29,6 +36,8 @@ public class Move : MonoBehaviour
     EmptyHand defaultWeapon;
     [HideInInspector]
     public Vector2 vibrationValue;
+
+    Text _AmmoText;
     // Use this for initialization
     void Start()
     { 
@@ -37,6 +46,7 @@ public class Move : MonoBehaviour
         m_controller = GetComponent<ControllerSetter>();
         m_status = GetComponent<PlayerStatus>();
         _rigidBody = GetComponent<Rigidbody2D>();
+
         //change my colour depending on what player I am
         switch (m_controller.mPlayerIndex)
         {
@@ -53,7 +63,10 @@ public class Move : MonoBehaviour
                 GetComponent<Renderer>().material.color = Color.yellow;
                 break;
         }
+
         defaultWeapon = GetComponent<EmptyHand>();
+        GameObject UIElements = GameObject.FindGameObjectWithTag("PlayerUI");
+        _AmmoText = UIElements.GetComponent<PlayerUIArray>().playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_AmmoText.GetComponent<Text>();
     }
 
     // Update is called once per frame
@@ -66,9 +79,25 @@ public class Move : MonoBehaviour
             {
                 CalculateMovement();
                 CheckForPickup();
-                Attack();
+                Attack(TriggerReleaseCheck());
                 CheckForDownedKill();
                 Special();
+                //WTF an ammo text changing for UI, move this to another function then change to sprites/masking later
+                if (heldWeapon)
+                {
+                    if (heldWeapon.GetComponent<Gun>())
+                    {
+                        _AmmoText.text = heldWeapon.GetComponent<Gun>().m_iAmmo.ToString();
+                    }
+                    else
+                    {
+                        _AmmoText.text = "Infinite Ammo";
+                    }
+                }
+                else
+                {
+                    _AmmoText.text = "you punch";
+                }
             }
             else //otherwise set the iskilling to false so it can return the animation to idle
             {
@@ -84,6 +113,17 @@ public class Move : MonoBehaviour
         }
 
         Debug.DrawLine(this.transform.position , new Vector2(this.transform.position.x - 1.0f , this.transform.position.y));
+    }
+
+    bool TriggerReleaseCheck()
+    {
+        if (XCI.GetButton(XboxButton.RightBumper, m_controller.mXboxController))
+        {
+            return m_bTriggerReleased;
+        }
+        else
+            m_bTriggerReleased = true;
+        return m_bTriggerReleased;
     }
 
     void FixedUpdate()
@@ -261,7 +301,7 @@ public class Move : MonoBehaviour
         return false;
     }
 
-    void Attack()
+    void Attack(bool TriggerCheck)
     {
         //attacks with weapon in hand, if no weapon, they do a melee punch instead.
         if (XCI.GetButton(XboxButton.RightBumper , m_controller.mXboxController))
@@ -269,14 +309,15 @@ public class Move : MonoBehaviour
             if (m_bHoldingWeapon)
             {
                 //attack using the weapon im holding. if an attack was done, set a vibration on my controller.
-                if (heldWeapon.GetComponent<Weapon>().Attack())
+                if (heldWeapon.GetComponent<Weapon>().Attack(TriggerCheck))
                     vibrationValue.x = 0.45f;
+                m_bTriggerReleased = false;
             }
             else
             {
                 vibrationValue.x = 0.1f;
                 GamePad.SetVibration(m_controller.mPlayerIndex , vibrationValue.x , vibrationValue.y);
-                defaultWeapon.Attack();
+                defaultWeapon.Attack(TriggerCheck);
                 //currently doesnt actually do melee attacks. using controller vibration for testing purposes
             }
         }
@@ -333,12 +374,16 @@ public class Move : MonoBehaviour
             {
                 if (collidersFound.gameObject != this.gameObject)
                 {
-                    if (collidersFound.GetComponent<PlayerStatus>().IsStunned)
+                    //Null check
+                    if (collidersFound.GetComponent<PlayerStatus>())
                     {
-                        runningAnimation = true;
-                        _rigidBody.velocity = Vector2.zero;
-                        this.GetComponentInChildren<Animator>().SetBool("IsKilling" , true);
-                        collidersFound.GetComponent<PlayerStatus>().KillPlayer();
+                        if (collidersFound.GetComponent<PlayerStatus>().IsStunned)
+                        {
+                            runningAnimation = true;
+                            _rigidBody.velocity = Vector2.zero;
+                            this.GetComponentInChildren<Animator>().SetBool("IsKilling" , true);
+                            collidersFound.GetComponent<PlayerStatus>().KillPlayer();
+                        }
                     }
                 }
             }

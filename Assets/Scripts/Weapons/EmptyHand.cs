@@ -4,12 +4,19 @@ using UnityEngine;
 
 public class EmptyHand : Weapon
 {
-
+    public AudioClip punchEffect;
+    private AudioSource temp; //TODO change to a singleton audio manager later
     public override void StartUp()
     {
+        if (!this.GetComponent<AudioSource>())
+        {
+            temp = this.gameObject.AddComponent<AudioSource>();
+        }
+        temp.clip = punchEffect;
+        temp.volume = 0.5f;
         stunPlayer = false;
     }
-    public override bool Attack()
+    public override bool Attack(bool trigger)
     {
         if (shotReady)
         {
@@ -19,6 +26,7 @@ public class EmptyHand : Weapon
             RaycastHit2D hit = Physics2D.Raycast(ray.origin , ray.direction , 0.3f , 1 << 8);
             if (hit)
             {
+                temp.Play();
                 //hit.transform.GetComponent<PlayerStatus>().StunPlayer();
                 hit.transform.GetComponent<PlayerStatus>().TimesPunched++;
                 //hit.transform.GetComponent<Move>().StatusApplied();

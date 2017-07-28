@@ -10,7 +10,7 @@ public class ControllerSetter : MonoBehaviour
     bool playerIndexSet = false;
     public XboxController mXboxController;
     public PlayerIndex mPlayerIndex;
-
+    public int m_playerNumber;
 
     public void SetController(PlayerIndex a_playerIndex)
     {
