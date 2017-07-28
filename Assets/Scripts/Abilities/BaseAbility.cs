@@ -24,6 +24,7 @@ public class BaseAbility : MonoBehaviour
 
     protected Text _ManaText;
     protected Text _AbilityTypeText;
+    protected GameObject manaBar;
     //WTF Use this for initialization
     void Start()
     {
@@ -35,6 +36,9 @@ public class BaseAbility : MonoBehaviour
             GameObject UIElements = GameObject.FindGameObjectWithTag("PlayerUI");
             _ManaText = UIElements.GetComponent<PlayerUIArray>().playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_ManaText.GetComponent<Text>();
             _AbilityTypeText = UIElements.GetComponent<PlayerUIArray>().playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_AbilityType.GetComponent<Text>();
+
+            manaBar = UIElements.GetComponent<PlayerUIArray>().playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_manaBarMask;
+
         }
     }
 
@@ -45,6 +49,12 @@ public class BaseAbility : MonoBehaviour
         {
             _ManaText.text = currentMana.ToString("0.00") + " / " + m_fMaximumMana.ToString();
 
+            //figure out the x offset
+            //- .25 to 0
+            float xOffset = -0.25f;
+            xOffset = currentMana / m_fMaximumMana * -0.25f;
+            // B1 - A1 / abs (A1)
+            manaBar.GetComponent<Image>().material.SetTextureOffset("_MainTex" , new Vector2(xOffset , 0));
         }
         if (RegenMana)
         {

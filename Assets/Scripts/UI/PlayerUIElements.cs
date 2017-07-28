@@ -12,6 +12,8 @@ public class PlayerUIElements : MonoBehaviour
     public GameObject m_HealthText;
     public GameObject m_AmmoText;
     public GameObject m_AbilityType;
+
+    public GameObject m_manaBarMask;
 	// Use this for initialization
 	void Awake()
     {
@@ -19,11 +21,18 @@ public class PlayerUIElements : MonoBehaviour
         m_ManaText = transform.Find("Mana").gameObject;
         m_HealthText = transform.Find("Health").gameObject;
         m_AmmoText = transform.Find("Ammo").gameObject;
-        m_AbilityType = transform.Find("AbilityType").gameObject
-            ;
+        m_AbilityType = transform.Find("AbilityType").gameObject;
+
+        //find the mana bar
+        m_manaBarMask = transform.Find("ManaBar").Find("BarMask").gameObject;
+
         if (!this.GetComponentInParent<PlayerUIArray>())
         {
             this.transform.parent.gameObject.AddComponent<PlayerUIArray>();
+        }
+        else
+        {
+            GetComponentInParent<PlayerUIArray>().UpdateArray();
         }
 	}
 	
@@ -36,6 +45,12 @@ public class PlayerUIArray : MonoBehaviour
     public PlayerUIElements[] playerElements;
 
     void Awake()
+    {
+        playerElements = this.GetComponentsInChildren<PlayerUIElements>();
+
+    }
+
+    public void UpdateArray()
     {
         playerElements = this.GetComponentsInChildren<PlayerUIElements>();
     }
