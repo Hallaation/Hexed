@@ -9,7 +9,7 @@ public class EmptyHand : Weapon
     {
         stunPlayer = false;
     }
-    public override bool Attack()
+    public override bool Attack(bool trigger)
     {
         if (shotReady)
         {

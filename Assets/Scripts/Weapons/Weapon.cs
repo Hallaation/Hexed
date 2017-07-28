@@ -8,9 +8,9 @@ public class Weapon : MonoBehaviour
     public float m_fTimeBetweenShots = 0.01f;
     public float m_iDamage;
     public bool m_bAutomaticGun;
+    public bool m_bBurstFire;
     protected Timer TimerBetweenFiring;
     protected bool shotReady = true;
-    private bool m_bTriggerReleased;
     protected bool stunPlayer = true;
 
     public bool m_bActive = true;
@@ -54,7 +54,7 @@ public class Weapon : MonoBehaviour
         //once the player has shot a bullet, the timer will start to tick until the desired time. Until the desired time hasn't reached, the player cannot shoot
         if (!shotReady)
         {
-            if (TimerBetweenFiring.Tick(Time.deltaTime) && (m_bAutomaticGun == true || m_bTriggerReleased == true)) //TODO Lincoln change this for SemiAutoGuns
+            if (TimerBetweenFiring.Tick(Time.deltaTime) ) //TODO Lincoln change this for SemiAutoGuns // && (m_bAutomaticGun == true || m_bTriggerReleased == true)
             {
                 shotReady = true;
             }
@@ -80,7 +80,7 @@ public class Weapon : MonoBehaviour
         GetComponent<Rigidbody2D>().angularVelocity = 600.0f;
     }
     //virtual functions
-    public virtual bool Attack()
+    public virtual bool Attack(bool trigger)
     {
         return false;
     }
