@@ -79,7 +79,7 @@ public class Move : MonoBehaviour
             {
                 CalculateMovement();
                 CheckForPickup();
-                Attack();
+                Attack(TriggerReleaseCheck());
                 CheckForDownedKill();
                 Special();
                 //WTF an ammo text changing for UI, move this to another function then change to sprites/masking later
@@ -125,6 +125,7 @@ public class Move : MonoBehaviour
             m_bTriggerReleased = true;
         return m_bTriggerReleased;
     }
+
     void FixedUpdate()
     {
         //Buggy with XBone controller with high frame rates.
