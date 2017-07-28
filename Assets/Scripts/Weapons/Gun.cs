@@ -11,6 +11,9 @@ public class Gun : Weapon
     public float m_fSpreadJitter = 1.0f;
     public float m_fBulletSpawnOffSet = 2.0f;
     public float m_fFiringForce = 20.0f;
+    public bool m_bAutomatic;
+
+    private float TimeSinceLastShot;
     //overriding startup, all weapons should do this
     public override void StartUp()
     {
@@ -21,7 +24,7 @@ public class Gun : Weapon
     {
 
         //player will only be allowed to attack once a shot is ready AND they have ammo. This is used to determine the time to wait in between shots.
-        if (shotReady && m_iAmmo != 0 && m_bActive) 
+        if (shotReady && m_iAmmo != 0 && m_bActive ) 
         {
             GameObject FiredBullet = Instantiate(bullet , this.transform.parent.position + this.transform.parent.up * m_fBulletSpawnOffSet , this.transform.rotation);
             FiredBullet.GetComponent<Bullet>().bulletOwner = GetComponentInParent<PlayerStatus>();
