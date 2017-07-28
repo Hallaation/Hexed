@@ -5,6 +5,9 @@ using XInputDotNetPure;
 using XboxCtrlrInput;
 public class ControllerManager : MonoBehaviour
 {
+
+    public int AbilityToAdd = 0;
+    bool addedAbility = false;
     //dictionary used to determine if the controller index has been assigned yet.
     Dictionary<PlayerIndex , bool> playerIdx = new Dictionary<PlayerIndex , bool>
     {
@@ -13,6 +16,7 @@ public class ControllerManager : MonoBehaviour
         {PlayerIndex.Three, false },
         {PlayerIndex.Four, false },
     };
+
     //dictionary mapping XCI index with the XInputDotNet indexes
     Dictionary<PlayerIndex , XboxController> xboxControllers = new Dictionary<PlayerIndex , XboxController>
     {
@@ -50,6 +54,10 @@ public class ControllerManager : MonoBehaviour
                 playerIdx[testIndex] = true;
                 GameObject go = Instantiate(playerPrefab , spawnPoints[nextPlayer].position , Quaternion.identity , null);
                 go.GetComponent<ControllerSetter>().SetController(testIndex);
+                go.GetComponent<ControllerSetter>().m_playerNumber = i;
+                AddAbility(AbilityToAdd, go);
+                addedAbility = true;
+                go.SetActive(true);
                 if (ref_cameraController)
                 {
                     //if the cameracontrol exists, add the instantiated player to a camera targets
@@ -59,5 +67,52 @@ public class ControllerManager : MonoBehaviour
                 break;
             }
         }
+    }
+
+    void AddAbility(int abilityIndex, GameObject playerToAddAbility)
+    {
+        if (addedAbility)
+        {
+            abilityIndex = 1;
+        }
+        else
+        {
+            abilityIndex = 0;
+        }
+
+        if (playerToAddAbility.GetComponent<BaseAbility>())
+        {
+            Destroy(playerToAddAbility.GetComponent<BaseAbility>());
+        }
+
+        switch (abilityIndex)
+        {
+            case 0:
+                {
+                    ShieldAbility temp = playerToAddAbility.AddComponent<ShieldAbility>();
+                    ShieldAbility mine = GetComponent<ShieldAbility>();
+                    temp.ManaCost = mine.ManaCost;
+                    temp.RepeatedUsage = mine.RepeatedUsage;
+                    temp.repeatedManaCost = mine.repeatedManaCost;
+                    temp.PassiveManaRegeneration = mine.PassiveManaRegeneration;
+                    temp.m_fMinimumManaRequired = mine.m_fMinimumManaRequired;
+                    temp.m_fMovementSpeedSlowDown = mine.m_fMovementSpeedSlowDown;
+                }
+                break;
+            case 1:
+                Teleport temp1 = playerToAddAbility.AddComponent<Teleport>();
+                Teleport mine1 = GetComponent<Teleport>();
+                temp1.ManaCost = mine1.ManaCost;
+                temp1.repeatedManaCost = mine1.repeatedManaCost;
+                temp1.PassiveManaRegeneration = mine1.PassiveManaRegeneration;
+                temp1.m_fMinimumManaRequired = mine1.m_fMinimumManaRequired;
+                temp1.m_fMovementSpeedSlowDown = mine1.m_fMovementSpeedSlowDown;
+                temp1.m_TeleportForce = mine1.m_TeleportForce;
+                break;
+
+            default: break;
+
+        }
+        
     }
 }

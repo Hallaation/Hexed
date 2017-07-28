@@ -13,13 +13,16 @@ public class ShieldAbility : BaseAbility
 
     bool m_bPoweredUp = false;
     bool PowerReset = false;
-	// Use this for initialization
-	public override void Initialise()
+    // Use this for initialization
+    public override void Initialise()
     {
-        shieldObject = transform.Find("ShieldSprite").gameObject;
-        shieldObject.SetActive(false);
-	}
-	
+        if (findUI)
+        {
+            shieldObject = transform.Find("ShieldSprite").gameObject;
+            shieldObject.SetActive(false);
+        }
+    }
+
     public override void UseSpecialAbility(bool UsingAbility)
     {
         //if the input calls for a power usage and the power hasnt been reset yet (trigger hasnt been let go yet)
@@ -33,7 +36,7 @@ public class ShieldAbility : BaseAbility
         }
 
         if (UsingAbility && PowerReset)
-        { 
+        {
             if (currentMana >= m_fMaximumMana)
             {
                 m_bPoweredUp = true;
@@ -64,15 +67,18 @@ public class ShieldAbility : BaseAbility
                 RegenMana = true;
             }
         }
-        
+
         if (currentMana <= 0)
         {
             PowerReset = false;
         }
-
+        if (_AbilityTypeText)
+        {
+            _AbilityTypeText.text = "Ability : Shield";
+        }
     }
-    
-    public void TakeBullet(GameObject bullet, RaycastHit2D rayHit)
+
+    public void TakeBullet(GameObject bullet , RaycastHit2D rayHit)
     {
         if (m_bPoweredUp)
         {
@@ -80,7 +86,7 @@ public class ShieldAbility : BaseAbility
             bullet.transform.rotation = Quaternion.Inverse(bullet.transform.rotation);
 
             Vector3 velocity = bullet.GetComponent<Rigidbody2D>().velocity;
-            bullet.GetComponent<Rigidbody2D>().velocity = Vector3.Reflect(bullet.transform.up + velocity * 0.5f, rayHit.transform.up);
+            bullet.GetComponent<Rigidbody2D>().velocity = Vector3.Reflect(bullet.transform.up + velocity * 0.5f , rayHit.transform.up);
             bullet.GetComponent<Bullet>().bulletOwner = null;
         }
         else
@@ -88,7 +94,7 @@ public class ShieldAbility : BaseAbility
             Destroy(bullet);
             //delete the bullet
         }
-        
+
     }
 
 

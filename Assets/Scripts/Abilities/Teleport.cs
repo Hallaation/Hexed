@@ -10,7 +10,7 @@ public class Teleport : BaseAbility
     [Space]
    
     [Header("Teleport Variables")]
-    public float m_TeleportForce;
+    public float m_TeleportForce = 10;
 
     Rigidbody2D _rigidBody;
     ControllerSetter m_controller;
@@ -47,7 +47,10 @@ public class Teleport : BaseAbility
         //}
         //if (XCI.GetButtonUp(XboxButton.DPadUp, m_controller.mXboxController))
         //    ButtonHasBeenUp = true;
-
+        if (_AbilityTypeText)
+        {
+            _AbilityTypeText.text = "Ability : Teleport";
+        }
     }
 
     public override void UseSpecialAbility(bool UsedAbility)
@@ -76,11 +79,8 @@ public class Teleport : BaseAbility
         if (XCI.GetAxis(XboxAxis.LeftTrigger, m_controller.mXboxController) < 0.1)
         {
             ButtonHasBeenUp = true;
-            Debug.Log("Reset");
-
-
         }
-        Debug.Log(XCI.GetAxis(XboxAxis.LeftTrigger, m_controller.mXboxController));
+
     }
 }
 

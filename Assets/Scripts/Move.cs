@@ -1,8 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using XboxCtrlrInput;
 using XInputDotNetPure;
+//////////////////////
+//                  //
+//   Louis Nguyen   //
+//   21/07/2017     //
+//                  //
+//////////////////////
 
 [RequireComponent(typeof(ControllerSetter))]
 [RequireComponent(typeof(PlayerStatus))]
@@ -29,6 +36,8 @@ public class Move : MonoBehaviour
     EmptyHand defaultWeapon;
     [HideInInspector]
     public Vector2 vibrationValue;
+
+    Text _AmmoText;
     // Use this for initialization
     void Start()
     { 
@@ -37,6 +46,7 @@ public class Move : MonoBehaviour
         m_controller = GetComponent<ControllerSetter>();
         m_status = GetComponent<PlayerStatus>();
         _rigidBody = GetComponent<Rigidbody2D>();
+
         //change my colour depending on what player I am
         switch (m_controller.mPlayerIndex)
         {
@@ -53,7 +63,10 @@ public class Move : MonoBehaviour
                 GetComponent<Renderer>().material.color = Color.yellow;
                 break;
         }
+
         defaultWeapon = GetComponent<EmptyHand>();
+        GameObject UIElements = GameObject.FindGameObjectWithTag("PlayerUI");
+        _AmmoText = UIElements.GetComponent<PlayerUIArray>().playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_AmmoText.GetComponent<Text>();
     }
 
     // Update is called once per frame
@@ -69,6 +82,22 @@ public class Move : MonoBehaviour
                 Attack();
                 CheckForDownedKill();
                 Special();
+                //WTF an ammo text changing for UI, move this to another function then change to sprites/masking later
+                if (heldWeapon)
+                {
+                    if (heldWeapon.GetComponent<Gun>())
+                    {
+                        _AmmoText.text = heldWeapon.GetComponent<Gun>().m_iAmmo.ToString();
+                    }
+                    else
+                    {
+                        _AmmoText.text = "Infinite Ammo";
+                    }
+                }
+                else
+                {
+                    _AmmoText.text = "you punch";
+                }
             }
             else //otherwise set the iskilling to false so it can return the animation to idle
             {
@@ -333,12 +362,16 @@ public class Move : MonoBehaviour
             {
                 if (collidersFound.gameObject != this.gameObject)
                 {
-                    if (collidersFound.GetComponent<PlayerStatus>().IsStunned)
+                    //Null check
+                    if (collidersFound.GetComponent<PlayerStatus>())
                     {
-                        runningAnimation = true;
-                        _rigidBody.velocity = Vector2.zero;
-                        this.GetComponentInChildren<Animator>().SetBool("IsKilling" , true);
-                        collidersFound.GetComponent<PlayerStatus>().KillPlayer();
+                        if (collidersFound.GetComponent<PlayerStatus>().IsStunned)
+                        {
+                            runningAnimation = true;
+                            _rigidBody.velocity = Vector2.zero;
+                            this.GetComponentInChildren<Animator>().SetBool("IsKilling" , true);
+                            collidersFound.GetComponent<PlayerStatus>().KillPlayer();
+                        }
                     }
                 }
             }
