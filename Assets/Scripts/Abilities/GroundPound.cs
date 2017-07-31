@@ -7,14 +7,16 @@ public class GroundPound : BaseAbility
 {
     private bool ButtonHasBeenUp = true;
     PlayerStatus Slamer;
-
+    CircleCollider2D GroundPoundCollider;
     Rigidbody2D _rigidBody;
     ControllerSetter m_controller;
     [Header("GroundPound Variables")]
-    float WidthOfHitbox = 10f;
+    public float WidthOfHitbox = 10f;
     // Use this for initialization
     public override void Initialise()
     {
+        GroundPoundCollider = GetComponent<CircleCollider2D>();
+     
         Slamer = GetComponent<PlayerStatus>();
         ManaCost = 50f;
         m_controller = GetComponent<ControllerSetter>();
@@ -26,6 +28,7 @@ public class GroundPound : BaseAbility
         ////XCI.GetButtonDown(XboxButton.DPadUp, m_controller.mXboxController)
         if (currentMana >= ManaCost && ButtonHasBeenUp == true && UsedAbility == true)
         {
+            
             StartCoroutine(GroundPoundAbility());
             
         }
@@ -40,22 +43,34 @@ public class GroundPound : BaseAbility
     IEnumerator GroundPoundAbility()
     {
         float i = 99;
-        while (i < 100)
-        {
-          Collider[] Collider = Physics.OverlapSphere(transform.position, i, 1 << LayerMask.NameToLayer("Player")); //? Currently doesnt collide.
-            int j = 0;
-            while (j < Collider.Length)
+        
+        if (GroundPoundCollider.IsTouchingLayers(1 << LayerMask.NameToLayer("Player")))
             {
-                if (Collider[j].transform.GetComponent<PlayerStatus>().IsStunned && Collider[j].transform.GetComponent<PlayerStatus>() != Slamer)
+                Collider2D[] nearBy = Physics2D.OverlapCircleAll(transform.position, WidthOfHitbox, 1 << LayerMask.NameToLayer("Player"));
+               for(int k = 0; k < nearBy.Length; ++k)
                 {
-                    Collider[j].transform.GetComponent<PlayerStatus>().StunPlayer();
+                    if (nearBy[k].transform != this.transform)
+                    {
+                        
+                        PlayerStatus tempStatus = nearBy[k].GetComponent<PlayerStatus>();
+                        if (tempStatus.IsStunned == false)
+                        {
+                            tempStatus.StunPlayer();
+                        }
+                    }
                 }
-            }
+
+                //GroundPoundCollider.OverlapCollider(1 << LayerMask.NameToLayer("Player"), ColliderArray);
+            }                                                                           //TODO Use Collider.OverlapCollider
+         // Collider[] Collider = Physics.c(transform.position, i, 1 << LayerMask.NameToLayer("Player")); //? Currently doesnt collide.
+            int j = 0;
+
             ++i;
             ButtonHasBeenUp = false;
             currentMana -= ManaCost;
-            yield return null;
-        }
+     
+        yield return null;
+
     }
     // Update is called once per frame
     void Update () {

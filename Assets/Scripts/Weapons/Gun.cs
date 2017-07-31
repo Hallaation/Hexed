@@ -56,12 +56,14 @@ public class Gun : Weapon
         shotReady = false;
 
 
-        while (i > 0)
+        while (i > 0 && m_iAmmo > 0 && transform.parent != null)
         {
+            
             FireBullet();
             i--;
 
             yield return new WaitForSeconds(m_fTimeBetweenBurstShots);
+            
         }
 
 
@@ -69,6 +71,8 @@ public class Gun : Weapon
         TimerBetweenFiring.set(0);
         yield return null;
     }
+
+
     void FireBullet()
     {
         GameObject FiredBullet = Instantiate(bullet, this.transform.parent.position + this.transform.parent.up * m_fBulletSpawnOffSet, this.transform.rotation);
