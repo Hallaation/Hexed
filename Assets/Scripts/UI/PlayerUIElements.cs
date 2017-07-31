@@ -12,8 +12,8 @@ public class PlayerUIElements : MonoBehaviour
     public GameObject m_HealthText;
     public GameObject m_AmmoText;
     public GameObject m_AbilityType;
-
     public GameObject m_manaBarMask;
+    public GameObject m_HealthBarMask;
 	// Use this for initialization
 	void Awake()
     {
@@ -25,7 +25,7 @@ public class PlayerUIElements : MonoBehaviour
 
         //find the mana bar
         m_manaBarMask = transform.Find("ManaBar").Find("BarMask").gameObject;
-
+        m_HealthBarMask = transform.Find("HealthBar").Find("BarMask").gameObject;
         if (!this.GetComponentInParent<PlayerUIArray>())
         {
             this.transform.parent.gameObject.AddComponent<PlayerUIArray>();

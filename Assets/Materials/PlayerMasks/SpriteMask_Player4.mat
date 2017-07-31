@@ -6,21 +6,32 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: SpriteMask_Player0
+  m_Name: SpriteMask_Player4
   m_Shader: {fileID: 4800000, guid: d3b8693f615312545a40eaa55e799c06, type: 3}
   m_ShaderKeywords: PIXELSNAP_ON
   m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
-  disabledShaderPasses: []
   m_SavedProperties:
-    serializedVersion: 3
+    serializedVersion: 2
     m_TexEnvs:
-    - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 725924f9e63317d4ea007c905357ff9e, type: 3}
+    - first:
+        name: <noninit>
+      second:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - first:
+        name: _MainTex
+      second:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: -0.25, y: 0}
     m_Floats:
-    - _Cutoff: 0.36
+    - first:
+        name: <noninit>
+      second: 0
+    - first:
+        name: _Cutoff
+      second: 0.5
     m_Colors: []

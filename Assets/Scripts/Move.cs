@@ -272,7 +272,7 @@ public class Move : MonoBehaviour
     bool PickUpWeapon(Vector2 stickMovement , Vector2 throwingDirection , bool tossWeapon)
     {
 
-        Collider2D hitCollider = Physics2D.OverlapCircle(this.transform.position , 1.0f , ~(1 << 8));
+        Collider2D hitCollider = Physics2D.OverlapCircle(this.transform.position , 1.0f , (1 << 12));
 
         //If there is a weapon being held, the weapon will be thrown away.
         if (heldWeapon)

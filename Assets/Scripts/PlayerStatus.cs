@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class PlayerStatus : MonoBehaviour
 {
+    private float m_iMaxHealth;
     public float m_iHealth = 3; //health completely useless right now
     int m_iTimesPunched = 0;
     bool m_bDead = false;
@@ -24,9 +25,11 @@ public class PlayerStatus : MonoBehaviour
     public GameObject killMeArea = null;
 
     private UnityEngine.UI.Text _healthText;
+    private GameObject _HealthMask;
     //if the player is dead, the renderer will change their colour to gray, and all physics simulation of the player's rigidbody will be turned off.
     void Start()
     {
+        m_iMaxHealth = m_iHealth;
         //initialize my timer and get the player's colour to return to.
         stunTimer = new Timer(m_fStunTime);
         _playerColour = GetComponent<Renderer>().material.color;
@@ -34,13 +37,15 @@ public class PlayerStatus : MonoBehaviour
 
         GameObject UIElements = GameObject.FindGameObjectWithTag("PlayerUI");
         _healthText = UIElements.GetComponent<PlayerUIArray>().playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_HealthText.GetComponent<Text>();
-
+        _HealthMask = UIElements.GetComponent<PlayerUIArray>().playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_HealthBarMask;
     }
     void Update()
     {
         if (_healthText)
         {
+            float xOffset = (m_iHealth / m_iMaxHealth) * 0.235f;
             _healthText.text = (m_iHealth > 0) ? m_iHealth.ToString() : "You're dead";
+            _HealthMask.GetComponent<Image>().material.SetTextureOffset("_MainTex", new Vector2(xOffset, 0));
         }
 
         //if im dead, set my colour to gray, turn of all physics simulations and exit the function

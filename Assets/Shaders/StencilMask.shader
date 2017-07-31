@@ -1,14 +1,11 @@
-﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
-
-
-Shader "Sprites/AlphaCutoff"
+﻿Shader "Sprites/Stencil Mask"
 {
 	Properties
 	{
 		[PerRendererData] _MainTex("Sprite Texture", 2D) = "white" {}
-	_Color("Tint", Color) = (1,1,1,1)
+		_Color("Tint", Color) = (1,1,1,1)
 		[MaterialToggle] PixelSnap("Pixel snap", Float) = 0
-		_CutOff("Cutoff", Range(0, 1)) = 0.5
+		[MaterialToggle] ShowTexture("Show Texture", Float) = 0
 	}
 
 		SubShader
@@ -21,19 +18,26 @@ Shader "Sprites/AlphaCutoff"
 		"PreviewType" = "Plane"
 		"CanUseSpriteAtlas" = "True"
 	}
-
+		Offset 0, -1
 		Cull Off
 		Lighting Off
 		ZWrite Off
-		Fog{ Mode Off }
-		Blend SrcAlpha OneMinusSrcAlpha
+		Blend One OneMinusSrcAlpha
 
 		Pass
 	{
+		Stencil
+	{
+		Ref 1
+		Comp always
+		Pass replace
+	}
+
 		CGPROGRAM
 #pragma vertex vert
 #pragma fragment frag
-#pragma multi_compile DUMMY PIXELSNAP_ON
+#pragma multi_compile _ PIXELSNAP_ON
+#pragma multi_compile _ SHOWTEXTURE_ON
 #include "UnityCG.cginc"
 
 		struct appdata_t
@@ -51,25 +55,34 @@ Shader "Sprites/AlphaCutoff"
 	};
 
 	fixed4 _Color;
-	fixed _CutOff;
 
 	v2f vert(appdata_t IN)
 	{
 		v2f OUT;
-		OUT.vertex = UnityObjectToClipPos(IN.vertex);
+		OUT.vertex = mul(UNITY_MATRIX_MVP, IN.vertex);
 		OUT.texcoord = IN.texcoord;
+#ifdef SHOWTEXTURE_ON
 		OUT.color = IN.color * _Color;
+#else
+		OUT.color = IN.color * _Color;
+		OUT.color.rgb = 0;
+#endif
 #ifdef PIXELSNAP_ON
 		OUT.vertex = UnityPixelSnap(OUT.vertex);
 #endif
+
 		return OUT;
 	}
 
 	sampler2D _MainTex;
 
-	fixed4 frag(v2f IN) : COLOR
+	fixed4 frag(v2f IN) : SV_Target
 	{
-		return tex2D(_MainTex, IN.texcoord).a > _CutOff ? IN.color : 0;
+		fixed4 c = tex2D(_MainTex, IN.texcoord) * IN.color;
+	if (c.a < 0.2) discard;
+	c.rgb *= c.a;
+	c.a = 0;
+	return c;
 	}
 		ENDCG
 	}
