@@ -9,44 +9,44 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1063818589371130}
+  m_RootGameObject: {fileID: 1797776813017728}
   m_IsPrefabParent: 1
---- !u!1 &1063818589371130
+--- !u!1 &1797776813017728
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 4275344870920014}
-  - component: {fileID: 212270079948290502}
-  - component: {fileID: 61697410140771958}
+  - component: {fileID: 4125677107823334}
+  - component: {fileID: 212808491720677450}
+  - component: {fileID: 61158073229132546}
   m_Layer: 0
-  m_Name: EA_Slums_Wall_Glass_001
+  m_Name: EA_Slums_Wall_Glass_Angled_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4275344870920014
+--- !u!4 &4125677107823334
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1063818589371130}
-  m_LocalRotation: {x: -0, y: -0, z: -0.70710576, w: 0.70710784}
-  m_LocalPosition: {x: -4, y: -8, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_GameObject: {fileID: 1797776813017728}
+  m_LocalRotation: {x: -0, y: -0, z: -0.38268274, w: 0.9238798}
+  m_LocalPosition: {x: -7, y: -10, z: 0}
+  m_LocalScale: {x: 1, y: 1.4099998, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90.00001}
---- !u!61 &61697410140771958
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -45.000004}
+--- !u!61 &61158073229132546
 BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1063818589371130}
+  m_GameObject: {fileID: 1797776813017728}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
@@ -55,12 +55,12 @@ BoxCollider2D:
   m_Offset: {x: 0.125, y: -0.5}
   serializedVersion: 2
   m_Size: {x: 0.25, y: 1}
---- !u!212 &212270079948290502
+--- !u!212 &212808491720677450
 SpriteRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1063818589371130}
+  m_GameObject: {fileID: 1797776813017728}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
