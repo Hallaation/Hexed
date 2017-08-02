@@ -18,6 +18,7 @@ public class PlayerStatus : MonoBehaviour
     Timer stunTimer;
     [HideInInspector]
     public Color _playerColour;
+    private Renderer PlayerSprite;
 
     [HideInInspector]
     public GameObject killMePrompt = null;
@@ -26,6 +27,7 @@ public class PlayerStatus : MonoBehaviour
 
     private UnityEngine.UI.Text _healthText;
     private GameObject _HealthMask;
+   
     //if the player is dead, the renderer will change their colour to gray, and all physics simulation of the player's rigidbody will be turned off.
     void Start()
     {
@@ -33,7 +35,16 @@ public class PlayerStatus : MonoBehaviour
         //initialize my timer and get the player's colour to return to.
         stunTimer = new Timer(m_fStunTime);
         //_playerColour = GetComponent<Renderer>().material.color;
-        _playerColour = transform.Find("Sprites").Find("PlayerSprite").GetComponent<Renderer>().material.color;
+        if (GetComponent<Renderer>())
+        {
+            PlayerSprite = GetComponent<Renderer>();
+            _playerColour = GetComponent<Renderer>().material.color;
+        }
+        else
+        {
+            PlayerSprite = transform.Find("Sprites").Find("PlayerSprite").GetComponent<Renderer>();
+            _playerColour = transform.Find("Sprites").Find("PlayerSprite").GetComponent<Renderer>().material.color;
+        }
         killMePrompt.SetActive(false);
 
         GameObject UIElements = GameObject.FindGameObjectWithTag("PlayerUI");
@@ -52,7 +63,8 @@ public class PlayerStatus : MonoBehaviour
         //if im dead, set my colour to gray, turn of all physics simulations and exit the function
         if (m_bDead)
         {
-            this.GetComponent<Renderer>().material.color = Color.grey;
+            //this.GetComponent<Renderer>().material.color = Color.grey;
+            PlayerSprite.material.color = Color.grey;
             this.GetComponent<Rigidbody2D>().simulated = false;
             killMePrompt.SetActive(false);
             killMeArea.SetActive(false);
@@ -62,7 +74,8 @@ public class PlayerStatus : MonoBehaviour
         if (m_bStunned)
         {
             killMeArea.SetActive(true);
-            this.GetComponent<Renderer>().material.color = Color.cyan;
+            PlayerSprite.material.color = Color.cyan;
+            //this.GetComponent<Renderer>().material.color = Color.cyan;
             this.GetComponent<Collider2D>().isTrigger = true;
             if (stunTimer.Tick(Time.deltaTime))
             {
