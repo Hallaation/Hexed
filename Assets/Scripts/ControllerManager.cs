@@ -31,7 +31,7 @@ public class ControllerManager : MonoBehaviour
 
     public bool assignControllers = true;
     public CameraControl ref_cameraController;
-    int maxPlayers = 4;
+    public int maxPlayers = 4;
     int nextPlayer = 0;
     public GameObject playerPrefab;
     public Transform[] spawnPoints;
@@ -39,7 +39,7 @@ public class ControllerManager : MonoBehaviour
     void Update()
     {
        // Debug.Log(nextPlayer);
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < maxPlayers; i++)
         {
             //make a player index based off what i is
             PlayerIndex testIndex = (PlayerIndex)i;
