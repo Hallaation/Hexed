@@ -63,7 +63,6 @@ public class GroundPound : BaseAbility
                 //GroundPoundCollider.OverlapCollider(1 << LayerMask.NameToLayer("Player"), ColliderArray);
             }                                                                           //TODO Use Collider.OverlapCollider
          // Collider[] Collider = Physics.c(transform.position, i, 1 << LayerMask.NameToLayer("Player")); //? Currently doesnt collide.
-            int j = 0;
 
             ++i;
             ButtonHasBeenUp = false;

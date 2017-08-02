@@ -22,6 +22,8 @@ public class Move : MonoBehaviour
     public GameObject heldWeapon = null;
     Rigidbody2D _rigidBody;
     private bool m_bTriggerReleased;
+    [HideInInspector]
+    public bool m_bStockStickRotation = false;
     bool m_bHoldingWeapon = false;
     bool runningAnimation = false;
     [HideInInspector]
@@ -36,31 +38,43 @@ public class Move : MonoBehaviour
     EmptyHand defaultWeapon;
     [HideInInspector]
     public Vector2 vibrationValue;
+    [HideInInspector]
+    public GameObject playerSpirte;
 
     Text _AmmoText;
+
     // Use this for initialization
     void Start()
-    { 
+    {
         vibrationValue = Vector2.zero;
         //setting up any references to other classes needed.
         m_controller = GetComponent<ControllerSetter>();
         m_status = GetComponent<PlayerStatus>();
         _rigidBody = GetComponent<Rigidbody2D>();
-
+        playerSpirte = transform.Find("Sprites").Find("PlayerSprite").gameObject;
         //change my colour depending on what player I am
+        Renderer temp;
+        if (GetComponent<Renderer>())
+        {
+            temp = GetComponent<Renderer>();
+        }
+        else
+        {
+            temp = transform.Find("Sprites").Find("PlayerSprite").GetComponent<Renderer>();
+        }
         switch (m_controller.mPlayerIndex)
         {
             case PlayerIndex.One:
-                GetComponent<Renderer>().material.color = Color.red;
+                temp.material.color = Color.red;
                 break;
             case PlayerIndex.Two:
-                GetComponent<Renderer>().material.color = Color.blue;
+                temp.material.color = Color.blue;
                 break;
             case PlayerIndex.Three:
-                GetComponent<Renderer>().material.color = Color.magenta;
+                temp.material.color = Color.magenta;
                 break;
             case PlayerIndex.Four:
-                GetComponent<Renderer>().material.color = Color.yellow;
+                temp.material.color = Color.yellow;
                 break;
         }
 
@@ -71,7 +85,8 @@ public class Move : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    { 
+    {
+        Debug.Log(XCI.GetAxis(XboxAxis.LeftTrigger , m_controller.mXboxController));
         if (!m_status.IsDead && !m_status.IsStunned)
         {
             //if the walking animation isnt running, do everything else
@@ -117,7 +132,7 @@ public class Move : MonoBehaviour
 
     bool TriggerReleaseCheck()
     {
-        if (XCI.GetButton(XboxButton.RightBumper, m_controller.mXboxController))
+        if (XCI.GetButton(XboxButton.RightBumper , m_controller.mXboxController))
         {
             return m_bTriggerReleased;
         }
@@ -129,7 +144,8 @@ public class Move : MonoBehaviour
     void FixedUpdate()
     {
         //Buggy with XBone controller with high frame rates.
-        GamePad.SetVibration(m_controller.mPlayerIndex , XCI.GetAxis(XboxAxis.LeftTrigger , m_controller.mXboxController) , XCI.GetAxis(XboxAxis.RightTrigger , m_controller.mXboxController));
+        //GamePad.SetVibration(m_controller.mPlayerIndex , XCI.GetAxis(XboxAxis.LeftTrigger , m_controller.mXboxController) , XCI.GetAxis(XboxAxis.RightTrigger , m_controller.mXboxController));
+        //vibrationValue = new Vector2(XCI.GetAxis(XboxAxis.LeftTrigger , m_controller.mXboxController) , XCI.GetAxis(XboxAxis.RightTrigger , m_controller.mXboxController));
         GamePad.SetVibration(m_controller.mPlayerIndex , vibrationValue.x , vibrationValue.y);
 
         vibrationValue *= 0.99f; //magic numbers.
@@ -149,11 +165,11 @@ public class Move : MonoBehaviour
     void Special()
     {
 
-        if (XCI.GetAxis(XboxAxis.LeftTrigger, m_controller.mXboxController) >= 1 )
+        if (XCI.GetAxis(XboxAxis.LeftTrigger , m_controller.mXboxController) > 0)
         {
             GetComponent<BaseAbility>().UseSpecialAbility(true);
         }
-        else if (XCI.GetAxis(XboxAxis.LeftTrigger, m_controller.mXboxController) <= 0.2f)
+        else if (XCI.GetAxis(XboxAxis.LeftTrigger , m_controller.mXboxController) <= 0)
         {
             GetComponent<BaseAbility>().UseSpecialAbility(false);
         }
@@ -184,10 +200,15 @@ public class Move : MonoBehaviour
         //otherwise moves on Z,X in 3D
         //condition ? true : false
         movement = (!m_b2DMode) ? new Vector3(XCI.GetAxis(XboxAxis.LeftStickX , m_controller.mXboxController) , 0 , XCI.GetAxis(XboxAxis.LeftStickY , m_controller.mXboxController)) : new Vector3(XCI.GetAxis(XboxAxis.LeftStickX , m_controller.mXboxController) , XCI.GetAxis(XboxAxis.LeftStickY , m_controller.mXboxController));
-        Vector3 vrotation = new Vector2(GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Right.X , GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Right.Y);
 
+        Vector3 vrotation = Vector3.zero;
+        if (!m_bStockStickRotation)
+        {
+            vrotation = new Vector2(GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Right.X , GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Right.Y);
+        }
         //if im not getting any input from the right stick, make my rotation from the left stick instead
-        if (vrotation == Vector3.zero)
+        //if rotation is none and stick rotation is allowed
+        if (vrotation == Vector3.zero && !m_bStockStickRotation)
         {
             //turn off the crosshair
             crosshair.SetActive(false);
@@ -305,7 +326,7 @@ public class Move : MonoBehaviour
     {
         //attacks with weapon in hand, if no weapon, they do a melee punch instead.
         if (XCI.GetButton(XboxButton.RightBumper , m_controller.mXboxController))
-        {                                                   
+        {
             if (m_bHoldingWeapon)
             {
                 //attack using the weapon im holding. if an attack was done, set a vibration on my controller.
@@ -357,7 +378,7 @@ public class Move : MonoBehaviour
         if (a_collider.tag == "Player")
         {
             a_collider.GetComponent<PlayerStatus>().killMePrompt.SetActive(false);
-            
+
         }
 
     }
