@@ -6,8 +6,8 @@ using XInputDotNetPure;
 
 public class ControllerSetter : MonoBehaviour
 {
-    PlayerIndex pIx;
-    bool playerIndexSet = false;
+
+
     public XboxController mXboxController;
     public PlayerIndex mPlayerIndex;
     public int m_playerNumber;

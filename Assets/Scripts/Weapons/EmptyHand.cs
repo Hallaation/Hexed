@@ -26,11 +26,14 @@ public class EmptyHand : Weapon
             RaycastHit2D hit = Physics2D.Raycast(ray.origin , ray.direction , 0.3f , 1 << 8);
             if (hit)
             {
-                temp.Play();
-                //hit.transform.GetComponent<PlayerStatus>().StunPlayer();
-                hit.transform.GetComponent<PlayerStatus>().TimesPunched++;
-                //hit.transform.GetComponent<Move>().StatusApplied();
-                return true;
+                if (hit.transform != this.transform)
+                {
+                    temp.Play();
+                    //hit.transform.GetComponent<PlayerStatus>().StunPlayer();
+                    hit.transform.GetComponent<PlayerStatus>().TimesPunched++;
+                    //hit.transform.GetComponent<Move>().StatusApplied();
+                    return true;
+                }
             }
             Debug.DrawRay(ray.origin , ray.direction);
         }

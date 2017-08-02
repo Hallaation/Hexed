@@ -51,7 +51,7 @@ public class Gun : Weapon
     IEnumerator BurstFire()
     {
         int i = m_iBurstFire;
-        float BurstTimer = m_fTimeBetweenBurstShots;
+
         TimerBetweenFiring.set(0);
         shotReady = false;
 

@@ -32,7 +32,8 @@ public class PlayerStatus : MonoBehaviour
         m_iMaxHealth = m_iHealth;
         //initialize my timer and get the player's colour to return to.
         stunTimer = new Timer(m_fStunTime);
-        _playerColour = GetComponent<Renderer>().material.color;
+        //_playerColour = GetComponent<Renderer>().material.color;
+        _playerColour = transform.Find("Sprites").Find("PlayerSprite").GetComponent<Renderer>().material.color;
         killMePrompt.SetActive(false);
 
         GameObject UIElements = GameObject.FindGameObjectWithTag("PlayerUI");
@@ -45,7 +46,7 @@ public class PlayerStatus : MonoBehaviour
         {
             float xOffset = (m_iHealth / m_iMaxHealth) * 0.235f;
             _healthText.text = (m_iHealth > 0) ? m_iHealth.ToString() : "You're dead";
-            _HealthMask.GetComponent<Image>().material.SetTextureOffset("_MainTex", new Vector2(xOffset, 0));
+            _HealthMask.GetComponent<Image>().material.SetTextureOffset("_MainTex" , new Vector2(xOffset , 0));
         }
 
         //if im dead, set my colour to gray, turn of all physics simulations and exit the function
@@ -67,14 +68,21 @@ public class PlayerStatus : MonoBehaviour
             {
                 m_bStunned = false;
             }
-        } 
+        }
         //if not stunned dont kill me
         else
         {
             this.GetComponent<Collider2D>().isTrigger = false;
             killMeArea.SetActive(false);
             killMePrompt.SetActive(false);
-            this.GetComponent<Renderer>().material.color = _playerColour;
+            if (GetComponent<Renderer>())
+            {
+                GetComponent<Renderer>().material.color = _playerColour;
+            }
+            else
+            {
+                transform.Find("Sprites").Find("PlayerSprite").GetComponent<Renderer>().material.color = _playerColour;
+            }
         }
         //? should probably set a timer to reset these?
         if (m_iTimesPunched >= 2)
