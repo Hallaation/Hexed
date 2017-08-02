@@ -376,6 +376,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_iHealth: 3
   m_fStunTime: 5
+  _playerColour: {r: 0, g: 0, b: 0, a: 0}
   killMePrompt: {fileID: 1117975142675102}
   killMeArea: {fileID: 1072692517627844}
 --- !u!114 &114458379330122386
@@ -389,7 +390,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 609449ed9bb771f428518c47f6a724dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mana: {fileID: 0}
   currentMana: 100000
   m_fMaximumMana: 100000
   PassiveManaRegeneration: 1
@@ -398,8 +398,8 @@ MonoBehaviour:
   repeatedManaCost: 0.5
   m_fMinimumManaRequired: 50
   m_fMovementSpeedSlowDown: 2
+  findUI: 1
   m_TeleportForce: 0
-  test: 0
 --- !u!114 &114501485396689554
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -413,6 +413,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mXboxController: 4
   mPlayerIndex: 3
+  m_playerNumber: 0
 --- !u!114 &114562922306742986
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -426,7 +427,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_fTimeBetweenShots: 1
   m_iDamage: 0
+  m_bAutomaticGun: 0
+  m_bBurstFire: 0
+  m_bActive: 1
   previousOwner: {fileID: 0}
+  punchEffect: {fileID: 0}
 --- !u!114 &114779038577127868
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -438,6 +443,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac6f130352d45f24a987e6d68e08e370, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  heldWeapon: {fileID: 0}
   crosshair: {fileID: 1307528044442894}
   weaponMount: {fileID: 1180499927594318}
   fistObject: {fileID: 0}
