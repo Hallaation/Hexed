@@ -57,6 +57,7 @@ public class BaseAbility : MonoBehaviour
             // B1 - A1 / abs (A1)
             manaBar.GetComponent<Image>().material.SetTextureOffset("_MainTex" , new Vector2(xOffset , 0));
         }
+
         if (RegenMana)
         {
             currentMana += PassiveManaRegeneration * Time.deltaTime;

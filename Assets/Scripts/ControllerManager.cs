@@ -38,7 +38,12 @@ public class ControllerManager : MonoBehaviour
 
     void Update()
     {
-       // Debug.Log(nextPlayer);
+        StartCoroutine(LookForPlayers());
+    }
+
+    IEnumerator LookForPlayers()
+    {
+        // Debug.Log(nextPlayer);
         for (int i = 0; i < maxPlayers; i++)
         {
             //make a player index based off what i is
@@ -48,14 +53,14 @@ public class ControllerManager : MonoBehaviour
             if (testState.IsConnected &&
                 !playerIdx[testIndex] &&
                 XCI.GetButtonDown(XboxButton.Start , xboxControllers[testIndex]))
-                //if the player of index i has pressed Start, and their controller is connected, and their controller has yet to be assgined
+            //if the player of index i has pressed Start, and their controller is connected, and their controller has yet to be assgined
             {
                 //assign a controller and spawn the player
                 playerIdx[testIndex] = true;
                 GameObject go = Instantiate(playerPrefab , spawnPoints[nextPlayer].position , Quaternion.identity , null);
                 go.GetComponent<ControllerSetter>().SetController(testIndex);
                 go.GetComponent<ControllerSetter>().m_playerNumber = i;
-               // AddAbility(AbilityToAdd, go);
+                // AddAbility(AbilityToAdd, go);
                 addedAbility = true;
                 go.SetActive(true);
                 if (ref_cameraController)
@@ -67,8 +72,9 @@ public class ControllerManager : MonoBehaviour
                 break;
             }
         }
-    }
 
+        yield return new WaitForEndOfFrame();
+    }
     void AddAbility(int abilityIndex, GameObject playerToAddAbility)
     {
         if (addedAbility)

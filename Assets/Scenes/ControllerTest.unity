@@ -91,54 +91,6 @@ NavMeshSettings:
     cellSize: 0.16666667
     accuratePlacement: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &5754387 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1752627976782452, guid: 6e6796b8f6299b546b96f0d34acdc80a,
-    type: 2}
-  m_PrefabInternal: {fileID: 1947177614}
---- !u!114 &5754390
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 5754387}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 609449ed9bb771f428518c47f6a724dc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentMana: 0
-  m_fMaximumMana: 100
-  PassiveManaRegeneration: 20
-  ManaCost: 10
-  RepeatedUsage: 0
-  repeatedManaCost: 0.5
-  m_fMinimumManaRequired: 50
-  m_fMovementSpeedSlowDown: 2
-  findUI: 0
-  m_TeleportForce: 20
---- !u!114 &5754391
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 5754387}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ac4df475773f6b48a29ed94bc3177c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentMana: 0
-  m_fMaximumMana: 100
-  PassiveManaRegeneration: 20
-  ManaCost: 10
-  RepeatedUsage: 0
-  repeatedManaCost: 0.5
-  m_fMinimumManaRequired: 50
-  m_fMovementSpeedSlowDown: 2
-  findUI: 0
-  testVariable: 0
-  shieldObject: {fileID: 0}
 --- !u!1 &102807136
 GameObject:
   m_ObjectHideFlags: 0
@@ -1010,41 +962,11 @@ Prefab:
       propertyPath: m_RootOrder
       value: 4
       objectReference: {fileID: 0}
-    - target: {fileID: 4501744476720288, guid: 6e6796b8f6299b546b96f0d34acdc80a, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4501744476720288, guid: 6e6796b8f6299b546b96f0d34acdc80a, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4501744476720288, guid: 6e6796b8f6299b546b96f0d34acdc80a, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4047585150703186, guid: 6e6796b8f6299b546b96f0d34acdc80a, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4047585150703186, guid: 6e6796b8f6299b546b96f0d34acdc80a, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4047585150703186, guid: 6e6796b8f6299b546b96f0d34acdc80a, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 114807812427637960, guid: 6e6796b8f6299b546b96f0d34acdc80a,
         type: 2}
       propertyPath: ref_cameraController
       value: 
       objectReference: {fileID: 1446030713}
-    - target: {fileID: 114807812427637960, guid: 6e6796b8f6299b546b96f0d34acdc80a,
-        type: 2}
-      propertyPath: playerPrefab
-      value: 
-      objectReference: {fileID: 1619562966071516, guid: db3d4591d6979734aba88094650c5d33,
-        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6e6796b8f6299b546b96f0d34acdc80a, type: 2}
   m_IsPrefabParent: 0
