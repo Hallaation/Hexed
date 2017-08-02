@@ -17,6 +17,7 @@ public class Move : MonoBehaviour
 {
     ControllerSetter m_controller;
     CharacterController _characterController;
+    bool PlayerIsActive = true; public bool getActive() { return PlayerIsActive; }  public void setActive(bool Active) { PlayerIsActive = Active; }
     PlayerStatus m_status;
     [HideInInspector]
     public GameObject heldWeapon = null;
@@ -77,11 +78,15 @@ public class Move : MonoBehaviour
             //if the walking animation isnt running, do everything else
             if (!GetComponentInChildren<Animator>().GetCurrentAnimatorStateInfo(0).IsName("WalkingMan") && !runningAnimation)
             {
-                CalculateMovement();
-                CheckForPickup();
-                Attack(TriggerReleaseCheck());
-                CheckForDownedKill();
-                Special();
+                if (PlayerIsActive)
+                {
+                    CalculateMovement();
+                    CheckForPickup();
+                    Attack(TriggerReleaseCheck());
+
+                    CheckForDownedKill();
+                    Special();
+                }
                 //WTF an ammo text changing for UI, move this to another function then change to sprites/masking later
                 if (heldWeapon)
                 {
@@ -178,6 +183,7 @@ public class Move : MonoBehaviour
     }
     void CalculateMovement()
     {
+        
         Vector3 movement = Vector3.zero;
         //get our raw input
         //moves on X,Y when in 2D mode
