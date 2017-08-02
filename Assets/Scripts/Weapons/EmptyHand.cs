@@ -28,6 +28,7 @@ public class EmptyHand : Weapon
             {
                 if (hit.transform != this.transform)
                 {
+                    Debug.Log("Test");
                     temp.Play();
                     //hit.transform.GetComponent<PlayerStatus>().StunPlayer();
                     hit.transform.GetComponent<PlayerStatus>().TimesPunched++;

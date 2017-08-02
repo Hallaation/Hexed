@@ -26,9 +26,10 @@ GameObject:
   - component: {fileID: 60232819244934002}
   - component: {fileID: 114018766683465526}
   - component: {fileID: 114562922306742986}
-  - component: {fileID: 114458379330122386}
+  - component: {fileID: 114225358176746676}
+  - component: {fileID: 58469072841367066}
   m_Layer: 8
-  m_Name: Teleport Player
+  m_Name: GroundPound
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -210,7 +211,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1063190448550652}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.9915335, y: 1.7505423, z: -30.249485}
+  m_LocalPosition: {x: 0.2473386, y: -2.0625944, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4491360864457088}
@@ -320,6 +321,20 @@ CircleCollider2D:
   m_Offset: {x: -0.00000011920929, y: 0}
   serializedVersion: 2
   m_Radius: 0.49999997
+--- !u!58 &58469072841367066
+CircleCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1063190448550652}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 5
 --- !u!60 &60232819244934002
 PolygonCollider2D:
   m_ObjectHideFlags: 1
@@ -376,9 +391,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_iHealth: 3
   m_fStunTime: 5
+  _playerColour: {r: 0, g: 0, b: 0, a: 0}
   killMePrompt: {fileID: 1117975142675102}
   killMeArea: {fileID: 1072692517627844}
---- !u!114 &114458379330122386
+--- !u!114 &114225358176746676
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -386,20 +402,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 1063190448550652}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 609449ed9bb771f428518c47f6a724dc, type: 3}
+  m_Script: {fileID: 11500000, guid: 8afc95fe87170034da865ae4473b7e8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mana: {fileID: 0}
-  currentMana: 100000
-  m_fMaximumMana: 100000
-  PassiveManaRegeneration: 1
-  ManaCost: 100
+  currentMana: 9999999
+  m_fMaximumMana: 9999999
+  PassiveManaRegeneration: 10
+  ManaCost: 10
   RepeatedUsage: 0
   repeatedManaCost: 0.5
   m_fMinimumManaRequired: 50
   m_fMovementSpeedSlowDown: 2
-  m_TeleportForce: 0
-  test: 0
+  findUI: 1
+  RadiusOfHitBox: 30
+  WidthOfRipple: 3
+  SpeedOfGrowthPerFrame: 1
+  Delay: 0
 --- !u!114 &114501485396689554
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -413,6 +431,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mXboxController: 4
   mPlayerIndex: 3
+  m_playerNumber: 0
 --- !u!114 &114562922306742986
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -426,7 +445,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_fTimeBetweenShots: 1
   m_iDamage: 0
+  m_bAutomaticGun: 1
+  m_bBurstFire: 1
+  m_bActive: 1
   previousOwner: {fileID: 0}
+  punchEffect: {fileID: 0}
 --- !u!114 &114779038577127868
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -438,6 +461,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac6f130352d45f24a987e6d68e08e370, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  heldWeapon: {fileID: 0}
   crosshair: {fileID: 1307528044442894}
   weaponMount: {fileID: 1180499927594318}
   fistObject: {fileID: 0}
