@@ -15,7 +15,9 @@ public class PlayerStatus : MonoBehaviour
     public int TimesPunched { get { return m_iTimesPunched; } set { m_iTimesPunched = value; } }
 
     public float m_fStunTime = 1;
+    public float m_fMaximumStunWait = 2;
     Timer stunTimer;
+    Timer resetStunTimer;
     [HideInInspector]
     public Color _playerColour;
     private Renderer PlayerSprite;
@@ -34,6 +36,7 @@ public class PlayerStatus : MonoBehaviour
         m_iMaxHealth = m_iHealth;
         //initialize my timer and get the player's colour to return to.
         stunTimer = new Timer(m_fStunTime);
+        resetStunTimer = new Timer(m_fMaximumStunWait);
         //_playerColour = GetComponent<Renderer>().material.color;
         if (GetComponent<Renderer>())
         {
@@ -53,6 +56,15 @@ public class PlayerStatus : MonoBehaviour
     }
     void Update()
     {
+        //if i've been punched once, start the timer, once the timer has reached the end, reset the amount of times punched.
+        if (m_iTimesPunched >= 1)
+        {
+            if (resetStunTimer.Tick(Time.deltaTime))
+            {
+                m_iTimesPunched = 0;
+            }
+        }
+
         if (_healthText)
         {
             float xOffset = (m_iHealth / m_iMaxHealth) * 0.235f;
@@ -111,6 +123,7 @@ public class PlayerStatus : MonoBehaviour
     {
         //stun the player called outside of class
         m_bStunned = true;
+        m_iTimesPunched = 0;
     }
 
     public void KillPlayer()

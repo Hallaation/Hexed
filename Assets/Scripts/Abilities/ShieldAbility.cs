@@ -9,77 +9,68 @@ public class ShieldAbility : BaseAbility
     [Header("Shield Variables")]
     public float testVariable;
     [SerializeField]
-    private GameObject shieldObject;
+    public GameObject shieldObject;
 
     bool m_bPoweredUp = false;
     bool PowerReset = false;
     // Use this for initialization
     public override void Initialise()
-
-
-    { m_bPoweredUp = true;
+    {
         if (findUI)
         {
             shieldObject = transform.Find("ShieldSprite").gameObject;
-            shieldObject.SetActive(true);
+            shieldObject.SetActive(false);
         }
     }
 
-    //public override void UseSpecialAbility(bool UsingAbility)
-    //{
+    public override void UseSpecialAbility(bool UsingAbility)
+    {
+        //if the input calls for a power usage and the power hasnt been reset yet (trigger hasnt been let go yet)
+        //once I want to use the ability, power reset is true
+        if (UsingAbility)
+        {
+            PowerReset = (currentMana >= m_fMinimumManaRequired);
+        }
 
-    //    //if the input calls for a power usage and the power hasnt been reset yet (trigger hasnt been let go yet)
-    //    //once I want to use the ability, power reset is true
-    //    if (UsingAbility)
-    //    {
-    //        if (currentMana >= m_fMinimumManaRequired)
-    //        {
-    //            PowerReset = true;
-    //        }
-    //    }
+        if (UsingAbility && PowerReset)
+        {
+            m_bPoweredUp = !(currentMana >= m_fMaximumMana);
+            RegenMana = false;
+            currentMana -= repeatedManaCost * Time.deltaTime;
+            this.GetComponent<Move>().HideWeapon(true);
+            shieldObject.SetActive(true);
+        }
+        //once the left trigger is at value 0, power reset is fals;e
+        else
+        {
+            this.GetComponent<Move>().HideWeapon(false);
+            PowerReset = false;
+            shieldObject.SetActive(false);
+            m_bPoweredUp = false;
+        }
 
-    //    if (UsingAbility && PowerReset)
-    //    {
-    //        if (currentMana >= m_fMaximumMana)
-    //        {
-    //            m_bPoweredUp = true;
-    //        }
-    //        RegenMana = false;
-    //        currentMana -= repeatedManaCost * Time.deltaTime;
-    //        this.GetComponent<Move>().HideWeapon(true);
-    //        shieldObject.SetActive(true);
-    //    }
-    //    //once the left trigger is at value 0, power reset is fals;e
-    //    else
-    //    {
-    //        this.GetComponent<Move>().HideWeapon(false);
-    //        PowerReset = false;
-    //        shieldObject.SetActive(false);
-    //        m_bPoweredUp = false;
-    //    }
+        //TODO Shield logic goes here.
+    }
 
-    //    //TODO Shield logic goes here.
-    //}
+    public override void AdditionalLogic()
+    {
+        if (shieldObject)
+        {
+            if (!shieldObject.activeInHierarchy)
+            {
+                RegenMana = true;
+            }
+        }
 
-    //public override void AdditionalLogic()
-    //{
-    //    if (shieldObject)
-    //    {
-    //        if (!shieldObject.activeInHierarchy)
-    //        {
-    //            RegenMana = true;
-    //        }
-    //    }
-
-    //    if (currentMana <= 0)
-    //    {
-    //        PowerReset = false;
-    //    }
-    //    if (_AbilityTypeText)
-    //    {
-    //        _AbilityTypeText.text = "Ability : Shield";
-    //    }
-    //}
+        if (currentMana <= 0)
+        {
+            PowerReset = false;
+        }
+        if (_AbilityTypeText)
+        {
+            _AbilityTypeText.text = "Ability : Shield";
+        }
+    }
 
     public void TakeBullet(GameObject bullet , RaycastHit2D rayHit)
     {
@@ -89,7 +80,7 @@ public class ShieldAbility : BaseAbility
             bullet.transform.rotation = Quaternion.Inverse(bullet.transform.rotation);
 
             Vector3 velocity = bullet.GetComponent<Rigidbody2D>().velocity;
-            bullet.GetComponent<Rigidbody2D>().velocity = Vector3.Reflect(bullet.transform.up + velocity , rayHit.transform.up);
+            bullet.GetComponent<Rigidbody2D>().velocity = Vector3.Reflect(bullet.transform.up + velocity * 0.5f , rayHit.transform.up);
             bullet.GetComponent<Bullet>().bulletOwner = null;
         }
         else
