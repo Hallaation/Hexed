@@ -328,7 +328,7 @@ public class Move : MonoBehaviour
     void Attack(bool TriggerCheck)
     {
         //attacks with weapon in hand, if no weapon, they do a melee punch instead.
-        if (XCI.GetButton(XboxButton.RightBumper , m_controller.mXboxController))
+        if (XCI.GetAxis(XboxAxis.RightTrigger , m_controller.mXboxController) > 0)
         {
             if (m_bHoldingWeapon)
             {
@@ -340,7 +340,7 @@ public class Move : MonoBehaviour
             else
             {
                 vibrationValue.x = 0.1f;
-               // GamePad.SetVibration(m_controller.mPlayerIndex , vibrationValue.x , vibrationValue.y);
+                //GamePad.SetVibration(m_controller.mPlayerIndex , vibrationValue.x , vibrationValue.y);
                 defaultWeapon.Attack(TriggerCheck);
                 //currently doesnt actually do melee attacks. using controller vibration for testing purposes
             }
