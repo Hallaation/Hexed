@@ -12,7 +12,7 @@ public class SpinToWin : BaseAbility
 
 
     public float SpinRadius = 2.3f;
-    private bool DrawGizmo = false;
+    private bool PowerReset = false;
     public override void AdditionalLogic()
     {
 
@@ -33,36 +33,52 @@ public class SpinToWin : BaseAbility
 
     public override void UseSpecialAbility(bool UsingAbility = false)
     {
-        RegenMana = !UsingAbility;
+        //do ability logic on a seperate thread
+        StartCoroutine(RunAbility(UsingAbility));
+    }
+
+
+    IEnumerator RunAbility(bool UsingAbility)
+    {
         if (UsingAbility)
         {
-            currentMana -= repeatedManaCost * Time.deltaTime;
-            GetComponent<Move>().HideWeapon(true);
-            //should use an animation instead of hacking it like this, but whatever.
-            GetComponent<Move>().playerSpirte.transform.rotation = Quaternion.Euler(new Vector3(0 , 0 , GetComponent<Move>().playerSpirte.transform.rotation.eulerAngles.z + RotationSpeed));
-            //disable stick rotation and turn on the radius
-            GetComponent<Move>().m_bStopStickRotation = true;
-            spinSprite.SetActive(true);
+            PowerReset = (currentMana >= m_fMinimumManaRequired);
+        }
 
-            Collider2D[] hitCollider = Physics2D.OverlapCircleAll(this.transform.position , SpinRadius , 1 << 8);
+        if (UsingAbility && PowerReset)
+        {
+                RegenMana = !UsingAbility;
+                currentMana -= repeatedManaCost * Time.deltaTime;
+                GetComponent<Move>().HideWeapon(true);
+                //should use an animation instead of hacking it like this, but whatever.
+                GetComponent<Move>().playerSpirte.transform.rotation = Quaternion.Euler(new Vector3(0 , 0 , GetComponent<Move>().playerSpirte.transform.rotation.eulerAngles.z + RotationSpeed));
+                //disable stick rotation and turn on the radius
+                GetComponent<Move>().m_bStopStickRotation = true;
+                spinSprite.SetActive(true);
 
-            foreach (Collider2D collided in hitCollider)
-            {
-                if (collided.transform != this.transform)
+                //overlap circle against player layer
+                Collider2D[] hitCollider = Physics2D.OverlapCircleAll(this.transform.position , SpinRadius , 1 << 8);
+
+                foreach (Collider2D collided in hitCollider)
                 {
-                    collided.GetComponent<PlayerStatus>().KillPlayer();
+                    if (collided.transform != this.transform)
+                    {
+                        collided.GetComponent<PlayerStatus>().KillPlayer();
+                    }
                 }
-            }
+
+            
         }
         else
         {
             GetComponent<Move>().HideWeapon(false);
-            DrawGizmo = false;
+            PowerReset = false;
             //let the player rotate again, turn the spin radius indicator off and reset the rotation and allow the player to rotate with their sticks
             GetComponent<Move>().m_bStopStickRotation = false;
             spinSprite.SetActive(false);
             GetComponent<Move>().playerSpirte.transform.rotation = this.transform.rotation;
+            RegenMana = !UsingAbility;
         }
+        yield return null;
     }
-
 }
