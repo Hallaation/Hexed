@@ -65,8 +65,6 @@ public class Gun : Weapon
             yield return new WaitForSeconds(m_fTimeBetweenBurstShots);
             
         }
-
-
         Debug.Log("BurstFinnished");
         TimerBetweenFiring.set(0);
         yield return null;

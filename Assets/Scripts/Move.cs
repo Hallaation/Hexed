@@ -24,7 +24,7 @@ public class Move : MonoBehaviour
     Rigidbody2D _rigidBody;
     private bool m_bTriggerReleased;
     [HideInInspector]
-    public bool m_bStockStickRotation = false;
+    public bool m_bStopStickRotation = false;
     bool m_bHoldingWeapon = false;
     bool runningAnimation = false;
     [HideInInspector]
@@ -87,7 +87,6 @@ public class Move : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(XCI.GetAxis(XboxAxis.LeftTrigger , m_controller.mXboxController));
         if (!m_status.IsDead && !m_status.IsStunned)
         {
             //if the walking animation isnt running, do everything else
@@ -131,8 +130,6 @@ public class Move : MonoBehaviour
         {
             _rigidBody.velocity = Vector2.zero;
         }
-
-        Debug.DrawLine(this.transform.position , new Vector2(this.transform.position.x - 1.0f , this.transform.position.y));
     }
 
     bool TriggerReleaseCheck()
@@ -208,13 +205,13 @@ public class Move : MonoBehaviour
         movement = (!m_b2DMode) ? new Vector3(XCI.GetAxis(XboxAxis.LeftStickX , m_controller.mXboxController) , 0 , XCI.GetAxis(XboxAxis.LeftStickY , m_controller.mXboxController)) : new Vector3(XCI.GetAxis(XboxAxis.LeftStickX , m_controller.mXboxController) , XCI.GetAxis(XboxAxis.LeftStickY , m_controller.mXboxController));
 
         Vector3 vrotation = Vector3.zero;
-        if (!m_bStockStickRotation)
+        if (!m_bStopStickRotation)
         {
             vrotation = new Vector2(GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Right.X , GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Right.Y);
         }
         //if im not getting any input from the right stick, make my rotation from the left stick instead
         //if rotation is none and stick rotation is allowed
-        if (vrotation == Vector3.zero && !m_bStockStickRotation)
+        if (vrotation == Vector3.zero && !m_bStopStickRotation)
         {
             //turn off the crosshair
             crosshair.SetActive(false);
@@ -222,8 +219,8 @@ public class Move : MonoBehaviour
         }
         else
         {
-            //turn on crosshair
-            crosshair.SetActive(true);
+            //turn on crosshair if im stopping
+                crosshair.SetActive(!m_bStopStickRotation);
         }
 
         //check the deadzone for rotation
@@ -445,4 +442,8 @@ public class Move : MonoBehaviour
         }
     }
 
+    public void FindSprite()
+    {
+        playerSpirte = transform.Find("Sprites").Find("PlayerSprite").gameObject;
+    }
 }
