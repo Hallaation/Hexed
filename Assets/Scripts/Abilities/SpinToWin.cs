@@ -14,8 +14,21 @@ public class SpinToWin : BaseAbility
     private bool PowerReset = false;
     public override void AdditionalLogic()
     {
+        if (!spinSprite.activeInHierarchy)
+        {
+            RegenMana = true;
+        }
 
+        if (currentMana <= 0)
+        {
+            PowerReset = false;
+        }
+        if (_AbilityTypeText)
+        {
+
+        }
     }
+    
 
     public override void Initialise()
     {
@@ -40,30 +53,34 @@ public class SpinToWin : BaseAbility
     {
         if (UsingAbility)
         {
-            PowerReset = (currentMana >= m_fMinimumManaRequired);
+            if (currentMana >= m_fMinimumManaRequired)
+            {
+                PowerReset = true;
+            }
         }
 
         if (UsingAbility && PowerReset)
         {
-                RegenMana = !UsingAbility;
-                currentMana -= repeatedManaCost * Time.deltaTime;
-                GetComponent<Move>().HideWeapon(true);
-                //should use an animation instead of hacking it like this, but whatever.
-                GetComponent<Move>().playerSpirte.transform.rotation = Quaternion.Euler(new Vector3(0 , 0 , GetComponent<Move>().playerSpirte.transform.rotation.eulerAngles.z + RotationSpeed));
-                //disable stick rotation and turn on the radius
-                GetComponent<Move>().m_bStopStickRotation = true;
-                spinSprite.SetActive(true);
 
-                //overlap circle against player layer
-                Collider2D[] hitCollider = Physics2D.OverlapCircleAll(this.transform.position , SpinRadius , 1 << 8);
+            RegenMana = false;
+            currentMana -= repeatedManaCost * Time.deltaTime;
+            GetComponent<Move>().HideWeapon(true);
+            //should use an animation instead of hacking it like this, but whatever.
+            GetComponent<Move>().playerSpirte.transform.rotation = Quaternion.Euler(new Vector3(0 , 0 , GetComponent<Move>().playerSpirte.transform.rotation.eulerAngles.z + RotationSpeed));
+            //disable stick rotation and turn on the radius
+            GetComponent<Move>().m_bStopStickRotation = true;
+            spinSprite.SetActive(true);
 
-                foreach (Collider2D collided in hitCollider)
+            //overlap circle against player layer
+            Collider2D[] hitCollider = Physics2D.OverlapCircleAll(this.transform.position , SpinRadius , 1 << 8);
+
+            foreach (Collider2D collided in hitCollider)
+            {
+                if (collided.transform != this.transform)
                 {
-                    if (collided.transform != this.transform)
-                    {
-                        collided.GetComponent<PlayerStatus>().KillPlayer();
-                    }
-                }           
+                    collided.GetComponent<PlayerStatus>().KillPlayer();
+                }
+            }
         }
         else
         {
@@ -73,7 +90,6 @@ public class SpinToWin : BaseAbility
             GetComponent<Move>().m_bStopStickRotation = false;
             spinSprite.SetActive(false);
             GetComponent<Move>().playerSpirte.transform.rotation = this.transform.rotation;
-            RegenMana = !UsingAbility;
         }
         yield return null;
     }
