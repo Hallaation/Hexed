@@ -340,7 +340,7 @@ public class Move : MonoBehaviour
             else
             {
                 vibrationValue.x = 0.1f;
-                GamePad.SetVibration(m_controller.mPlayerIndex , vibrationValue.x , vibrationValue.y);
+               // GamePad.SetVibration(m_controller.mPlayerIndex , vibrationValue.x , vibrationValue.y);
                 defaultWeapon.Attack(TriggerCheck);
                 //currently doesnt actually do melee attacks. using controller vibration for testing purposes
             }
