@@ -106,16 +106,16 @@ public class Move : MonoBehaviour
                 {
                     if (heldWeapon.GetComponent<Gun>())
                     {
-                        _AmmoText.text = heldWeapon.GetComponent<Gun>().m_iAmmo.ToString();
+                   //     _AmmoText.text = heldWeapon.GetComponent<Gun>().m_iAmmo.ToString();
                     }
                     else
                     {
-                        _AmmoText.text = "Infinite Ammo";
+                     //   _AmmoText.text = "Infinite Ammo";
                     }
                 }
                 else
                 {
-                    _AmmoText.text = "you punch";
+              //      _AmmoText.text = "you punch";
                 }
             }
             else //otherwise set the iskilling to false so it can return the animation to idle
@@ -148,9 +148,9 @@ public class Move : MonoBehaviour
         //Buggy with XBone controller with high frame rates.
         //GamePad.SetVibration(m_controller.mPlayerIndex , XCI.GetAxis(XboxAxis.LeftTrigger , m_controller.mXboxController) , XCI.GetAxis(XboxAxis.RightTrigger , m_controller.mXboxController));
         //vibrationValue = new Vector2(XCI.GetAxis(XboxAxis.LeftTrigger , m_controller.mXboxController) , XCI.GetAxis(XboxAxis.RightTrigger , m_controller.mXboxController));
-        GamePad.SetVibration(m_controller.mPlayerIndex , vibrationValue.x , vibrationValue.y);
+       // GamePad.SetVibration(m_controller.mPlayerIndex , vibrationValue.x , vibrationValue.y);
 
-        vibrationValue *= 0.99f; //magic numbers.
+      //  vibrationValue *= 0.99f; //magic numbers.
 
         if (vibrationValue.magnitude < 0.4f)
         {
