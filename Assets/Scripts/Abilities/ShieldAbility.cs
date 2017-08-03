@@ -29,18 +29,12 @@ public class ShieldAbility : BaseAbility
         //once I want to use the ability, power reset is true
         if (UsingAbility)
         {
-            if (currentMana >= m_fMinimumManaRequired)
-            {
-                PowerReset = true;
-            }
+            PowerReset = (currentMana >= m_fMinimumManaRequired);
         }
 
         if (UsingAbility && PowerReset)
         {
-            if (currentMana >= m_fMaximumMana)
-            {
-                m_bPoweredUp = true;
-            }
+            m_bPoweredUp = !(currentMana >= m_fMaximumMana);
             RegenMana = false;
             currentMana -= repeatedManaCost * Time.deltaTime;
             this.GetComponent<Move>().HideWeapon(true);
