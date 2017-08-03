@@ -6,7 +6,6 @@ public class SpinToWin : BaseAbility
 {
 
     private GameObject spinSprite;
-    private float m_fRotation;
     public float RotationSpeed = 20.0f;
     public float MovementSpeedSlow = 10.0f;
 
@@ -20,7 +19,6 @@ public class SpinToWin : BaseAbility
 
     public override void Initialise()
     {
-        m_fRotation = 0;
         //find the gameobject containing the sprite, and set its parent to be the player's sprite (pure laziness)
         spinSprite = this.transform.Find("SpinSprite").gameObject;
         if (!GetComponent<Move>().playerSpirte)
@@ -65,9 +63,7 @@ public class SpinToWin : BaseAbility
                     {
                         collided.GetComponent<PlayerStatus>().KillPlayer();
                     }
-                }
-
-            
+                }           
         }
         else
         {

@@ -11,6 +11,22 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1063190448550652}
   m_IsPrefabParent: 1
+--- !u!1 &1003125572194434
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4668190631523716}
+  - component: {fileID: 212998283642398248}
+  m_Layer: 8
+  m_Name: PlayerSprite
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1063190448550652
 GameObject:
   m_ObjectHideFlags: 0
@@ -114,22 +130,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!1 &1317882333509602
-GameObject:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 4695616982495660}
-  - component: {fileID: 212819027338277954}
-  m_Layer: 8
-  m_Name: PlayerSprite
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &1418356294443734
 GameObject:
   m_ObjectHideFlags: 1
@@ -216,7 +216,7 @@ Transform:
   - {fileID: 4917713658517612}
   - {fileID: 4531079090191160}
   - {fileID: 4495240860212316}
-  - {fileID: 4695616982495660}
+  - {fileID: 4668190631523716}
   m_Father: {fileID: 4349989783234848}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -277,12 +277,12 @@ Transform:
   m_Father: {fileID: 4176614370046088}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &4695616982495660
+--- !u!4 &4668190631523716
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1317882333509602}
+  m_GameObject: {fileID: 1003125572194434}
   m_LocalRotation: {x: -0, y: 0.008726558, z: -0, w: 0.999962}
   m_LocalPosition: {x: -0.0873386, y: 0.88259447, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -675,12 +675,12 @@ SpriteRenderer:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
---- !u!212 &212819027338277954
+--- !u!212 &212998283642398248
 SpriteRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1317882333509602}
+  m_GameObject: {fileID: 1003125572194434}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
