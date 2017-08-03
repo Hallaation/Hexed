@@ -17,15 +17,17 @@ public class PlayerUIElements : MonoBehaviour
 	// Use this for initialization
 	void Awake()
     {
+                
         //lets find my children and find the objects
-        m_ManaText = transform.Find("Mana").gameObject;
-        m_HealthText = transform.Find("Health").gameObject;
-        m_AmmoText = transform.Find("Ammo").gameObject;
-        m_AbilityType = transform.Find("AbilityType").gameObject;
+        m_ManaText = transform.Find("OldObjects").Find("Mana").gameObject;
+        m_HealthText = transform.Find("OldObjects").Find("Health").gameObject;
+        m_AmmoText = transform.Find("OldObjects").Find("Ammo").gameObject;
+        m_AbilityType = transform.Find("OldObjects").Find("AbilityType").gameObject;
 
         //find the mana bar
-        m_manaBarMask = transform.Find("ManaBar").Find("BarMask").gameObject;
-        m_HealthBarMask = transform.Find("HealthBar").Find("BarMask").gameObject;
+        m_manaBarMask = transform.Find("OldObjects").Find("ManaBar").Find("BarMask").gameObject;
+        m_HealthBarMask = transform.Find("OldObjects").Find("HealthBar").Find("BarMask").gameObject;
+
         if (!this.GetComponentInParent<PlayerUIArray>())
         {
             this.transform.parent.gameObject.AddComponent<PlayerUIArray>();
