@@ -376,6 +376,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_iHealth: 3
   m_fStunTime: 5
+  m_fMaximumStunWait: 2
   _playerColour: {r: 0, g: 0, b: 0, a: 0}
   killMePrompt: {fileID: 1117975142675102}
   killMeArea: {fileID: 1072692517627844}
@@ -390,6 +391,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 609449ed9bb771f428518c47f6a724dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  AbilityIcon: {fileID: 21300000, guid: beb561301c429c1478719366046b5f33, type: 3}
   currentMana: 100000
   m_fMaximumMana: 100000
   PassiveManaRegeneration: 1
@@ -444,6 +446,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   heldWeapon: {fileID: 0}
+  m_bStopStickRotation: 0
   crosshair: {fileID: 1307528044442894}
   weaponMount: {fileID: 1180499927594318}
   fistObject: {fileID: 0}
@@ -451,6 +454,7 @@ MonoBehaviour:
   throwingForce: 40
   m_b2DMode: 1
   vibrationValue: {x: 0, y: 0}
+  playerSpirte: {fileID: 0}
 --- !u!212 &212011166948301414
 SpriteRenderer:
   m_ObjectHideFlags: 1

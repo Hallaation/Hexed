@@ -27,7 +27,6 @@ public class PlayerStatus : MonoBehaviour
     [HideInInspector]
     public GameObject killMeArea = null;
 
-    private UnityEngine.UI.Text _healthText;
     private GameObject _HealthMask;
 
     //if the player is dead, the renderer will change their colour to gray, and all physics simulation of the player's rigidbody will be turned off.
@@ -50,11 +49,11 @@ public class PlayerStatus : MonoBehaviour
         }
         killMePrompt.SetActive(false);
 
-        GameObject UIElements = GameObject.FindGameObjectWithTag("PlayerUI");
-        _healthText = UIElements.GetComponent<PlayerUIArray>().playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_HealthText.GetComponent<Text>();
-        _HealthMask = UIElements.GetComponent<PlayerUIArray>().playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_HealthBarMask;
-        UIElements.GetComponent<PlayerUIArray>().playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_ScrollingIcon.GetComponent<Image>().material.SetColor("_Color" , _playerColour);
-        UIElements.GetComponent<PlayerUIArray>().playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_StaticObjectMaterial.SetColor("_Color" , _playerColour);
+        _HealthMask = PlayerUIArray.instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_HealthBarMask;
+        PlayerUIArray.instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_healthScrolllingIcon.GetComponent<Image>().material.SetColor("_Color" , _playerColour);
+        PlayerUIArray.instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_StaticObjectMaterial.SetColor("_Color" , _playerColour);
+
+
     }
     void Update()
     {
@@ -67,11 +66,10 @@ public class PlayerStatus : MonoBehaviour
             }
         }
 
-        if (_healthText)
+        if (_HealthMask)
         {
             float xOffset = m_iHealth * -0.0791f;
             Debug.Log(xOffset);
-            _healthText.text = (m_iHealth > 0) ? m_iHealth.ToString() : "You're dead";
             _HealthMask.GetComponent<Image>().material.SetTextureOffset("_MainTex" , new Vector2(0 + xOffset , 0));
         }
 

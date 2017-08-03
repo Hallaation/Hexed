@@ -5,7 +5,9 @@ using UnityEngine.UI;
 
 public class BaseAbility : MonoBehaviour
 {
+    public Sprite AbilityIcon;
 
+    [Space]
     //abilities are going to cost mana.
     public float currentMana = 0.0f; //TODO change back to protectd
     protected bool RegenMana;
@@ -19,10 +21,10 @@ public class BaseAbility : MonoBehaviour
     public float m_fMovementSpeedSlowDown = 2.0f;
 
     public bool findUI = true;
+
     //TODO if the shield is charged up to 100% of mana, the shield can deflect bullets, knock over players when run over with it
     //TODO otherwise all the shield is block bullets and knock over players when run over with it.
 
-    protected Text _ManaText;
     protected Text _AbilityTypeText;
     protected GameObject manaBar;
     //WTF Use this for initialization
@@ -30,26 +32,19 @@ public class BaseAbility : MonoBehaviour
     {
         // mana = GameObject.Find("Mana").GetComponent<UnityEngine.UI.Text>();
         Initialise();
-
         
         if (findUI)
         {
-            GameObject UIElements = GameObject.FindGameObjectWithTag("PlayerUI");
-            _ManaText = UIElements.GetComponent<PlayerUIArray>().playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_ManaText.GetComponent<Text>();
-            _AbilityTypeText = UIElements.GetComponent<PlayerUIArray>().playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_AbilityType.GetComponent<Text>();
-
-            manaBar = UIElements.GetComponent<PlayerUIArray>().playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_manaBarMask;
-
+            manaBar = PlayerUIArray.instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_manaBarMask;
+            PlayerUIArray.instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_SpecialScrollingIcon.GetComponent<Image>().sprite = AbilityIcon;
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (_ManaText)
+        if (manaBar)
         {
-            _ManaText.text = currentMana.ToString("0.00") + " / " + m_fMaximumMana.ToString();
-
             //figure out the x offset
             //- .25 to 0
             float xOffset = -0.25f;

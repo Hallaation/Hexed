@@ -17,7 +17,8 @@ public class Move : MonoBehaviour
 {
     ControllerSetter m_controller;
     CharacterController _characterController;
-    bool PlayerIsActive = true; public bool getActive() { return PlayerIsActive; }  public void setActive(bool Active) { PlayerIsActive = Active; }
+    bool PlayerIsActive = true; public bool getActive() { return PlayerIsActive; }
+    public void setActive(bool Active) { PlayerIsActive = Active; }
     PlayerStatus m_status;
     [HideInInspector]
     public GameObject heldWeapon = null;
@@ -41,8 +42,6 @@ public class Move : MonoBehaviour
     public Vector2 vibrationValue;
     [HideInInspector]
     public GameObject playerSpirte;
-
-    Text _AmmoText;
 
     // Use this for initialization
     void Start()
@@ -80,8 +79,8 @@ public class Move : MonoBehaviour
         }
 
         defaultWeapon = GetComponent<EmptyHand>();
-        GameObject UIElements = GameObject.FindGameObjectWithTag("PlayerUI");
-        _AmmoText = UIElements.GetComponent<PlayerUIArray>().playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_AmmoText.GetComponent<Text>();
+
+
     }
 
     // Update is called once per frame
@@ -101,7 +100,8 @@ public class Move : MonoBehaviour
                     CheckForDownedKill();
                     Special();
                 }
-                //WTF an ammo text changing for UI, move this to another function then change to sprites/masking later
+                /*
+                //! an ammo text changing for UI, move this to another function then change to sprites/masking later
                 if (heldWeapon)
                 {
                     if (heldWeapon.GetComponent<Gun>())
@@ -117,6 +117,7 @@ public class Move : MonoBehaviour
                 {
               //      _AmmoText.text = "you punch";
                 }
+                */
             }
             else //otherwise set the iskilling to false so it can return the animation to idle
             {
@@ -148,9 +149,9 @@ public class Move : MonoBehaviour
         //Buggy with XBone controller with high frame rates.
         //GamePad.SetVibration(m_controller.mPlayerIndex , XCI.GetAxis(XboxAxis.LeftTrigger , m_controller.mXboxController) , XCI.GetAxis(XboxAxis.RightTrigger , m_controller.mXboxController));
         //vibrationValue = new Vector2(XCI.GetAxis(XboxAxis.LeftTrigger , m_controller.mXboxController) , XCI.GetAxis(XboxAxis.RightTrigger , m_controller.mXboxController));
-       // GamePad.SetVibration(m_controller.mPlayerIndex , vibrationValue.x , vibrationValue.y);
+        // GamePad.SetVibration(m_controller.mPlayerIndex , vibrationValue.x , vibrationValue.y);
 
-      //  vibrationValue *= 0.99f; //magic numbers.
+        //  vibrationValue *= 0.99f; //magic numbers.
 
         if (vibrationValue.magnitude < 0.4f)
         {
@@ -196,7 +197,7 @@ public class Move : MonoBehaviour
     }
     void CalculateMovement()
     {
-        
+
         Vector3 movement = Vector3.zero;
         //get our raw input
         //moves on X,Y when in 2D mode
@@ -220,7 +221,7 @@ public class Move : MonoBehaviour
         else
         {
             //turn on crosshair if im stopping
-                crosshair.SetActive(!m_bStopStickRotation);
+            crosshair.SetActive(!m_bStopStickRotation);
         }
 
         //check the deadzone for rotation
