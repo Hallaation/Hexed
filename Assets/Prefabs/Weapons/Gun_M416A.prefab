@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 50690837388985444}
   - component: {fileID: 114347866791611600}
   m_Layer: 12
-  m_Name: M416A
+  m_Name: Gun_M416A
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -161,7 +161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae25850cfcbaae2439d77f3f6d8188da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_fTimeBetweenShots: 0.2
+  m_fTimeBetweenShots: 0.5
   m_iDamage: 0
   m_bAutomaticGun: 0
   m_bBurstFire: 1
@@ -169,12 +169,12 @@ MonoBehaviour:
   previousOwner: {fileID: 0}
   m_iAmmo: 10000000
   bullet: {fileID: 1928104826133792, guid: 26c7aaea0cded2b40b91a42678ca6f95, type: 2}
-  m_fSpreadJitter: 1
+  m_fSpreadJitter: 5
   m_fBulletSpawnOffSet: 1
-  m_fFiringForce: 10
+  m_fFiringForce: 7
   m_bAutomatic: 0
   m_iBurstFire: 3
-  m_fTimeBetweenBurstShots: 0.07
+  m_fTimeBetweenBurstShots: 0.1
 --- !u!212 &212695625594022770
 SpriteRenderer:
   m_ObjectHideFlags: 1

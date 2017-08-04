@@ -55,7 +55,7 @@ GameObject:
   - component: {fileID: 50956766400796642}
   - component: {fileID: 114534047055188346}
   m_Layer: 12
-  m_Name: Gun_AK47
+  m_Name: Gun_Shotgun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -161,7 +161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae25850cfcbaae2439d77f3f6d8188da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_fTimeBetweenShots: 0.15
+  m_fTimeBetweenShots: 1
   m_iDamage: 0
   m_bAutomaticGun: 1
   m_bBurstFire: 0
@@ -169,11 +169,11 @@ MonoBehaviour:
   previousOwner: {fileID: 0}
   m_iAmmo: 30
   bullet: {fileID: 1928104826133792, guid: 7b1d5a4de82f724468c78516eca036b0, type: 2}
-  m_fSpreadJitter: 10
+  m_fSpreadJitter: 15
   m_fBulletSpawnOffSet: 1
   m_fFiringForce: 7
   m_bAutomatic: 0
-  m_iBurstFire: 0
+  m_iBurstFire: 5
   m_fTimeBetweenBurstShots: 0
 --- !u!212 &212751703789702168
 SpriteRenderer:
@@ -206,7 +206,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: da8da47eb60060b4ca5f426ef78cee85, type: 3}
+  m_Sprite: {fileID: 21300004, guid: da8da47eb60060b4ca5f426ef78cee85, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
