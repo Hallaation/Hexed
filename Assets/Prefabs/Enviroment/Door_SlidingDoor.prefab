@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 61226909819104154}
   - component: {fileID: 114356706842031706}
   m_Layer: 11
-  m_Name: SlidingDoor
+  m_Name: Door_SlidingDoor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -53,8 +53,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1456091503775474}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -6.705, y: -36.88, z: 0}
-  m_LocalScale: {x: 4.5, y: 4.5, z: 1}
+  m_LocalPosition: {x: 5.4, y: -1.65, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4542531800602996}
   m_Father: {fileID: 0}
@@ -106,7 +106,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Size: {x: 3, y: 3}
+  m_Size: {x: 4, y: 3}
 --- !u!61 &61454642936851002
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -132,9 +132,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2b730d387e513a43ad5e59ac4d08d2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TravelDistance: 10
-  TimeToOpen: 2
-  TimeStaysOpen: 2
+  TravelDistance: 2
+  TimeToOpen: 0.5
+  TimeStaysOpen: 0.75
   TimeBetweenMovements: 0.1
 --- !u!212 &212429375598408442
 SpriteRenderer:
