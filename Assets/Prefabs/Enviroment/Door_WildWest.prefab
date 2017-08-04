@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4066612855820090}
   - component: {fileID: 50532065778418250}
   m_Layer: 11
-  m_Name: Wild West
+  m_Name: Door_WildWest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -54,8 +54,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1010328308739346}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 15.15, y: 14.37, z: 0}
-  m_LocalScale: {x: 4.5, y: 4.5, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4418840021729110}
   m_Father: {fileID: 0}
@@ -67,8 +67,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1215318344789552}
-  m_LocalRotation: {x: 0, y: -0, z: -0.6508549, w: -0.75920224}
-  m_LocalPosition: {x: -0.14169948, y: -0.09100173, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4066612855820090}
@@ -177,9 +177,9 @@ SpringJoint2D:
   m_BreakTorque: Infinity
   m_AutoConfigureConnectedAnchor: 0
   m_Anchor: {x: 0, y: -2}
-  m_ConnectedAnchor: {x: 7.640334, y: -1.9023832}
+  m_ConnectedAnchor: {x: 1.6168909, y: -1.5407271}
   m_AutoConfigureDistance: 1
-  m_Distance: 35.029434
+  m_Distance: 1.6808532
   m_DampingRatio: 0
   m_Frequency: 1
 --- !u!233 &233126469086746948
@@ -196,7 +196,7 @@ HingeJoint2D:
   m_BreakTorque: Infinity
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: 0, y: 0}
-  m_ConnectedAnchor: {x: -0.1416999, y: -0.09100003}
+  m_ConnectedAnchor: {x: 0, y: 0}
   m_UseMotor: 0
   m_Motor:
     m_MotorSpeed: 0
