@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class BaseAbility : MonoBehaviour
 {
     public Sprite AbilityIcon;
+    public Sprite[] SelectionSprites;
 
     [Space]
     //abilities are going to cost mana.
@@ -30,6 +31,7 @@ public class BaseAbility : MonoBehaviour
     //WTF Use this for initialization
     void Start()
     {
+        
         // mana = GameObject.Find("Mana").GetComponent<UnityEngine.UI.Text>();
         Initialise();
         
