@@ -17,7 +17,7 @@ public class BaseAbility : MonoBehaviour
     public float ManaCost = 10.0f;
     public bool RepeatedUsage = false;
     public float repeatedManaCost = 0.5f;
-    public float m_fMinimumManaRequired = 50;
+    public float m_fMinimumManaRequired = 40;
     public float m_fMovementSpeedSlowDown = 2.0f;
 
     public bool findUI = true;
