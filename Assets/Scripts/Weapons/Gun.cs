@@ -61,7 +61,7 @@ public class Gun : Weapon
             
             FireBullet();
             i--;
-
+            TimerBetweenFiring.set(0);
             yield return new WaitForSeconds(m_fTimeBetweenBurstShots);
             
         }
