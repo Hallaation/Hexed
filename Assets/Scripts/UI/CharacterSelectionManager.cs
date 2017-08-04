@@ -4,35 +4,55 @@ using UnityEngine;
 
 public class CharacterSelectionManager : MonoBehaviour
 {
-    public GameObject[] SelectableCharacters;
-    
-    public Dictionary<GameObject , bool> characterSelected;
+    public GameObject[] CharacterArray;
 
-    public static CharacterSelectionManager instance;
-	// Use this for initialization
-	void Start ()
+    public Dictionary<GameObject , bool> CharacterSelectionStatus;
+
+    public Dictionary<XboxCtrlrInput.XboxController , GameObject> playerSelectedCharacter = new Dictionary<XboxCtrlrInput.XboxController , GameObject>();
+
+    static CharacterSelectionManager mInstance = null;
+
+    //lazy singleton if an instance of this doesn't exist, make one
+    //Instance property
+    public static CharacterSelectionManager Instance
     {
-        //? instantiate the dictionary, and populate it with the selectable characters.
-        characterSelected = new Dictionary<GameObject , bool>();
-        foreach (GameObject character in SelectableCharacters)
-        {
-            characterSelected.Add(character , false);
+        get
+        {   
+            //if an instance doesnt exist
+            if (mInstance == null)
+            {
+                //look for an instance
+                mInstance = (CharacterSelectionManager)FindObjectOfType(typeof(CharacterSelectionManager));
+                //if an instance wasn't found, make an instance
+                if (mInstance == null)
+                {
+                    mInstance = (new GameObject("CharacterSelectionManager")).AddComponent<CharacterSelectionManager>();
+                }
+                //set to dont destroy on load
+                DontDestroyOnLoad(mInstance.gameObject);
+            }
+            return mInstance;
         }
-	}
+    }
 
+    // Use this for initialization
     private void Awake()
     {
-        //! check if there is already an instance
-        if (instance)
+        Object[] temp = Resources.LoadAll("Characters" , typeof(GameObject));
+        CharacterArray = new GameObject[temp.Length];
+        for (int i = 0; i < CharacterArray.Length;  ++i)
         {
-            Debug.LogError("There is already a character selection manager");
-            return;
+            CharacterArray[i] = temp[i] as GameObject;
         }
-        instance = this;
+        //Application.targetFrameRate = 30;
+        //! check if there is already an instance
+        //? instantiate the dictionary, and populate it with the selectable characters.
+        CharacterSelectionStatus = new Dictionary<GameObject , bool>();
+        foreach (GameObject character in CharacterArray)
+        {
+            CharacterSelectionStatus.Add(character , false);
+        }
     }
-    // Update is called once per frame
-    void Update ()
-    {
-		
-	}
+
+
 }
