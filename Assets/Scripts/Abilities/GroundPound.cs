@@ -21,7 +21,7 @@ public class GroundPound : BaseAbility
     // Use this for initialization
     public override void Initialise()
     {
-        GroundPoundCollider = GetComponent<CircleCollider2D>();
+        GroundPoundCollider = transform.GetChild(0).GetComponent<CircleCollider2D>();
         MoveScript = GetComponent<Move>();
         GroundPoundCollider.radius = SpeedOfGrowthPerFrame;
         Slamer = GetComponent<PlayerStatus>();
@@ -54,51 +54,53 @@ public class GroundPound : BaseAbility
         // Debug.Break();
         ButtonHasBeenUp = false;
         yield return new WaitForSeconds(Delay);
-        while (Corotuine)
+        if (!Slamer.IsDead && !Slamer.IsStunned)
         {
-            ButtonHasBeenUp = false;
-            if (GroundPoundCollider.IsTouchingLayers(1 << LayerMask.NameToLayer("Player")))
+            while (Corotuine)
             {
-                Collider2D[] nearBy = Physics2D.OverlapCircleAll(transform.position, GroundPoundCollider.radius, 1 << LayerMask.NameToLayer("Player"));
-                for (int k = 0; k < nearBy.Length; ++k)
+                ButtonHasBeenUp = false;
+                if (GroundPoundCollider.IsTouchingLayers(1 << LayerMask.NameToLayer("Player")))
                 {
-                    if (nearBy[k].transform != this.transform)
+                    Collider2D[] nearBy = Physics2D.OverlapCircleAll(transform.position, GroundPoundCollider.radius, 1 << LayerMask.NameToLayer("Player"));
+                    for (int k = 0; k < nearBy.Length; ++k)
                     {
-                        Debug.Log(Vector2.Distance(nearBy[k].transform.position, transform.position));
-                        if (Vector2.Distance(nearBy[k].transform.position, transform.position) > GroundPoundCollider.radius - WidthOfRipple)
+                        if (nearBy[k].transform != this.transform)
                         {
-                            PlayerStatus tempStatus = nearBy[k].GetComponent<PlayerStatus>();
-                            if (tempStatus.IsStunned == false)
+                            Debug.Log(Vector2.Distance(nearBy[k].transform.position, transform.position));
+                            if (Vector2.Distance(nearBy[k].transform.position, transform.position) > GroundPoundCollider.radius - WidthOfRipple)
                             {
-                                tempStatus.StunPlayer();
+                                PlayerStatus tempStatus = nearBy[k].GetComponent<PlayerStatus>();
+                                if (tempStatus.IsStunned == false)
+                                {
+                                    tempStatus.StunPlayer();
+                                }
                             }
                         }
                     }
+                    if (GroundPoundCollider.radius >= RadiusOfHitBox)
+                        Corotuine = false;
+                    else
+                    {
+                        GroundPoundCollider.radius += SpeedOfGrowthPerFrame;
+                        if (GroundPoundCollider.radius > RadiusOfHitBox)
+                            GroundPoundCollider.radius = RadiusOfHitBox;
+                        yield return new WaitForEndOfFrame();
+                    }
                 }
-                if (GroundPoundCollider.radius >= RadiusOfHitBox)
-                    Corotuine = false;
                 else
                 {
-                    GroundPoundCollider.radius += SpeedOfGrowthPerFrame;
-                    if (GroundPoundCollider.radius > RadiusOfHitBox)
-                        GroundPoundCollider.radius = RadiusOfHitBox;
-                    yield return new WaitForEndOfFrame();
-                }
-            }
-            else
-            {
-                if (GroundPoundCollider.radius >= RadiusOfHitBox)
-                    Corotuine = false;
-                else
-                {
-                    GroundPoundCollider.radius += SpeedOfGrowthPerFrame;
-                    if (GroundPoundCollider.radius > RadiusOfHitBox)
-                        GroundPoundCollider.radius = RadiusOfHitBox;
-                    yield return new WaitForEndOfFrame();
+                    if (GroundPoundCollider.radius >= RadiusOfHitBox)
+                        Corotuine = false;
+                    else
+                    {
+                        GroundPoundCollider.radius += SpeedOfGrowthPerFrame;
+                        if (GroundPoundCollider.radius > RadiusOfHitBox)
+                            GroundPoundCollider.radius = RadiusOfHitBox;
+                        yield return new WaitForEndOfFrame();
+                    }
                 }
             }
         }
-
 
 
 

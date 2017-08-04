@@ -12,6 +12,10 @@ public class EmptyHand : Weapon
         {
             temp = this.gameObject.AddComponent<AudioSource>();
         }
+        else
+        {
+            temp = GetComponent<AudioSource>();
+        }
         temp.clip = punchEffect;
         temp.volume = 0.5f;
         stunPlayer = false;
