@@ -11,7 +11,7 @@ public class SlidingDoor : MonoBehaviour {
     BoxCollider2D Coll;
     Collider2D Coll2d;
     Transform ChildPosition;
-    Vector2 OriginalPosition;
+    Vector3 OriginalPosition;
     Vector3 EndPosition;
     bool DoorIsOpening;
     // Use this for initialization
@@ -21,7 +21,7 @@ public class SlidingDoor : MonoBehaviour {
    
         ChildPosition = transform.GetChild(0).GetComponentInChildren<Transform>();
         OriginalPosition = ChildPosition.transform.position;
-        EndPosition = OriginalPosition + new Vector2(0, TravelDistance);
+        EndPosition = OriginalPosition + (transform.up * TravelDistance);
         DoorIsOpening = false;
         timer = 0;
     }
