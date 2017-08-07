@@ -7,6 +7,7 @@ public class Bullet : MonoBehaviour
     CircleCollider2D Hit;
     Vector2 m_vVelocity;
     Vector3 PreviousVelocity;
+    public Vector3 GetPreviousVelocity() { return PreviousVelocity; }
     public Vector2 Velocity { get { return m_vVelocity; }  set { m_vVelocity = value; } }
 
     [HideInInspector]
