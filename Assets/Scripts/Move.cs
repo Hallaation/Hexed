@@ -135,7 +135,7 @@ public class Move : MonoBehaviour
 
     bool TriggerReleaseCheck()
     {
-        if (XCI.GetButton(XboxButton.RightBumper , m_controller.mXboxController))
+        if (XCI.GetAxis(XboxAxis.RightTrigger , m_controller.mXboxController) > 0)
         {
             return m_bTriggerReleased;
         }
@@ -335,7 +335,10 @@ public class Move : MonoBehaviour
             {
                 //attack using the weapon im holding. if an attack was done, set a vibration on my controller.
                 if (heldWeapon.GetComponent<Weapon>().Attack(TriggerCheck))
+                {
                     vibrationValue.x = 0.45f;
+                    
+                }
                 m_bTriggerReleased = false;
             }
             else
