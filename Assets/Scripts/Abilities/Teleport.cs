@@ -79,9 +79,6 @@ public class Teleport : BaseAbility
         if (XCI.GetAxis(XboxAxis.LeftTrigger, m_controller.mXboxController) < 0.1)
         {
             ButtonHasBeenUp = true;
-
-
-
         }
 
     }
