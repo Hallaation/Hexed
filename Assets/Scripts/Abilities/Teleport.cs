@@ -80,7 +80,6 @@ public class Teleport : BaseAbility
         {
             ButtonHasBeenUp = true;
         }
-
     }
 }
 

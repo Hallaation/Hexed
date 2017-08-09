@@ -49,6 +49,7 @@ public class GroundPound : BaseAbility
 
     IEnumerator GroundPoundAbility()
     {
+        currentMana -= ManaCost;
         MoveScript.setActive(false);
         _rigidBody.velocity = Vector2.zero;
         // Debug.Break();
