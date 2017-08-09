@@ -40,6 +40,7 @@ public class ControllerManager : MonoBehaviour
     void Update()
     {
         StartCoroutine(LookForPlayers());
+        ref_cameraController = GameObject.FindObjectOfType<CameraControl>();
     }
 
     IEnumerator LookForPlayers()
