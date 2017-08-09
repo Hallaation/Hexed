@@ -95,8 +95,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4047585150703186}
   - component: {fileID: 114807812427637960}
-  - component: {fileID: 114234034463495858}
-  - component: {fileID: 114803379555821988}
   m_Layer: 0
   m_Name: ControllerManager
   m_TagString: Untagged
@@ -216,49 +214,6 @@ Transform:
   m_Father: {fileID: 4501744476720288}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114234034463495858
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1752627976782452}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 609449ed9bb771f428518c47f6a724dc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentMana: 0
-  m_fMaximumMana: 100
-  PassiveManaRegeneration: 20
-  ManaCost: 10
-  RepeatedUsage: 0
-  repeatedManaCost: 0.5
-  m_fMinimumManaRequired: 50
-  m_fMovementSpeedSlowDown: 2
-  findUI: 0
-  m_TeleportForce: 20
---- !u!114 &114803379555821988
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1752627976782452}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ac4df475773f6b48a29ed94bc3177c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentMana: 0
-  m_fMaximumMana: 100
-  PassiveManaRegeneration: 20
-  ManaCost: 10
-  RepeatedUsage: 0
-  repeatedManaCost: 0.5
-  m_fMinimumManaRequired: 50
-  m_fMovementSpeedSlowDown: 2
-  findUI: 0
-  testVariable: 0
-  shieldObject: {fileID: 0}
 --- !u!114 &114807812427637960
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -274,8 +229,9 @@ MonoBehaviour:
   assignControllers: 1
   ref_cameraController: {fileID: 0}
   maxPlayers: 4
-  playerPrefab: {fileID: 1619562966071516, guid: db3d4591d6979734aba88094650c5d33,
+  playerPrefab: {fileID: 1388003199033540, guid: b56e1a7a00e659448b4245ab720ada2c,
     type: 2}
+  playerPrefab2: {fileID: 0}
   spawnPoints:
   - {fileID: 4666339143857888}
   - {fileID: 4856578179329464}

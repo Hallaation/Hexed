@@ -23,7 +23,7 @@ public class Door : MonoBehaviour
         if (DoorHinge.jointAngle > DoorHinge.limits.max - DoorAngleOfBounce && timer > 0)
         {
             MyRigidBody.AddTorque(DoorBounceForce, ForceMode2D.Force);
-            Debug.Log("MAX");
+            Debug.LogError("MAX"); //! MAX
             HasBounced = true;
             timer = 0;
         }

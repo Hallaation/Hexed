@@ -49,9 +49,9 @@ public class PlayerStatus : MonoBehaviour
         }
         killMePrompt.SetActive(false);
 
-        //_HealthMask = PlayerUIArray.instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_HealthBarMask;
-        //PlayerUIArray.instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_healthScrolllingIcon.GetComponent<Image>().material.SetColor("_Color" , _playerColour);
-        //PlayerUIArray.instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_StaticObjectMaterial.SetColor("_Color" , _playerColour);
+        _HealthMask = PlayerUIArray.instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_HealthBarMask;
+        PlayerUIArray.instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_healthScrolllingIcon.GetComponent<Image>().material.SetColor("_Color" , _playerColour);
+        PlayerUIArray.instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_StaticObjectMaterial.SetColor("_Color" , _playerColour);
 
 
     }
@@ -69,7 +69,6 @@ public class PlayerStatus : MonoBehaviour
         if (_HealthMask)
         {
             float xOffset = m_iHealth * -0.0791f;
-            Debug.Log(xOffset);
             _HealthMask.GetComponent<Image>().material.SetTextureOffset("_MainTex" , new Vector2(0 + xOffset , 0));
         }
 
