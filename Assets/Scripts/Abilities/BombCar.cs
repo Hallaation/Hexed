@@ -15,9 +15,7 @@ public class BombCar : BaseAbility {
     ControllerSetter m_controller;
     Move Movement;
     // Use this for initialization
-    void Start () {
-       
-    }                
+              
     public override void Initialise()
     {
         ManaCost = 50f;
@@ -25,6 +23,7 @@ public class BombCar : BaseAbility {
         _rigidBody = GetComponent<Rigidbody2D>();
         RegenMana = true;
         Movement = GetComponent<Move>();
+        Debug.Log("Initialised");
     }
     public override void AdditionalLogic()
     {

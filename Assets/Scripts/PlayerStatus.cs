@@ -69,7 +69,6 @@ public class PlayerStatus : MonoBehaviour
         if (_HealthMask)
         {
             float xOffset = m_iHealth * -0.0791f;
-            Debug.Log(xOffset);
             _HealthMask.GetComponent<Image>().material.SetTextureOffset("_MainTex" , new Vector2(0 + xOffset , 0));
         }
 
