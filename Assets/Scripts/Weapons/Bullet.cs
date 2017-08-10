@@ -10,6 +10,8 @@ public class Bullet : MonoBehaviour
     public Vector3 GetPreviousVelocity() { return PreviousVelocity; }
     public Vector2 Velocity { get { return m_vVelocity; }  set { m_vVelocity = value; } }
 
+
+    Rigidbody2D m_rigidBody;
     [HideInInspector]
     public PlayerStatus bulletOwner;
     [HideInInspector]
@@ -17,6 +19,7 @@ public class Bullet : MonoBehaviour
     void Start()
     {
         Hit = GetComponent<CircleCollider2D>();
+        m_rigidBody = GetComponent<Rigidbody2D>();
        // Destroy(this.gameObject , 5);
     }
 	// Update is called once per frame
@@ -53,7 +56,9 @@ public class Bullet : MonoBehaviour
         //    }
 
         //}
-        PreviousVelocity = this.GetComponent<Rigidbody2D>().velocity;
+        Vector2 dir = m_rigidBody.velocity;
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
 
     void OnCollisionEnter2D(Collision2D hit)
@@ -81,7 +86,7 @@ public class Bullet : MonoBehaviour
                 {
                     hit.transform.GetComponent<PlayerStatus>().IsDead = true;
                 }
-                hit.transform.GetComponent<Move>().StatusApplied();
+              
                 Destroy(this.gameObject);
             }
         }
