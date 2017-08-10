@@ -122,7 +122,7 @@ public class Move : MonoBehaviour
             else //otherwise set the iskilling to false so it can return the animation to idle
             {
                 runningAnimation = false;
-                _rigidBody.velocity = Vector2.zero;
+             //   _rigidBody.velocity = Vector2.zero;
                 GetComponentInChildren<Animator>().SetBool("IsKilling" , false);
             }
 
@@ -235,7 +235,7 @@ public class Move : MonoBehaviour
             this.transform.rotation = (!m_b2DMode) ? Quaternion.Euler(0 , Mathf.Atan2(vrotation.x , vrotation.y) * Mathf.Rad2Deg , 0) : this.transform.rotation = Quaternion.Euler(0 , 0 , Mathf.Atan2(-vrotation.x , vrotation.y) * Mathf.Rad2Deg);
         }
 
-        if (!_characterController)
+        if (!_characterController && !m_status.IsStunned)
         {
             //this.transform.position += movement * movementSpeed * Time.deltaTime;
             //_rigidBody.AddForce(movement * movementSpeed * Time.deltaTime , ForceMode2D.Impulse);
@@ -268,7 +268,6 @@ public class Move : MonoBehaviour
                 heldWeapon.GetComponent<Weapon>().previousOwner = this.gameObject;
                 m_bHoldingWeapon = false;
                 heldWeapon = null;
-
             }
         }
     }
@@ -281,7 +280,7 @@ public class Move : MonoBehaviour
             Vector2 movement = new Vector3(XCI.GetAxis(XboxAxis.LeftStickX , m_controller.mXboxController) , XCI.GetAxis(XboxAxis.LeftStickY , m_controller.mXboxController));
             Vector2 throwDirection = new Vector2(this.transform.up.x , this.transform.up.y);
 
-            PickUpWeapon(movement , throwDirection , false);
+            PickUpWeaponCheck(movement , throwDirection , false);
         }
         //pressing LB will throw the weapon away at a higher velocity, essentially making a projectile, this throw will be used to stun players.
         if (XCI.GetButtonDown(XboxButton.LeftBumper , m_controller.mXboxController))
@@ -289,12 +288,12 @@ public class Move : MonoBehaviour
             Vector2 movement = new Vector3(XCI.GetAxis(XboxAxis.LeftStickX , m_controller.mXboxController) , XCI.GetAxis(XboxAxis.LeftStickY , m_controller.mXboxController));
             Vector2 throwDirection = new Vector2(this.transform.up.x , this.transform.up.y);
 
-            PickUpWeapon(movement , throwDirection , true);
+            PickUpWeaponCheck(movement , throwDirection , true);
         }
     }
 
 
-    bool PickUpWeapon(Vector2 stickMovement , Vector2 throwingDirection , bool tossWeapon)
+    bool PickUpWeaponCheck(Vector2 stickMovement , Vector2 throwingDirection , bool tossWeapon)
     {
 
         Collider2D hitCollider = Physics2D.OverlapCircle(this.transform.position , 1.0f , (1 << 12));
@@ -307,25 +306,45 @@ public class Move : MonoBehaviour
         //if the overlap circle found something, pickup the weapon
         if (hitCollider)
         {
-            if (hitCollider.transform.parent.parent == null)
-            {
-                heldWeapon = hitCollider.transform.parent.gameObject;
-                hitCollider.gameObject.transform.parent.SetParent(this.transform);
-                hitCollider.gameObject.transform.parent.position = weaponMount.transform.position; //set position to the weapon mount spot
-                hitCollider.gameObject.transform.parent.rotation = weaponMount.transform.rotation; //set its rotation
-                Rigidbody2D weaponRigidBody = hitCollider.transform.parent.GetComponent<Rigidbody2D>(); //find its rigidbody in its parent
-                weaponRigidBody.simulated = false; //turn off any of its simulation
-                weaponRigidBody.velocity = Vector2.zero; //set any velocity to nothing
-                weaponRigidBody.angularVelocity = 0.0f; //set any angular velocity to nothing
+            Vector3 pos = transform.position;
+            Vector3 Dir = hitCollider.gameObject.transform.position - transform.position;
+           
 
-                m_bHoldingWeapon = true;
-                vibrationValue.y = 0.5f; //vibrate controller for haptic feedback
-                return true;
+            RaycastHit2D hitPoint = Physics2D.Raycast(pos, Dir.normalized, 1, 1 << LayerMask.NameToLayer("Wall"));
+
+            if (hitPoint.transform == null)
+            {
+                if (hitCollider.transform.parent.parent == null)
+                
+                {
+                    PickUpWeaon(hitCollider);
+                    return true;
+                }
             }
+            else if (hitCollider.transform.parent.parent == null)
+            {
+                Debug.Log("WallBlock");
+                Debug.DrawLine(pos, pos + Dir, Color.red, Mathf.Infinity);
+            }
+
         }
         return false;
     }
 
+    void PickUpWeaon(Collider2D hitCollider)
+    {
+        heldWeapon = hitCollider.transform.parent.gameObject;
+        hitCollider.gameObject.transform.parent.SetParent(this.transform);
+        hitCollider.gameObject.transform.parent.position = weaponMount.transform.position; //set position to the weapon mount spot
+        hitCollider.gameObject.transform.parent.rotation = weaponMount.transform.rotation; //set its rotation
+        Rigidbody2D weaponRigidBody = hitCollider.transform.parent.GetComponent<Rigidbody2D>(); //find its rigidbody in its parent
+        weaponRigidBody.simulated = false; //turn off any of its simulation
+        weaponRigidBody.velocity = Vector2.zero; //set any velocity to nothing
+        weaponRigidBody.angularVelocity = 0.0f; //set any angular velocity to nothing
+
+        m_bHoldingWeapon = true;
+        vibrationValue.y = 0.5f; //vibrate controller for haptic feedback
+    }
     void Attack(bool TriggerCheck)
     {
         //attacks with weapon in hand, if no weapon, they do a melee punch instead.

@@ -10,9 +10,11 @@ public class Door : MonoBehaviour
     Rigidbody2D MyRigidBody;
     bool HasBounced = false;
     float timer;
+    float freezeTimer;
     // Use this for initialization
     void Start()
     {
+        freezeTimer = 0;
         timer = 0f;
         MyRigidBody = GetComponent<Rigidbody2D>();
     }
@@ -20,26 +22,33 @@ public class Door : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (DoorHinge.jointAngle > DoorHinge.limits.max - DoorAngleOfBounce && timer > 0)
+        if (freezeTimer > 10)
         {
-            MyRigidBody.AddTorque(DoorBounceForce, ForceMode2D.Force);
-            Debug.LogError("MAX"); //! MAX
-            HasBounced = true;
-            timer = 0;
-        }
-        else if (DoorHinge.jointAngle < DoorHinge.limits.min + DoorAngleOfBounce && timer > 0)
-        {
-            MyRigidBody.AddTorque(-DoorBounceForce, ForceMode2D.Force);
+            if (DoorHinge.jointAngle > DoorHinge.limits.max - DoorAngleOfBounce && timer > 0)
+            {
+                MyRigidBody.AddTorque(DoorBounceForce, ForceMode2D.Force);
+                Debug.LogError("MAX"); //! MAX
+                HasBounced = true;
+                timer = 0;
+            }
+            else if (DoorHinge.jointAngle < DoorHinge.limits.min + DoorAngleOfBounce && timer > 0)
+            {
+                MyRigidBody.AddTorque(-DoorBounceForce, ForceMode2D.Force);
 
-            HasBounced = true;
-            timer = 0;
+                HasBounced = true;
+                timer = 0;
+            }
+            else
+            {
+                HasBounced = false;
+                timer += Time.deltaTime;
+
+            }
         }
         else
-        {
-            HasBounced = false;
-            timer += Time.deltaTime;
-
-        }
+            MyRigidBody.velocity = new Vector3(0, 0, 0);
+        MyRigidBody.angularVelocity = 0;
+        freezeTimer += Time.deltaTime;
     }
 
 

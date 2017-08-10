@@ -73,7 +73,7 @@ public class GroundPound : BaseAbility
                                 PlayerStatus tempStatus = nearBy[k].GetComponent<PlayerStatus>();
                                 if (tempStatus.IsStunned == false)
                                 {
-                                    tempStatus.StunPlayer();
+                                    tempStatus.StunPlayer(transform.position);
                                 }
                             }
                         }

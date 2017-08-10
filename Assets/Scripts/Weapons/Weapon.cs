@@ -12,7 +12,7 @@ public class Weapon : MonoBehaviour
     protected Timer TimerBetweenFiring;
     protected bool shotReady = true;
     protected bool stunPlayer = true;
-
+    Rigidbody2D rigidbody;
     public bool m_bActive = true;
     [HideInInspector]
     public GameObject previousOwner; //previous owner used to make sure when the weapon is thrown, it doesnt stun the thrower.
@@ -20,6 +20,7 @@ public class Weapon : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        rigidbody = GetComponent<Rigidbody2D>();
         TimerBetweenFiring = new Timer(m_fTimeBetweenShots);
         StartUp();
     }
@@ -95,7 +96,7 @@ public class Weapon : MonoBehaviour
             //if it enters a trigger (another player in this case") the hit player gets stunned. calls the status applied to drop their weapon.
             if (GetComponent<Rigidbody2D>().velocity.magnitude >= 10 && a_collider.tag == "Player" && a_collider.gameObject != previousOwner)
             {
-                a_collider.GetComponent<PlayerStatus>().StunPlayer();
+                a_collider.GetComponent<PlayerStatus>().StunPlayer(rigidbody.velocity);
                 a_collider.GetComponent<Move>().StatusApplied();
             }
         }
