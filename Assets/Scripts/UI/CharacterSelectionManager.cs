@@ -1,19 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
+using XboxCtrlrInput;
+using XInputDotNetPure;
 public class CharacterSelectionManager : MonoBehaviour
 {
     public GameObject[] CharacterArray;
 
     public Dictionary<GameObject , bool> CharacterSelectionStatus;
-
+    //Each controller will have a gameobject(their player);
     public Dictionary<XboxCtrlrInput.XboxController , GameObject> playerSelectedCharacter = new Dictionary<XboxCtrlrInput.XboxController , GameObject>();
 
     static CharacterSelectionManager mInstance = null;
 
     //lazy singleton if an instance of this doesn't exist, make one
-    //Instance property
+    //Instance property 
     public static CharacterSelectionManager Instance
     {
         get
@@ -38,6 +40,7 @@ public class CharacterSelectionManager : MonoBehaviour
     // Use this for initialization
     private void Awake()
     {
+        SceneManager.sceneLoaded += OnSceneLoaded;
         Object[] temp = Resources.LoadAll("Characters" , typeof(GameObject));
         CharacterArray = new GameObject[temp.Length];
         for (int i = 0; i < CharacterArray.Length;  ++i)
@@ -54,5 +57,36 @@ public class CharacterSelectionManager : MonoBehaviour
         }
     }
 
+    void Update()
+    {
+        if (playerSelectedCharacter.Count > 1)
+        {
+            if (Input.GetButtonDown("Start"))
+            {
+                SceneManager.LoadScene(1);
+            }
+        }
+    }
 
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.buildIndex == 1)
+        {
+            for (int i = 0; i < playerSelectedCharacter.Count; ++i)
+            {
+                ControllerManager.Instance.FindSpawns();
+                Debug.Log(playerSelectedCharacter[XboxController.First + i] + "Where i = " + i);
+                Debug.Log(ControllerManager.Instance.spawnPoints[i].position);
+                GameObject go = Instantiate(playerSelectedCharacter[XboxController.First + i] , ControllerManager.Instance.spawnPoints[i].position , Quaternion.identity , null);
+                go.GetComponent<ControllerSetter>().SetController(PlayerIndex.One + i);
+                go.GetComponent<ControllerSetter>().m_playerNumber = i;
+                go.GetComponent<PlayerStatus>().spawnIndex = i;
+                PlayerUIArray.instance.playerElements[i].gameObject.SetActive(true);
+                GameManagerc.Instance.InGamePlayers.Add(go.GetComponent<PlayerStatus>());
+                DontDestroyOnLoad(go);
+                go.SetActive(true);
+                CameraControl.mInstance.m_Targets.Add(go.transform);
+            }
+        }
+    }
 }

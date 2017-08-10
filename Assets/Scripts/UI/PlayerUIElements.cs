@@ -44,7 +44,7 @@ public class PlayerUIElements : MonoBehaviour
         {
             PlayerUIArray.instance.UpdateArray();
         }
-        
+
 	}
 
     private void Update()
@@ -57,7 +57,7 @@ public class PlayerUIElements : MonoBehaviour
 //! a container class used for other scripts, used to find any of the UI required for the player(s)
 public class PlayerUIArray : MonoBehaviour
 {
-    [HideInInspector]
+    //[HideInInspector]
     public PlayerUIElements[] playerElements;
 
     public static PlayerUIArray instance;
@@ -70,10 +70,19 @@ public class PlayerUIArray : MonoBehaviour
         }
         instance = this;
         playerElements = this.GetComponentsInChildren<PlayerUIElements>();
+        foreach (PlayerUIElements UIContainer in playerElements)
+        {
+            UIContainer.gameObject.SetActive(false);
+        }
+
     }
 
     public void UpdateArray()
     {
-        playerElements = this.GetComponentsInChildren<PlayerUIElements>();
+       // playerElements = this.GetComponentsInChildren<PlayerUIElements>();
+
     }
+
+
+
 }

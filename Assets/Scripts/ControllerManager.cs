@@ -1,13 +1,37 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using XInputDotNetPure;
 using XboxCtrlrInput;
 public class ControllerManager : MonoBehaviour
 {
-
     public int AbilityToAdd = 0;
     bool addedAbility = false;
+    static ControllerManager mInstance = null;
+    
+    //lazy singleton
+    public static ControllerManager Instance
+    {
+        get
+        {
+            if (mInstance == null)
+            {
+                //If I already exist, make the instance that
+                mInstance = (ControllerManager)FindObjectOfType(typeof(ControllerManager));
+
+                if (mInstance == null)
+                {
+                    //if not found, make an object and attach me to it
+                    mInstance = (new GameObject("ControllerManager")).AddComponent<ControllerManager>();
+                }
+                DontDestroyOnLoad(mInstance.gameObject);
+
+            }
+            return mInstance;
+        }
+    }
+
     //dictionary used to determine if the controller index has been assigned yet.
     Dictionary<PlayerIndex , bool> playerIdx = new Dictionary<PlayerIndex , bool>
     {
@@ -26,7 +50,6 @@ public class ControllerManager : MonoBehaviour
         {PlayerIndex.Four, XboxController.Fourth },
     };
 
-
     //4 players
 
     public bool assignControllers = true;
@@ -36,6 +59,24 @@ public class ControllerManager : MonoBehaviour
     public GameObject playerPrefab;
     public GameObject playerPrefab2;
     public Transform[] spawnPoints;
+
+    List<GameObject> players = new List<GameObject>();
+    void Awake()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        mInstance = Instance;
+        //GameObject spawnParent = GameObject.FindGameObjectWithTag("SpawnPoints");
+        ////Find the spawn points
+        ////Debug.LogError(spawnParent.transform.childCount);
+        //spawnPoints = new Transform[spawnParent.transform.childCount];
+        //for (int i = 0; i < spawnParent.transform.childCount; ++i)
+        //{
+        //    spawnPoints[i] = spawnParent.transform.GetChild(i);
+        //}
+        playerPrefab = Resources.Load("Characters/SmokePlayer") as GameObject;
+        Debug.Log("Controller manager has started");
+    }
+
 
     void Update()
     {
@@ -54,16 +95,20 @@ public class ControllerManager : MonoBehaviour
             GamePadState testState = GamePad.GetState(testIndex);
             if (testState.IsConnected &&
                 !playerIdx[testIndex] &&
-                (XCI.GetButtonDown(XboxButton.Start , xboxControllers[testIndex]) || XCI.GetButtonDown(XboxButton.Back, xboxControllers[testIndex]) ))
+                (XCI.GetButtonDown(XboxButton.Start , xboxControllers[testIndex]) || XCI.GetButtonDown(XboxButton.Back , xboxControllers[testIndex])))
             //if the player of index i has pressed Start, and their controller is connected, and their controller has yet to be assgined
             {
                 //assign a controller and spawn the player
                 playerIdx[testIndex] = true;
-                if (XCI.GetButtonDown(XboxButton.Start, xboxControllers[testIndex]))
+                if (XCI.GetButtonDown(XboxButton.Start , xboxControllers[testIndex]))
                 {
-                    GameObject go2 = Instantiate(playerPrefab, spawnPoints[nextPlayer].position, Quaternion.identity, null);
+                    GameObject go2 = Instantiate(playerPrefab , spawnPoints[nextPlayer].position , Quaternion.identity , null);
                     go2.GetComponent<ControllerSetter>().SetController(testIndex);
                     go2.GetComponent<ControllerSetter>().m_playerNumber = i;
+                    go2.GetComponent<PlayerStatus>().spawnIndex = nextPlayer;
+                    PlayerUIArray.instance.playerElements[i].gameObject.SetActive(true);
+                    GameManagerc.Instance.InGamePlayers.Add(go2.GetComponent<PlayerStatus>());
+                    DontDestroyOnLoad(go2);
                     // AddAbility(AbilityToAdd, go);
                     addedAbility = true;
                     go2.SetActive(true);
@@ -73,11 +118,14 @@ public class ControllerManager : MonoBehaviour
                         ref_cameraController.m_Targets.Add(go2.transform);
                     }
                 }
-                else if (XCI.GetButtonDown(XboxButton.Back, xboxControllers[testIndex]))
+                else if (XCI.GetButtonDown(XboxButton.Back , xboxControllers[testIndex]))
                 {
-                    GameObject go = Instantiate(playerPrefab2, spawnPoints[nextPlayer].position, Quaternion.identity, null);
+                    GameObject go = Instantiate(playerPrefab2 , spawnPoints[nextPlayer].position , Quaternion.identity , null);
                     go.GetComponent<ControllerSetter>().SetController(testIndex);
                     go.GetComponent<ControllerSetter>().m_playerNumber = i;
+                    go.GetComponent<PlayerStatus>().spawnIndex = nextPlayer;
+                    GameManagerc.Instance.InGamePlayers.Add(go.GetComponent<PlayerStatus>());
+                    DontDestroyOnLoad(go);
                     // AddAbility(AbilityToAdd, go);
                     addedAbility = true;
                     go.SetActive(true);
@@ -95,7 +143,7 @@ public class ControllerManager : MonoBehaviour
 
         yield return new WaitForEndOfFrame();
     }
-    void AddAbility(int abilityIndex, GameObject playerToAddAbility)
+    void AddAbility(int abilityIndex , GameObject playerToAddAbility)
     {
         if (addedAbility)
         {
@@ -139,6 +187,40 @@ public class ControllerManager : MonoBehaviour
             default: break;
 
         }
-        
+
+    }
+    void OnSceneLoaded(Scene scene , LoadSceneMode mode)
+    {
+        Debug.Log("loaded in a scene");
+        Object[] items = FindObjectsOfType<ControllerManager>();
+        for (int i = 0; i < items.Length; ++i)
+        {
+            if (items[i] != this)
+            {
+                Destroy(items[i]);
+            }
+        }
+
+        GameObject spawnParent = GameObject.FindGameObjectWithTag("SpawnPoints");
+        //Find the spawn points
+        spawnPoints = new Transform[spawnParent.transform.childCount];
+        for (int i = 0; i < spawnParent.transform.childCount; ++i)
+        {
+            spawnPoints[i] = spawnParent.transform.GetChild(i);
+        }
+
+        //look for the spawn points
+    }
+
+    public void FindSpawns()
+    {
+        GameObject spawnParent = GameObject.FindGameObjectWithTag("SpawnPoints");
+        //Find the spawn points
+        spawnPoints = new Transform[spawnParent.transform.childCount];
+        for (int i = 0; i < spawnParent.transform.childCount; ++i)
+        {
+            spawnPoints[i] = spawnParent.transform.GetChild(i);
+        }
+
     }
 }

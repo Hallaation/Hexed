@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using XboxCtrlrInput;
+
 using XInputDotNetPure;
 
 public class BombCar : BaseAbility {
@@ -15,7 +16,7 @@ public class BombCar : BaseAbility {
     ControllerSetter m_controller;
     Move Movement;
     // Use this for initialization
-              
+
     public override void Initialise()
     {
         ManaCost = 50f;

@@ -247,7 +247,7 @@ public class Move : MonoBehaviour
         }
     }
 
-    void ThrowMyWeapon(Vector2 movement , Vector2 throwDirection , bool tossWeapon)
+    public void ThrowMyWeapon(Vector2 movement , Vector2 throwDirection , bool tossWeapon)
     {
         if (heldWeapon && heldWeapon.GetComponent<Weapon>().m_bActive)
         {

@@ -28,18 +28,14 @@ public class BaseAbility : MonoBehaviour
 
     protected Text _AbilityTypeText;
     protected GameObject manaBar;
-    //WTF Use this for initialization
+
     void Start()
     {
         
         // mana = GameObject.Find("Mana").GetComponent<UnityEngine.UI.Text>();
         Initialise();
-        
-        if (findUI)
-        {
-            manaBar = PlayerUIArray.instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_manaBarMask;
-            PlayerUIArray.instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_SpecialScrollingIcon.GetComponent<Image>().sprite = AbilityIcon;
-        }
+
+        GetUIElements();
     }
 
     // Update is called once per frame
@@ -68,5 +64,15 @@ public class BaseAbility : MonoBehaviour
     public virtual void UseSpecialAbility(bool UsingAbility = false) { }
     public virtual void AdditionalLogic() { }
     public virtual void Initialise() { }
+
+    public void GetUIElements()
+    {
+        if (findUI)
+        {
+            PlayerUIArray.instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].gameObject.SetActive(true);
+            manaBar = PlayerUIArray.instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_manaBarMask;
+            PlayerUIArray.instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_SpecialScrollingIcon.GetComponent<Image>().sprite = AbilityIcon;
+        }
+    }
 }
 

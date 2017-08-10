@@ -69,13 +69,10 @@ public class Bullet : MonoBehaviour
             //TODO Play Spark effect
             Destroy(this.gameObject);
         }
-        Debug.Log(hit.transform.gameObject.layer);
         if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             if (!hit.transform.GetComponent<PlayerStatus>().IsStunned && hit.transform.GetComponent<PlayerStatus>() != bulletOwner)
             {
-                Debug.Log("Hit player");
-                //Debug.Log("Raycast hit player");
                 hit.transform.GetComponent<PlayerStatus>().m_iHealth -= m_iDamage; 
                 if (hit.transform.GetComponent<PlayerStatus>().m_iHealth <= 0)
                 {

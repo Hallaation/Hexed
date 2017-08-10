@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using UnityEngine.SceneManagement;
 public class PlayerStatus : MonoBehaviour
 {
     private float m_iMaxHealth;
@@ -28,10 +28,12 @@ public class PlayerStatus : MonoBehaviour
     public GameObject killMeArea = null;
 
     private GameObject _HealthMask;
-
+    [HideInInspector]
+    public int spawnIndex;
     //if the player is dead, the renderer will change their colour to gray, and all physics simulation of the player's rigidbody will be turned off.
     void Start()
     {
+        SceneManager.sceneLoaded += OnSceneLoaded;
         m_iMaxHealth = m_iHealth;
         //initialize my timer and get the player's colour to return to.
         stunTimer = new Timer(m_fStunTime);
@@ -55,6 +57,7 @@ public class PlayerStatus : MonoBehaviour
 
 
     }
+
     void Update()
     {
         //if i've been punched once, start the timer, once the timer has reached the end, reset the amount of times punched.
@@ -131,5 +134,27 @@ public class PlayerStatus : MonoBehaviour
         //kill the player, called outside of class (mostly used for downed kills)
         m_iHealth = 0;
         m_bDead = true;
+    }
+
+    public void ResetPlayer()
+    {
+        m_iHealth = 3;
+        m_bDead = false;
+        m_bStunned = false;
+        m_iTimesPunched = 0;
+        this.GetComponent<Rigidbody2D>().simulated = true;
+
+        this.transform.position = ControllerManager.Instance.spawnPoints[spawnIndex].position;
+        GetComponent<Move>().ThrowMyWeapon(Vector2.zero , Vector2.up , false);
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        //time to re activate all the UI stuff
+        this.GetComponent<BaseAbility>().GetUIElements();
+        _HealthMask = PlayerUIArray.instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_HealthBarMask;
+        PlayerUIArray.instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_healthScrolllingIcon.GetComponent<Image>().material.SetColor("_Color" , _playerColour);
+        PlayerUIArray.instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_StaticObjectMaterial.SetColor("_Color" , _playerColour);
+
     }
 }
