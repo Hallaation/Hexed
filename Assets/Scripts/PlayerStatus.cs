@@ -10,6 +10,8 @@ public class PlayerStatus : MonoBehaviour
     int m_iTimesPunched = 0;
     bool m_bDead = false;
     bool m_bStunned = false;
+    public float StunedSlide = 40;
+
     public bool IsDead { get { return m_bDead; } set { m_bDead = value; } }
     public bool IsStunned { get { return m_bStunned; } set { m_bStunned = value; } }
     public int TimesPunched { get { return m_iTimesPunched; } set { m_iTimesPunched = value; } }
@@ -28,11 +30,13 @@ public class PlayerStatus : MonoBehaviour
     public GameObject killMeArea = null;
 
     private GameObject _HealthMask;
+    Rigidbody2D _rigidbody;
     [HideInInspector]
     public int spawnIndex;
     //if the player is dead, the renderer will change their colour to gray, and all physics simulation of the player's rigidbody will be turned off.
     void Start()
     {
+        _rigidbody = GetComponent<Rigidbody2D>();
         SceneManager.sceneLoaded += OnSceneLoaded;
         m_iMaxHealth = m_iHealth;
         //initialize my timer and get the player's colour to return to.
@@ -115,16 +119,18 @@ public class PlayerStatus : MonoBehaviour
         //? should probably set a timer to reset these?
         if (m_iTimesPunched >= 2)
         {
-            StunPlayer();
+         //   StunPlayer();
             GetComponent<Move>().StatusApplied();
             m_iTimesPunched = 0;
         }
 
     }
 
-    public void StunPlayer()
+    public void StunPlayer(Vector3 ThrownItemVelocity)
     {
         //stun the player called outside of class
+        Vector3 a = ThrownItemVelocity.normalized;
+        _rigidbody.velocity = (a * StunedSlide);
         m_bStunned = true;
         m_iTimesPunched = 0;
     }
