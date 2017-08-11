@@ -10,7 +10,7 @@ public class PlayerStatus : MonoBehaviour
     int m_iTimesPunched = 0;
     bool m_bDead = false;
     bool m_bStunned = false;
-    public float StunedSlide = 40;
+    public float StunedSlide = 400;
 
     public bool IsDead { get { return m_bDead; } set { m_bDead = value; } }
     public bool IsStunned { get { return m_bStunned; } set { m_bStunned = value; } }
@@ -95,6 +95,14 @@ public class PlayerStatus : MonoBehaviour
             killMeArea.SetActive(true);
             PlayerSprite.material.color = Color.cyan;
             //this.GetComponent<Renderer>().material.color = Color.cyan;
+            if (this.transform.GetChild(1).tag == "Stunned")
+            {
+                this.transform.GetChild(1).gameObject.GetComponent<PolygonCollider2D>().enabled = true;
+            }
+            else
+            {
+                this.transform.GetChild(2).gameObject.GetComponent<PolygonCollider2D>().enabled = true;
+            }
             this.GetComponent<Collider2D>().isTrigger = true;
             if (stunTimer.Tick(Time.deltaTime))
             {
@@ -103,8 +111,16 @@ public class PlayerStatus : MonoBehaviour
         }
         //if not stunned dont kill me
         else
-        {
+        { 
             this.GetComponent<Collider2D>().isTrigger = false;
+            if (this.transform.GetChild(1).tag == "Stunned")
+            {
+                this.transform.GetChild(1).gameObject.GetComponent<PolygonCollider2D>().enabled = false;
+            }
+            else
+            {
+                this.transform.GetChild(2).gameObject.GetComponent<PolygonCollider2D>().enabled = false;
+            }
             killMeArea.SetActive(false);
             killMePrompt.SetActive(false);
             if (GetComponent<Renderer>())
@@ -125,12 +141,15 @@ public class PlayerStatus : MonoBehaviour
         }
 
     }
-
+    
     public void StunPlayer(Vector3 ThrownItemVelocity)
     {
         //stun the player called outside of class
-        Vector3 a = ThrownItemVelocity.normalized;
-        _rigidbody.velocity = (a * StunedSlide);
+        //Vector3 a = ThrownItemVelocity.normalized;
+        // _rigidbody.velocity = (a * StunedSlide);
+
+
+        _rigidbody.velocity = ThrownItemVelocity;
         m_bStunned = true;
         m_iTimesPunched = 0;
     }

@@ -56,6 +56,7 @@ public class Bullet : MonoBehaviour
         //    }
 
         //}
+        PreviousVelocity = this.GetComponent<Rigidbody2D>().velocity;
         Vector2 dir = m_rigidBody.velocity;
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);

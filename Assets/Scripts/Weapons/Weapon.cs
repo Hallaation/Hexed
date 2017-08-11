@@ -9,6 +9,7 @@ public class Weapon : MonoBehaviour
     public float m_iDamage;
     public bool m_bAutomaticGun;
     public bool m_bBurstFire;
+    public float KnockBack;
     protected Timer TimerBetweenFiring;
     protected bool shotReady = true;
     protected bool stunPlayer = true;
@@ -55,7 +56,7 @@ public class Weapon : MonoBehaviour
         //once the player has shot a bullet, the timer will start to tick until the desired time. Until the desired time hasn't reached, the player cannot shoot
         if (!shotReady)
         {
-            if (TimerBetweenFiring.Tick(Time.deltaTime) ) //TODO Lincoln change this for SemiAutoGuns // && (m_bAutomaticGun == true || m_bTriggerReleased == true)
+            if (TimerBetweenFiring.Tick(Time.deltaTime) ) 
             {
                 shotReady = true;
             }
@@ -96,8 +97,11 @@ public class Weapon : MonoBehaviour
             //if it enters a trigger (another player in this case") the hit player gets stunned. calls the status applied to drop their weapon.
             if (GetComponent<Rigidbody2D>().velocity.magnitude >= 10 && a_collider.tag == "Player" && a_collider.gameObject != previousOwner)
             {
-                a_collider.GetComponent<PlayerStatus>().StunPlayer(rigidbody.velocity);
-                a_collider.GetComponent<Move>().StatusApplied();
+                if (a_collider.GetComponent<PlayerStatus>().IsStunned == false)
+                {
+                    a_collider.GetComponent<PlayerStatus>().StunPlayer(rigidbody.velocity * KnockBack);
+                    a_collider.GetComponent<Move>().StatusApplied();
+                }
             }
         }
     }
