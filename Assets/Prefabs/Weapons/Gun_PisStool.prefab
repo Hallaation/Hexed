@@ -94,7 +94,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1565912102136700}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -7.47, y: -1.1842475, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_Children:
   - {fileID: 4612613489843890}
@@ -113,9 +113,9 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 1
-  m_AngularDrag: 1
+  m_Mass: 10
+  m_LinearDrag: 2
+  m_AngularDrag: 2
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
@@ -165,13 +165,14 @@ MonoBehaviour:
   m_iDamage: 0
   m_bAutomaticGun: 1
   m_bBurstFire: 0
+  KnockBack: 0
   m_bActive: 1
   previousOwner: {fileID: 0}
   m_iAmmo: 8
   bullet: {fileID: 1928104826133792, guid: 7b1d5a4de82f724468c78516eca036b0, type: 2}
   m_fSpreadJitter: 1
   m_fBulletSpawnOffSet: 1
-  m_fFiringForce: 7
+  m_fFiringForce: 0.25
   m_bAutomatic: 0
   m_iBurstFire: 0
   m_fTimeBetweenBurstShots: 0
