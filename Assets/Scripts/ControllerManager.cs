@@ -73,7 +73,7 @@ public class ControllerManager : MonoBehaviour
         //{
         //    spawnPoints[i] = spawnParent.transform.GetChild(i);
         //}
-        playerPrefab = Resources.Load("Characters/SmokePlayer") as GameObject;
+     //   playerPrefab = Resources.Load("Characters/SmokePlayer") as GameObject;
         Debug.Log("Controller manager has started");
     }
 

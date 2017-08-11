@@ -130,6 +130,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1868322700312608
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4830432663192878}
+  - component: {fileID: 60726497065469886}
+  m_Layer: 16
+  m_Name: StunnedCollider
+  m_TagString: Stunned
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1943979977751084
 GameObject:
   m_ObjectHideFlags: 1
@@ -216,7 +232,7 @@ Transform:
   - {fileID: 4502361899095744}
   - {fileID: 4166561799535384}
   m_Father: {fileID: 4790506326493114}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4436251988063510
 Transform:
@@ -270,9 +286,23 @@ Transform:
   m_LocalScale: {x: 0.75, y: 0.75, z: 1}
   m_Children:
   - {fileID: 4436251988063510}
+  - {fileID: 4830432663192878}
   - {fileID: 4325525109234482}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4830432663192878
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1868322700312608}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4790506326493114}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4909644827755646
 Transform:
@@ -321,6 +351,32 @@ CircleCollider2D:
   m_Offset: {x: -0.00000011920929, y: 0}
   serializedVersion: 2
   m_Radius: 0.49999997
+--- !u!60 &60726497065469886
+PolygonCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1868322700312608}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_Offset: {x: 0, y: 0}
+  m_Points:
+    m_Paths:
+    - - {x: 0.91499996, y: -0.85499996}
+      - {x: 0.91499996, y: -0.815}
+      - {x: -0.044999998, y: 1.165}
+      - {x: -0.095, y: 1.165}
+      - {x: -0.125, y: 1.155}
+      - {x: -1.025, y: -0.815}
+      - {x: -1.025, y: -0.885}
+      - {x: -1.005, y: -0.895}
+      - {x: -0.965, y: -0.895}
+      - {x: -0.955, y: -0.875}
+      - {x: 0.275, y: -0.895}
+      - {x: 0.885, y: -0.895}
 --- !u!60 &60760674364989694
 PolygonCollider2D:
   m_ObjectHideFlags: 1
@@ -502,11 +558,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_iHealth: 3
+  StunedSlide: 400
   m_fStunTime: 5
   m_fMaximumStunWait: 2
   _playerColour: {r: 1, g: 1, b: 1, a: 1}
   killMePrompt: {fileID: 1981359788956318}
   killMeArea: {fileID: 1118281410784494}
+  spawnIndex: 0
 --- !u!114 &114804359155514702
 MonoBehaviour:
   m_ObjectHideFlags: 1

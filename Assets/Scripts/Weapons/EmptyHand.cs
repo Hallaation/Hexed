@@ -6,6 +6,7 @@ public class EmptyHand : Weapon
 {
     public AudioClip punchEffect;
     private AudioSource temp; //TODO change to a singleton audio manager later
+    public float KnockBack = 2;
     public override void StartUp()
     {
         if (!this.GetComponent<AudioSource>())
@@ -34,9 +35,14 @@ public class EmptyHand : Weapon
                 {
                     Debug.Log("Test");
                     temp.Play();
-                    //hit.transform.GetComponent<PlayerStatus>().StunPlayer();
+
                     hit.transform.GetComponent<PlayerStatus>().TimesPunched++;
-                    //hit.transform.GetComponent<Move>().StatusApplied();
+                    if (hit.transform.GetComponent<PlayerStatus>().TimesPunched >= 3)
+                    {
+                        hit.transform.GetComponent<PlayerStatus>().StunPlayer(this.transform.up * KnockBack * 10);
+                        hit.transform.GetComponent<Move>().StatusApplied();
+                    }
+
                     return true;
                 }
             }

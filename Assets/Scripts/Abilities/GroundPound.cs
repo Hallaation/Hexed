@@ -73,7 +73,11 @@ public class GroundPound : BaseAbility
                                 PlayerStatus tempStatus = nearBy[k].GetComponent<PlayerStatus>();
                                 if (tempStatus.IsStunned == false)
                                 {
-                                    tempStatus.StunPlayer(transform.position);
+                                   // Vector3 Temp = nearBy[k].GetComponent<Transform>().position;
+                                    //Vector3 Tempa = Vector3.RotateTowards(Temp,transform.position,Mathf.Infinity,Mathf.Infinity);
+                                    
+
+                                    tempStatus.StunPlayer(Vector3.zero);
                                 }
                             }
                         }
