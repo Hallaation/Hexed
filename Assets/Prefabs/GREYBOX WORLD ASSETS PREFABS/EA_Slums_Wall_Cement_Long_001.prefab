@@ -20,7 +20,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4985492388138710}
   - component: {fileID: 212449985531582390}
-  - component: {fileID: 61937181916388754}
   m_Layer: 10
   m_Name: EA_Slums_Wall_Cement_Long_001
   m_TagString: Wall
@@ -41,20 +40,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!61 &61937181916388754
-BoxCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1727528328597980}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_Offset: {x: 0.125, y: -0.5}
-  serializedVersion: 2
-  m_Size: {x: 0.25, y: 1}
 --- !u!212 &212449985531582390
 SpriteRenderer:
   m_ObjectHideFlags: 1
