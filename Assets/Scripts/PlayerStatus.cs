@@ -8,6 +8,7 @@ public class PlayerStatus : MonoBehaviour
     private float m_iMaxHealth;
     public float m_iHealth = 3; //health completely useless right now
     int m_iTimesPunched = 0;
+    int m_iPreviousTimesPunched = 0;
     bool m_bDead = false;
     bool m_bStunned = false;
     public float StunedSlide = 400;
@@ -67,9 +68,15 @@ public class PlayerStatus : MonoBehaviour
         //if i've been punched once, start the timer, once the timer has reached the end, reset the amount of times punched.
         if (m_iTimesPunched >= 1)
         {
+            if(m_iTimesPunched != m_iPreviousTimesPunched)
+            {
+                resetStunTimer.SetTimer(0);
+                m_iPreviousTimesPunched = m_iTimesPunched;
+            }
             if (resetStunTimer.Tick(Time.deltaTime))
             {
-                m_iTimesPunched = 0;
+              //  m_iTimesPunched = 0;
+               // m_iPreviousTimesPunched = 0;
             }
         }
 
@@ -136,8 +143,8 @@ public class PlayerStatus : MonoBehaviour
         if (m_iTimesPunched >= 2)
         {
          //   StunPlayer();
-            GetComponent<Move>().StatusApplied();
-            m_iTimesPunched = 0;
+          //  GetComponent<Move>().StatusApplied();
+            //m_iTimesPunched = 0;
         }
 
     }

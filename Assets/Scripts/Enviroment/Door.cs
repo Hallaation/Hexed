@@ -22,16 +22,15 @@ public class Door : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (freezeTimer > 10)
-        {
-            if (DoorHinge.jointAngle > DoorHinge.limits.max - DoorAngleOfBounce && timer > 0)
+
+            if (DoorHinge.jointAngle > DoorHinge.limits.max - DoorAngleOfBounce)
             {
                 MyRigidBody.AddTorque(DoorBounceForce, ForceMode2D.Force);
                 Debug.Log("MAX"); //! MAX
                 HasBounced = true;
                 timer = 0;
             }
-            else if (DoorHinge.jointAngle < DoorHinge.limits.min + DoorAngleOfBounce && timer > 0)
+            else if (DoorHinge.jointAngle < DoorHinge.limits.min + DoorAngleOfBounce)
             {
                 MyRigidBody.AddTorque(-DoorBounceForce, ForceMode2D.Force);
                 Debug.Log("Min");
@@ -43,11 +42,8 @@ public class Door : MonoBehaviour
                 HasBounced = false;
                 timer += Time.deltaTime;
             }
-        }
-        else
-            MyRigidBody.velocity = new Vector3(0, 0, 0);
-        MyRigidBody.angularVelocity = 0;
-        freezeTimer += Time.deltaTime;
+        
+
     }
 
 
