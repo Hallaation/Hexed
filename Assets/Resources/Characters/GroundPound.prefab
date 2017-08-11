@@ -649,6 +649,7 @@ MonoBehaviour:
   m_iDamage: 0
   m_bAutomaticGun: 1
   m_bBurstFire: 1
+  KnockBack: 0
   m_bActive: 1
   previousOwner: {fileID: 0}
   punchEffect: {fileID: 8300000, guid: 218397e7ca0b6f3499b6bc3e88df9b86, type: 3}
@@ -668,8 +669,8 @@ MonoBehaviour:
   crosshair: {fileID: 1307528044442894}
   weaponMount: {fileID: 1180499927594318}
   fistObject: {fileID: 0}
-  movementSpeed: 7
-  throwingForce: 200
+  movementSpeed: 10
+  throwingForce: 300
   m_b2DMode: 1
   vibrationValue: {x: 0, y: 0}
   playerSpirte: {fileID: 1003125572194434}
