@@ -75,8 +75,6 @@ public class CharacterSelectionManager : MonoBehaviour
             for (int i = 0; i < playerSelectedCharacter.Count; ++i)
             {
                 ControllerManager.Instance.FindSpawns();
-                Debug.Log(playerSelectedCharacter[XboxController.First + i] + "Where i = " + i);
-                Debug.Log(ControllerManager.Instance.spawnPoints[i].position);
                 GameObject go = Instantiate(playerSelectedCharacter[XboxController.First + i] , ControllerManager.Instance.spawnPoints[i].position , Quaternion.identity , null);
                 go.GetComponent<ControllerSetter>().SetController(PlayerIndex.One + i);
                 go.GetComponent<ControllerSetter>().m_playerNumber = i;

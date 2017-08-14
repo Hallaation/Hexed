@@ -120,13 +120,15 @@ public class PlayerStatus : MonoBehaviour
         else
         { 
             this.GetComponent<Collider2D>().isTrigger = false;
-            if (this.transform.GetChild(1).tag == "Stunned")
+
+            if (this.transform.GetChild(0).tag == "Stunned")
             {
-                this.transform.GetChild(1).gameObject.GetComponent<PolygonCollider2D>().enabled = false;
+                Debug.Log(this.transform.GetChild(0).tag);
+                this.transform.GetChild(0).gameObject.GetComponent<PolygonCollider2D>().enabled = false;
             }
             else
             {
-                this.transform.GetChild(2).gameObject.GetComponent<PolygonCollider2D>().enabled = false;
+                this.transform.GetChild(1).gameObject.GetComponent<PolygonCollider2D>().enabled = false;
             }
             killMeArea.SetActive(false);
             killMePrompt.SetActive(false);

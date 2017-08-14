@@ -107,7 +107,6 @@ public class SelectionUIElements : MonoBehaviour
                 {
                     if (StickMovement[1] || XCI.GetButtonDown(XboxButton.DPadRight , m_controller))
                     {
-                        Debug.Log("Right stick " + StickMovement[1]);
                         StickMovement[1] = false;
                         m_iSelectedIndex++;
                         if (m_iSelectedIndex > selectionManager.CharacterArray.Length - 1)

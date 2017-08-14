@@ -74,7 +74,6 @@ public class ControllerManager : MonoBehaviour
         //    spawnPoints[i] = spawnParent.transform.GetChild(i);
         //}
      //   playerPrefab = Resources.Load("Characters/SmokePlayer") as GameObject;
-        Debug.Log("Controller manager has started");
     }
 
 
@@ -191,7 +190,7 @@ public class ControllerManager : MonoBehaviour
     }
     void OnSceneLoaded(Scene scene , LoadSceneMode mode)
     {
-        Debug.Log("loaded in a scene");
+
         Object[] items = FindObjectsOfType<ControllerManager>();
         for (int i = 0; i < items.Length; ++i)
         {
