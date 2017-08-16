@@ -7,6 +7,10 @@ public class GameManagerc : MonoBehaviour
 {
     Timer waitForRoundEnd;
 
+    List<int> PlayerWins = new List<int>();
+
+
+
     static GameManagerc mInstance = null;
     public static GameManagerc Instance
     {
@@ -39,7 +43,11 @@ public class GameManagerc : MonoBehaviour
         waitForRoundEnd = new Timer(3);
         mInstance = GameManagerc.Instance;
         m_bRoundOver = false;
-
+        foreach (PlayerStatus player in InGamePlayers)
+        {
+            PlayerWins.Add(0);
+        }
+            
     }
 
 
@@ -71,7 +79,7 @@ public class GameManagerc : MonoBehaviour
 
             if (DeadCount >= InGamePlayers.Count - 1)
             {
-                m_bRoundOver = true;
+                RoundEnd();
             }
         }
         else
@@ -92,6 +100,20 @@ public class GameManagerc : MonoBehaviour
         yield return null;
     }
 
+    void RoundEnd()
+    {
+        m_bRoundOver = true;
+        int i = 0;
+        foreach (PlayerStatus player in InGamePlayers)
+        {
+
+            if (!player.IsDead)
+            {
+                PlayerWins[i] += 1;
+            }
+            ++i;
+        }
+    }
     void OnSceneLoaded(Scene scene , LoadSceneMode mode)
     {
         //look for a gamemanager, then delete it.
