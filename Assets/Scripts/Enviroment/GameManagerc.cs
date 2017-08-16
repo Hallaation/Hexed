@@ -75,7 +75,7 @@ public class GameManagerc : MonoBehaviour
 
             if (DeadCount >= InGamePlayers.Count - 1)
             {
-                RoundEnd();
+                RoundEndLastManStanding();
             }
         }
         else
@@ -96,7 +96,7 @@ public class GameManagerc : MonoBehaviour
         yield return null;
     }
 
-    void RoundEnd()
+    void RoundEndLastManStanding()
     {
         m_bRoundOver = true;
         int i = 0;
@@ -109,10 +109,17 @@ public class GameManagerc : MonoBehaviour
                 if (PlayerWins[i] >= m_iPointsNeeded )
                 {
                     //TODO Load Character select / win screen;
+                    //TODO Sort players by score?
                 }
             }
             ++i;
         }
+    }
+    void RoundEndDeathMatch()
+    {
+        m_bRoundOver = true;
+        //TODO Sort players by score?
+        //TODO Load Character select / win screen;
     }
     void OnSceneLoaded(Scene scene , LoadSceneMode mode)
     {
