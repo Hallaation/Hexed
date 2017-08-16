@@ -27,7 +27,7 @@ public class BaseAbility : MonoBehaviour
     //TODO otherwise all the shield is block bullets and knock over players when run over with it.
 
     protected Text _AbilityTypeText;
-    protected GameObject manaBar;
+    public GameObject manaBar;
 
     void Start()
     {
@@ -41,6 +41,11 @@ public class BaseAbility : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (manaBar == null)
+        {
+            //GetUIElements();
+        }
+        Debug.Log(findUI);
         if (manaBar)
         {
             //figure out the x offset
@@ -69,9 +74,11 @@ public class BaseAbility : MonoBehaviour
     {
         if (findUI)
         {
-            PlayerUIArray.instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].gameObject.SetActive(true);
-            manaBar = PlayerUIArray.instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_manaBarMask;
-            PlayerUIArray.instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_SpecialScrollingIcon.GetComponent<Image>().sprite = AbilityIcon;
+            Debug.Log("finding the UI" + PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber]);
+            Debug.Log(PlayerUIArray.Instance);
+            PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].gameObject.SetActive(true);
+            manaBar = PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_manaBarMask;
+            PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_SpecialScrollingIcon.GetComponent<Image>().sprite = AbilityIcon;
         }
     }
 }

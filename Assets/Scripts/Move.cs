@@ -35,14 +35,15 @@ public class Move : MonoBehaviour
     public GameObject fistObject;
     public float movementSpeed = 10.0f;
     public float throwingForce = 100.0f;
-
+    float StoredMoveSpeed;
     public bool m_b2DMode = true;
     EmptyHand defaultWeapon;
     [HideInInspector]
     public Vector2 vibrationValue;
     [HideInInspector]
     public GameObject playerSpirte;
-
+    float MoveDelayTimer;
+    public float StartMoveDelay = 3;
     // Use this for initialization
     void Start()
     {
@@ -79,8 +80,10 @@ public class Move : MonoBehaviour
         }
 
         defaultWeapon = GetComponent<EmptyHand>();
-
-
+        // Delay
+        MoveDelayTimer = 0;
+        StoredMoveSpeed = movementSpeed;
+       StartCoroutine( DelayMovement());
     }
 
     // Update is called once per frame
@@ -132,7 +135,12 @@ public class Move : MonoBehaviour
           //  _rigidBody.velocity = Vector2.zero;
         }
     }
-
+    IEnumerator DelayMovement()
+    {
+        movementSpeed = 0;
+        yield return new WaitForSeconds(StartMoveDelay);
+        movementSpeed = StoredMoveSpeed;
+    }
     bool TriggerReleaseCheck()
     {
         if (XCI.GetAxis(XboxAxis.RightTrigger , m_controller.mXboxController) > 0)

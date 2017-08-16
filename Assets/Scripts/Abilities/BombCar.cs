@@ -24,7 +24,7 @@ public class BombCar : BaseAbility {
         _rigidBody = GetComponent<Rigidbody2D>();
         RegenMana = true;
         Movement = GetComponent<Move>();
-        Debug.Log("Initialised");
+
     }
     public override void AdditionalLogic()
     {

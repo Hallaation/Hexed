@@ -16,11 +16,11 @@ public class ShieldAbility : BaseAbility
     // Use this for initialization
     public override void Initialise()
     {
-        if (findUI)
-        {
-            shieldObject = transform.Find("ShieldSprite").gameObject;
-            shieldObject.SetActive(false);
-        }
+        shieldObject = transform.Find("ShieldSprite").gameObject;
+        shieldObject.SetActive(false);
+        //if (findUI)
+        //{
+        //}
     }
 
     public override void UseSpecialAbility(bool UsingAbility)
@@ -43,6 +43,7 @@ public class ShieldAbility : BaseAbility
             }
             RegenMana = false;
             currentMana -= repeatedManaCost * Time.deltaTime;
+            Debug.Log("Depleting mana");
             this.GetComponent<Move>().HideWeapon(true);
             shieldObject.SetActive(true);
         }

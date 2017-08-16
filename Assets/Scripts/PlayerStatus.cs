@@ -56,9 +56,9 @@ public class PlayerStatus : MonoBehaviour
         }
         killMePrompt.SetActive(false);
 
-        _HealthMask = PlayerUIArray.instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_HealthBarMask;
-        PlayerUIArray.instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_healthScrolllingIcon.GetComponent<Image>().material.SetColor("_Color" , _playerColour);
-        PlayerUIArray.instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_StaticObjectMaterial.SetColor("_Color" , _playerColour);
+        _HealthMask = PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_HealthBarMask;
+        PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_healthScrolllingIcon.GetComponent<Image>().material.SetColor("_Color" , _playerColour);
+        PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_StaticObjectMaterial.SetColor("_Color" , _playerColour);
 
 
     }
@@ -120,13 +120,15 @@ public class PlayerStatus : MonoBehaviour
         else
         { 
             this.GetComponent<Collider2D>().isTrigger = false;
-            if (this.transform.GetChild(1).tag == "Stunned")
+
+            if (this.transform.GetChild(0).tag == "Stunned")
             {
-                this.transform.GetChild(1).gameObject.GetComponent<PolygonCollider2D>().enabled = false;
+                Debug.Log(this.transform.GetChild(0).tag);
+                this.transform.GetChild(0).gameObject.GetComponent<PolygonCollider2D>().enabled = false;
             }
             else
             {
-                this.transform.GetChild(2).gameObject.GetComponent<PolygonCollider2D>().enabled = false;
+                this.transform.GetChild(1).gameObject.GetComponent<PolygonCollider2D>().enabled = false;
             }
             killMeArea.SetActive(false);
             killMePrompt.SetActive(false);
@@ -184,9 +186,9 @@ public class PlayerStatus : MonoBehaviour
     {
         //time to re activate all the UI stuff
         this.GetComponent<BaseAbility>().GetUIElements();
-        _HealthMask = PlayerUIArray.instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_HealthBarMask;
-        PlayerUIArray.instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_healthScrolllingIcon.GetComponent<Image>().material.SetColor("_Color" , _playerColour);
-        PlayerUIArray.instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_StaticObjectMaterial.SetColor("_Color" , _playerColour);
+        _HealthMask = PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_HealthBarMask;
+        PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_healthScrolllingIcon.GetComponent<Image>().material.SetColor("_Color" , _playerColour);
+        PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_StaticObjectMaterial.SetColor("_Color" , _playerColour);
 
     }
 }
