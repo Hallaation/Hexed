@@ -22,8 +22,8 @@ public class PlayerUIElements : MonoBehaviour
 
     public Material m_StaticObjectMaterial;
     public Material m_UIOutlineMaterial;
-	// Use this for initialization
-	void Awake()
+    // Use this for initialization
+    void Awake()
     {
         m_AmmoText = transform.Find("StatusUI").Find("Ammo").gameObject;
 
@@ -42,10 +42,10 @@ public class PlayerUIElements : MonoBehaviour
         }
         else
         {
-            PlayerUIArray.instance.UpdateArray();
+            PlayerUIArray.Instance.UpdateArray();
         }
 
-	}
+    }
 
     private void Update()
     {
@@ -60,16 +60,27 @@ public class PlayerUIArray : MonoBehaviour
     //[HideInInspector]
     public PlayerUIElements[] playerElements;
 
-    public static PlayerUIArray instance;
+    private static PlayerUIArray mInstance;
+
+    public static PlayerUIArray Instance
+    {
+        get
+        {
+            if (mInstance == null)
+            {
+                mInstance = (PlayerUIArray)FindObjectOfType(typeof(PlayerUIArray));
+            }
+            return mInstance;
+        }
+
+    }
     void Awake()
     {
-        if (instance) //check to see if it already exists
-        {
-            Debug.LogError("More than one");
-            return;
-        }
-        instance = this;
+        mInstance = Instance;
         playerElements = this.GetComponentsInChildren<PlayerUIElements>();
+        //Debug.Log(Instance);
+
+        UpdateArray();
         foreach (PlayerUIElements UIContainer in playerElements)
         {
             UIContainer.gameObject.SetActive(false);
@@ -79,8 +90,7 @@ public class PlayerUIArray : MonoBehaviour
 
     public void UpdateArray()
     {
-       // playerElements = this.GetComponentsInChildren<PlayerUIElements>();
-
+        playerElements = this.GetComponentsInChildren<PlayerUIElements>();
     }
 
 

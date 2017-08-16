@@ -7,6 +7,10 @@ public class GameManagerc : MonoBehaviour
 {
     Timer waitForRoundEnd;
 
+    List<int> PlayerWins = new List<int>();
+
+
+    public int m_iPointsNeeded = 5;
     static GameManagerc mInstance = null;
     public static GameManagerc Instance
     {
@@ -71,7 +75,7 @@ public class GameManagerc : MonoBehaviour
 
             if (DeadCount >= InGamePlayers.Count - 1)
             {
-                m_bRoundOver = true;
+                RoundEndLastManStanding();
             }
         }
         else
@@ -92,6 +96,31 @@ public class GameManagerc : MonoBehaviour
         yield return null;
     }
 
+    void RoundEndLastManStanding()
+    {
+        m_bRoundOver = true;
+        int i = 0;
+        foreach (PlayerStatus player in InGamePlayers)
+        {
+
+            if (!player.IsDead)
+            {
+                PlayerWins[i] += 1;
+                if (PlayerWins[i] >= m_iPointsNeeded )
+                {
+                    //TODO Load Character select / win screen;
+                    //TODO Sort players by score?
+                }
+            }
+            ++i;
+        }
+    }
+    void RoundEndDeathMatch()
+    {
+        m_bRoundOver = true;
+        //TODO Sort players by score?
+        //TODO Load Character select / win screen;
+    }
     void OnSceneLoaded(Scene scene , LoadSceneMode mode)
     {
         //look for a gamemanager, then delete it.
@@ -100,8 +129,15 @@ public class GameManagerc : MonoBehaviour
         {
             if (items[i] != this)
             {
-                Destroy(items[i]);
+                Destroy(items[i]); 
             }
         }
+        Debug.Log("Scene load");
+    }
+
+    public void AddPlayer(PlayerStatus aPlayer)
+    {
+        InGamePlayers.Add(aPlayer);
+        PlayerWins.Add(0);
     }
 }
