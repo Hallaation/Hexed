@@ -13,7 +13,7 @@ public class CharacterSelectionManager : MonoBehaviour
     public Dictionary<XboxCtrlrInput.XboxController , GameObject> playerSelectedCharacter = new Dictionary<XboxCtrlrInput.XboxController , GameObject>();
 
     static CharacterSelectionManager mInstance = null;
-
+    public bool m_bMovedToMainScene = false;
     //lazy singleton if an instance of this doesn't exist, make one
     //Instance property 
     public static CharacterSelectionManager Instance
@@ -61,16 +61,18 @@ public class CharacterSelectionManager : MonoBehaviour
     {
         if (playerSelectedCharacter.Count > 1)
         {
-            if (Input.GetButtonDown("Start"))
+            //only load the scene if I still havnt moved to arena scene
+            if (Input.GetButtonDown("Start") && !m_bMovedToMainScene)
             {
-                SceneManager.LoadScene(1);
+                SceneManager.LoadScene(1); //oh fuck.
             }
         }
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (scene.buildIndex == 1)
+        //if my currnet scene is 1 (when loaded into the game arean and I havn't already moved in, spawn the players
+        if (scene.buildIndex == 1 && !m_bMovedToMainScene)
         {
             for (int i = 0; i < playerSelectedCharacter.Count; ++i)
             {
@@ -79,11 +81,12 @@ public class CharacterSelectionManager : MonoBehaviour
                 go.GetComponent<ControllerSetter>().SetController(PlayerIndex.One + i);
                 go.GetComponent<ControllerSetter>().m_playerNumber = i;
                 go.GetComponent<PlayerStatus>().spawnIndex = i;
-                PlayerUIArray.instance.playerElements[i].gameObject.SetActive(true);
+                PlayerUIArray.Instance.playerElements[i].gameObject.SetActive(true);
                 GameManagerc.Instance.InGamePlayers.Add(go.GetComponent<PlayerStatus>());
                 DontDestroyOnLoad(go);
                 go.SetActive(true);
                 CameraControl.mInstance.m_Targets.Add(go.transform);
+                m_bMovedToMainScene = true;
             }
         }
     }
