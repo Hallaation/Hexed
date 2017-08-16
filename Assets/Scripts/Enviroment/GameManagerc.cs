@@ -109,5 +109,6 @@ public class GameManagerc : MonoBehaviour
     public void AddPlayer(PlayerStatus aPlayer)
     {
         InGamePlayers.Add(aPlayer);
+
     }
 }

@@ -82,7 +82,7 @@ public class CharacterSelectionManager : MonoBehaviour
                 go.GetComponent<ControllerSetter>().m_playerNumber = i;
                 go.GetComponent<PlayerStatus>().spawnIndex = i;
                 PlayerUIArray.Instance.playerElements[i].gameObject.SetActive(true);
-                GameManagerc.Instance.InGamePlayers.Add(go.GetComponent<PlayerStatus>());
+                GameManagerc.Instance.AddPlayer(go.GetComponent<PlayerStatus>());
                 DontDestroyOnLoad(go);
                 go.SetActive(true);
                 CameraControl.mInstance.m_Targets.Add(go.transform);

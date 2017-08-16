@@ -113,7 +113,7 @@ public class ControllerManager : MonoBehaviour
                     go2.GetComponent<ControllerSetter>().m_playerNumber = i;
                     go2.GetComponent<PlayerStatus>().spawnIndex = nextPlayer;
                     PlayerUIArray.Instance.playerElements[i].gameObject.SetActive(true);
-                    GameManagerc.Instance.InGamePlayers.Add(go2.GetComponent<PlayerStatus>());
+                    GameManagerc.Instance.AddPlayer(go2.GetComponent<PlayerStatus>());
                     DontDestroyOnLoad(go2);
                     // AddAbility(AbilityToAdd, go);
                     addedAbility = true;
@@ -130,7 +130,7 @@ public class ControllerManager : MonoBehaviour
                     go.GetComponent<ControllerSetter>().SetController(testIndex);
                     go.GetComponent<ControllerSetter>().m_playerNumber = i;
                     go.GetComponent<PlayerStatus>().spawnIndex = nextPlayer;
-                    GameManagerc.Instance.InGamePlayers.Add(go.GetComponent<PlayerStatus>());
+                    GameManagerc.Instance.AddPlayer(go.GetComponent<PlayerStatus>());
                     DontDestroyOnLoad(go);
                     // AddAbility(AbilityToAdd, go);
                     addedAbility = true;
