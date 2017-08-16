@@ -131,6 +131,6 @@ public class GameManagerc : MonoBehaviour
     public void AddPlayer(PlayerStatus aPlayer)
     {
         InGamePlayers.Add(aPlayer);
-
+        PlayerWins.Add(0);
     }
 }
