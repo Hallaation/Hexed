@@ -10,7 +10,7 @@ public class GameManagerc : MonoBehaviour
     List<int> PlayerWins = new List<int>();
 
 
-
+    public int m_iPointsNeeded = 5;
     static GameManagerc mInstance = null;
     public static GameManagerc Instance
     {
@@ -43,11 +43,7 @@ public class GameManagerc : MonoBehaviour
         waitForRoundEnd = new Timer(3);
         mInstance = GameManagerc.Instance;
         m_bRoundOver = false;
-        foreach (PlayerStatus player in InGamePlayers)
-        {
-            PlayerWins.Add(0);
-        }
-            
+
     }
 
 
@@ -110,6 +106,10 @@ public class GameManagerc : MonoBehaviour
             if (!player.IsDead)
             {
                 PlayerWins[i] += 1;
+                if (PlayerWins[i] >= m_iPointsNeeded )
+                {
+                    //TODO Load Character select / win screen;
+                }
             }
             ++i;
         }
