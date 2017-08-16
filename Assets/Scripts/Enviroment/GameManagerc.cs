@@ -100,8 +100,14 @@ public class GameManagerc : MonoBehaviour
         {
             if (items[i] != this)
             {
-                Destroy(items[i]);
+                Destroy(items[i]); 
             }
         }
+        Debug.Log("Scene load");
+    }
+
+    public void AddPlayer(PlayerStatus aPlayer)
+    {
+        InGamePlayers.Add(aPlayer);
     }
 }
