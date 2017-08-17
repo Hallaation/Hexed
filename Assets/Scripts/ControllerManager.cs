@@ -205,14 +205,15 @@ public class ControllerManager : MonoBehaviour
 
             }
         }
-
-        GameObject spawnParent = GameObject.FindGameObjectWithTag("SpawnPoints");
-        //Find the spawn points    ////    spawnPoints = new Transform[spawnParent.transform.childCount];
-        for (int i = 0; i < spawnParent.transform.childCount; ++i)
+        if (scene.buildIndex != 0)
         {
-            spawnPoints[i] = spawnParent.transform.GetChild(i);
+            GameObject spawnParent = GameObject.FindGameObjectWithTag("SpawnPoints");
+            //Find the spawn points    ////    spawnPoints = new Transform[spawnParent.transform.childCount];
+            for (int i = 0; i < spawnParent.transform.childCount; ++i)
+            {
+                spawnPoints[i] = spawnParent.transform.GetChild(i);
+            }
         }
-
 
         //look for the spawn points
     }

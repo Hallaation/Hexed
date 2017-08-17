@@ -10,6 +10,8 @@ public class PlayerUIElements : MonoBehaviour
     //TODO change these to the sprites and sprite masks later. 
     [HideInInspector]
     public GameObject m_AmmoText;
+    [HideInInspector]
+    public GameObject m_ScoreText;
 
     [HideInInspector]
     public GameObject m_manaBarMask;
@@ -20,13 +22,14 @@ public class PlayerUIElements : MonoBehaviour
     [HideInInspector]
     public GameObject m_SpecialScrollingIcon;
 
+    public List<GameObject> m_objects;
     public Material m_StaticObjectMaterial;
     public Material m_UIOutlineMaterial;
     // Use this for initialization
     void Awake()
     {
         m_AmmoText = transform.Find("StatusUI").Find("Ammo").gameObject;
-
+        m_ScoreText = transform.Find("StatusUI").Find("PointText").gameObject;
 
         //m_manaBarMask = transform.Find("OldObjects").Find("ManaBar").Find("BarMask").gameObject;
         m_manaBarMask = transform.Find("StatusUI").Find("SpecialBar").Find("BarMask").gameObject;
@@ -44,7 +47,15 @@ public class PlayerUIElements : MonoBehaviour
         {
             PlayerUIArray.Instance.UpdateArray();
         }
-
+        m_objects = new List<GameObject>();
+        for (int i = 0; i < transform.Find("StatusUI").childCount; i++)
+        {
+            m_objects.Add(transform.Find("StatusUI").GetChild(i).gameObject);
+        }
+        foreach (var item in m_objects)
+        {
+            item.SetActive(false);
+        }
     }
 
     private void Update()
@@ -81,10 +92,10 @@ public class PlayerUIArray : MonoBehaviour
         //Debug.Log(Instance);
 
         UpdateArray();
-        foreach (PlayerUIElements UIContainer in playerElements)
-        {
-            UIContainer.gameObject.SetActive(false);
-        }
+        //foreach (PlayerUIElements UIContainer in playerElements)
+        //{
+        //    UIContainer.gameObject.SetActive(false);
+        //}
 
     }
 
