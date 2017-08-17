@@ -9,17 +9,25 @@ public class Bullet : MonoBehaviour
     Vector3 PreviousVelocity;
     public Vector3 GetPreviousVelocity() { return PreviousVelocity; }
     public Vector2 Velocity { get { return m_vVelocity; }  set { m_vVelocity = value; } }
-
-
+    ParticleSystem ParticleSparks;
+    SpriteRenderer BulletSprite;
     Rigidbody2D m_rigidBody;
+    Vector3 VChildPrevRotation;
     [HideInInspector]
     public PlayerStatus bulletOwner;
     [HideInInspector]
     public float m_iDamage;
+    //public GameObject HitParticle;
+
+  
     void Start()
     {
+        BulletSprite = GetComponent<SpriteRenderer>();
+        ParticleSparks = GetComponentInChildren<ParticleSystem>();
         Hit = GetComponent<CircleCollider2D>();
         m_rigidBody = GetComponent<Rigidbody2D>();
+        
+
        // Destroy(this.gameObject , 5);
     }
 	// Update is called once per frame
@@ -60,6 +68,25 @@ public class Bullet : MonoBehaviour
         Vector2 dir = m_rigidBody.velocity;
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+
+
+      
+        VChildPrevRotation = transform.localEulerAngles;
+    }
+
+    IEnumerator PlayParticle(Collision2D hit)
+    {
+        Debug.Log("spark");
+        if (ParticleSparks != null)
+        {
+            transform.GetChild(0).localEulerAngles = new Vector3(VChildPrevRotation.x,VChildPrevRotation.y,VChildPrevRotation.z - 90); // parent - 90z
+            ParticleSparks.Play();
+            //GameObject hitInstance = Instantiate(HitParticle, this.transform.position, Quaternion.identity) as GameObject;
+            //hitInstance.transform.up = hit.transform.up;
+            //hitInstance.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
+        }
+        yield return new WaitForSeconds(.4f);
+        Destroy(this.gameObject);
     }
 
     void OnCollisionEnter2D(Collision2D hit)
@@ -72,8 +99,17 @@ public class Bullet : MonoBehaviour
         }
         if(hit.transform.gameObject.layer == LayerMask.NameToLayer("Wall") || hit.transform.gameObject.layer == LayerMask.NameToLayer("Door"))
         {
+           if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Wall"))
+            StartCoroutine( PlayParticle(hit));
+            m_rigidBody.velocity = Vector2.zero;
+            m_rigidBody.simulated = false;
+            BulletSprite.enabled = false;
+            Hit.enabled = false;
+          
+            
+            
             //TODO Play Spark effect
-            Destroy(this.gameObject);
+
         }
         if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
@@ -94,4 +130,5 @@ public class Bullet : MonoBehaviour
     {
        
     }
+
 }
