@@ -114,12 +114,15 @@ public class GameManagerc : MonoBehaviour
                     RoundEndLastManStanding();
                     break;
                 case Gamemode_type.DEATHMATCH_POINTS:
-                    RoundEndDeathMatchMaxPoints();
+                    RoundEndLastManStanding();
+                    //RoundEndDeathMatchMaxPoints();
                     break;
                 case Gamemode_type.DEATHMATCH_TIMED:
-                    RoundEndDeathMatchTimed();
+                    RoundEndLastManStanding();
+                    //RoundEndDeathMatchTimed();
                     break;
                 case Gamemode_type.CAPTURE_THE_FLAG:
+                    RoundEndLastManStanding();
                     //lol
                     m_bRoundOver = true;
                     break;

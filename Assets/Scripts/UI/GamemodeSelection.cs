@@ -25,8 +25,8 @@ public class GamemodeSelection : MonoBehaviour
     public PickType m_pickType = PickType.GAMEMODEPICK;
     private Gamemode_type m_GamemodeSelected = Gamemode_type.LAST_MAN_STANDING_DEATHMATCH;
     private bool ResetSticks = false;
-    private GameObject[] GMSettingObjects;
     private bool[] StickMovement; // index 0 for left horizontal, index 1 for right horizontal
+    private GameObject[] GMSettingObjects;
     Image _mapSprite;
     public int[] mPointsToWin =
     {
@@ -192,7 +192,7 @@ public class GamemodeSelection : MonoBehaviour
                     default:
                         break;
                 }
-                GameManagerc.Instance.m_iPointsNeeded = mPointsToWin[m_iPointWinIndex];
+                //GameManagerc.Instance.m_iPointsNeeded = mPointsToWin[m_iPointWinIndex];
                 break;
             case PickType.MAPPICK:
                 break;

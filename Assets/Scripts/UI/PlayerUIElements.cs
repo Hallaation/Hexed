@@ -21,6 +21,8 @@ public class PlayerUIElements : MonoBehaviour
     public GameObject m_healthScrolllingIcon;
     [HideInInspector]
     public GameObject m_SpecialScrollingIcon;
+
+    public List<GameObject> m_objects;
     public Material m_StaticObjectMaterial;
     public Material m_UIOutlineMaterial;
     // Use this for initialization
@@ -45,7 +47,15 @@ public class PlayerUIElements : MonoBehaviour
         {
             PlayerUIArray.Instance.UpdateArray();
         }
-
+        m_objects = new List<GameObject>();
+        for (int i = 0; i < transform.Find("StatusUI").childCount; i++)
+        {
+            m_objects.Add(transform.Find("StatusUI").GetChild(i).gameObject);
+        }
+        foreach (var item in m_objects)
+        {
+            item.SetActive(false);
+        }
     }
 
     private void Update()
@@ -82,10 +92,10 @@ public class PlayerUIArray : MonoBehaviour
         //Debug.Log(Instance);
 
         UpdateArray();
-        foreach (PlayerUIElements UIContainer in playerElements)
-        {
-            UIContainer.gameObject.SetActive(false);
-        }
+        //foreach (PlayerUIElements UIContainer in playerElements)
+        //{
+        //    UIContainer.gameObject.SetActive(false);
+        //}
 
     }
 
