@@ -23,7 +23,6 @@ GameObject:
   - component: {fileID: 50966111687138256}
   - component: {fileID: 61456240043476200}
   - component: {fileID: 233314366720437114}
-  - component: {fileID: 231370717413856726}
   - component: {fileID: 114548112554870386}
   m_Layer: 11
   m_Name: EA_Slums_Door_Wood_001
@@ -55,7 +54,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1100443223738838}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.045, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4700991172757984}
@@ -68,8 +67,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1701932453630138}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 2.34, y: 1.14, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 0}
   m_Children:
   - {fileID: 4560145477707074}
   m_Father: {fileID: 0}
@@ -140,8 +139,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd3db3d54c49a404c806212e1241d41e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DoorAngleOfBounce: 5
-  DoorBounceForce: 30
+  DoorAngleOfBounce: 2
+  DoorBounceForce: 10
   DoorHinge: {fileID: 233314366720437114}
 --- !u!212 &212887875968461078
 SpriteRenderer:
@@ -178,25 +177,6 @@ SpriteRenderer:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
---- !u!231 &231370717413856726
-SpringJoint2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1100443223738838}
-  m_Enabled: 0
-  serializedVersion: 4
-  m_EnableCollision: 0
-  m_ConnectedRigidBody: {fileID: 0}
-  m_BreakForce: Infinity
-  m_BreakTorque: Infinity
-  m_AutoConfigureConnectedAnchor: 0
-  m_Anchor: {x: 0, y: 0}
-  m_ConnectedAnchor: {x: 0, y: 0}
-  m_AutoConfigureDistance: 1
-  m_Distance: 17.312195
-  m_DampingRatio: 0
-  m_Frequency: 1
 --- !u!233 &233314366720437114
 HingeJoint2D:
   m_ObjectHideFlags: 1
@@ -210,13 +190,13 @@ HingeJoint2D:
   m_BreakForce: Infinity
   m_BreakTorque: Infinity
   m_AutoConfigureConnectedAnchor: 1
-  m_Anchor: {x: 0, y: 0}
-  m_ConnectedAnchor: {x: 0, y: 0}
+  m_Anchor: {x: 0.075, y: -0.075}
+  m_ConnectedAnchor: {x: 0.030000247, y: -0.07499999}
   m_UseMotor: 0
   m_Motor:
     m_MotorSpeed: 0
     m_MaximumMotorForce: 10000
   m_UseLimits: 1
   m_AngleLimits:
-    m_LowerAngle: 280
-    m_UpperAngle: 420
+    m_LowerAngle: -80
+    m_UpperAngle: 80
