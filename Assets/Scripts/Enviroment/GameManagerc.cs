@@ -44,7 +44,7 @@ public class GameManagerc : MonoBehaviour
         waitForRoundEnd = new Timer(3);
         mInstance = GameManagerc.Instance;
         m_bRoundOver = false;
-
+        Physics.gravity = new Vector3(0, 0, 10);
     }
 
 
