@@ -80,7 +80,9 @@ public class Bullet : MonoBehaviour
         if (ParticleSparks != null)
         {
             transform.GetChild(0).localEulerAngles = new Vector3(VChildPrevRotation.x,VChildPrevRotation.y,VChildPrevRotation.z - 90); // parent - 90z
+          
             ParticleSparks.Play();
+
             //GameObject hitInstance = Instantiate(HitParticle, this.transform.position, Quaternion.identity) as GameObject;
             //hitInstance.transform.up = hit.transform.up;
             //hitInstance.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
@@ -99,15 +101,17 @@ public class Bullet : MonoBehaviour
         }
         if(hit.transform.gameObject.layer == LayerMask.NameToLayer("Wall") || hit.transform.gameObject.layer == LayerMask.NameToLayer("Door"))
         {
-           if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Wall"))
-            StartCoroutine( PlayParticle(hit));
+
+           
             m_rigidBody.velocity = Vector2.zero;
             m_rigidBody.simulated = false;
             BulletSprite.enabled = false;
             Hit.enabled = false;
-          
-            
-            
+            if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Wall"))
+                StartCoroutine(PlayParticle(hit));
+            else
+                Destroy(this.gameObject);
+
             //TODO Play Spark effect
 
         }
