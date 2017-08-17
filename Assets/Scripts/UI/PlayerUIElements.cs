@@ -10,6 +10,8 @@ public class PlayerUIElements : MonoBehaviour
     //TODO change these to the sprites and sprite masks later. 
     [HideInInspector]
     public GameObject m_AmmoText;
+    [HideInInspector]
+    public GameObject m_ScoreText;
 
     [HideInInspector]
     public GameObject m_manaBarMask;
@@ -19,14 +21,13 @@ public class PlayerUIElements : MonoBehaviour
     public GameObject m_healthScrolllingIcon;
     [HideInInspector]
     public GameObject m_SpecialScrollingIcon;
-
     public Material m_StaticObjectMaterial;
     public Material m_UIOutlineMaterial;
     // Use this for initialization
     void Awake()
     {
         m_AmmoText = transform.Find("StatusUI").Find("Ammo").gameObject;
-
+        m_ScoreText = transform.Find("StatusUI").Find("PointText").gameObject;
 
         //m_manaBarMask = transform.Find("OldObjects").Find("ManaBar").Find("BarMask").gameObject;
         m_manaBarMask = transform.Find("StatusUI").Find("SpecialBar").Find("BarMask").gameObject;

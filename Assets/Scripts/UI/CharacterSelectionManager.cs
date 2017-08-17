@@ -64,7 +64,7 @@ public class CharacterSelectionManager : MonoBehaviour
             //only load the scene if I still havnt moved to arena scene
             if (Input.GetButtonDown("Start") && !m_bMovedToMainScene)
             {
-                SceneManager.LoadScene(1); //oh fuck.
+                SceneManager.LoadScene(2); //oh fuck.
             }
         }
     }
