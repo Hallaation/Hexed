@@ -25,9 +25,9 @@ public class PlayerStatus : MonoBehaviour
     public Color _playerColour;
     private Renderer PlayerSprite;
 
-    [HideInInspector]
+    
     public GameObject killMePrompt = null;
-    [HideInInspector]
+    
     public GameObject killMeArea = null;
 
     private GameObject _HealthMask;
