@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using XboxCtrlrInput;
-
 public class UIManager : MonoBehaviour
 {
+ 
+    //CS LUL
     public static UIManager instance;
 
     public Stack<GameObject> menuStatus;
@@ -15,10 +17,11 @@ public class UIManager : MonoBehaviour
     //only used if all else fails
     private GameObject defaultToReturnTo;
     private EventSystem _eventSystem;
+    private bool RemoveDefaultPanel;
     // Use this for initialization
     void Start()
     {
-
+        SceneManager.sceneLoaded += OnSceneLoad;
     }
 
     void Awake()
@@ -55,11 +58,16 @@ public class UIManager : MonoBehaviour
             selected = _eventSystem.currentSelectedGameObject;
         }
 
-        if (XCI.GetButtonDown(XboxButton.B))
+        //If I press B return to the previous UI thing.
+        for (int i = 0; i < (int)XInputDotNetPure.PlayerIndex.Four; ++i)
         {
-            Back();
+            if (XCI.GetButtonDown(XboxButton.B, XboxController.First + i))
+            {
+                Back();
+            }
         }
 
+        //If I press start and the menu status (stack of UI elements) is nothing, push the default panel into the stack.
         if (XCI.GetButton(XboxButton.Start) && menuStatus.Count <= 0)
         {
             if (!menuStatus.Contains(defaultPanel))
@@ -75,6 +83,10 @@ public class UIManager : MonoBehaviour
     public void Back()
     {
         //set the current menu (whatever it is), turn it off then pop it off the stack.
+        //If I don't want to remove the default panel and the top of the stack is the default,  exit the function
+        //if (!RemoveDefaultPanel && menuStatus.Peek() == defaultPanel) 
+        //    return;
+        Debug.Log("trying to go back");
         if (menuStatus.Count >= 1)
         {
             menuStatus.Peek().SetActive(false);
@@ -87,19 +99,22 @@ public class UIManager : MonoBehaviour
                 if (menuStatus.Peek().transform.Find("DefaultButton"))
                 {
                     _eventSystem.SetSelectedGameObject(null);
-                    _eventSystem.SetSelectedGameObject(menuStatus.Peek().transform.Find("DefaultButton").gameObject);
-                    defaultToReturnTo = menuStatus.Peek().transform.Find("DefaultButton").gameObject;
+                    _eventSystem.SetSelectedGameObject(menuStatus.Peek().GetComponentInChildren<Button>().gameObject);
+                    defaultToReturnTo = menuStatus.Peek().GetComponentInChildren<Button>().gameObject;
                 }
             }
         }
     }
 
-    public void Test(GameObject current)
+    //whatever the element is, push it into the stack 
+    public void OpenUIElement(GameObject current)
     {
         //Debug.Log(current);
         if (!menuStatus.Contains(current))
         {
-            menuStatus.Peek().SetActive(false);
+            if (menuStatus.Count > 0)
+                menuStatus.Peek().SetActive(false);
+
             current.SetActive(true);
             menuStatus.Push(current.gameObject);
             _eventSystem.SetSelectedGameObject(null);
@@ -115,4 +130,18 @@ public class UIManager : MonoBehaviour
         }
 
     }
+
+    void OnSceneLoad(Scene scene , LoadSceneMode mode)
+    {
+        if (scene.buildIndex != 0)
+        {
+            RemoveDefaultPanel = true;
+        }
+        else
+        {
+            RemoveDefaultPanel = false;
+        }
+    }
+
+
 }

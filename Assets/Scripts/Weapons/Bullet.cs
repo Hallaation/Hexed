@@ -80,7 +80,7 @@ public class Bullet : MonoBehaviour
         if (ParticleSparks != null)
         {
             transform.GetChild(0).localEulerAngles = new Vector3(VChildPrevRotation.x,VChildPrevRotation.y,VChildPrevRotation.z - 90); // parent - 90z
-            transform.GetChild(0).position = new Vector3(hit.contacts[0].point.x,hit.contacts[0].point.y,0);
+            transform.position = new Vector3(hit.contacts[0].point.x,hit.contacts[0].point.y,0);
             ParticleSparks.Play();
 
             //GameObject hitInstance = Instantiate(HitParticle, this.transform.position, Quaternion.identity) as GameObject;
@@ -99,7 +99,7 @@ public class Bullet : MonoBehaviour
 
             return;
         }
-        if(hit.transform.gameObject.layer == LayerMask.NameToLayer("Wall") || hit.transform.gameObject.layer == LayerMask.NameToLayer("Door"))
+        if(hit.transform.gameObject.layer == LayerMask.NameToLayer("Wall") || hit.transform.gameObject.layer == LayerMask.NameToLayer("Door") || hit.transform.gameObject.layer == LayerMask.NameToLayer("Glass"))
         {
            
            
@@ -128,6 +128,7 @@ public class Bullet : MonoBehaviour
                 Destroy(this.gameObject);
             }
         }
+        
     }
 
     void OnTriggerEnter2D()

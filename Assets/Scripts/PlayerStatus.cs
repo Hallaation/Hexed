@@ -12,7 +12,7 @@ public class PlayerStatus : MonoBehaviour
     bool m_bDead = false;
     bool m_bStunned = false;
     public float StunedSlide = 400;
-
+    public int m_iScore;
     public bool IsDead { get { return m_bDead; } set { m_bDead = value; } }
     public bool IsStunned { get { return m_bStunned; } set { m_bStunned = value; } }
     public int TimesPunched { get { return m_iTimesPunched; } set { m_iTimesPunched = value; } }
@@ -25,12 +25,13 @@ public class PlayerStatus : MonoBehaviour
     public Color _playerColour;
     private Renderer PlayerSprite;
 
-    [HideInInspector]
+    
     public GameObject killMePrompt = null;
-    [HideInInspector]
+    
     public GameObject killMeArea = null;
 
     private GameObject _HealthMask;
+    private Text _ScoreText;
     Rigidbody2D _rigidbody;
     [HideInInspector]
     public int spawnIndex;
@@ -55,16 +56,28 @@ public class PlayerStatus : MonoBehaviour
             _playerColour = transform.Find("Sprites").Find("PlayerSprite").GetComponent<Renderer>().material.color;
         }
         killMePrompt.SetActive(false);
-
+        Debug.Log(GetComponent<ControllerSetter>().m_playerNumber);
         _HealthMask = PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_HealthBarMask;
+        _ScoreText = PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_ScoreText.GetComponent<Text>();
         PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_healthScrolllingIcon.GetComponent<Image>().material.SetColor("_Color" , _playerColour);
         PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_StaticObjectMaterial.SetColor("_Color" , _playerColour);
 
+        foreach (var item in PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_objects)
+        {
+            item.SetActive(true);
+        }
 
     }
 
     void Update()
     {
+        //update my score
+        m_iScore = GameManagerc.Instance.PlayerWins[this.GetComponent<ControllerSetter>().m_playerNumber];
+        //Debug.LogError(GetComponent<ControllerSetter>().m_playerNumber);
+        if (_ScoreText != null)
+        {
+            _ScoreText.text = m_iScore.ToString();
+        }
         //if i've been punched once, start the timer, once the timer has reached the end, reset the amount of times punched.
         if (m_iTimesPunched >= 1)
         {
@@ -186,7 +199,9 @@ public class PlayerStatus : MonoBehaviour
     {
         //time to re activate all the UI stuff
         this.GetComponent<BaseAbility>().GetUIElements();
+        
         _HealthMask = PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_HealthBarMask;
+        _ScoreText = PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_ScoreText.GetComponent<Text>();
         PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_healthScrolllingIcon.GetComponent<Image>().material.SetColor("_Color" , _playerColour);
         PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_StaticObjectMaterial.SetColor("_Color" , _playerColour);
 

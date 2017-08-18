@@ -59,13 +59,22 @@ public class CharacterSelectionManager : MonoBehaviour
 
     void Update()
     {
-        if (playerSelectedCharacter.Count > 1)
+        if (playerSelectedCharacter.Count > 1 || Application.isEditor)
         {
             //only load the scene if I still havnt moved to arena scene
             if (Input.GetButtonDown("Start") && !m_bMovedToMainScene)
             {
-                SceneManager.LoadScene(1); //oh fuck.
+                SceneManager.LoadScene(2); //oh fuck.
             }
+        }
+
+        if (Application.isEditor && Input.GetKeyDown(KeyCode.R))
+        {
+            foreach(PlayerStatus player in GameManagerc.Instance.InGamePlayers)
+            {
+                Destroy(player.gameObject.gameObject , 1);
+            }
+            SceneManager.LoadScene(0);
         }
     }
 
