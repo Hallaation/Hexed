@@ -28,9 +28,9 @@ public class Move : MonoBehaviour
     public bool m_bStopStickRotation = false;
     bool m_bHoldingWeapon = false;
     bool runningAnimation = false;
-    [HideInInspector]
+    //[HideInInspector]
     public GameObject crosshair;
-    [HideInInspector]
+    
     public GameObject weaponMount;
     public GameObject fistObject;
     public float movementSpeed = 10.0f;
@@ -52,7 +52,10 @@ public class Move : MonoBehaviour
         m_controller = GetComponent<ControllerSetter>();
         m_status = GetComponent<PlayerStatus>();
         _rigidBody = GetComponent<Rigidbody2D>();
-        playerSpirte = transform.Find("Sprites").Find("PlayerSprite").gameObject;
+        if (transform.Find("Sprite/Character001_Body") != null)
+            playerSpirte = transform.Find("Sprites/Character001_Body").gameObject;
+        else if (transform.Find("Sprites/PlayerSprite"))
+            playerSpirte = transform.Find("Sprites/PlayerSprite").gameObject;
         //change my colour depending on what player I am
         Renderer temp;
         if (GetComponent<Renderer>())
@@ -61,7 +64,11 @@ public class Move : MonoBehaviour
         }
         else
         {
-            temp = transform.Find("Sprites").Find("PlayerSprite").GetComponent<Renderer>();
+            if (transform.Find("Sprite/Character001_Body") != null)
+                temp = transform.Find("Sprites").Find("Character001_Body").GetComponent<Renderer>();
+            else if (transform.Find("Sprites/PlayerSprite"))
+                temp = transform.Find("Sprites").Find("PlayerSprite").GetComponent<Renderer>();
+            else temp = null;
         }
         switch (m_controller.mPlayerIndex)
         {
@@ -477,6 +484,9 @@ public class Move : MonoBehaviour
 
     public void FindSprite()
     {
-        playerSpirte = transform.Find("Sprites").Find("PlayerSprite").gameObject;
+        if (transform.Find("Sprite/Character001_Body") != null)
+            playerSpirte = transform.Find("Sprites").Find("Character001_Body").gameObject;
+        else if (transform.Find("Sprites/PlayerSprite"))
+            playerSpirte = transform.Find("Sprites").Find("PlayerSprite").gameObject;
     }
 }

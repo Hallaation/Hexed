@@ -6,6 +6,7 @@ using UnityEngine;
 [System.Serializable]
 public class Gun : Weapon
 {
+    [Header("Gun Specific")]
     public int m_iAmmo = 30;
     public GameObject bullet;
     [SerializeField]
@@ -18,10 +19,12 @@ public class Gun : Weapon
     public float m_fTimeBetweenBurstShots;
     private float TimeSinceLastShot;
     private Thread _t1;
+    private ParticleSystem MuzzelFlash;
     //overriding startup, all weapons should do this
     public override void StartUp()
     {
-        
+        if(transform.childCount > 3)
+        MuzzelFlash = transform.GetChild(3).GetComponent<ParticleSystem>();
     }
 
     public override bool Attack(bool trigger)
@@ -78,6 +81,13 @@ public class Gun : Weapon
         FiredBullet.GetComponent<Bullet>().m_iDamage = this.m_iDamage;
         FiredBullet.transform.rotation = this.transform.parent.rotation * Quaternion.Euler(Vector3.forward * m_fSpreadJitter * Random.Range(-1.0f, 1.0f));
         FiredBullet.GetComponent<Rigidbody2D>().AddForce(FiredBullet.transform.up * m_fFiringForce, ForceMode2D.Impulse);
+        //!
+        Vector2 dir = FiredBullet.GetComponent<Rigidbody2D>().velocity;
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        FiredBullet.GetComponent<Transform>().rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        //!
+        if(MuzzelFlash != null)
+        MuzzelFlash.Play();
         shotReady = false;
         --m_iAmmo;
     }

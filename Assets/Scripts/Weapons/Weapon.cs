@@ -10,6 +10,12 @@ public class Weapon : MonoBehaviour
     public bool m_bAutomaticGun;
     public bool m_bBurstFire;
     public float KnockBack;
+    [Space]
+    [Header("ShadowRelated")]
+    public float MaxShadow;
+    public float MinShadow;
+    public float ShadowGrowthSpeed;
+    [Space]
     protected Timer TimerBetweenFiring;
     protected bool shotReady = true;
     protected bool stunPlayer = true;
@@ -18,20 +24,58 @@ public class Weapon : MonoBehaviour
     [HideInInspector]
     public GameObject previousOwner; //previous owner used to make sure when the weapon is thrown, it doesnt stun the thrower.
 
+    private SpriteRenderer ShadowSprite;
+    private Transform ShadowScale;
+    private bool ShadowDirection;
     // Use this for initialization
     void Start()
     {
         rigidbody = GetComponent<Rigidbody2D>();
         TimerBetweenFiring = new Timer(m_fTimeBetweenShots);
-        StartUp();
+        if (this.transform.childCount > 2 && tag != "Player")
+        {
+            ShadowSprite = transform.GetChild(0).GetComponent<SpriteRenderer>();
+            ShadowScale = transform.GetChild(0).GetComponent<Transform>();
+        }
+            StartUp();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!transform.parent)
+        if (!transform.parent) // If gun is not held, Grow and shrink shadow.
         {
             m_bActive = true;
+            if (this.transform.childCount > 2 && tag != "Player")
+            {
+                transform.GetChild(2).GetComponent<SpriteRenderer>().enabled = true;
+
+                if (ShadowDirection)
+                {
+                    ShadowScale.localPosition += new Vector3(0, Time.deltaTime * ShadowGrowthSpeed, 0);
+                    if (ShadowScale.localPosition.y >= MaxShadow)
+                    {
+                        ShadowScale.localPosition = new Vector3(ShadowScale.localPosition.x, MaxShadow, ShadowScale.localPosition.z);
+                        ShadowDirection = false;
+                    }
+                }
+                else
+                {
+                    ShadowScale.localPosition -= new Vector3(0, Time.deltaTime * ShadowGrowthSpeed, 0);
+                    if (ShadowScale.localPosition.y <= MinShadow)
+                    {
+                        ShadowScale.localPosition = new Vector3(ShadowScale.localPosition.x, MinShadow, ShadowScale.localPosition.z);
+                        ShadowDirection = true;
+                    }
+                }
+            }
+        }
+        if (transform.parent)
+        {
+            if (this.transform.childCount > 2 && tag != "Player")
+            {
+                transform.GetChild(2).GetComponent<SpriteRenderer>().enabled = false;
+            }
         }
 
         if (m_bActive)
@@ -40,15 +84,17 @@ public class Weapon : MonoBehaviour
             DoWeaponThings();
             if (!GetComponent<Move>())
                 GetComponentInChildren<Renderer>().material.color = Color.white;
+
         }
         else
         {
             if (!GetComponent<Move>())
                 GetComponentInChildren<Renderer>().material.color = new Color(0.1f , 0.1f , 0.1f , 0.8f);
+
         }
         //wait for next shot, ticks the timer until it is ready for the next shot
-        waitForNextShot();
 
+        waitForNextShot();
     }
 
     void waitForNextShot()
