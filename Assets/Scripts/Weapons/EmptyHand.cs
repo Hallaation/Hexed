@@ -21,6 +21,7 @@ public class EmptyHand : Weapon
         temp.volume = 0.5f;
         stunPlayer = false;
     }
+
     public override bool Attack(bool trigger)
     {
         if (shotReady)
