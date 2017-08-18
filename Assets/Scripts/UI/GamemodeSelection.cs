@@ -63,10 +63,14 @@ public class GamemodeSelection : MonoBehaviour
             {
                 item.SetActive(false);
             }
-            UIManager.instance.defaultPanel = this.transform.parent.gameObject;
-            UIManager.instance.menuStatus.Push(UIManager.instance.defaultPanel);
-            _button.onClick.AddListener(delegate () { UIManager.instance.OpenUIElement(GMSettingObjects[(int)GameManagerc.Instance.m_gameMode]); });
+            //Debug.Log(UIManager.Instance);
+            //Debug.Log(UIManager.Instance.defaultPanel);
+            Debug.Log(UIManager.Instance.menuStatus);
+            UIManager.Instance.defaultPanel = this.transform.parent.gameObject;
+            UIManager.Instance.menuStatus.Push(UIManager.Instance.defaultPanel);
+            _button.onClick.AddListener(delegate () { UIManager.Instance.OpenUIElement(GMSettingObjects[(int)GameManagerc.Instance.m_gameMode]); });
         }
+  
     }
 
     //?

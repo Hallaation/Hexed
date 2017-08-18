@@ -7,9 +7,9 @@ using UnityEngine.SceneManagement;
 using XboxCtrlrInput;
 public class UIManager : MonoBehaviour
 {
- 
+
     //CS LUL
-    public static UIManager instance;
+    public static UIManager mInstance;
 
     public Stack<GameObject> menuStatus;
     public GameObject defaultPanel;
@@ -17,66 +17,93 @@ public class UIManager : MonoBehaviour
     //only used if all else fails
     private GameObject defaultToReturnTo;
     private EventSystem _eventSystem;
-    private bool RemoveDefaultPanel;
+    private bool m_bRemoveLastPanel;
+
+    public bool RemoveLastPanel { get { return m_bRemoveLastPanel; } set { m_bRemoveLastPanel = value; } }
     // Use this for initialization
-    void Start()
+
+
+    public static UIManager Instance
     {
-        SceneManager.sceneLoaded += OnSceneLoad;
+        get
+        {
+            if (mInstance == null)
+            {
+                //If I already exist, make the instance that
+                mInstance = (UIManager)FindObjectOfType(typeof(UIManager));
+
+                if (mInstance == null)
+                {
+                    //if not found, make an object and attach me to it
+                    mInstance = (new GameObject("ControllerManager")).AddComponent<UIManager>();
+                }
+                mInstance.gameObject.name = "Singleton container";
+                DontDestroyOnLoad(mInstance.gameObject);
+
+            }
+            return mInstance;
+        }
     }
 
     void Awake()
     {
-        if (instance != null) //check if singleton has been initiated
-        {
-            Debug.LogError("More than one audiomanager");
-            return;
-        }
-        instance = this;
+        SceneManager.sceneLoaded += OnSceneLoad;
+        Debug.Log("Awake");
+        //instance = FindObjectOfType<UIManager>();
+        Debug.Log(UIManager.Instance);
         _eventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
         selected = _eventSystem.currentSelectedGameObject;
         menuStatus = new Stack<GameObject>();
 
+        if (Instance.gameObject != this.gameObject)
+        {
+            Destroy(this.gameObject);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        //if the current selected is null
-        if (!GameObject.Find("EventSystem").GetComponent<EventSystem>().currentSelectedGameObject)
-        {
-            //set the selected
-            Debug.Log("Currently selecting null");
-            //when all else fails, return to a default
-            if (!selected)
-            {
-                selected = defaultToReturnTo;
-            }
-            _eventSystem.SetSelectedGameObject(selected);
-        }
-        else
-        {
-            selected = _eventSystem.currentSelectedGameObject;
-        }
 
+        //if the current selected is null
+        if (menuStatus.Count > 0)
+        {
+            if (!GameObject.Find("EventSystem").GetComponent<EventSystem>().currentSelectedGameObject)
+            {
+                //set the selected
+                Debug.Log("Currently selecting null");
+                //when all else fails, return to a default
+                if (!selected)
+                {
+                    selected = defaultToReturnTo;
+                }
+                _eventSystem.SetSelectedGameObject(selected);
+            }
+            else
+            {
+                selected = _eventSystem.currentSelectedGameObject;
+            }
+        }
         //If I press B return to the previous UI thing.
         for (int i = 0; i < (int)XInputDotNetPure.PlayerIndex.Four; ++i)
         {
-            if (XCI.GetButtonDown(XboxButton.B, XboxController.First + i))
+            if (XCI.GetButtonDown(XboxButton.B , XboxController.First + i))
             {
                 Back();
             }
-        }
 
-        //If I press start and the menu status (stack of UI elements) is nothing, push the default panel into the stack.
-        if (XCI.GetButton(XboxButton.Start) && menuStatus.Count <= 0)
-        {
-            if (!menuStatus.Contains(defaultPanel))
+            //If I press start and the menu status (stack of UI elements) is nothing, push the default panel into the stack.
+            if (XCI.GetButton(XboxButton.Start , XboxController.First + i) && menuStatus.Count <= 0)
             {
-                menuStatus.Push(defaultPanel);
-                defaultPanel.SetActive(true);
-                _eventSystem.SetSelectedGameObject(null);
-                _eventSystem.SetSelectedGameObject(defaultPanel.transform.Find("DefaultButton").gameObject);
+                if (!menuStatus.Contains(defaultPanel))
+                {
+                    menuStatus.Push(defaultPanel);
+                    defaultPanel.SetActive(true);
+                    _eventSystem.SetSelectedGameObject(null);
+                    _eventSystem.SetSelectedGameObject(defaultPanel.GetComponentInChildren<Button>().gameObject);
+                }
             }
+
         }
     }
 
@@ -86,7 +113,12 @@ public class UIManager : MonoBehaviour
         //If I don't want to remove the default panel and the top of the stack is the default,  exit the function
         //if (!RemoveDefaultPanel && menuStatus.Peek() == defaultPanel) 
         //    return;
-        Debug.Log("trying to go back");
+
+        //if the menu status count is 1 and I don't want to remove the last panel, exit out of the function
+        if (menuStatus.Count == 1 && !m_bRemoveLastPanel)
+        {
+            return;
+        }
         if (menuStatus.Count >= 1)
         {
             menuStatus.Peek().SetActive(false);
@@ -107,16 +139,16 @@ public class UIManager : MonoBehaviour
     }
 
     //whatever the element is, push it into the stack 
-    public void OpenUIElement(GameObject current)
+    public void OpenUIElement(GameObject ElementToOpen)
     {
         //Debug.Log(current);
-        if (!menuStatus.Contains(current))
+        if (!menuStatus.Contains(ElementToOpen))
         {
             if (menuStatus.Count > 0)
                 menuStatus.Peek().SetActive(false);
 
-            current.SetActive(true);
-            menuStatus.Push(current.gameObject);
+            ElementToOpen.SetActive(true);
+            menuStatus.Push(ElementToOpen.gameObject);
             _eventSystem.SetSelectedGameObject(null);
 
             //find defaults if there are any and set it to my selected.
@@ -133,14 +165,18 @@ public class UIManager : MonoBehaviour
 
     void OnSceneLoad(Scene scene , LoadSceneMode mode)
     {
+        menuStatus.Clear();
+        //if im not in scene 0, remove last panel is true (allowing game to go back)
         if (scene.buildIndex != 0)
         {
-            RemoveDefaultPanel = true;
+            m_bRemoveLastPanel = true;
         }
         else
         {
-            RemoveDefaultPanel = false;
+            //don't allow the last panel to be removed 
+            m_bRemoveLastPanel = false;
         }
+
     }
 
 

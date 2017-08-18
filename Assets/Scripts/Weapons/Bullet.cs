@@ -119,7 +119,8 @@ public class Bullet : MonoBehaviour
         {
             if (!hit.transform.GetComponent<PlayerStatus>().IsStunned && hit.transform.GetComponent<PlayerStatus>() != bulletOwner)
             {
-                hit.transform.GetComponent<PlayerStatus>().m_iHealth -= m_iDamage; 
+                //hit.transform.GetComponent<PlayerStatus>().m_iHealth -= m_iDamage;
+                hit.transform.GetComponent<PlayerStatus>().HitPlayer(this);
                 if (hit.transform.GetComponent<PlayerStatus>().m_iHealth <= 0)
                 {
                     hit.transform.GetComponent<PlayerStatus>().IsDead = true;

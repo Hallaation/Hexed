@@ -45,7 +45,7 @@ public class BaseAbility : MonoBehaviour
         {
             //GetUIElements();
         }
-        Debug.Log(findUI);
+
         if (manaBar)
         {
             //figure out the x offset
@@ -74,8 +74,6 @@ public class BaseAbility : MonoBehaviour
     {
         if (findUI)
         {
-            Debug.Log("finding the UI" + PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber]);
-            Debug.Log(PlayerUIArray.Instance);
             PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].gameObject.SetActive(true);
             manaBar = PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_manaBarMask;
             PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_SpecialScrollingIcon.GetComponent<Image>().sprite = AbilityIcon;

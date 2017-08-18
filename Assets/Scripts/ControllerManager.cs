@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using XInputDotNetPure;
 using XboxCtrlrInput;
+
 public class ControllerManager : MonoBehaviour
 {
     public int AbilityToAdd = 0;
@@ -26,6 +27,7 @@ public class ControllerManager : MonoBehaviour
                     //if not found, make an object and attach me to it
                     mInstance = (new GameObject("ControllerManager")).AddComponent<ControllerManager>();
                 }
+
                 DontDestroyOnLoad(mInstance.gameObject);
 
             }
@@ -197,14 +199,16 @@ public class ControllerManager : MonoBehaviour
     }
     void OnSceneLoaded(Scene scene , LoadSceneMode mode)
     {
-        Object[] items = FindObjectsOfType<ControllerManager>();
+        ControllerManager[] items = FindObjectsOfType<ControllerManager>() as ControllerManager[];
+
         for (int i = 0; i < items.Length; ++i)
         {
             if (items[i] != this)
             {
-
+                //Destroy(items[i].gameObject);
             }
         }
+        
         if (scene.buildIndex != 0)
         {
             GameObject spawnParent = GameObject.FindGameObjectWithTag("SpawnPoints");

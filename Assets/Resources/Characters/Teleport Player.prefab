@@ -107,6 +107,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4917713658517612}
   - component: {fileID: 212258931249363816}
+  - component: {fileID: 114056880130896666}
   m_Layer: 8
   m_Name: Crosshair
   m_TagString: Untagged
@@ -432,12 +433,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_iHealth: 3
   StunedSlide: 40
+  m_iScore: 0
   m_fStunTime: 5
   m_fMaximumStunWait: 2
   _playerColour: {r: 0, g: 0, b: 0, a: 0}
   killMePrompt: {fileID: 1117975142675102}
   killMeArea: {fileID: 1072692517627844}
   spawnIndex: 0
+--- !u!114 &114056880130896666
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1307528044442894}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bfc2992c82f4ac46a3faad0014c18d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114458379330122386
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -453,9 +466,9 @@ MonoBehaviour:
   SelectionSprites:
   - {fileID: 21300010, guid: 8560db96e33c8ae4a837c261da8941ce, type: 3}
   - {fileID: 21300032, guid: 8560db96e33c8ae4a837c261da8941ce, type: 3}
-  currentMana: 100000
-  m_fMaximumMana: 100000
-  PassiveManaRegeneration: 1
+  currentMana: 100
+  m_fMaximumMana: 100
+  PassiveManaRegeneration: 50
   ManaCost: 100
   RepeatedUsage: 0
   repeatedManaCost: 0.5
@@ -463,7 +476,7 @@ MonoBehaviour:
   m_fMovementSpeedSlowDown: 2
   findUI: 1
   manaBar: {fileID: 0}
-  m_TeleportForce: 0
+  m_TeleportForce: 10
 --- !u!114 &114501485396689554
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -518,6 +531,7 @@ MonoBehaviour:
   m_b2DMode: 1
   vibrationValue: {x: 0, y: 0}
   playerSpirte: {fileID: 0}
+  StartMoveDelay: 3
 --- !u!212 &212011166948301414
 SpriteRenderer:
   m_ObjectHideFlags: 1

@@ -19,7 +19,7 @@ public class CharacterSelectionManager : MonoBehaviour
     public static CharacterSelectionManager Instance
     {
         get
-        {   
+        {
             //if an instance doesnt exist
             if (mInstance == null)
             {
@@ -43,7 +43,7 @@ public class CharacterSelectionManager : MonoBehaviour
         SceneManager.sceneLoaded += OnSceneLoaded;
         Object[] temp = Resources.LoadAll("Characters" , typeof(GameObject));
         CharacterArray = new GameObject[temp.Length];
-        for (int i = 0; i < CharacterArray.Length;  ++i)
+        for (int i = 0; i < CharacterArray.Length; ++i)
         {
             CharacterArray[i] = temp[i] as GameObject;
         }
@@ -59,6 +59,11 @@ public class CharacterSelectionManager : MonoBehaviour
 
     void Update()
     {
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
         if (playerSelectedCharacter.Count > 1 || Application.isEditor)
         {
             //only load the scene if I still havnt moved to arena scene
@@ -70,7 +75,7 @@ public class CharacterSelectionManager : MonoBehaviour
 
         if (Application.isEditor && Input.GetKeyDown(KeyCode.R))
         {
-            foreach(PlayerStatus player in GameManagerc.Instance.InGamePlayers)
+            foreach (PlayerStatus player in GameManagerc.Instance.InGamePlayers)
             {
                 Destroy(player.gameObject.gameObject , 1);
             }
@@ -78,7 +83,7 @@ public class CharacterSelectionManager : MonoBehaviour
         }
     }
 
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    void OnSceneLoaded(Scene scene , LoadSceneMode mode)
     {
         //if my currnet scene is 1 (when loaded into the game arean and I havn't already moved in, spawn the players
         if (scene.buildIndex == 1 && !m_bMovedToMainScene)
@@ -96,6 +101,27 @@ public class CharacterSelectionManager : MonoBehaviour
                 go.SetActive(true);
                 CameraControl.mInstance.m_Targets.Add(go.transform);
                 m_bMovedToMainScene = true;
+            }
+        }
+
+        if (scene.buildIndex == 0)
+        {
+            playerSelectedCharacter.Clear();
+            CharacterSelectionStatus.Clear();
+
+            Object[] temp = Resources.LoadAll("Characters" , typeof(GameObject));
+            CharacterArray = new GameObject[temp.Length];
+            for (int i = 0; i < CharacterArray.Length; ++i)
+            {
+                CharacterArray[i] = temp[i] as GameObject;
+            }
+            //Application.targetFrameRate = 30;
+            //! check if there is already an instance
+            //? instantiate the dictionary, and populate it with the selectable characters.
+            CharacterSelectionStatus = new Dictionary<GameObject , bool>();
+            foreach (GameObject character in CharacterArray)
+            {
+                CharacterSelectionStatus.Add(character , false);
             }
         }
     }

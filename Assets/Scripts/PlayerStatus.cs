@@ -56,7 +56,7 @@ public class PlayerStatus : MonoBehaviour
             _playerColour = transform.Find("Sprites").Find("PlayerSprite").GetComponent<Renderer>().material.color;
         }
         killMePrompt.SetActive(false);
-        Debug.Log(GetComponent<ControllerSetter>().m_playerNumber);
+
         _HealthMask = PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_HealthBarMask;
         _ScoreText = PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_ScoreText.GetComponent<Text>();
         PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_healthScrolllingIcon.GetComponent<Image>().material.SetColor("_Color" , _playerColour);
@@ -72,7 +72,7 @@ public class PlayerStatus : MonoBehaviour
     void Update()
     {
         //update my score
-        m_iScore = GameManagerc.Instance.PlayerWins[this.GetComponent<ControllerSetter>().m_playerNumber];
+        m_iScore = GameManagerc.Instance.PlayerWins[this];
         //Debug.LogError(GetComponent<ControllerSetter>().m_playerNumber);
         if (_ScoreText != null)
         {
@@ -193,10 +193,17 @@ public class PlayerStatus : MonoBehaviour
 
         this.transform.position = ControllerManager.Instance.spawnPoints[spawnIndex].position;
         GetComponent<Move>().ThrowMyWeapon(Vector2.zero , Vector2.up , false);
+
+        this.GetComponent<Collider2D>().isTrigger = true;
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        if (scene.buildIndex == 0)
+        {
+            Destroy(this.gameObject);
+            return;
+        }
         //time to re activate all the UI stuff
         this.GetComponent<BaseAbility>().GetUIElements();
         
@@ -205,5 +212,25 @@ public class PlayerStatus : MonoBehaviour
         PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_healthScrolllingIcon.GetComponent<Image>().material.SetColor("_Color" , _playerColour);
         PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_StaticObjectMaterial.SetColor("_Color" , _playerColour);
 
+        foreach (var item in PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_objects)
+        {
+            item.SetActive(true);
+        }
+    }
+
+    public void HitPlayer(Bullet aBullet)
+    {
+        m_iHealth -= aBullet.m_iDamage;
+        //If the game mode is either the timed deathmatch or scores appointed on kills deathmatch, then give them points
+        if (m_iHealth <= 0 && (GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_POINTS || GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_TIMED))
+        {
+            //update the bullet owner's score
+            GameManagerc.Instance.PlayerWins[aBullet.bulletOwner]++;
+        }
+    }
+
+    public void Clear()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 }

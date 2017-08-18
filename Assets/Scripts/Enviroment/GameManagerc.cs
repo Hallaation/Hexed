@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 //?
 //? F R O M
 //? T H E
@@ -39,7 +40,7 @@ using UnityEngine.SceneManagement;
 
 //learn the definition of deathmatch please
 public enum Gamemode_type
-{ 
+{
     LAST_MAN_STANDING_DEATHMATCH, //last person to stand earns a point, probably the default
     DEATHMATCH_POINTS, //killing a player will earn them a point, up to a certain point
     DEATHMATCH_TIMED, //kill as many players as you can in the allocated time
@@ -50,14 +51,20 @@ public enum Gamemode_type
 public class GameManagerc : MonoBehaviour
 {
     Timer waitForRoundEnd;
-
-    public List<int> PlayerWins = new List<int>();
+    //lets try a dictionary again
+    //public List<int> PlayerWins = new List<int>();
+    public Dictionary<PlayerStatus , int> PlayerWins = new Dictionary<PlayerStatus , int>();
     public Gamemode_type m_gameMode = Gamemode_type.LAST_MAN_STANDING_DEATHMATCH;
     public int m_iPointsNeeded = 5;
     public float m_fTimedDeathMatchTime;
 
     static GameManagerc mInstance = null;
     Timer DeathmatchTimer;
+    //lets keep the variables at the top shall we
+    public List<PlayerStatus> InGamePlayers = new List<PlayerStatus>();
+    GameObject WinningPlayer = null;
+    private GameObject FinishUIPanel;
+    private bool m_bRoundOver;
     public static GameManagerc Instance
     {
         get
@@ -78,10 +85,6 @@ public class GameManagerc : MonoBehaviour
             return mInstance;
         }
     }
-
-    public List<PlayerStatus> InGamePlayers = new List<PlayerStatus>();
-    GameObject WinningPlayer = null;
-    private bool m_bRoundOver;
     // Use this for initialization
     void Start()
     {
@@ -90,7 +93,7 @@ public class GameManagerc : MonoBehaviour
         waitForRoundEnd = new Timer(3);
         mInstance = GameManagerc.Instance;
         m_bRoundOver = false;
-        Physics.gravity = new Vector3(0, 0, 10);
+        Physics.gravity = new Vector3(0 , 0 , 10);
     }
 
 
@@ -114,16 +117,13 @@ public class GameManagerc : MonoBehaviour
                     RoundEndLastManStanding();
                     break;
                 case Gamemode_type.DEATHMATCH_POINTS:
-                    RoundEndLastManStanding();
-                    //RoundEndDeathMatchMaxPoints();
+                    RoundEndDeathMatchMaxPoints();
                     break;
                 case Gamemode_type.DEATHMATCH_TIMED:
-                    RoundEndLastManStanding();
-                    //RoundEndDeathMatchTimed();
+                    RoundEndDeathMatchTimed();
                     break;
                 case Gamemode_type.CAPTURE_THE_FLAG:
-                    RoundEndLastManStanding();
-                    //lol
+                    //RoundEndLastManStanding();
                     m_bRoundOver = true;
                     break;
                 default:
@@ -168,11 +168,16 @@ public class GameManagerc : MonoBehaviour
 
                 if (!player.IsDead)
                 {
-                    PlayerWins[i] += 1;
-                    if (PlayerWins[i] >= m_iPointsNeeded)
+                    PlayerWins[player] += 1;
+                    if (PlayerWins[player] >= m_iPointsNeeded)
                     {
                         Debug.LogError("Poinst required have been reached");
-
+                        Time.timeScale = 0;
+                        UIManager.Instance.OpenUIElement(FinishUIPanel);
+                        UIManager.Instance.RemoveLastPanel = false;
+                        FindObjectOfType<EventSystem>().SetSelectedGameObject(null);
+                        FindObjectOfType<EventSystem>().SetSelectedGameObject(FinishUIPanel.transform.Find("Rematch").gameObject);
+                        //this one line breaks things ResetPoints();
                         //TODO Load Character select / win screen;
                         //TODO Sort players by score?
                     }
@@ -183,20 +188,29 @@ public class GameManagerc : MonoBehaviour
     }
     void RoundEndDeathMatchMaxPoints()
     {
+        foreach (PlayerStatus player in InGamePlayers)
+        {
+            if (player.IsDead)
+            {
+                player.ResetPlayer();
+            }
+        }
+        //RoundEndLastManStanding();
         //TODO round shouldn't be over until one of the players has reached the maximum points
         //TODO For Max points, guns should be respawning with new ammo, any guns with no ammo should be deleted after a while when they have no ammo (like duck game)
         //TODO Respawn players after they are killed (Like Smash bros.) no i-Frames though, they can be camped for all I care.
-        m_bRoundOver = true;
+        //m_bRoundOver = true;
         //TODO Sort players by score?
         //TODO Load Character select / win screen;
     }
 
     void RoundEndDeathMatchTimed()
     {
+        RoundEndLastManStanding();
         //TODO similiar to max points (should change this to kills) 
         //TODO Penalty for death? 
         //TODO Round isn't over until the timer has reached 0.
-        m_bRoundOver = true;
+        //m_bRoundOver = true;
         //TODO Sort players by score?
         //TODO Load Character select / win screen;
     }
@@ -204,21 +218,81 @@ public class GameManagerc : MonoBehaviour
     void OnSceneLoaded(Scene scene , LoadSceneMode mode)
     {
         //look for a gamemanager, then delete it.
-        Object[] items = FindObjectsOfType<GameManagerc>();
-        for (int i = 0; i < items.Length; ++i)
-        {
-            if (items[i] != this)
-            {
-                Destroy(items[i]);
-            }
-        }
+        //Object[] items = FindObjectsOfType<GameManagerc>();
+        //for (int i = 0; i < items.Length; ++i)
+        //{
+        //    if (items[i] != this)
+        //    {
+        //        //Destroy(items[i]);
+        //    }
+        //}
         Debug.Log("Scene load");
+        if (GameObject.Find("FinishedGamePanel"))
+        {
+            FinishUIPanel = GameObject.Find("FinishedGamePanel");
+            FinishUIPanel.transform.Find("Rematch").GetComponent<Button>().onClick.AddListener(delegate { Rematch(); });
+            FinishUIPanel.transform.Find("Main Menu").GetComponent<Button>().onClick.AddListener(delegate { GoToStart(); });
+            FinishUIPanel.SetActive(false);
+        }
+
     }
 
     public void AddPlayer(PlayerStatus aPlayer)
     {
         InGamePlayers.Add(aPlayer);
-        PlayerWins.Add(0);
+        PlayerWins.Add(aPlayer , 0);
     }
+
+
+    public void Rematch()
+    {
+        Time.timeScale = 1;
+        m_bRoundOver = false;
+        foreach (KeyValuePair<PlayerStatus , int> item in PlayerWins)
+        {
+            item.Key.ResetPlayer();
+        }
+        foreach (var item in InGamePlayers)
+        {
+            PlayerWins[item] = 0;
+        }
+        WinningPlayer = null;
+        m_bRoundOver = false;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+
+    public void GoToStart()
+    {
+        for (int i = 0; i < InGamePlayers.Count; i++)
+        {
+            InGamePlayers[i].Clear();
+            InGamePlayers[i].gameObject.SetActive(false);
+        }
+
+        //Debug.Break();
+        //empty the list
+        //InGamePlayers.Clear();
+        //turn off all the singletons so they no longer update, then destroy them
+        //StartCoroutine(waitForSeconds());
+        UIManager.Instance.gameObject.SetActive(false);
+        ControllerManager.Instance.gameObject.SetActive(false);
+        CharacterSelectionManager.Instance.gameObject.SetActive(false);
+        PlayerUIArray.Instance.gameObject.SetActive(false);
+
+        Destroy(PlayerUIArray.Instance.gameObject);
+        Destroy(UIManager.Instance.gameObject);
+        Destroy(ControllerManager.Instance.gameObject);
+        Destroy(CharacterSelectionManager.Instance.gameObject);
+        Destroy(this.gameObject);
+        Time.timeScale = 1;
+        //WTF scene begings to load even though line hasnt been called. what is happening. 
+        SceneManager.LoadScene(0);
+    }
+    IEnumerator waitForSeconds()
+    {
+        yield return new WaitForSecondsRealtime(1);
+    }
+
 }
 

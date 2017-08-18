@@ -107,6 +107,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4917713658517612}
   - component: {fileID: 212258931249363816}
+  - component: {fileID: 114016193602839646}
   m_Layer: 8
   m_Name: Crosshair
   m_TagString: Untagged
@@ -463,6 +464,17 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114016193602839646
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1307528044442894}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bfc2992c82f4ac46a3faad0014c18d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114018766683465526
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -476,6 +488,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_iHealth: 3
   StunedSlide: 40
+  m_iScore: 0
   m_fStunTime: 5
   m_fMaximumStunWait: 2
   _playerColour: {r: 0, g: 0, b: 0, a: 0}
@@ -536,6 +549,7 @@ MonoBehaviour:
   m_b2DMode: 1
   vibrationValue: {x: 0, y: 0}
   playerSpirte: {fileID: 0}
+  StartMoveDelay: 3
 --- !u!114 &114875984380278874
 MonoBehaviour:
   m_ObjectHideFlags: 1
