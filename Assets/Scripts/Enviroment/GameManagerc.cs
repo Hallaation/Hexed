@@ -3,16 +3,61 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+//?
+//? F R O M
+//? T H E
+//? G H A S T L Y
+//? E Y R I E S
+//? I
+//? C A N
+//? S E E
+//? T O
+//? T H E
+//? E N D S
+//? O F
+//? T H E
+//? W O R LD
+//? A N D
+//? F R O M 
+//? T H I S
+//? V A N T A G E
+//? P O I NT
+//? I
+//? D E C L A R E 
+//? W I T H
+//? U T T E R
+//? C E R T A I N T Y
+//? T H A T
+//? T H I S
+//? O N E
+//? I S
+//? I N
+//? T H E
+//? B A G
+//? .
+//?
+
+//learn the definition of deathmatch please
+public enum Gamemode_type
+{ 
+    LAST_MAN_STANDING_DEATHMATCH, //last person to stand earns a point, probably the default
+    DEATHMATCH_POINTS, //killing a player will earn them a point, up to a certain point
+    DEATHMATCH_TIMED, //kill as many players as you can in the allocated time
+    CAPTURE_THE_FLAG, //unsued, probably not going to implement, put it in here for the lols;
+
+}
+
 public class GameManagerc : MonoBehaviour
 {
     Timer waitForRoundEnd;
 
-    List<int> PlayerWins = new List<int>();
-
-
+    public List<int> PlayerWins = new List<int>();
+    public Gamemode_type m_gameMode = Gamemode_type.LAST_MAN_STANDING_DEATHMATCH;
     public int m_iPointsNeeded = 5;
+    public float m_fTimedDeathMatchTime;
+
     static GameManagerc mInstance = null;
-    
+    Timer DeathmatchTimer;
     public static GameManagerc Instance
     {
         get
@@ -40,6 +85,7 @@ public class GameManagerc : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        DeathmatchTimer = new Timer(m_fTimedDeathMatchTime);
         SceneManager.sceneLoaded += OnSceneLoaded;
         waitForRoundEnd = new Timer(3);
         mInstance = GameManagerc.Instance;
@@ -55,32 +101,38 @@ public class GameManagerc : MonoBehaviour
         {
             StartCoroutine(CheckForRoundEnd());
         }
-        else
-        {
 
-        }
     }
 
     IEnumerator CheckForRoundEnd()
     {
         if (!m_bRoundOver)
         {
-            int DeadCount = 0;
-            foreach (PlayerStatus player in InGamePlayers)
+            switch (m_gameMode)
             {
-                if (player.IsDead)
-                {
-                    DeadCount++;
-                }
-            }
-
-            if (DeadCount >= InGamePlayers.Count - 1)
-            {
-                RoundEndLastManStanding();
+                case Gamemode_type.LAST_MAN_STANDING_DEATHMATCH:
+                    RoundEndLastManStanding();
+                    break;
+                case Gamemode_type.DEATHMATCH_POINTS:
+                    RoundEndLastManStanding();
+                    //RoundEndDeathMatchMaxPoints();
+                    break;
+                case Gamemode_type.DEATHMATCH_TIMED:
+                    RoundEndLastManStanding();
+                    //RoundEndDeathMatchTimed();
+                    break;
+                case Gamemode_type.CAPTURE_THE_FLAG:
+                    RoundEndLastManStanding();
+                    //lol
+                    m_bRoundOver = true;
+                    break;
+                default:
+                    break;
             }
         }
         else
         {
+            //once the round is over, reset players
             if (waitForRoundEnd.Tick(Time.deltaTime))
             {
                 //reload scene
@@ -99,29 +151,56 @@ public class GameManagerc : MonoBehaviour
 
     void RoundEndLastManStanding()
     {
-        m_bRoundOver = true;
-        int i = 0;
+        int DeadCount = 0;
         foreach (PlayerStatus player in InGamePlayers)
         {
-
-            if (!player.IsDead)
+            if (player.IsDead)
             {
-                PlayerWins[i] += 1;
-                if (PlayerWins[i] >= m_iPointsNeeded )
-                {
-                    //TODO Load Character select / win screen;
-                    //TODO Sort players by score?
-                }
+                DeadCount++;
             }
-            ++i;
+        }
+        if (DeadCount >= InGamePlayers.Count - 1)
+        {
+            m_bRoundOver = true;
+            int i = 0;
+            foreach (PlayerStatus player in InGamePlayers)
+            {
+
+                if (!player.IsDead)
+                {
+                    PlayerWins[i] += 1;
+                    if (PlayerWins[i] >= m_iPointsNeeded)
+                    {
+                        Debug.LogError("Poinst required have been reached");
+
+                        //TODO Load Character select / win screen;
+                        //TODO Sort players by score?
+                    }
+                }
+                ++i;
+            }
         }
     }
-    void RoundEndDeathMatch()
+    void RoundEndDeathMatchMaxPoints()
     {
+        //TODO round shouldn't be over until one of the players has reached the maximum points
+        //TODO For Max points, guns should be respawning with new ammo, any guns with no ammo should be deleted after a while when they have no ammo (like duck game)
+        //TODO Respawn players after they are killed (Like Smash bros.) no i-Frames though, they can be camped for all I care.
         m_bRoundOver = true;
         //TODO Sort players by score?
         //TODO Load Character select / win screen;
     }
+
+    void RoundEndDeathMatchTimed()
+    {
+        //TODO similiar to max points (should change this to kills) 
+        //TODO Penalty for death? 
+        //TODO Round isn't over until the timer has reached 0.
+        m_bRoundOver = true;
+        //TODO Sort players by score?
+        //TODO Load Character select / win screen;
+    }
+
     void OnSceneLoaded(Scene scene , LoadSceneMode mode)
     {
         //look for a gamemanager, then delete it.
@@ -130,7 +209,7 @@ public class GameManagerc : MonoBehaviour
         {
             if (items[i] != this)
             {
-                Destroy(items[i]); 
+                Destroy(items[i]);
             }
         }
         Debug.Log("Scene load");
@@ -142,3 +221,4 @@ public class GameManagerc : MonoBehaviour
         PlayerWins.Add(0);
     }
 }
+
