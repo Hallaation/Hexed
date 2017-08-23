@@ -99,10 +99,9 @@ public class Bullet : MonoBehaviour
 
             return;
         }
-        if(hit.transform.gameObject.layer == LayerMask.NameToLayer("Wall") || hit.transform.gameObject.layer == LayerMask.NameToLayer("Door") || hit.transform.gameObject.layer == LayerMask.NameToLayer("Glass"))
-        {
-           
-           
+        //if I hit a wall, a door, some glass or a "height objecct" I will stop everything.
+        if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Wall") || hit.transform.gameObject.layer == LayerMask.NameToLayer("Door") || hit.transform.gameObject.layer == LayerMask.NameToLayer("Glass") || hit.transform.gameObject.layer == LayerMask.NameToLayer("HeightObject"))
+        {          
             m_rigidBody.velocity = Vector2.zero;
             m_rigidBody.simulated = false;
             BulletSprite.enabled = false;

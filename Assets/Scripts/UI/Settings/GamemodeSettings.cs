@@ -18,11 +18,13 @@ public class GamemodeSettings : MonoBehaviour
     private bool[] StickMovement; // index 0 for left horizontal, index 1 for right horizontal
 
     Text _SettingsValue;
+    GameManagerc m_ManagerInstance;
     // Use this for initialization
     void Start()
     {
         _SettingsValue = GetComponentInChildren<Text>();
         StickMovement = new bool[2] { false , false };
+        m_ManagerInstance = GameManagerc.Instance;
     }
 
     // Update is called once per frame
@@ -57,7 +59,7 @@ public class GamemodeSettings : MonoBehaviour
 
         }
         _SettingsValue.text = mPointsToWin[PointWinIndex].ToString("0");
-        GameManagerc.Instance.m_iPointsNeeded = (int)mPointsToWin[PointWinIndex];
+        m_ManagerInstance.m_iPointsNeeded = (int)mPointsToWin[PointWinIndex];
     }
 
 

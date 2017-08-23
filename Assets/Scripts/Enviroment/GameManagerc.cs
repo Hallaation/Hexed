@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+
 //?
 //? F R O M
 //? T H E
@@ -173,10 +174,12 @@ public class GameManagerc : MonoBehaviour
                     {
                         Debug.LogError("Poinst required have been reached");
                         Time.timeScale = 0;
-                        UIManager.Instance.OpenUIElement(FinishUIPanel);
+                        UIManager.Instance.OpenUIElement(FinishUIPanel, true);
                         UIManager.Instance.RemoveLastPanel = false;
                         FindObjectOfType<EventSystem>().SetSelectedGameObject(null);
                         FindObjectOfType<EventSystem>().SetSelectedGameObject(FinishUIPanel.transform.Find("Rematch").gameObject);
+
+                        
                         //this one line breaks things ResetPoints();
                         //TODO Load Character select / win screen;
                         //TODO Sort players by score?
@@ -229,10 +232,16 @@ public class GameManagerc : MonoBehaviour
         Debug.Log("Scene load");
         if (GameObject.Find("FinishedGamePanel"))
         {
+            Debug.ClearDeveloperConsole();
             FinishUIPanel = GameObject.Find("FinishedGamePanel");
             FinishUIPanel.transform.Find("Rematch").GetComponent<Button>().onClick.AddListener(delegate { Rematch(); });
             FinishUIPanel.transform.Find("Main Menu").GetComponent<Button>().onClick.AddListener(delegate { GoToStart(); });
-            FinishUIPanel.SetActive(false);
+            
+            for (int i = 0; i < FinishUIPanel.transform.childCount; ++i)
+            {
+                FinishUIPanel.transform.GetChild(i).gameObject.SetActive(false);
+            }
+
         }
 
     }

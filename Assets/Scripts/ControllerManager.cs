@@ -213,9 +213,12 @@ public class ControllerManager : MonoBehaviour
         {
             GameObject spawnParent = GameObject.FindGameObjectWithTag("SpawnPoints");
             //Find the spawn points    ////    spawnPoints = new Transform[spawnParent.transform.childCount];
-            for (int i = 0; i < spawnParent.transform.childCount; ++i)
+            if (spawnParent)
             {
-                spawnPoints[i] = spawnParent.transform.GetChild(i);
+                for (int i = 0; i < spawnParent.transform.childCount; ++i)
+                {
+                    spawnPoints[i] = spawnParent.transform.GetChild(i);
+                }
             }
         }
 
