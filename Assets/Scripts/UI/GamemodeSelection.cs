@@ -110,7 +110,8 @@ public class GamemodeSelection : MonoBehaviour
     void Update()
     {
         CheckForStickReset();
-        //everything needs to change fuck
+        Debug.Log(_button);
+        //if the event systems currently selected object is my assigned buttons parent, do the things according to my type.
         if (_eventSystem.currentSelectedGameObject.transform.parent == _button.transform.parent)
         {
             switch (m_pickType)
