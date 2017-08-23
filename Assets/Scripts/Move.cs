@@ -44,6 +44,7 @@ public class Move : MonoBehaviour
     public GameObject playerSpirte;
     float MoveDelayTimer;
     public float StartMoveDelay = 3;
+    public Vector3 m_LeftStickRotation;
     // Use this for initialization
     void Start()
     {
@@ -223,6 +224,7 @@ public class Move : MonoBehaviour
         movement = (!m_b2DMode) ? new Vector3(XCI.GetAxis(XboxAxis.LeftStickX , m_controller.mXboxController) , 0 , XCI.GetAxis(XboxAxis.LeftStickY , m_controller.mXboxController)) : new Vector3(XCI.GetAxis(XboxAxis.LeftStickX , m_controller.mXboxController) , XCI.GetAxis(XboxAxis.LeftStickY , m_controller.mXboxController));
 
         Vector3 vrotation = Vector3.zero;
+        m_LeftStickRotation = new Vector2(GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Left.X , GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Left.Y);
         if (!m_bStopStickRotation)
         {
             vrotation = new Vector2(GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Right.X , GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Right.Y);
@@ -262,6 +264,14 @@ public class Move : MonoBehaviour
         {
             _characterController.Move(movement * movementSpeed * Time.deltaTime);
         }
+
+
+        //animation checks go here
+        if (movement.magnitude > 0)
+        {
+
+        }
+
     }
 
     public void ThrowMyWeapon(Vector2 movement , Vector2 throwDirection , bool tossWeapon)

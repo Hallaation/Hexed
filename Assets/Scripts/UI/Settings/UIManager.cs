@@ -51,6 +51,7 @@ public class UIManager : MonoBehaviour
         Debug.Log("Awake");
         //instance = FindObjectOfType<UIManager>();
         Debug.Log(UIManager.Instance);
+        
         _eventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
         selected = _eventSystem.currentSelectedGameObject;
         menuStatus = new Stack<GameObject>();
@@ -139,15 +140,24 @@ public class UIManager : MonoBehaviour
     }
 
     //whatever the element is, push it into the stack 
-    public void OpenUIElement(GameObject ElementToOpen)
+    public void OpenUIElement(GameObject ElementToOpen, bool openChildren = false)
     {
+        
         //Debug.Log(current);
         if (!menuStatus.Contains(ElementToOpen))
         {
             if (menuStatus.Count > 0)
                 menuStatus.Peek().SetActive(false);
-
+            //Debug.Log(ElementToOpen);
+            //Debug.Break();
             ElementToOpen.SetActive(true);
+            if (ElementToOpen.transform.childCount > 0 && openChildren)
+            {
+                for (int i = 0; i < ElementToOpen.transform.childCount; ++i)
+                {
+                    ElementToOpen.transform.GetChild(i).gameObject.SetActive(true);
+                }
+            }
             menuStatus.Push(ElementToOpen.gameObject);
             _eventSystem.SetSelectedGameObject(null);
 

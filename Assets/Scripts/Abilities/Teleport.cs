@@ -59,6 +59,7 @@ public class Teleport : BaseAbility
         if (currentMana >= ManaCost && ButtonHasBeenUp == true && UsedAbility == true )
         {
             RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up, m_TeleportForce, 1 << LayerMask.NameToLayer("Wall"));
+            //Doe sa raycast to see if it has hit a wall, if it has, dont teleport.
             if (hit.collider != null)
             {
                 float Xdistance = ((hit.point.x) - (transform.position.x));
@@ -69,9 +70,25 @@ public class Teleport : BaseAbility
                 currentMana -= ManaCost;
 
             }
+            //otherwise if it is clear, allow the player to teleport
             else
             {
-                _rigidBody.position += new Vector2(transform.up.x * m_TeleportForce, transform.up.y * m_TeleportForce);
+                //makes a quaternion
+                Quaternion LeftStickRotation = new Quaternion();
+                LeftStickRotation = Quaternion.Euler(0 , 0 , Mathf.Atan2(-GetComponent<Move>().m_LeftStickRotation.x , GetComponent<Move>().m_LeftStickRotation.y) * Mathf.Rad2Deg);
+                Vector3 rotation = LeftStickRotation * Vector3.up;
+                //makes a rotation vector from the left stick's rotation
+                
+                //if there is any rotation from the left stick, the player will teleport the direction of the left stick, otherwise they will teleport the way they are looking
+                if (GetComponent<Move>().m_LeftStickRotation.magnitude > 0)
+                {
+                    _rigidBody.position += new Vector2(rotation.x * m_TeleportForce , rotation.y * m_TeleportForce);
+                }
+                else
+                {
+                    _rigidBody.position += new Vector2(this.transform.up.x * m_TeleportForce , this.transform.up.y * m_TeleportForce);
+                }
+                
                 ButtonHasBeenUp = false;
                 currentMana -= ManaCost;
             }
