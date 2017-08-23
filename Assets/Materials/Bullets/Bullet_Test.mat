@@ -6,8 +6,8 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Sprite_Masked_MovingTexture_Player1
-  m_Shader: {fileID: 4800000, guid: 586fec13c3b714a419c6896a25d93a6e, type: 3}
+  m_Name: Bullet_Test
+  m_Shader: {fileID: 200, guid: 0000000000000000f000000000000000, type: 0}
   m_ShaderKeywords: _EMISSION
   m_LightmapFlags: 1
   m_CustomRenderQueue: -1
@@ -48,9 +48,9 @@ Material:
     - first:
         name: _MainTex
       second:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 24722ebb350959249950e7ae25a81c47, type: 3}
         m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 2692.6296, y: 2691.6501}
+        m_Offset: {x: 0, y: 0}
     - first:
         name: _MetallicGlossMap
       second:
@@ -74,9 +74,6 @@ Material:
         name: PixelSnap
       second: 0
     - first:
-        name: ShowTexture
-      second: 0
-    - first:
         name: _BumpScale
       second: 1
     - first:
@@ -96,6 +93,9 @@ Material:
       second: 0.5
     - first:
         name: _GlossyReflections
+      second: 1
+    - first:
+        name: _InvFade
       second: 1
     - first:
         name: _Metallic
@@ -127,7 +127,10 @@ Material:
     m_Colors:
     - first:
         name: _Color
-      second: {r: 1, g: 0, b: 0, a: 1}
+      second: {r: 1, g: 1, b: 1, a: 1}
     - first:
         name: _EmissionColor
       second: {r: 0, g: 0, b: 0, a: 1}
+    - first:
+        name: _TintColor
+      second: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}
