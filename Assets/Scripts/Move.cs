@@ -306,7 +306,8 @@ public class Move : MonoBehaviour
                 m_bHoldingWeapon = false;
 
                 heldWeapon = null;
-                BodyAnimator.SetBool("HoldingTwoHandedGun", false);
+                if (BodyAnimator != null)
+                    BodyAnimator.SetBool("HoldingTwoHandedGun", false);
 
             }
             else
@@ -316,7 +317,8 @@ public class Move : MonoBehaviour
                 heldWeapon.GetComponent<Weapon>().previousOwner = this.gameObject;
                 m_bHoldingWeapon = false;
                 heldWeapon = null;
-                BodyAnimator.SetBool("HoldingTwoHandedGun", false);
+                if (BodyAnimator != null)
+                    BodyAnimator.SetBool("HoldingTwoHandedGun", false);
             }
         }
     }
@@ -392,7 +394,8 @@ public class Move : MonoBehaviour
         weaponRigidBody.angularVelocity = 0.0f; //set any angular velocity to nothing
 
         m_bHoldingWeapon = true;
-        BodyAnimator.SetBool("HoldingTwoHandedGun", true);
+        if (BodyAnimator != null)
+            BodyAnimator.SetBool("HoldingTwoHandedGun", true);
         vibrationValue.y = 0.5f; //vibrate controller for haptic feedback
     }
     void Attack(bool TriggerCheck)
@@ -402,7 +405,8 @@ public class Move : MonoBehaviour
         {
             if (m_bHoldingWeapon)
             {
-                BodyAnimator.SetBool("UnarmedAttack", false);
+                if (BodyAnimator != null)
+                    BodyAnimator.SetBool("UnarmedAttack", false);
                 //attack using the weapon im holding. if an attack was done, set a vibration on my controller.
                 if (heldWeapon.GetComponent<Weapon>().Attack(TriggerCheck))
                 {
@@ -416,11 +420,12 @@ public class Move : MonoBehaviour
                 vibrationValue.x = 0.1f;
                 //GamePad.SetVibration(m_controller.mPlayerIndex , vibrationValue.x , vibrationValue.y);
                 defaultWeapon.Attack(TriggerCheck);
-                BodyAnimator.SetBool("UnarmedAttack", true);
+                if (BodyAnimator != null)
+                    BodyAnimator.SetBool("UnarmedAttack", true);
                 //currently doesnt actually do melee attacks. using controller vibration for testing purposes
             }
         }
-        else
+        else if (BodyAnimator != null)
             BodyAnimator.SetBool("UnarmedAttack", false);
     }
 
