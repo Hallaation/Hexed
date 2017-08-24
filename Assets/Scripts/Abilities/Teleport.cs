@@ -63,7 +63,7 @@ public class Teleport : BaseAbility
   
                 //makes a quaternion
                 Quaternion LeftStickRotation = new Quaternion();
-                LeftStickRotation = Quaternion.Euler(0 , 0 , Mathf.Atan2(-GetComponent<Move>().m_LeftStickRotation.x , GetComponent<Move>().m_LeftStickRotation.y) * Mathf.Rad2Deg);
+                LeftStickRotation = Quaternion.Euler(0 , 0 , Mathf.Atan2(-GetComponent<Move>().m_LeftStickRotation.x , GetComponent<Move>().m_LeftStickRotation.y) * Mathf.Rad2Deg); // This works
                 Vector3 rotation = LeftStickRotation * Vector3.up;
                 
                 //makes a rotation vector from the left stick's rotation
@@ -74,13 +74,13 @@ public class Teleport : BaseAbility
                     
                     Vector2 V2rotation = new Vector2(rotation.x, rotation.y);
                     RaycastHit2D hitLeftStick = Physics2D.Raycast(transform.position, V2rotation, m_TeleportForce, 1 << LayerMask.NameToLayer("Wall"));
-                    if(hitLeftStick.collider != null)
+                    if(hitLeftStick.collider != null)   //! If a raycast sent along the direction of the left stick collides with a wall. Put the player at the collision
                     {
                         float Xdistance = ((hitLeftStick.point.x) - (transform.position.x));
                         float Ydistance = ((hitLeftStick.point.y) - (transform.position.y));
-                    _rigidBody.position = new Vector2(_rigidBody.position.x + Xdistance, _rigidBody.position.y + Ydistance);
-                    Debug.Log("WallPrevention");
-                         }
+                        _rigidBody.position = new Vector2(_rigidBody.position.x + Xdistance, _rigidBody.position.y + Ydistance);
+                        Debug.Log("WallPrevention");
+                    }
                     else
                     _rigidBody.position += new Vector2(rotation.x * m_TeleportForce, rotation.y * m_TeleportForce);
                 }
@@ -88,18 +88,16 @@ public class Teleport : BaseAbility
                 {
                     RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up, m_TeleportForce, 1 << LayerMask.NameToLayer("Wall"));
 
-                    //Doe sa raycast to see if it has hit a wall, if it has, dont teleport.
-                    if (hit.collider != null)
-                    {
-                        float Xdistance = ((hit.point.x) - (transform.position.x));
-                        float Ydistance = ((hit.point.y) - (transform.position.y));
-                        _rigidBody.position = new Vector2(_rigidBody.position.x + Xdistance, _rigidBody.position.y + Ydistance);
-                        Debug.Log("WallPrevention");
-                        
-
-                    }
-                    else
-                    _rigidBody.position += new Vector2(this.transform.up.x * m_TeleportForce , this.transform.up.y * m_TeleportForce);
+                //Doe sa raycast to see if it has hit a wall, if it has, dont teleport.
+                if (hit.collider != null) //! If a raycast sent along the direction the player is facing collides with a wall. Put the player at the collision
+                {
+                    float Xdistance = ((hit.point.x) - (transform.position.x));
+                    float Ydistance = ((hit.point.y) - (transform.position.y));
+                    _rigidBody.position = new Vector2(_rigidBody.position.x + Xdistance, _rigidBody.position.y + Ydistance);
+                    Debug.Log("WallPrevention");
+                }
+                else
+                    _rigidBody.position += new Vector2(this.transform.up.x * m_TeleportForce, this.transform.up.y * m_TeleportForce);  // Teleport full distance
                 }
                 
                 ButtonHasBeenUp = false;
