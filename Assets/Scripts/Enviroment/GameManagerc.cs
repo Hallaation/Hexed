@@ -86,6 +86,7 @@ public class GameManagerc : MonoBehaviour
     public GameObject[] PointOrigins;
     private GameObject PointsPanel;
 
+    private bool mbLoadedIntoGame = false;
     public static GameManagerc Instance
     {
         get
@@ -220,9 +221,11 @@ public class GameManagerc : MonoBehaviour
                     PlayerWins[player] += 1;
                     //TODO Point tallying screen goes here.
                     //! HERE
+                    //Update points
                     PointsPanel.SetActive(true);
+                    //now this for loop is not necassary. only need to add new points, hmm. 
                     for (int k = 0; k < PlayerWins[player]; k++)
-                    { 
+                    {
                         GameObject go = new GameObject("Point" , typeof(RectTransform));
                         go.AddComponent<CanvasRenderer>();
                         go.AddComponent<Image>().sprite = PointSprite;
@@ -231,7 +234,7 @@ public class GameManagerc : MonoBehaviour
                         Vector3 AddPointSpot = PointOrigins[XboxControllerPlayerNumbers[player.GetComponent<ControllerSetter>().mXboxController]].transform.position;
                         go.transform.position += new Vector3(AddPointSpot.x + 40 * k , AddPointSpot.y);
                     }
-                   // Debug.Break();
+                    // Debug.Break();
                     //If player has reached the points required to win
                     if (PlayerWins[player] >= m_iPointsNeeded)
                     {
@@ -301,24 +304,14 @@ public class GameManagerc : MonoBehaviour
 
     void OnSceneLoaded(Scene scene , LoadSceneMode mode)
     {
-        //look for a gamemanager, then delete it.
-        //Object[] items = FindObjectsOfType<GameManagerc>();
-        //for (int i = 0; i < items.Length; ++i)
-        //{
-        //    if (items[i] != this)
-        //    {
-        //        //Destroy(items[i]);
-        //    }
-        //}
-
-        Debug.Log("----------------------------------------------------------------------\n GameManager loaded in ControllerTest\n----------------------------------------------------------------------------");
-        //If I found the finished game panel
+        //If the map to load isnt null, load it
         if (MapToLoad)
         {
             GameObject go = Instantiate(MapToLoad);
             go.transform.position = Vector3.zero;
             go.transform.DetachChildren();
         }
+        //If I found the finished game panel
         if (GameObject.Find("FinishedGamePanel"))
         {
             //Set the UI panel reference to that object
@@ -343,7 +336,33 @@ public class GameManagerc : MonoBehaviour
             PointOrigins[i] = temp.transform.GetChild(i).transform.Find("PointsOrigin").gameObject;
             PointSprite = temp.transform.GetChild(i).transform.Find("PointsOrigin").GetComponent<Image>().sprite;
         }
+        //The point UI should now be populated
+        //For every player that is in the game should have a bool for this
+        if (mbLoadedIntoGame)
+        {
+            //For every player in the game
+            for (int i = 0; i < InGamePlayers.Count; i++)
+            {
+                //Obtain the amount of points they own. For every point they own, make a point sprite to visualize their points.
+                for (int j = 0; j < PlayerWins[InGamePlayers[i]]; ++j)
+                {
+                    GameObject go = new GameObject("Point" , typeof(RectTransform));
+                    go.AddComponent<CanvasRenderer>();
+                    go.AddComponent<Image>().sprite = PointSprite;
+                    //Get the specific player's point origin and set the newly made point's parent to this
+                    go.transform.SetParent(PointOrigins[XboxControllerPlayerNumbers[InGamePlayers[i].GetComponent<ControllerSetter>().mXboxController]].transform);
+                    //Get the position of the point origin
+                    Vector3 AddPointSpot = PointOrigins[XboxControllerPlayerNumbers[InGamePlayers[i].GetComponent<ControllerSetter>().mXboxController]].transform.position;
+                    //depending on score (j) move the point to an offset based on how many points they have
+                    go.transform.position += new Vector3(AddPointSpot.x + 40 * j , AddPointSpot.y);
+                    
+                }
 
+            }
+
+        }
+        if (scene.buildIndex == 1)
+            mbLoadedIntoGame = true;
     }
 
     /// <summary>
