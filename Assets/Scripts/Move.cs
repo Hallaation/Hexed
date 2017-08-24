@@ -30,7 +30,7 @@ public class Move : MonoBehaviour
     bool runningAnimation = false;
     //[HideInInspector]
     public GameObject crosshair;
-    
+    Animator m_Animator;
     public GameObject weaponMount;
     public GameObject fistObject;
     public float movementSpeed = 10.0f;
@@ -48,6 +48,13 @@ public class Move : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        if (transform.Find("Sprites"))
+        {
+            if (transform.Find("Sprites").transform.Find("Character001_Feet"))
+            {
+                m_Animator = transform.Find("Sprites").transform.Find("Character001_Feet").GetComponent<Animator>();
+            }
+        }
         vibrationValue = Vector2.zero;
         //setting up any references to other classes needed.
         m_controller = GetComponent<ControllerSetter>();
@@ -259,6 +266,7 @@ public class Move : MonoBehaviour
             //this.transform.position += movement * movementSpeed * Time.deltaTime;
             //_rigidBody.AddForce(movement * movementSpeed * Time.deltaTime , ForceMode2D.Impulse);
             _rigidBody.velocity = movement * movementSpeed;
+           
         }
         else
         {
@@ -267,11 +275,17 @@ public class Move : MonoBehaviour
 
 
         //animation checks go here
-        if (movement.magnitude > 0)
+        if (m_Animator != null)
         {
-
+            if (movement.magnitude > 0)
+            {
+                m_Animator.SetBool("Moving", true);
+            }
+            else
+            {
+                m_Animator.SetBool("Moving", false);
+            }
         }
-
     }
 
     public void ThrowMyWeapon(Vector2 movement , Vector2 throwDirection , bool tossWeapon)
