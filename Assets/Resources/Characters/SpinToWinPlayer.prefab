@@ -201,7 +201,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1619562966071516}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 22.35, y: -10.51, z: 0}
   m_LocalScale: {x: 0.75, y: 0.75, z: 1}
   m_Children:
   - {fileID: 4526993688421688}
@@ -495,17 +495,17 @@ MonoBehaviour:
   - {fileID: 21300022, guid: 8560db96e33c8ae4a837c261da8941ce, type: 3}
   currentMana: 0
   m_fMaximumMana: 100
-  PassiveManaRegeneration: 10
-  ManaCost: 10
+  PassiveManaRegeneration: 2.5
+  ManaCost: 40
   RepeatedUsage: 0
-  repeatedManaCost: 5
-  m_fMinimumManaRequired: 50
+  repeatedManaCost: 3
+  m_fMinimumManaRequired: 40
   m_fMovementSpeedSlowDown: 2
   findUI: 1
   manaBar: {fileID: 0}
-  RotationSpeed: 20
-  MovementSpeedSlow: 10
-  SpinRadius: 2.3
+  RotationSpeed: 7
+  MovementSpeedSlow: 50
+  SpinRadius: 2.5
 --- !u!114 &114707463469366004
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -522,8 +522,12 @@ MonoBehaviour:
   m_bAutomaticGun: 0
   m_bBurstFire: 0
   KnockBack: 0
+  MaxShadow: 0
+  MinShadow: 0
+  ShadowGrowthSpeed: 0
   m_bActive: 1
   previousOwner: {fileID: 0}
+  m_bMoveWeaponSpriteUp: 0
   punchEffect: {fileID: 0}
 --- !u!114 &114762347629995032
 MonoBehaviour:
@@ -547,6 +551,7 @@ MonoBehaviour:
   vibrationValue: {x: 0, y: 0}
   playerSpirte: {fileID: 0}
   StartMoveDelay: 0
+  m_LeftStickRotation: {x: 0, y: 0, z: 0}
 --- !u!114 &114821913010574642
 MonoBehaviour:
   m_ObjectHideFlags: 1

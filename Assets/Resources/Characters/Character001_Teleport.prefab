@@ -474,17 +474,17 @@ MonoBehaviour:
   SelectionSprites:
   - {fileID: 21300010, guid: 8560db96e33c8ae4a837c261da8941ce, type: 3}
   - {fileID: 21300032, guid: 8560db96e33c8ae4a837c261da8941ce, type: 3}
-  currentMana: 100000
-  m_fMaximumMana: 100000
-  PassiveManaRegeneration: 1
-  ManaCost: 100
+  currentMana: 0
+  m_fMaximumMana: 100
+  PassiveManaRegeneration: 2.5
+  ManaCost: 40
   RepeatedUsage: 0
-  repeatedManaCost: 0.5
-  m_fMinimumManaRequired: 50
+  repeatedManaCost: 0
+  m_fMinimumManaRequired: 40
   m_fMovementSpeedSlowDown: 2
   findUI: 1
   manaBar: {fileID: 0}
-  m_TeleportForce: 10
+  m_TeleportForce: 7.5
 --- !u!114 &114391857428821610
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -506,6 +506,7 @@ MonoBehaviour:
   ShadowGrowthSpeed: 0
   m_bActive: 1
   previousOwner: {fileID: 0}
+  m_bMoveWeaponSpriteUp: 0
   punchEffect: {fileID: 0}
 --- !u!114 &114504531806896794
 MonoBehaviour:
