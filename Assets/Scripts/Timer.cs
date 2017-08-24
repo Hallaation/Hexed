@@ -10,7 +10,7 @@ public class Timer
         mfTimeToWait = a_fTimeToWait;
     }
 
-    private float mfTimeToWait = 0;
+    public float mfTimeToWait = 0;
     private float mfTimer = 0; public void set(float a) { mfTimer = a; } public float get() { return mfTimer; }
     public void SetTimer(float SetTime) { mfTimer = SetTime; }
     public bool Tick(float timeIncrement)
