@@ -9,33 +9,34 @@ public class Weapon : MonoBehaviour
     public float m_iDamage;
     public bool m_bAutomaticGun;
     public bool m_bBurstFire;
+    public bool m_bGivePlayersIFrames = false;
     public float KnockBack;
     [Space]
     [Header("ShadowRelated")]
-    public float MaxShadow;
-    public float MinShadow;
-    public float ShadowGrowthSpeed;
+    public float MaxShadow; //How high the weapon sprite will move up
+    public float MinShadow; //How low the weapon sprite will move down
+    public float ShadowGrowthSpeed; //how fast the weapon will move from the min/max
     [Space]
     protected Timer TimerBetweenFiring;
     protected bool shotReady = true;
     protected bool stunPlayer = true;
-    Rigidbody2D rigidbody;
+    Rigidbody2D _rigidbody;
     public bool m_bActive = true;
     [HideInInspector]
     public GameObject previousOwner; //previous owner used to make sure when the weapon is thrown, it doesnt stun the thrower.
 
-    private SpriteRenderer ShadowSprite;
-    private Transform ShadowScale;
-    private bool ShadowDirection;
+    private SpriteRenderer WeaponSprite; //The sprite rendere of the weapon sprite
+    private Transform weaponSpriteTransform; //The transform of the weapon's sprite 
+    public bool m_bMoveWeaponSpriteUp; //A bool used to determine if the weapon sprite will move up or down
     // Use this for initialization
     void Start()
     {
-        rigidbody = GetComponent<Rigidbody2D>();
+        _rigidbody = GetComponent<Rigidbody2D>();
         TimerBetweenFiring = new Timer(m_fTimeBetweenShots);
         if (this.transform.childCount > 2 && tag != "Player")
         {
-            ShadowSprite = transform.GetChild(0).GetComponent<SpriteRenderer>();
-            ShadowScale = transform.GetChild(0).GetComponent<Transform>();
+            WeaponSprite = transform.GetChild(0).GetComponent<SpriteRenderer>();
+            weaponSpriteTransform = transform.GetChild(0).GetComponent<Transform>();
         }
             StartUp();
     }
@@ -46,38 +47,50 @@ public class Weapon : MonoBehaviour
         if (!transform.parent) // If gun is not held, Grow and shrink shadow.
         {
             m_bActive = true;
+            //If my weapon has more than 2 (the shadow object is the third)
             if (this.transform.childCount > 2 && tag != "Player")
             {
+                //turn the sprite renderer on
                 transform.GetChild(2).GetComponent<SpriteRenderer>().enabled = true;
-
-                if (ShadowDirection)
+               
+                //If i want to move the weapon sprite up.
+                if (m_bMoveWeaponSpriteUp)
                 {
-                    ShadowScale.localPosition += new Vector3(0, Time.deltaTime * ShadowGrowthSpeed, 0);
-                    if (ShadowScale.localPosition.y >= MaxShadow)
+                    //move the weapon sprite up by the amount specified by ShadowGrowthSpeed
+                    weaponSpriteTransform.localPosition += new Vector3(0 , Time.deltaTime * ShadowGrowthSpeed , 0);
+                    //once I have reached the maximum allowed
+                    if (weaponSpriteTransform.localPosition.y >= MaxShadow)
                     {
-                        ShadowScale.localPosition = new Vector3(ShadowScale.localPosition.x, MaxShadow, ShadowScale.localPosition.z);
-                        ShadowDirection = false;
+                        //Snap the weapon's sprite transform to the max location
+                        weaponSpriteTransform.localPosition = new Vector3(weaponSpriteTransform.localPosition.x, MaxShadow, weaponSpriteTransform.localPosition.z);
+                        m_bMoveWeaponSpriteUp = false; 
+                        //set the bool to false so the weapon will move down instead
                     }
                 }
                 else
                 {
-                    ShadowScale.localPosition -= new Vector3(0, Time.deltaTime * ShadowGrowthSpeed, 0);
-                    if (ShadowScale.localPosition.y <= MinShadow)
+                    //! everything above but the opposite
+                    weaponSpriteTransform.localPosition -= new Vector3(0, Time.deltaTime * ShadowGrowthSpeed, 0);
+                    if (weaponSpriteTransform.localPosition.y <= MinShadow)
                     {
-                        ShadowScale.localPosition = new Vector3(ShadowScale.localPosition.x, MinShadow, ShadowScale.localPosition.z);
-                        ShadowDirection = true;
+                        weaponSpriteTransform.localPosition = new Vector3(weaponSpriteTransform.localPosition.x, MinShadow, weaponSpriteTransform.localPosition.z);
+                        m_bMoveWeaponSpriteUp = true;
                     }
                 }
             }
         }
+        //If my transform has a parent (its being held by a player)
         if (transform.parent)
         {
+            //find the shadow sprite renderer
             if (this.transform.childCount > 2 && tag != "Player")
             {
-                transform.GetChild(2).GetComponent<SpriteRenderer>().enabled = false;
+                //turn the shadow's sprite renderer off
+                transform.GetChild(2).GetComponent<SpriteRenderer>().enabled = false;                
             }
         }
 
+        //if the weapon is active
         if (m_bActive)
         {
             //do weapon things a virtual function, in case any weapons need to do anything extra
@@ -93,8 +106,8 @@ public class Weapon : MonoBehaviour
 
         }
         //wait for next shot, ticks the timer until it is ready for the next shot
-
         waitForNextShot();
+
     }
 
     void waitForNextShot()
@@ -102,6 +115,10 @@ public class Weapon : MonoBehaviour
         //once the player has shot a bullet, the timer will start to tick until the desired time. Until the desired time hasn't reached, the player cannot shoot
         if (!shotReady)
         {
+            if (TimerBetweenFiring.mfTimeToWait != m_fTimeBetweenShots)
+            {
+                TimerBetweenFiring = new Timer(m_fTimeBetweenShots);
+            }
             if (TimerBetweenFiring.Tick(Time.deltaTime) ) 
             {
                 shotReady = true;
@@ -145,7 +162,7 @@ public class Weapon : MonoBehaviour
             {
                 if (a_collider.GetComponent<PlayerStatus>().IsStunned == false)
                 {
-                    a_collider.GetComponent<PlayerStatus>().StunPlayer(rigidbody.velocity * KnockBack);
+                    a_collider.GetComponent<PlayerStatus>().StunPlayer(_rigidbody.velocity * KnockBack);
                     a_collider.GetComponent<Move>().StatusApplied();
                 }
             }

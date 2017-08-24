@@ -17,6 +17,7 @@ public class Bullet : MonoBehaviour
     public PlayerStatus bulletOwner;
     [HideInInspector]
     public float m_iDamage;
+    public bool m_bGiveIFrames = false;
     //public GameObject HitParticle;
 
   
@@ -119,7 +120,7 @@ public class Bullet : MonoBehaviour
             if (!hit.transform.GetComponent<PlayerStatus>().IsStunned && hit.transform.GetComponent<PlayerStatus>() != bulletOwner)
             {
                 //hit.transform.GetComponent<PlayerStatus>().m_iHealth -= m_iDamage;
-                hit.transform.GetComponent<PlayerStatus>().HitPlayer(this);
+                hit.transform.GetComponent<PlayerStatus>().HitPlayer(this, m_bGiveIFrames);
                 if (hit.transform.GetComponent<PlayerStatus>().m_iHealth <= 0)
                 {
                     hit.transform.GetComponent<PlayerStatus>().IsDead = true;

@@ -48,9 +48,9 @@ public class UIManager : MonoBehaviour
     void Awake()
     {
         SceneManager.sceneLoaded += OnSceneLoad;
-        Debug.Log("Awake");
+
         //instance = FindObjectOfType<UIManager>();
-        Debug.Log(UIManager.Instance);
+
         
         _eventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
         selected = _eventSystem.currentSelectedGameObject;

@@ -58,40 +58,51 @@ public class Teleport : BaseAbility
         ////XCI.GetButtonDown(XboxButton.DPadUp, m_controller.mXboxController)
         if (currentMana >= ManaCost && ButtonHasBeenUp == true && UsedAbility == true )
         {
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up, m_TeleportForce, 1 << LayerMask.NameToLayer("Wall"));
-            //Doe sa raycast to see if it has hit a wall, if it has, dont teleport.
-            if (hit.collider != null)
-            {
-                float Xdistance = ((hit.point.x) - (transform.position.x));
-                float Ydistance = ((hit.point.y) - (transform.position.y));
-                _rigidBody.position = new Vector2(_rigidBody.position.x + Xdistance, _rigidBody.position.y + Ydistance);
-                Debug.Log("WallPrevention");
-                ButtonHasBeenUp = false;
-                currentMana -= ManaCost;
 
-            }
             //otherwise if it is clear, allow the player to teleport
-            else
-            {
+  
                 //makes a quaternion
                 Quaternion LeftStickRotation = new Quaternion();
-                LeftStickRotation = Quaternion.Euler(0 , 0 , Mathf.Atan2(-GetComponent<Move>().m_LeftStickRotation.x , GetComponent<Move>().m_LeftStickRotation.y) * Mathf.Rad2Deg);
+                LeftStickRotation = Quaternion.Euler(0 , 0 , Mathf.Atan2(-GetComponent<Move>().m_LeftStickRotation.x , GetComponent<Move>().m_LeftStickRotation.y) * Mathf.Rad2Deg); // This works
                 Vector3 rotation = LeftStickRotation * Vector3.up;
-                //makes a rotation vector from the left stick's rotation
                 
+                //makes a rotation vector from the left stick's rotation
+
                 //if there is any rotation from the left stick, the player will teleport the direction of the left stick, otherwise they will teleport the way they are looking
                 if (GetComponent<Move>().m_LeftStickRotation.magnitude > 0)
                 {
-                    _rigidBody.position += new Vector2(rotation.x * m_TeleportForce , rotation.y * m_TeleportForce);
+                    
+                    Vector2 V2rotation = new Vector2(rotation.x, rotation.y);
+                    RaycastHit2D hitLeftStick = Physics2D.Raycast(transform.position, V2rotation, m_TeleportForce, 1 << LayerMask.NameToLayer("Wall"));
+                    if(hitLeftStick.collider != null)   //! If a raycast sent along the direction of the left stick collides with a wall. Put the player at the collision
+                    {
+                        float Xdistance = ((hitLeftStick.point.x) - (transform.position.x));
+                        float Ydistance = ((hitLeftStick.point.y) - (transform.position.y));
+                        _rigidBody.position = new Vector2(_rigidBody.position.x + Xdistance, _rigidBody.position.y + Ydistance);
+                        Debug.Log("WallPrevention");
+                    }
+                    else
+                    _rigidBody.position += new Vector2(rotation.x * m_TeleportForce, rotation.y * m_TeleportForce);
                 }
                 else
                 {
-                    _rigidBody.position += new Vector2(this.transform.up.x * m_TeleportForce , this.transform.up.y * m_TeleportForce);
+                    RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up, m_TeleportForce, 1 << LayerMask.NameToLayer("Wall"));
+
+                //Doe sa raycast to see if it has hit a wall, if it has, dont teleport.
+                if (hit.collider != null) //! If a raycast sent along the direction the player is facing collides with a wall. Put the player at the collision
+                {
+                    float Xdistance = ((hit.point.x) - (transform.position.x));
+                    float Ydistance = ((hit.point.y) - (transform.position.y));
+                    _rigidBody.position = new Vector2(_rigidBody.position.x + Xdistance, _rigidBody.position.y + Ydistance);
+                    Debug.Log("WallPrevention");
+                }
+                else
+                    _rigidBody.position += new Vector2(this.transform.up.x * m_TeleportForce, this.transform.up.y * m_TeleportForce);  // Teleport full distance
                 }
                 
                 ButtonHasBeenUp = false;
                 currentMana -= ManaCost;
-            }
+            
         }
         if (XCI.GetAxis(XboxAxis.LeftTrigger, m_controller.mXboxController) < 0.1)
         {
