@@ -57,6 +57,7 @@ public class SelectionUIElements : MonoBehaviour
         // Debug.Log(CharacterSelectionManager.instance);
         StickMovement = new bool[2] { false , false };
     }
+    //useless, keeping it here in case
     IEnumerator GetSelectionManagerInstance()
     {
         while (!selectionManager)
@@ -65,10 +66,11 @@ public class SelectionUIElements : MonoBehaviour
         }
         yield return null;
     }
+
     // Update is called once per frame
     void Update()
     {
-        
+        //If I want to reset the sticks, check if any there is no movement from the left stick, if there isnt any the sticks are reset.
         if (ResetSticks)
         {
             if (XCI.GetAxis(XboxAxis.LeftStickX , m_controller) < 0)

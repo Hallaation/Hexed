@@ -9,6 +9,7 @@ public class Weapon : MonoBehaviour
     public float m_iDamage;
     public bool m_bAutomaticGun;
     public bool m_bBurstFire;
+    public bool m_bGivePlayersIFrames = false;
     public float KnockBack;
     [Space]
     [Header("ShadowRelated")]
@@ -19,7 +20,7 @@ public class Weapon : MonoBehaviour
     protected Timer TimerBetweenFiring;
     protected bool shotReady = true;
     protected bool stunPlayer = true;
-    Rigidbody2D rigidbody;
+    Rigidbody2D _rigidbody;
     public bool m_bActive = true;
     [HideInInspector]
     public GameObject previousOwner; //previous owner used to make sure when the weapon is thrown, it doesnt stun the thrower.
@@ -30,7 +31,7 @@ public class Weapon : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        rigidbody = GetComponent<Rigidbody2D>();
+        _rigidbody = GetComponent<Rigidbody2D>();
         TimerBetweenFiring = new Timer(m_fTimeBetweenShots);
         if (this.transform.childCount > 2 && tag != "Player")
         {
@@ -161,7 +162,7 @@ public class Weapon : MonoBehaviour
             {
                 if (a_collider.GetComponent<PlayerStatus>().IsStunned == false)
                 {
-                    a_collider.GetComponent<PlayerStatus>().StunPlayer(rigidbody.velocity * KnockBack);
+                    a_collider.GetComponent<PlayerStatus>().StunPlayer(_rigidbody.velocity * KnockBack);
                     a_collider.GetComponent<Move>().StatusApplied();
                 }
             }

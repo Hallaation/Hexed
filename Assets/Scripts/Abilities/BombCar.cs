@@ -11,7 +11,7 @@ public class BombCar : BaseAbility {
     public GameObject RemoteCar;
 
     bool ButtonHasBeenUp = true;
-    bool CarIsActive = false;
+   // bool CarIsActive = false;
     Rigidbody2D _rigidBody;
     ControllerSetter m_controller;
     Move Movement;
@@ -44,7 +44,7 @@ public class BombCar : BaseAbility {
         ////XCI.GetButtonDown(XboxButton.DPadUp, m_controller.mXboxController)
         if (currentMana >= ManaCost && ButtonHasBeenUp == true && UsedAbility == true)
         {
-            GameObject Car = Instantiate(RemoteCar, this.transform.position, this.transform.rotation);
+          //  GameObject Car = Instantiate(RemoteCar, this.transform.position, this.transform.rotation);
             ButtonHasBeenUp = false;
         }
         if (XCI.GetAxis(XboxAxis.LeftTrigger, m_controller.mXboxController) < 0.1)

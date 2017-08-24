@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-
+using XboxCtrlrInput;
+using XInputDotNetPure;
 //?
 //? F R O M
 //? T H E
@@ -49,23 +50,42 @@ public enum Gamemode_type
 
 }
 
+//Used to store the game state
 public class GameManagerc : MonoBehaviour
 {
+
+    //dictionary mapping XCI index with the XInputDotNet indexes
+    Dictionary<XboxController , int> XboxControllerPlayerNumbers = new Dictionary<XboxController , int>
+    {
+        {XboxController.First,   0 },
+        {XboxController.Second,  1 },
+        {XboxController.Third,   2 },
+        {XboxController.Fourth,  3 },
+    };
+
     Timer waitForRoundEnd;
     //lets try a dictionary again
     //public List<int> PlayerWins = new List<int>();
     public Dictionary<PlayerStatus , int> PlayerWins = new Dictionary<PlayerStatus , int>();
+    public List<PlayerStatus> InGamePlayers = new List<PlayerStatus>();
+    GameObject WinningPlayer = null;
+
     public Gamemode_type m_gameMode = Gamemode_type.LAST_MAN_STANDING_DEATHMATCH;
+
     public int m_iPointsNeeded = 5;
     public float m_fTimedDeathMatchTime;
 
     static GameManagerc mInstance = null;
     Timer DeathmatchTimer;
     //lets keep the variables at the top shall we
-    public List<PlayerStatus> InGamePlayers = new List<PlayerStatus>();
-    GameObject WinningPlayer = null;
     private GameObject FinishUIPanel;
     private bool m_bRoundOver;
+    public GameObject MapToLoad;
+
+    public Sprite PointSprite;
+    public GameObject[] PointOrigins;
+    private GameObject PointsPanel;
+
     public static GameManagerc Instance
     {
         get
@@ -89,18 +109,36 @@ public class GameManagerc : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        //Find the 
+
         DeathmatchTimer = new Timer(m_fTimedDeathMatchTime);
         SceneManager.sceneLoaded += OnSceneLoaded;
         waitForRoundEnd = new Timer(3);
         mInstance = GameManagerc.Instance;
+        if (mInstance.gameObject != this.gameObject)
+        {
+            Destroy(this.gameObject);
+        }
         m_bRoundOver = false;
-        Physics.gravity = new Vector3(0 , 0 , 10);
+        Physics.gravity = new Vector3(0 , 0 , 10); //why
     }
 
 
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            //tempPoint++;
+            //GameObject go = new GameObject("Point", typeof(RectTransform));
+            //go.AddComponent<CanvasRenderer>();
+            //go.AddComponent<Image>().sprite = test;
+
+            //go.transform.SetParent(AddPointSpot.transform);
+            //go.transform.position += new Vector3(AddPointSpot.transform.position.x + 40 * tempPoint , AddPointSpot.transform.position.y);
+            //go.transform.localScale = new Vector3(1,1,1);
+
+        }
         if (InGamePlayers.Count > 1)
         {
             StartCoroutine(CheckForRoundEnd());
@@ -112,6 +150,7 @@ public class GameManagerc : MonoBehaviour
     {
         if (!m_bRoundOver)
         {
+            //Depending on the game mode, different logic will happen, a very basic state maching
             switch (m_gameMode)
             {
                 case Gamemode_type.LAST_MAN_STANDING_DEATHMATCH:
@@ -150,8 +189,12 @@ public class GameManagerc : MonoBehaviour
         yield return null;
     }
 
+    /// <summary>
+    /// Points are awarded if a player is the last man standing
+    /// </summary>
     void RoundEndLastManStanding()
     {
+        //Find the amount of dead players
         int DeadCount = 0;
         foreach (PlayerStatus player in InGamePlayers)
         {
@@ -160,8 +203,12 @@ public class GameManagerc : MonoBehaviour
                 DeadCount++;
             }
         }
+
+        //If there is only 1 alive
         if (DeadCount >= InGamePlayers.Count - 1)
         {
+            //the round is now over
+            //look for the one player that is 
             m_bRoundOver = true;
             int i = 0;
             foreach (PlayerStatus player in InGamePlayers)
@@ -169,23 +216,40 @@ public class GameManagerc : MonoBehaviour
 
                 if (!player.IsDead)
                 {
+                    //increase the winning player's point by 1
                     PlayerWins[player] += 1;
+                    //TODO Point tallying screen goes here.
+                    //! HERE
+                    PointsPanel.SetActive(true);
+                    for (int k = 0; k < PlayerWins[player]; k++)
+                    { 
+                        GameObject go = new GameObject("Point" , typeof(RectTransform));
+                        go.AddComponent<CanvasRenderer>();
+                        go.AddComponent<Image>().sprite = PointSprite;
+                        go.transform.SetParent(PointOrigins[XboxControllerPlayerNumbers[player.GetComponent<ControllerSetter>().mXboxController]].transform);
+                        //go.transform.position += new Vector3(AddPointSpot.transform.position.x + 40 * tempPoint , AddPointSpot.transform.position.y);
+                        Vector3 AddPointSpot = PointOrigins[XboxControllerPlayerNumbers[player.GetComponent<ControllerSetter>().mXboxController]].transform.position;
+                        go.transform.position += new Vector3(AddPointSpot.x + 40 * k , AddPointSpot.y);
+                    }
+                   // Debug.Break();
+                    //If player has reached the points required to win
                     if (PlayerWins[player] >= m_iPointsNeeded)
                     {
-                        Debug.LogError("Poinst required have been reached");
+                        //Set the time scale to 0 (essentially pausing the game-ish)
+                        Debug.LogError("Points required have been reached");
                         Time.timeScale = 0;
-                        UIManager.Instance.OpenUIElement(FinishUIPanel, true);
+                        //open the finish panel, UI manager will set all the children to true, thus rendering them
+                        UIManager.Instance.OpenUIElement(FinishUIPanel , true);
                         UIManager.Instance.RemoveLastPanel = false;
+                        //Reset the event managers current selected object to the rematch button
                         FindObjectOfType<EventSystem>().SetSelectedGameObject(null);
                         FindObjectOfType<EventSystem>().SetSelectedGameObject(FinishUIPanel.transform.Find("Rematch").gameObject);
 
-                        
-                        //this one line breaks things ResetPoints();
                         //TODO Load Character select / win screen;
                         //TODO Sort players by score?
                     }
                 }
-                ++i;
+                ++i; //probably unused, keeping it here in case it is actually used.
             }
         }
     }
@@ -196,6 +260,23 @@ public class GameManagerc : MonoBehaviour
             if (player.IsDead)
             {
                 player.ResetPlayer();
+            }
+
+            //If player has reached the points required to win
+            if (PlayerWins[player] >= m_iPointsNeeded)
+            {
+                //Set the time scale to 0 (essentially pausing the game-ish)
+                Debug.LogError("Points required have been reached");
+                Time.timeScale = 0;
+                //open the finish panel, UI manager will set all the children to true, thus rendering them
+                UIManager.Instance.OpenUIElement(FinishUIPanel , true);
+                UIManager.Instance.RemoveLastPanel = false;
+                //Reset the event managers current selected object to the rematch button
+                FindObjectOfType<EventSystem>().SetSelectedGameObject(null);
+                FindObjectOfType<EventSystem>().SetSelectedGameObject(FinishUIPanel.transform.Find("Rematch").gameObject);
+
+                //TODO Load Character select / win screen;
+                //TODO Sort players by score?
             }
         }
         //RoundEndLastManStanding();
@@ -229,23 +310,46 @@ public class GameManagerc : MonoBehaviour
         //        //Destroy(items[i]);
         //    }
         //}
-        Debug.Log("Scene load");
+
+        Debug.Log("----------------------------------------------------------------------\n GameManager loaded in ControllerTest\n----------------------------------------------------------------------------");
+        //If I found the finished game panel
+        if (MapToLoad)
+        {
+            GameObject go = Instantiate(MapToLoad);
+            go.transform.position = Vector3.zero;
+            go.transform.DetachChildren();
+        }
         if (GameObject.Find("FinishedGamePanel"))
         {
-            Debug.ClearDeveloperConsole();
+            //Set the UI panel reference to that object
             FinishUIPanel = GameObject.Find("FinishedGamePanel");
+            //set the object buttons delegates
             FinishUIPanel.transform.Find("Rematch").GetComponent<Button>().onClick.AddListener(delegate { Rematch(); });
             FinishUIPanel.transform.Find("Main Menu").GetComponent<Button>().onClick.AddListener(delegate { GoToStart(); });
-            
+
+            //turn the children off (so this object can still be found if needed be);
             for (int i = 0; i < FinishUIPanel.transform.childCount; ++i)
             {
                 FinishUIPanel.transform.GetChild(i).gameObject.SetActive(false);
             }
 
         }
+        //Find the points panel and populate the array.
+        PointsPanel = GameObject.Find("PointsPanel");
+        GameObject temp = GameObject.Find("PointsPanel");
+        PointOrigins = new GameObject[temp.transform.childCount];
+        for (int i = 0; i < temp.transform.childCount; i++)
+        {
+            PointOrigins[i] = temp.transform.GetChild(i).transform.Find("PointsOrigin").gameObject;
+            PointSprite = temp.transform.GetChild(i).transform.Find("PointsOrigin").GetComponent<Image>().sprite;
+        }
 
     }
 
+    /// <summary>
+    /// Adds a player to the game, used to check if they're dead or not to determine if the round is over or not.
+    /// </summary>
+    /// <param name="aPlayer"></param>
     public void AddPlayer(PlayerStatus aPlayer)
     {
         InGamePlayers.Add(aPlayer);
@@ -255,46 +359,54 @@ public class GameManagerc : MonoBehaviour
 
     public void Rematch()
     {
+        //reset the time scale
         Time.timeScale = 1;
+        //The round is not over
         m_bRoundOver = false;
+        //reset every player
         foreach (KeyValuePair<PlayerStatus , int> item in PlayerWins)
         {
             item.Key.ResetPlayer();
         }
+        //Reset the players' points
         foreach (var item in InGamePlayers)
         {
             PlayerWins[item] = 0;
         }
-        WinningPlayer = null;
+        WinningPlayer = null; // still unsued
         m_bRoundOver = false;
+        //reload the current scene
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-
+    /// <summary>
+    /// used to reutn to the character selection screen
+    /// </summary>
     public void GoToStart()
     {
+        //clear the players list
         for (int i = 0; i < InGamePlayers.Count; i++)
         {
             InGamePlayers[i].Clear();
             InGamePlayers[i].gameObject.SetActive(false);
         }
 
-        //Debug.Break();
-        //empty the list
-        //InGamePlayers.Clear();
-        //turn off all the singletons so they no longer update, then destroy them
-        //StartCoroutine(waitForSeconds());
+
+        //turn off all the singletons
         UIManager.Instance.gameObject.SetActive(false);
         ControllerManager.Instance.gameObject.SetActive(false);
         CharacterSelectionManager.Instance.gameObject.SetActive(false);
         PlayerUIArray.Instance.gameObject.SetActive(false);
 
+        //Destroy the singleton objects
         Destroy(PlayerUIArray.Instance.gameObject);
         Destroy(UIManager.Instance.gameObject);
         Destroy(ControllerManager.Instance.gameObject);
         Destroy(CharacterSelectionManager.Instance.gameObject);
         Destroy(this.gameObject);
+        //reset the time scale
         Time.timeScale = 1;
+        //? Don't know why but the scene loads before all the logic even happens
         //WTF scene begings to load even though line hasnt been called. what is happening. 
         SceneManager.LoadScene(0);
     }

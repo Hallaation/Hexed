@@ -149,15 +149,17 @@ public class Move : MonoBehaviour
         yield return new WaitForSeconds(StartMoveDelay);
         movementSpeed = StoredMoveSpeed;
     }
+    //used for semi auto fire
     bool TriggerReleaseCheck()
     {
+        //IF the right trigger is being pressed down
         if (XCI.GetAxis(XboxAxis.RightTrigger , m_controller.mXboxController) > 0)
         {
-            return m_bTriggerReleased;
+            return m_bTriggerReleased;  //return trigger released (im assuming this is false by default);
         }
         else
-            m_bTriggerReleased = true;
-        return m_bTriggerReleased;
+            return m_bTriggerReleased = true; //otherwise return true;
+
     }
 
 
@@ -385,6 +387,7 @@ public class Move : MonoBehaviour
                     vibrationValue.x = 0.45f;
                     
                 }
+                
                 m_bTriggerReleased = false;
             }
             else
@@ -456,7 +459,7 @@ public class Move : MonoBehaviour
                             runningAnimation = true;
                             _rigidBody.velocity = Vector2.zero;
                             this.GetComponentInChildren<Animator>().SetBool("IsKilling" , true);
-                            collidersFound.GetComponent<PlayerStatus>().KillPlayer();
+                            collidersFound.GetComponent<PlayerStatus>().KillPlayer(this.GetComponent<PlayerStatus>());
                         }
                     }
                 }

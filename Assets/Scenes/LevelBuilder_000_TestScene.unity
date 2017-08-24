@@ -2438,6 +2438,21 @@ Prefab:
       propertyPath: bullet
       value: 
       objectReference: {fileID: 1022350913}
+    - target: {fileID: 114999740774355930, guid: 5bebd3d6dfe97864b83ab0b29febc846,
+        type: 2}
+      propertyPath: m_bGivePlayersIFrames
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114999740774355930, guid: 5bebd3d6dfe97864b83ab0b29febc846,
+        type: 2}
+      propertyPath: m_fSpreadJitter
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 114999740774355930, guid: 5bebd3d6dfe97864b83ab0b29febc846,
+        type: 2}
+      propertyPath: m_fSpreadIncrease
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 58664573050713888, guid: 5bebd3d6dfe97864b83ab0b29febc846, type: 2}
     - {fileID: 58199406430124616, guid: 5bebd3d6dfe97864b83ab0b29febc846, type: 2}
@@ -2790,6 +2805,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletOwner: {fileID: 0}
   m_iDamage: 0
+  m_bGiveIFrames: 0
 --- !u!58 &992462820
 CircleCollider2D:
   m_ObjectHideFlags: 0

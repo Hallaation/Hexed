@@ -35,6 +35,8 @@ public class GamemodeSelection : MonoBehaviour
 
 
     public Sprite[] mapSprites; //TODO in heavy construction should be done later
+    public GameObject[] MapObjects;
+    public GameObject MapToLoad;
     // Use this for initialization
     void Start()
     {
@@ -45,9 +47,21 @@ public class GamemodeSelection : MonoBehaviour
         _eventSystem = FindObjectOfType<EventSystem>();
 
         StickMovement = new bool[2] { false , false };
+
         if (m_pickType == PickType.MAPPICK)
+        {
             _mapSprite = GetComponentInChildren<Image>();
-            
+            //Load the maps and populate the arrays with them
+            Object[] temp = Resources.LoadAll("Maps" , typeof(GameObject));
+            MapObjects = new GameObject[temp.Length];
+            mapSprites = new Sprite[temp.Length];
+            for (int i = 0; i < MapObjects.Length; i++)
+            {
+                MapObjects[i] = temp[i] as GameObject;
+                mapSprites[i] = (temp[i] as GameObject).GetComponent<Map>().mapSelectionSprite;
+            }
+        }
+
         //If I am a settings type of object, I will open the settings
         if (m_pickType == PickType.GAMEMODESETTINGS)
         {
@@ -65,12 +79,14 @@ public class GamemodeSelection : MonoBehaviour
             }
             //Debug.Log(UIManager.Instance);
             //Debug.Log(UIManager.Instance.defaultPanel);
-            Debug.Log(UIManager.Instance.menuStatus);
+
             UIManager.Instance.defaultPanel = this.transform.parent.gameObject;
             UIManager.Instance.menuStatus.Push(UIManager.Instance.defaultPanel);
             _button.onClick.AddListener(delegate () { UIManager.Instance.OpenUIElement(GMSettingObjects[(int)GameManagerc.Instance.m_gameMode]); });
         }
-  
+       
+
+
     }
 
     //?
@@ -110,7 +126,7 @@ public class GamemodeSelection : MonoBehaviour
     void Update()
     {
         CheckForStickReset();
-        Debug.Log(_button);
+
         //if the event systems currently selected object is my assigned buttons parent, do the things according to my type.
         if (_eventSystem.currentSelectedGameObject.transform.parent == _button.transform.parent)
         {
@@ -144,37 +160,43 @@ public class GamemodeSelection : MonoBehaviour
                     }
                     break;
                 case PickType.MAPPICK:
-                    _mapSprite.sprite = mapSprites[m_iMapPickIndex];
-                    if ((DpadHorizontalTest() > 0) || StickMovement[1])
                     {
-                        StickMovement[1] = false;
-                        if (m_iMapPickIndex == mapSprites.Length - 1)
+                        Debug.Log(">>>>>>>>>>>>>>>>>>>>>>>>>" + m_iMapPickIndex + "<<<<<<<<<<<<<<<<<<<<<<<<<<");
+                        _mapSprite.sprite = mapSprites[m_iMapPickIndex];
+                        GameManagerc.Instance.MapToLoad = MapObjects[m_iMapPickIndex];
+                        if ((DpadHorizontalTest() > 0) || StickMovement[1])
                         {
-                            m_iMapPickIndex = 0;
-                        }
-                        else
-                        {
-                            m_iMapPickIndex++;
-                        }
+                            StickMovement[1] = false;
+                            if (m_iMapPickIndex == mapSprites.Length - 1)
+                            {
+                                m_iMapPickIndex = 0;
+                            }
+                            else
+                            {
+                                m_iMapPickIndex++;
+                            }
 
-                    }
-                    else if ((DpadHorizontalTest() < 0) || StickMovement[0])
-                    {
-                        StickMovement[0] = false;
-                        Debug.Log("below 0");
-                        if (m_iMapPickIndex == 0)
-                        {
-                            m_iMapPickIndex = mapSprites.Length - 1;
                         }
-                        else
+                        else if ((DpadHorizontalTest() < 0) || StickMovement[0])
                         {
-                            Debug.Log("Decrement");
-                            m_iMapPickIndex--;
+                            StickMovement[0] = false;
+
+                            if (m_iMapPickIndex == 0)
+                            {
+                                m_iMapPickIndex = mapSprites.Length - 1;
+                            }
+                            else
+                            {
+                                Debug.Log("Decrement");
+                                m_iMapPickIndex--;
+                            }
+
                         }
 
                     }
                     break;
             }
+
         }
         //update different according to pick type
         switch (m_pickType)
@@ -200,6 +222,7 @@ public class GamemodeSelection : MonoBehaviour
                 //GameManagerc.Instance.m_iPointsNeeded = mPointsToWin[m_iPointWinIndex];
                 break;
             case PickType.MAPPICK:
+                
                 break;
         }
 
@@ -266,6 +289,7 @@ public class GamemodeSelection : MonoBehaviour
     }
     public void EnterGame()
     {
+      
         SceneManager.LoadScene(1);
     }
 
