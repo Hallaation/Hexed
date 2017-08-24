@@ -30,7 +30,8 @@ public class Move : MonoBehaviour
     bool runningAnimation = false;
     //[HideInInspector]
     public GameObject crosshair;
-    Animator m_Animator;
+    Animator FeetAnimator;
+    Animator BodyAnimator;
     public GameObject weaponMount;
     public GameObject fistObject;
     public float movementSpeed = 10.0f;
@@ -52,7 +53,11 @@ public class Move : MonoBehaviour
         {
             if (transform.Find("Sprites").transform.Find("Character001_Feet"))
             {
-                m_Animator = transform.Find("Sprites").transform.Find("Character001_Feet").GetComponent<Animator>();
+                FeetAnimator = transform.Find("Sprites").transform.Find("Character001_Feet").GetComponent<Animator>();
+            }
+            if (transform.Find("Sprites").transform.Find("Character001_Body"))
+            {
+                BodyAnimator = transform.Find("Sprites").transform.Find("Character001_Body").GetComponent<Animator>();
             }
         }
         vibrationValue = Vector2.zero;
@@ -156,15 +161,17 @@ public class Move : MonoBehaviour
         yield return new WaitForSeconds(StartMoveDelay);
         movementSpeed = StoredMoveSpeed;
     }
+    //used for semi auto fire
     bool TriggerReleaseCheck()
     {
+        //IF the right trigger is being pressed down
         if (XCI.GetAxis(XboxAxis.RightTrigger , m_controller.mXboxController) > 0)
         {
-            return m_bTriggerReleased;
+            return m_bTriggerReleased;  //return trigger released (im assuming this is false by default);
         }
         else
-            m_bTriggerReleased = true;
-        return m_bTriggerReleased;
+            return m_bTriggerReleased = true; //otherwise return true;
+
     }
 
 
@@ -275,15 +282,15 @@ public class Move : MonoBehaviour
 
 
         //animation checks go here
-        if (m_Animator != null)
+        if (FeetAnimator != null)
         {
             if (movement.magnitude > 0)
             {
-                m_Animator.SetBool("Moving", true);
+                SetMovingAnimators(true); // Sets Body and Feet animator movement bools to true
             }
             else
             {
-                m_Animator.SetBool("Moving", false);
+                SetMovingAnimators(false); // Sets Body and Feet animator movement bools to false
             }
         }
     }
@@ -299,7 +306,10 @@ public class Move : MonoBehaviour
                 heldWeapon.GetComponent<Weapon>().throwWeapon(throwDirection * 2);
                 heldWeapon.GetComponent<Weapon>().previousOwner = this.gameObject;
                 m_bHoldingWeapon = false;
+
                 heldWeapon = null;
+                if (BodyAnimator != null)
+                    BodyAnimator.SetBool("HoldingTwoHandedGun", false);
 
             }
             else
@@ -309,6 +319,8 @@ public class Move : MonoBehaviour
                 heldWeapon.GetComponent<Weapon>().previousOwner = this.gameObject;
                 m_bHoldingWeapon = false;
                 heldWeapon = null;
+                if (BodyAnimator != null)
+                    BodyAnimator.SetBool("HoldingTwoHandedGun", false);
             }
         }
     }
@@ -384,21 +396,26 @@ public class Move : MonoBehaviour
         weaponRigidBody.angularVelocity = 0.0f; //set any angular velocity to nothing
 
         m_bHoldingWeapon = true;
+        if (BodyAnimator != null)
+            BodyAnimator.SetBool("HoldingTwoHandedGun", true);
         vibrationValue.y = 0.5f; //vibrate controller for haptic feedback
     }
     void Attack(bool TriggerCheck)
     {
         //attacks with weapon in hand, if no weapon, they do a melee punch instead.
-        if (XCI.GetAxis(XboxAxis.RightTrigger , m_controller.mXboxController) > 0)
+        if (XCI.GetAxis(XboxAxis.RightTrigger, m_controller.mXboxController) > 0)
         {
             if (m_bHoldingWeapon)
             {
+                if (BodyAnimator != null)
+                    BodyAnimator.SetBool("UnarmedAttack", false);
                 //attack using the weapon im holding. if an attack was done, set a vibration on my controller.
                 if (heldWeapon.GetComponent<Weapon>().Attack(TriggerCheck))
                 {
                     vibrationValue.x = 0.45f;
-                    
+
                 }
+                
                 m_bTriggerReleased = false;
             }
             else
@@ -406,9 +423,13 @@ public class Move : MonoBehaviour
                 vibrationValue.x = 0.1f;
                 //GamePad.SetVibration(m_controller.mPlayerIndex , vibrationValue.x , vibrationValue.y);
                 defaultWeapon.Attack(TriggerCheck);
+                if (BodyAnimator != null)
+                    BodyAnimator.SetBool("UnarmedAttack", true);
                 //currently doesnt actually do melee attacks. using controller vibration for testing purposes
             }
         }
+        else if (BodyAnimator != null)
+            BodyAnimator.SetBool("UnarmedAttack", false);
     }
 
     public void StatusApplied()
@@ -470,7 +491,7 @@ public class Move : MonoBehaviour
                             runningAnimation = true;
                             _rigidBody.velocity = Vector2.zero;
                             this.GetComponentInChildren<Animator>().SetBool("IsKilling" , true);
-                            collidersFound.GetComponent<PlayerStatus>().KillPlayer();
+                            collidersFound.GetComponent<PlayerStatus>().KillPlayer(this.GetComponent<PlayerStatus>());
                         }
                     }
                 }
@@ -512,5 +533,11 @@ public class Move : MonoBehaviour
             playerSpirte = transform.Find("Sprites").Find("Character001_Body").gameObject;
         else if (transform.Find("Sprites/PlayerSprite"))
             playerSpirte = transform.Find("Sprites").Find("PlayerSprite").gameObject;
+    }
+
+    private void SetMovingAnimators(bool Moving)
+    {
+        FeetAnimator.SetBool("Moving", Moving);
+        BodyAnimator.SetBool("Moving", Moving);
     }
 }

@@ -78,7 +78,7 @@ public class SpinToWin : BaseAbility
             {
                 if (collided.transform != this.transform)
                 {
-                    collided.GetComponent<PlayerStatus>().KillPlayer();
+                    collided.GetComponent<PlayerStatus>().KillPlayer(this.GetComponent<PlayerStatus>());
                 }
             }
         }

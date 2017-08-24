@@ -13,6 +13,10 @@ public class PlayerStatus : MonoBehaviour
     bool m_bStunned = false;
     public float StunedSlide = 400;
     public int m_iScore;
+    public bool m_bInvincible = false;
+    public float m_fInvincibleTime = 3.0f;
+    public float test = 0.5f;
+    private Timer m_InvincibilityTimer;
     public bool IsDead { get { return m_bDead; } set { m_bDead = value; } }
     public bool IsStunned { get { return m_bStunned; } set { m_bStunned = value; } }
     public int TimesPunched { get { return m_iTimesPunched; } set { m_iTimesPunched = value; } }
@@ -25,9 +29,9 @@ public class PlayerStatus : MonoBehaviour
     public Color _playerColour;
     private Renderer PlayerSprite;
 
-    
+
     public GameObject killMePrompt = null;
-    
+
     public GameObject killMeArea = null;
 
     private GameObject _HealthMask;
@@ -38,6 +42,7 @@ public class PlayerStatus : MonoBehaviour
     //if the player is dead, the renderer will change their colour to gray, and all physics simulation of the player's rigidbody will be turned off.
     void Start()
     {
+        m_InvincibilityTimer = new Timer(m_fInvincibleTime);
         _rigidbody = GetComponent<Rigidbody2D>();
         SceneManager.sceneLoaded += OnSceneLoaded;
         m_iMaxHealth = m_iHealth;
@@ -69,8 +74,15 @@ public class PlayerStatus : MonoBehaviour
 
     }
 
+    void Awake()
+    {
+        m_bInvincible = true;
+    }
     void Update()
     {
+
+
+        StartCoroutine(InvinciblityTime());
         //update my score
         m_iScore = GameManagerc.Instance.PlayerWins[this];
         //Debug.LogError(GetComponent<ControllerSetter>().m_playerNumber);
@@ -81,15 +93,15 @@ public class PlayerStatus : MonoBehaviour
         //if i've been punched once, start the timer, once the timer has reached the end, reset the amount of times punched.
         if (m_iTimesPunched >= 1)
         {
-            if(m_iTimesPunched != m_iPreviousTimesPunched)
+            if (m_iTimesPunched != m_iPreviousTimesPunched)
             {
                 resetStunTimer.SetTimer(0);
                 m_iPreviousTimesPunched = m_iTimesPunched;
             }
             if (resetStunTimer.Tick(Time.deltaTime))
             {
-              //  m_iTimesPunched = 0;
-               // m_iPreviousTimesPunched = 0;
+                //  m_iTimesPunched = 0;
+                // m_iPreviousTimesPunched = 0;
             }
         }
 
@@ -131,7 +143,7 @@ public class PlayerStatus : MonoBehaviour
         }
         //if not stunned dont kill me
         else
-        { 
+        {
             this.GetComponent<Collider2D>().isTrigger = false;
 
             if (this.transform.GetChild(0).tag == "Stunned")
@@ -145,25 +157,31 @@ public class PlayerStatus : MonoBehaviour
             }
             killMeArea.SetActive(false);
             killMePrompt.SetActive(false);
+            //If I find a regular renderer
             if (GetComponent<Renderer>())
             {
                 GetComponent<Renderer>().material.color = _playerColour;
             }
-            else
+            else //if no rendere was found
             {
-                transform.Find("Sprites").Find("PlayerSprite").GetComponent<Renderer>().material.color = _playerColour;
+
+                if (!m_bInvincible)
+
+                    PlayerSprite.GetComponent<Renderer>().material.color = _playerColour; //?
+
+
             }
         }
         //? should probably set a timer to reset these?
         if (m_iTimesPunched >= 2)
         {
-         //   StunPlayer();
-          //  GetComponent<Move>().StatusApplied();
+            //   StunPlayer();
+            //  GetComponent<Move>().StatusApplied();
             //m_iTimesPunched = 0;
         }
 
     }
-    
+
     public void StunPlayer(Vector3 ThrownItemVelocity)
     {
         //stun the player called outside of class
@@ -176,12 +194,7 @@ public class PlayerStatus : MonoBehaviour
         m_iTimesPunched = 0;
     }
 
-    public void KillPlayer()
-    {
-        //kill the player, called outside of class (mostly used for downed kills)
-        m_iHealth = 0;
-        m_bDead = true;
-    }
+
 
     public void ResetPlayer()
     {
@@ -195,9 +208,10 @@ public class PlayerStatus : MonoBehaviour
         GetComponent<Move>().ThrowMyWeapon(Vector2.zero , Vector2.up , false);
 
         this.GetComponent<Collider2D>().isTrigger = true;
+        m_bInvincible = true;
     }
 
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    void OnSceneLoaded(Scene scene , LoadSceneMode mode)
     {
         if (scene.buildIndex == 0)
         {
@@ -206,7 +220,7 @@ public class PlayerStatus : MonoBehaviour
         }
         //time to re activate all the UI stuff
         this.GetComponent<BaseAbility>().GetUIElements();
-        
+
         _HealthMask = PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_HealthBarMask;
         _ScoreText = PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_ScoreText.GetComponent<Text>();
         PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_healthScrolllingIcon.GetComponent<Image>().material.SetColor("_Color" , _playerColour);
@@ -217,16 +231,60 @@ public class PlayerStatus : MonoBehaviour
             item.SetActive(true);
         }
     }
-
-    public void HitPlayer(Bullet aBullet)
+    public void KillPlayer(PlayerStatus killer)
     {
-        m_iHealth -= aBullet.m_iDamage;
-        //If the game mode is either the timed deathmatch or scores appointed on kills deathmatch, then give them points
-        if (m_iHealth <= 0 && (GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_POINTS || GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_TIMED))
+        //kill the player, called outside of class (mostly used for downed kills)
+        if (!m_bInvincible)
         {
-            //update the bullet owner's score
-            GameManagerc.Instance.PlayerWins[aBullet.bulletOwner]++;
+            m_iHealth = 0;
+            m_bDead = true;
+            if (GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_POINTS)
+                GameManagerc.Instance.PlayerWins[killer]++;
         }
+
+    }
+
+    public void HitPlayer(Bullet aBullet, bool abGiveIFrames = false)
+    {
+        if (!m_bInvincible)
+        {
+            m_iHealth -= aBullet.m_iDamage;
+            //If the game mode is either the timed deathmatch or scores appointed on kills deathmatch, then give them points
+            if (m_iHealth <= 0 && (GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_POINTS || GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_TIMED))
+            {
+                //update the bullet owner's score
+                GameManagerc.Instance.PlayerWins[aBullet.bulletOwner]++;
+            }
+        }
+        if (abGiveIFrames)
+        {
+            m_bInvincible = true;
+        }
+    }
+
+    IEnumerator InvinciblityTime()
+    {
+        if (m_InvincibilityTimer.mfTimeToWait != m_fInvincibleTime)
+        {
+            m_InvincibilityTimer = new Timer(m_fInvincibleTime);
+        }
+
+        if (m_bInvincible)
+        {
+            if (m_InvincibilityTimer.Tick(Time.deltaTime))
+            {
+                m_bInvincible = false;
+            }
+            Material m = PlayerSprite.GetComponent<Renderer>().material;
+
+            PlayerSprite.GetComponent<Renderer>().material = null;
+            PlayerSprite.GetComponent<Renderer>().material.color = Color.white;
+            yield return new WaitForSecondsRealtime(test);
+            PlayerSprite.GetComponent<Renderer>().material = m;
+            PlayerSprite.GetComponent<Renderer>().material.color = _playerColour;
+        }
+
+        yield return null;
     }
 
     public void Clear()

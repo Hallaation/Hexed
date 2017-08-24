@@ -63,7 +63,7 @@ public class ControllerManager : MonoBehaviour
     public GameObject playerPrefab2;
     public Transform[] spawnPoints;
 
-    List<GameObject> players = new List<GameObject>();
+   // List<GameObject> players = new List<GameObject>();
     void Awake()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
