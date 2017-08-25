@@ -94,7 +94,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1565912102136700}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 25.417822, y: -19.471952, z: 0}
+  m_LocalPosition: {x: -5.4, y: -2.81, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_Children:
   - {fileID: 4612613489843890}
@@ -162,7 +162,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_fTimeBetweenShots: 0.75
-  m_iDamage: 0
+  m_iDamage: 1
   m_bAutomaticGun: 1
   m_bBurstFire: 1
   m_bGivePlayersIFrames: 0
@@ -175,7 +175,7 @@ MonoBehaviour:
   m_bMoveWeaponSpriteUp: 0
   m_iAmmo: 35
   bullet: {fileID: 1928104826133792, guid: cb8bab3de28b752498df0390ebf4bdc5, type: 2}
-  m_fSpreadJitter: 10
+  m_fSpreadJitter: 7
   m_fSpreadIncrease: 1000
   m_fBulletSpawnOffSet: 1
   m_fFiringForce: 0.25
@@ -212,7 +212,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -5
   m_Sprite: {fileID: 21300004, guid: da8da47eb60060b4ca5f426ef78cee85, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
