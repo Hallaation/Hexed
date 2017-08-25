@@ -161,7 +161,6 @@ public class GamemodeSelection : MonoBehaviour
                     break;
                 case PickType.MAPPICK:
                     {
-                        Debug.Log(">>>>>>>>>>>>>>>>>>>>>>>>>" + m_iMapPickIndex + "<<<<<<<<<<<<<<<<<<<<<<<<<<");
                         _mapSprite.sprite = mapSprites[m_iMapPickIndex];
                         GameManagerc.Instance.MapToLoad = MapObjects[m_iMapPickIndex];
                         if ((DpadHorizontalTest() > 0) || StickMovement[1])
