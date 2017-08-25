@@ -239,7 +239,7 @@ public class Move : MonoBehaviour
 
         Vector3 vrotation = Vector3.zero;
         m_LeftStickRotation = new Vector2(GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Left.X , GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Left.Y);
-        Quaternion temp = Quaternion.LookRotation(m_LeftStickRotation);
+        //Quaternion temp = Quaternion.LookRotation(m_LeftStickRotation);
        // FeetAnimator.transform.rotation = new Quaternion(0, 0, temp.z, temp.w);
         if (!m_bStopStickRotation)
         {
