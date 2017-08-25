@@ -98,8 +98,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1197723866840090}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.46, y: 1.26, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_Children:
   - {fileID: 4605829996525652}
@@ -225,15 +225,18 @@ MonoBehaviour:
   m_iDamage: 1
   m_bAutomaticGun: 1
   m_bBurstFire: 0
+  m_bGivePlayersIFrames: 0
   KnockBack: 0
   MaxShadow: 0.2
   MinShadow: 0
   ShadowGrowthSpeed: 0.2
   m_bActive: 1
   previousOwner: {fileID: 0}
-  m_iAmmo: 9999
+  m_bMoveWeaponSpriteUp: 0
+  m_iAmmo: 30
   bullet: {fileID: 1928104826133792, guid: 7b1d5a4de82f724468c78516eca036b0, type: 2}
-  m_fSpreadJitter: 10
+  m_fSpreadJitter: 5
+  m_fSpreadIncrease: 15
   m_fBulletSpawnOffSet: 1
   m_fFiringForce: 0.25
   m_bAutomatic: 0
@@ -269,7 +272,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1853133351
-  m_SortingOrder: 1
+  m_SortingOrder: -5
   m_Sprite: {fileID: 21300000, guid: da8da47eb60060b4ca5f426ef78cee85, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -304,7 +307,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1268030465
-  m_SortingOrder: 0
+  m_SortingOrder: -6
   m_Sprite: {fileID: 21300000, guid: da8da47eb60060b4ca5f426ef78cee85, type: 3}
   m_Color: {r: 0.16911763, g: 0.16911763, b: 0.16911763, a: 1}
   m_FlipX: 0
