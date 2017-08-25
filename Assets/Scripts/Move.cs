@@ -238,12 +238,14 @@ public class Move : MonoBehaviour
         movement = (!m_b2DMode) ? new Vector3(XCI.GetAxis(XboxAxis.LeftStickX , m_controller.mXboxController) , 0 , XCI.GetAxis(XboxAxis.LeftStickY , m_controller.mXboxController)) : new Vector3(XCI.GetAxis(XboxAxis.LeftStickX , m_controller.mXboxController) , XCI.GetAxis(XboxAxis.LeftStickY , m_controller.mXboxController));
 
         Vector3 vrotation = Vector3.zero;
+        Vector3 Lvrotation = Vector3.zero; // consistently left stick rotation
         m_LeftStickRotation = new Vector2(GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Left.X , GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Left.Y);
         Quaternion temp = Quaternion.LookRotation(m_LeftStickRotation);
        // FeetAnimator.transform.rotation = new Quaternion(0, 0, temp.z, temp.w);
         if (!m_bStopStickRotation)
         {
             vrotation = new Vector2(GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Right.X , GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Right.Y);
+            Lvrotation = new Vector2(GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Left.X, GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Left.Y);
         }
         //if im not getting any input from the right stick, make my rotation from the left stick instead
         //if rotation is none and stick rotation is allowed
@@ -261,13 +263,18 @@ public class Move : MonoBehaviour
 
         //check the deadzone for rotation
         vrotation = CheckDeadZone(vrotation , 0.1f);
-
+        Lvrotation = CheckDeadZone(Lvrotation, 0.05f);
         if (vrotation.magnitude != 0)
         {
             //ternary operator asking if 2dmode, does rotation based on which mode
             //if 2D, the rotation twists around the Z axis
             //otherwise 3D, the rotation twists around Y axis;
-            this.transform.rotation = (!m_b2DMode) ? Quaternion.Euler(0 , Mathf.Atan2(vrotation.x , vrotation.y) * Mathf.Rad2Deg , 0) : this.transform.rotation = Quaternion.Euler(0 , 0 , Mathf.Atan2(-vrotation.x , vrotation.y) * Mathf.Rad2Deg);
+              this.transform.rotation = (!m_b2DMode) ? Quaternion.Euler(0 , Mathf.Atan2(vrotation.x , vrotation.y) * Mathf.Rad2Deg , 0) : this.transform.rotation = Quaternion.Euler(0 , 0 , Mathf.Atan2(-vrotation.x , vrotation.y) * Mathf.Rad2Deg);
+            //! This makes the feet face the left sticks direction. Quaternions are wierd.
+            if(Lvrotation.magnitude != 0)
+            transform.Find("Sprites").transform.Find("Character001_Feet").transform.rotation = (!m_b2DMode) ? Quaternion.Euler(0, Mathf.Atan2(Lvrotation.x, Lvrotation.y) * Mathf.Rad2Deg, 0) : transform.Find("Sprites").transform.Find("Character001_Feet").transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(-Lvrotation.x, Lvrotation.y) * Mathf.Rad2Deg);
+            transform.Find("Sprites").transform.Find("Character001_Feet").transform.rotation *= Quaternion.Euler(0, 0, 90);
+
         }
 
         if (!_characterController && !m_status.IsStunned)
@@ -280,7 +287,7 @@ public class Move : MonoBehaviour
         else
         {
             _characterController.Move(movement * movementSpeed * Time.deltaTime);
-            FeetAnimator.transform.rotation = Quaternion.LookRotation(movement);
+            
         }
 
 
