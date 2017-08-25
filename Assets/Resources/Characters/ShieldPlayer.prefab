@@ -316,7 +316,7 @@ Transform:
   m_GameObject: {fileID: 1122724251598758}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.1, y: 1.5, z: 0}
-  m_LocalScale: {x: 0.4861181, y: 0.4861181, z: 0.4861181}
+  m_LocalScale: {x: 0.7, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4349989783234848}
   m_RootOrder: 3
@@ -489,6 +489,9 @@ MonoBehaviour:
   m_iHealth: 3
   StunedSlide: 40
   m_iScore: 0
+  m_bInvincible: 0
+  m_fInvincibleTime: 3
+  test: 0.5
   m_fStunTime: 5
   m_fMaximumStunWait: 2
   _playerColour: {r: 0, g: 0, b: 0, a: 0}
@@ -524,6 +527,7 @@ MonoBehaviour:
   m_iDamage: 0
   m_bAutomaticGun: 0
   m_bBurstFire: 0
+  m_bGivePlayersIFrames: 0
   KnockBack: 0
   MaxShadow: 0
   MinShadow: 0

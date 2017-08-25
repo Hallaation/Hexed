@@ -27,13 +27,14 @@ public class Bullet : MonoBehaviour
         ParticleSparks = GetComponentInChildren<ParticleSystem>();
         Hit = GetComponent<CircleCollider2D>();
         m_rigidBody = GetComponent<Rigidbody2D>();
-        
 
+        PreviousVelocity = GetComponent<Rigidbody2D>().velocity;
        // Destroy(this.gameObject , 5);
     }
 	// Update is called once per frame
 	void Update ()
     {
+
         //raycasts in front for collision check
         //Ray2D ray = new Ray2D(this.transform.position, -this.transform.up);
         //Debug.DrawRay(ray.origin, ray.direction, Color.red);

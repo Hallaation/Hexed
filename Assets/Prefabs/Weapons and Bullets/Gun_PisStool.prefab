@@ -94,7 +94,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1565912102136700}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.47, y: -1.1842475, z: 0}
+  m_LocalPosition: {x: -6.16, y: 0.85, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_Children:
   - {fileID: 4612613489843890}
@@ -133,7 +133,6 @@ CircleCollider2D:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_UsedByEffector: 0
-  m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 1
@@ -148,7 +147,6 @@ CircleCollider2D:
   m_Material: {fileID: 6200000, guid: 75593ba3a54ba6848a35ce524a35ce4f, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.2
@@ -163,18 +161,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae25850cfcbaae2439d77f3f6d8188da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_fTimeBetweenShots: 0.5
-  m_iDamage: 0
+  m_fTimeBetweenShots: 0
+  m_iDamage: 1
   m_bAutomaticGun: 0
   m_bBurstFire: 0
+  m_bGivePlayersIFrames: 0
   KnockBack: 0
+  MaxShadow: 0
+  MinShadow: 0
+  ShadowGrowthSpeed: 0
   m_bActive: 1
   previousOwner: {fileID: 0}
+  m_bMoveWeaponSpriteUp: 0
   m_iAmmo: 8
   bullet: {fileID: 1928104826133792, guid: 7b1d5a4de82f724468c78516eca036b0, type: 2}
   m_fSpreadJitter: 1
+  m_fSpreadIncrease: 10
   m_fBulletSpawnOffSet: 1
-  m_fFiringForce: 0.02
+  m_fFiringForce: 0.25
   m_bAutomatic: 0
   m_iBurstFire: 0
   m_fTimeBetweenBurstShots: 0
@@ -208,15 +212,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -5
   m_Sprite: {fileID: 21300006, guid: da8da47eb60060b4ca5f426ef78cee85, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
