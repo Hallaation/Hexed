@@ -126,7 +126,9 @@ public class GameManagerc : MonoBehaviour
         {
             mbInstanceIsMe = true;
             SceneManager.sceneLoaded += OnSceneLoaded;
+            Debug.Log(mbInstanceIsMe);
         }
+        //Debug.Log(mInstance.gameObject);
         m_bRoundOver = false;
         Physics.gravity = new Vector3(0 , 0 , 10); //why
     }
