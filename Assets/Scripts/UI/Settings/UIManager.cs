@@ -17,7 +17,7 @@ public class UIManager : MonoBehaviour
     //only used if all else fails
     private GameObject defaultToReturnTo;
     private EventSystem _eventSystem;
-    private bool m_bRemoveLastPanel;
+    public bool m_bRemoveLastPanel;
 
     public bool RemoveLastPanel { get { return m_bRemoveLastPanel; } set { m_bRemoveLastPanel = value; } }
     // Use this for initialization
@@ -114,7 +114,7 @@ public class UIManager : MonoBehaviour
         //If I don't want to remove the default panel and the top of the stack is the default,  exit the function
         //if (!RemoveDefaultPanel && menuStatus.Peek() == defaultPanel) 
         //    return;
-
+        
         //if the menu status count is 1 and I don't want to remove the last panel, exit out of the function
         if (menuStatus.Count == 1 && !m_bRemoveLastPanel)
         {
@@ -177,13 +177,17 @@ public class UIManager : MonoBehaviour
     {
         menuStatus.Clear();
         //if im not in scene 0, remove last panel is true (allowing game to go back)
-        if (scene.buildIndex != 0)
+        if (scene.buildIndex == 2)
         {
+            m_bRemoveLastPanel = false;
+        }
+        else if(scene.buildIndex != 0)
+        {
+            //don't allow the last panel to be removed 
             m_bRemoveLastPanel = true;
         }
         else
         {
-            //don't allow the last panel to be removed 
             m_bRemoveLastPanel = false;
         }
 

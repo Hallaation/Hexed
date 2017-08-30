@@ -271,10 +271,11 @@ public class Move : MonoBehaviour
             //otherwise 3D, the rotation twists around Y axis;
               this.transform.rotation = (!m_b2DMode) ? Quaternion.Euler(0 , Mathf.Atan2(vrotation.x , vrotation.y) * Mathf.Rad2Deg , 0) : this.transform.rotation = Quaternion.Euler(0 , 0 , Mathf.Atan2(-vrotation.x , vrotation.y) * Mathf.Rad2Deg);
             //! This makes the feet face the left sticks direction. Quaternions are wierd.
-            if(Lvrotation.magnitude != 0)
-            transform.Find("Sprites").transform.Find("Character001_Feet").transform.rotation = (!m_b2DMode) ? Quaternion.Euler(0, Mathf.Atan2(Lvrotation.x, Lvrotation.y) * Mathf.Rad2Deg, 0) : transform.Find("Sprites").transform.Find("Character001_Feet").transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(-Lvrotation.x, Lvrotation.y) * Mathf.Rad2Deg);
-            transform.Find("Sprites").transform.Find("Character001_Feet").transform.rotation *= Quaternion.Euler(0, 0, 90);
-
+            if (Lvrotation.magnitude != 0 && FeetAnimator)
+            {
+                transform.Find("Sprites").transform.Find("Character001_Feet").transform.rotation = (!m_b2DMode) ? Quaternion.Euler(0, Mathf.Atan2(Lvrotation.x, Lvrotation.y) * Mathf.Rad2Deg, 0) : transform.Find("Sprites").transform.Find("Character001_Feet").transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(-Lvrotation.x, Lvrotation.y) * Mathf.Rad2Deg);
+                transform.Find("Sprites").transform.Find("Character001_Feet").transform.rotation *= Quaternion.Euler(0, 0, 90);
+            }
         }
 
         if (!_characterController && !m_status.IsStunned)

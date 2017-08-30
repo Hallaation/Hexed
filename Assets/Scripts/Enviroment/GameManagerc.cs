@@ -127,7 +127,7 @@ public class GameManagerc : MonoBehaviour
         {
             mbInstanceIsMe = true;
             SceneManager.sceneLoaded += OnSceneLoaded;
-            Debug.Log(mbInstanceIsMe);
+
         }
         //Debug.Log(mInstance.gameObject);
         m_bRoundOver = false;
@@ -334,7 +334,7 @@ public class GameManagerc : MonoBehaviour
                     go.transform.DetachChildren();
                     mbMapLoaded = true;
                     ControllerManager.Instance.FindSpawns();
-                    CharacterSelectionManager.Instance.LoadPlayers();
+                    CharacterSelectionManager.Instance.LoadPlayers(); 
                 }
                 //If I found the finished game panel
                 if (GameObject.Find("FinishedGamePanel"))

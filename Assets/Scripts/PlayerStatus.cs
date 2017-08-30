@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using XboxCtrlrInput;
+using XInputDotNetPure;
 public class PlayerStatus : MonoBehaviour
 {
     private float m_iMaxHealth;
@@ -23,6 +25,7 @@ public class PlayerStatus : MonoBehaviour
 
     public float m_fStunTime = 1;
     public float m_fMaximumStunWait = 2;
+    public float m_fStunTimerReduction = 0.5f;
     Timer stunTimer;
     Timer resetStunTimer;
     [HideInInspector]
@@ -64,8 +67,8 @@ public class PlayerStatus : MonoBehaviour
 
         _HealthMask = PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_HealthBarMask;
         _ScoreText = PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_ScoreText.GetComponent<Text>();
-        PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_healthScrolllingIcon.GetComponent<Image>().material.SetColor("_Color" , _playerColour);
-        PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_StaticObjectMaterial.SetColor("_Color" , _playerColour);
+        PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_healthScrolllingIcon.GetComponent<Image>().material.SetColor("_Color", _playerColour);
+        PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_StaticObjectMaterial.SetColor("_Color", _playerColour);
 
         foreach (var item in PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_objects)
         {
@@ -80,7 +83,8 @@ public class PlayerStatus : MonoBehaviour
     }
     void Update()
     {
-
+        if (m_iHealth <= 0)
+            m_iHealth = 0;
 
         StartCoroutine(InvinciblityTime());
         //update my score
@@ -108,7 +112,7 @@ public class PlayerStatus : MonoBehaviour
         if (_HealthMask)
         {
             float xOffset = m_iHealth * -0.0791f;
-            _HealthMask.GetComponent<Image>().material.SetTextureOffset("_MainTex" , new Vector2(0 + xOffset , 0));
+            _HealthMask.GetComponent<Image>().material.SetTextureOffset("_MainTex", new Vector2(0 + xOffset, 0));
         }
 
         //if im dead, set my colour to gray, turn of all physics simulations and exit the function
@@ -126,6 +130,7 @@ public class PlayerStatus : MonoBehaviour
         {
             killMeArea.SetActive(true);
             PlayerSprite.material.color = Color.cyan;
+            CheckForButtonMash();
             //this.GetComponent<Renderer>().material.color = Color.cyan;
             if (this.transform.GetChild(1).tag == "Stunned")
             {
@@ -187,8 +192,6 @@ public class PlayerStatus : MonoBehaviour
         //stun the player called outside of class
         //Vector3 a = ThrownItemVelocity.normalized;
         // _rigidbody.velocity = (a * StunedSlide);
-
-
         _rigidbody.velocity = ThrownItemVelocity;
         m_bStunned = true;
         m_iTimesPunched = 0;
@@ -205,13 +208,13 @@ public class PlayerStatus : MonoBehaviour
         this.GetComponent<Rigidbody2D>().simulated = true;
 
         this.transform.position = ControllerManager.Instance.spawnPoints[spawnIndex].position;
-        GetComponent<Move>().ThrowMyWeapon(Vector2.zero , Vector2.up , false);
+        GetComponent<Move>().ThrowMyWeapon(Vector2.zero, Vector2.up, false);
 
         this.GetComponent<Collider2D>().isTrigger = true;
         m_bInvincible = true;
     }
 
-    void OnSceneLoaded(Scene scene , LoadSceneMode mode)
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         if (scene.buildIndex == 0)
         {
@@ -223,8 +226,8 @@ public class PlayerStatus : MonoBehaviour
 
         _HealthMask = PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_HealthBarMask;
         _ScoreText = PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_ScoreText.GetComponent<Text>();
-        PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_healthScrolllingIcon.GetComponent<Image>().material.SetColor("_Color" , _playerColour);
-        PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_StaticObjectMaterial.SetColor("_Color" , _playerColour);
+        PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_healthScrolllingIcon.GetComponent<Image>().material.SetColor("_Color", _playerColour);
+        PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_StaticObjectMaterial.SetColor("_Color", _playerColour);
 
         foreach (var item in PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_objects)
         {
@@ -290,5 +293,14 @@ public class PlayerStatus : MonoBehaviour
     public void Clear()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    void CheckForButtonMash()
+    {
+        if (XCI.GetButtonDown(XboxButton.X, GetComponent<ControllerSetter>().mXboxController))
+        {
+            stunTimer.CurrentTime -= m_fStunTimerReduction;
+        }
+        Debug.Log(stunTimer.CurrentTime / stunTimer.mfTimeToWait);
     }
 }
