@@ -42,9 +42,23 @@ public class PlayerStatus : MonoBehaviour
     Rigidbody2D _rigidbody;
     [HideInInspector]
     public int spawnIndex;
+
+    public SpriteRenderer stunBar;
+    public SpriteRenderer stunMask;
+
     //if the player is dead, the renderer will change their colour to gray, and all physics simulation of the player's rigidbody will be turned off.
     void Start()
     {
+        stunBar = transform.Find("Sprites").Find("Stunbar").GetComponent<SpriteRenderer>();
+        stunMask = transform.Find("Sprites").Find("StunbarMask").GetComponent<SpriteRenderer>();
+        if (stunBar && stunMask)
+        {
+            stunMask.material.shader = Shader.Find("Custom/MaskTest");
+            stunMask.material.renderQueue = 3000;
+            stunBar.material.shader = Shader.Find("Sprites/Default");
+            stunBar.material.renderQueue = 3002;
+        }
+
         m_InvincibilityTimer = new Timer(m_fInvincibleTime);
         _rigidbody = GetComponent<Rigidbody2D>();
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -67,8 +81,8 @@ public class PlayerStatus : MonoBehaviour
 
         _HealthMask = PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_HealthBarMask;
         _ScoreText = PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_ScoreText.GetComponent<Text>();
-        PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_healthScrolllingIcon.GetComponent<Image>().material.SetColor("_Color", _playerColour);
-        PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_StaticObjectMaterial.SetColor("_Color", _playerColour);
+        PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_healthScrolllingIcon.GetComponent<Image>().material.SetColor("_Color" , _playerColour);
+        PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_StaticObjectMaterial.SetColor("_Color" , _playerColour);
 
         foreach (var item in PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_objects)
         {
@@ -83,6 +97,7 @@ public class PlayerStatus : MonoBehaviour
     }
     void Update()
     {
+       
         if (m_iHealth <= 0)
             m_iHealth = 0;
 
@@ -113,7 +128,7 @@ public class PlayerStatus : MonoBehaviour
         if (_HealthMask)
         {
             float xOffset = m_iHealth * -0.0791f;
-            _HealthMask.GetComponent<Image>().material.SetTextureOffset("_MainTex", new Vector2(0 + xOffset, 0));
+            _HealthMask.GetComponent<Image>().material.SetTextureOffset("_MainTex" , new Vector2(0 + xOffset , 0));
         }
 
         //if im dead, set my colour to gray, turn of all physics simulations and exit the function
@@ -125,7 +140,7 @@ public class PlayerStatus : MonoBehaviour
             this.GetComponent<Rigidbody2D>().simulated = false;
             killMePrompt.SetActive(false);
             killMeArea.SetActive(false);
-            
+
             return;
         }
 
@@ -135,6 +150,7 @@ public class PlayerStatus : MonoBehaviour
             SetAllAnimatorsFalse();
             killMeArea.SetActive(true);
             PlayerSprite.material.color = Color.cyan;
+            float stunBarOffset = (stunTimer.CurrentTime / stunTimer.mfTimeToWait) * 0.22f;
             CheckForButtonMash();
             //this.GetComponent<Renderer>().material.color = Color.cyan;
             if (this.transform.GetChild(1).tag == "Stunned")
@@ -214,13 +230,13 @@ public class PlayerStatus : MonoBehaviour
         this.GetComponent<Rigidbody2D>().simulated = true;
 
         this.transform.position = ControllerManager.Instance.spawnPoints[spawnIndex].position;
-        GetComponent<Move>().ThrowMyWeapon(Vector2.zero, Vector2.up, false);
+        GetComponent<Move>().ThrowMyWeapon(Vector2.zero , Vector2.up , false);
 
         this.GetComponent<Collider2D>().isTrigger = true;
         m_bInvincible = true;
     }
 
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    void OnSceneLoaded(Scene scene , LoadSceneMode mode)
     {
         if (scene.buildIndex == 0)
         {
@@ -232,8 +248,8 @@ public class PlayerStatus : MonoBehaviour
 
         _HealthMask = PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_HealthBarMask;
         _ScoreText = PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_ScoreText.GetComponent<Text>();
-        PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_healthScrolllingIcon.GetComponent<Image>().material.SetColor("_Color", _playerColour);
-        PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_StaticObjectMaterial.SetColor("_Color", _playerColour);
+        PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_healthScrolllingIcon.GetComponent<Image>().material.SetColor("_Color" , _playerColour);
+        PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_StaticObjectMaterial.SetColor("_Color" , _playerColour);
 
         foreach (var item in PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_objects)
         {
@@ -254,7 +270,7 @@ public class PlayerStatus : MonoBehaviour
 
     }
 
-    public void HitPlayer(Bullet aBullet, bool abGiveIFrames = false)
+    public void HitPlayer(Bullet aBullet , bool abGiveIFrames = false)
     {
         if (!m_bInvincible)
         {
@@ -304,7 +320,7 @@ public class PlayerStatus : MonoBehaviour
 
     void CheckForButtonMash()
     {
-        if (XCI.GetButtonDown(XboxButton.X, GetComponent<ControllerSetter>().mXboxController))
+        if (XCI.GetButtonDown(XboxButton.X , GetComponent<ControllerSetter>().mXboxController))
         {
             stunTimer.CurrentTime -= m_fStunTimerReduction;
         }
@@ -316,20 +332,20 @@ public class PlayerStatus : MonoBehaviour
         Animator Body = GetComponent<Move>().GetBodyAnimator();
         Animator Feet = GetComponent<Move>().GetFeetAnimator();
 
-        Body.SetBool(0, false);
-        Body.SetBool(1, false);
-        Body.SetBool(2, false);
-        Body.SetBool(3, false);
-        Body.SetBool(4, false);
-        Body.SetBool(5, false);
-        Body.SetBool(6, false);
-        Body.SetBool(7, false);
-        Body.SetBool(8, false);
-        Body.SetBool(9, false);
-        Body.SetBool(10, false);
-        Body.SetBool(11, false);
+        Body.SetBool(0 , false);
+        Body.SetBool(1 , false);
+        Body.SetBool(2 , false);
+        Body.SetBool(3 , false);
+        Body.SetBool(4 , false);
+        Body.SetBool(5 , false);
+        Body.SetBool(6 , false);
+        Body.SetBool(7 , false);
+        Body.SetBool(8 , false);
+        Body.SetBool(9 , false);
+        Body.SetBool(10 , false);
+        Body.SetBool(11 , false);
 
-        Feet.SetBool("Moving", false); // Doesnt Work Not Sure why.
-        
+        Feet.SetBool("Moving" , false); // Doesnt Work Not Sure why.
+
     }
 }
