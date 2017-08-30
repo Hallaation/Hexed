@@ -90,6 +90,7 @@ public class GameManagerc : MonoBehaviour
     private bool mbLoadedIntoGame = false;
     private bool mbInstanceIsMe = false;
     private bool mbFinishedPanelShown = false;
+    public bool mbMapLoaded = false;
     public static GameManagerc Instance
     {
         get
@@ -126,7 +127,9 @@ public class GameManagerc : MonoBehaviour
         {
             mbInstanceIsMe = true;
             SceneManager.sceneLoaded += OnSceneLoaded;
+            Debug.Log(mbInstanceIsMe);
         }
+        //Debug.Log(mInstance.gameObject);
         m_bRoundOver = false;
         Physics.gravity = new Vector3(0 , 0 , 10); //why
     }
@@ -329,6 +332,9 @@ public class GameManagerc : MonoBehaviour
                     GameObject go = Instantiate(MapToLoad);
                     go.transform.position = Vector3.zero;
                     go.transform.DetachChildren();
+                    mbMapLoaded = true;
+                    ControllerManager.Instance.FindSpawns();
+                    CharacterSelectionManager.Instance.LoadPlayers();
                 }
                 //If I found the finished game panel
                 if (GameObject.Find("FinishedGamePanel"))
