@@ -48,14 +48,20 @@ public class Weapon : MonoBehaviour
         {
             m_bActive = true;
             //If my weapon has more than 2 (the shadow object is the third)
-            if (this.transform.childCount > 2 && tag != "Player")
+            if (this.transform.childCount > 2 && tag != "Player" && _rigidbody.velocity.magnitude < .1)
             {
                 //turn the sprite renderer on
-                transform.GetChild(2).GetComponent<SpriteRenderer>().enabled = true;
-               
-                //If i want to move the weapon sprite up.
-                if (m_bMoveWeaponSpriteUp)
+                if (transform.GetChild(2).GetComponent<SpriteRenderer>().enabled == false)
                 {
+                    transform.GetChild(2).GetComponent<SpriteRenderer>().enabled = true;
+                    transform.GetChild(0).transform.localPosition = new Vector3(0, 0, 0);
+                    m_bMoveWeaponSpriteUp = true;
+                }
+                //If i want to move the weapon sprite up.
+                if (m_bMoveWeaponSpriteUp && _rigidbody.velocity.magnitude < .3)
+                {
+                   
+
                     //move the weapon sprite up by the amount specified by ShadowGrowthSpeed
                     weaponSpriteTransform.localPosition += new Vector3(0 , Time.deltaTime * ShadowGrowthSpeed , 0);
                     //once I have reached the maximum allowed

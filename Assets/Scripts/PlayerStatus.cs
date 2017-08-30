@@ -101,7 +101,8 @@ public class PlayerStatus : MonoBehaviour
             if (resetStunTimer.Tick(Time.deltaTime))
             {
                 //  m_iTimesPunched = 0;
-                // m_iPreviousTimesPunched = 0;
+                // m_iPreviousTimesPunched = 0; 
+                //TODO Needs to be readded at some point.
             }
         }
 
@@ -115,15 +116,19 @@ public class PlayerStatus : MonoBehaviour
         if (m_bDead)
         {
             //this.GetComponent<Renderer>().material.color = Color.grey;
+            SetAllAnimatorsFalse();
             PlayerSprite.material.color = Color.grey;
             this.GetComponent<Rigidbody2D>().simulated = false;
             killMePrompt.SetActive(false);
             killMeArea.SetActive(false);
+            
             return;
         }
+
         //if im stunned, make me cyan and show any kill prompts (X button and kill radius);
         if (m_bStunned)
         {
+            SetAllAnimatorsFalse();
             killMeArea.SetActive(true);
             PlayerSprite.material.color = Color.cyan;
             //this.GetComponent<Renderer>().material.color = Color.cyan;
@@ -133,7 +138,7 @@ public class PlayerStatus : MonoBehaviour
             }
             else
             {
-                this.transform.GetChild(2).gameObject.GetComponent<PolygonCollider2D>().enabled = true;
+                this.transform.GetChild(1).gameObject.GetComponent<PolygonCollider2D>().enabled = true;
             }
             this.GetComponent<Collider2D>().isTrigger = true;
             if (stunTimer.Tick(Time.deltaTime))
@@ -149,7 +154,7 @@ public class PlayerStatus : MonoBehaviour
             if (this.transform.GetChild(0).tag == "Stunned")
             {
                 Debug.Log(this.transform.GetChild(0).tag);
-                this.transform.GetChild(0).gameObject.GetComponent<PolygonCollider2D>().enabled = false;
+                this.transform.GetChild(1).gameObject.GetComponent<PolygonCollider2D>().enabled = false;        //TODO Check up on this and above something seems fishy
             }
             else
             {
@@ -188,7 +193,7 @@ public class PlayerStatus : MonoBehaviour
         //Vector3 a = ThrownItemVelocity.normalized;
         // _rigidbody.velocity = (a * StunedSlide);
 
-
+        SetAllAnimatorsFalse();
         _rigidbody.velocity = ThrownItemVelocity;
         m_bStunned = true;
         m_iTimesPunched = 0;
@@ -236,6 +241,7 @@ public class PlayerStatus : MonoBehaviour
         //kill the player, called outside of class (mostly used for downed kills)
         if (!m_bInvincible)
         {
+            SetAllAnimatorsFalse();
             m_iHealth = 0;
             m_bDead = true;
             if (GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_POINTS)
@@ -290,5 +296,27 @@ public class PlayerStatus : MonoBehaviour
     public void Clear()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    void SetAllAnimatorsFalse()
+    {
+        Animator Body = GetComponent<Move>().GetBodyAnimator();
+        Animator Feet = GetComponent<Move>().GetFeetAnimator();
+
+        Body.SetBool(0, false);
+        Body.SetBool(1, false);
+        Body.SetBool(2, false);
+        Body.SetBool(3, false);
+        Body.SetBool(4, false);
+        Body.SetBool(5, false);
+        Body.SetBool(6, false);
+        Body.SetBool(7, false);
+        Body.SetBool(8, false);
+        Body.SetBool(9, false);
+        Body.SetBool(10, false);
+        Body.SetBool(11, false);
+
+        Feet.SetBool("Moving", false); // Doesnt Work Not Sure why.
+        
     }
 }
