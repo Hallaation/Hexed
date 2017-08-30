@@ -30,8 +30,8 @@ public class Move : MonoBehaviour
     bool runningAnimation = false;
     //[HideInInspector]
     public GameObject crosshair;
-    Animator FeetAnimator;
-    Animator BodyAnimator;
+    protected Animator FeetAnimator; public Animator GetFeetAnimator() { return FeetAnimator; }
+    protected Animator BodyAnimator; public Animator GetBodyAnimator() { return BodyAnimator; }
     public GameObject weaponMount;
     public GameObject fistObject;
     public float movementSpeed = 10.0f;
@@ -282,7 +282,7 @@ public class Move : MonoBehaviour
             //this.transform.position += movement * movementSpeed * Time.deltaTime;
             //_rigidBody.AddForce(movement * movementSpeed * Time.deltaTime , ForceMode2D.Impulse);
             _rigidBody.velocity = movement * movementSpeed;
-           
+            
         }
         else
         {
@@ -319,7 +319,7 @@ public class Move : MonoBehaviour
 
                 heldWeapon = null;
                 if (BodyAnimator != null)
-                    BodyAnimator.SetBool("HoldingTwoHandedGun", false);
+                    SetHoldingGun(0);
 
             }
             else
@@ -330,7 +330,8 @@ public class Move : MonoBehaviour
                 m_bHoldingWeapon = false;
                 heldWeapon = null;
                 if (BodyAnimator != null)
-                    BodyAnimator.SetBool("HoldingTwoHandedGun", false);
+                    SetHoldingGun(0);
+                    
             }
         }
     }
@@ -406,7 +407,12 @@ public class Move : MonoBehaviour
         weaponRigidBody.angularVelocity = 0.0f; //set any angular velocity to nothing
 
         m_bHoldingWeapon = true;
+        SetHoldingGun(0);
         if (BodyAnimator != null)
+            if(heldWeapon.tag == "OneHanded")
+            {
+                BodyAnimator.SetBool("HoldingOneHandedGun", true);
+            }
             BodyAnimator.SetBool("HoldingTwoHandedGun", true);
         vibrationValue.y = 0.5f; //vibrate controller for haptic feedback
     }
@@ -446,6 +452,11 @@ public class Move : MonoBehaviour
     {
         //called outside
         //whenever a status is applied to player (stunned / killed) they drop their weapon
+
+        BodyAnimator.SetBool("UnarmedAttack", false);
+        BodyAnimator.SetBool("Moving", false);
+        BodyAnimator.SetBool("IsKilling", false);
+        transform.Find("StunnedCollider").GetComponent<PolygonCollider2D>().enabled = false;
         if (heldWeapon)
         {
             ThrowMyWeapon(Vector2.zero , this.transform.up , false);
@@ -549,5 +560,28 @@ public class Move : MonoBehaviour
     {
         FeetAnimator.SetBool("Moving", Moving);
         BodyAnimator.SetBool("Moving", Moving);
+    }
+    ///<summary>
+    ///Amount of hands required to hold GUN. if no weapon, 0. Sets Animators. Not Melee.
+    ///</summary>
+    private void SetHoldingGun(int HandsOccupied)  // Input the amount of hands needed to hold weapon. If no weapon input 0 for 0 hands.
+    {
+            switch (HandsOccupied)
+            {
+            case 0:
+                BodyAnimator.SetBool("HoldingOneHandedGun", false); // Sets animators
+                BodyAnimator.SetBool("HoldingTwoHandedGun", false);
+                break;
+            case 1:
+                BodyAnimator.SetBool("HoldingOneHandedGun", true);
+                BodyAnimator.SetBool("HoldingTwoHandedGun", false);
+                break;
+            case 2:
+                BodyAnimator.SetBool("HoldingOneHandedGun", false);
+                BodyAnimator.SetBool("HoldingTwoHandedGun", true);
+                break;
+            default:
+                break;
+            }
     }
 }

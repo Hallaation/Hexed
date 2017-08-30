@@ -83,26 +83,30 @@ public class CharacterSelectionManager : MonoBehaviour
         }
     }
 
+    public void LoadPlayers()
+    {
+        for (int i = 0; i < playerSelectedCharacter.Count; ++i)
+        {
+            ControllerManager.Instance.FindSpawns();
+            GameObject go = Instantiate(playerSelectedCharacter[XboxController.First + i] , ControllerManager.Instance.spawnPoints[i].position , Quaternion.identity , null);
+            go.GetComponent<ControllerSetter>().SetController(PlayerIndex.One + i);
+            go.GetComponent<ControllerSetter>().m_playerNumber = i;
+            go.GetComponent<PlayerStatus>().spawnIndex = i;
+            PlayerUIArray.Instance.playerElements[i].gameObject.SetActive(true);
+            GameManagerc.Instance.AddPlayer(go.GetComponent<PlayerStatus>());
+            DontDestroyOnLoad(go);
+            go.SetActive(true);
+            CameraControl.mInstance.m_Targets.Add(go.transform);
+            m_bMovedToMainScene = true;
+        }
+    }
     void OnSceneLoaded(Scene scene , LoadSceneMode mode)
     {
         //if my currnet scene is 1 (when loaded into the game arean and I havn't already moved in, spawn the players
-        if (scene.buildIndex == 1 && !m_bMovedToMainScene)
-        {
-            for (int i = 0; i < playerSelectedCharacter.Count; ++i)
-            {
-                ControllerManager.Instance.FindSpawns();
-                GameObject go = Instantiate(playerSelectedCharacter[XboxController.First + i] , ControllerManager.Instance.spawnPoints[i].position , Quaternion.identity , null);
-                go.GetComponent<ControllerSetter>().SetController(PlayerIndex.One + i);
-                go.GetComponent<ControllerSetter>().m_playerNumber = i;
-                go.GetComponent<PlayerStatus>().spawnIndex = i;
-                PlayerUIArray.Instance.playerElements[i].gameObject.SetActive(true);
-                GameManagerc.Instance.AddPlayer(go.GetComponent<PlayerStatus>());
-                DontDestroyOnLoad(go);
-                go.SetActive(true);
-                CameraControl.mInstance.m_Targets.Add(go.transform);
-                m_bMovedToMainScene = true;
-            }
-        }
+        //if (scene.buildIndex == 1 && !m_bMovedToMainScene)
+        //{
+        //
+        //}
 
         if (scene.buildIndex == 0)
         {
