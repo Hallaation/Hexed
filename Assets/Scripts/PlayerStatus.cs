@@ -350,7 +350,7 @@ public class PlayerStatus : MonoBehaviour
         {
             stunTimer.CurrentTime += m_fStunTimerReduction;
         }
-        Debug.Log(stunTimer.CurrentTime / stunTimer.mfTimeToWait);
+
     }
 
     void SetAllAnimatorsFalse()

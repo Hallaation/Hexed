@@ -8,6 +8,7 @@ public class EmptyHand : Weapon
  
     public override void StartUp()
     {
+        this.gameObject.name = "Player + " + GetComponent<ControllerSetter>().m_playerNumber;
         if (!this.GetComponent<AudioSource>())
         {
             temp = this.gameObject.AddComponent<AudioSource>();
@@ -37,7 +38,7 @@ public class EmptyHand : Weapon
                 int TotalCollisions = Overlap.Length;
                 for(int i = 0; i < TotalCollisions; ++i)
                 {
-                    if(Overlap[i].transform.tag == "Player")
+                    if(Overlap[i].transform.tag == "Player" && Overlap[i].transform != this.transform)
                     {
                         Overlap[i].transform.GetComponent<PlayerStatus>().TimesPunched++;
                         if(Overlap[i].transform.GetComponent<PlayerStatus>().TimesPunched >= 3)
