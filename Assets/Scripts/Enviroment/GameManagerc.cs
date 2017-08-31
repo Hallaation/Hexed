@@ -55,7 +55,7 @@ public class GameManagerc : MonoBehaviour
 {
 
     //dictionary mapping XCI index with the XInputDotNet indexes
-    Dictionary<XboxController , int> XboxControllerPlayerNumbers = new Dictionary<XboxController , int>
+    Dictionary<XboxController, int> XboxControllerPlayerNumbers = new Dictionary<XboxController, int>
     {
         {XboxController.First,   0 },
         {XboxController.Second,  1 },
@@ -66,7 +66,7 @@ public class GameManagerc : MonoBehaviour
     Timer waitForRoundEnd;
     //lets try a dictionary again
     //public List<int> PlayerWins = new List<int>();
-    public Dictionary<PlayerStatus , int> PlayerWins = new Dictionary<PlayerStatus , int>();
+    public Dictionary<PlayerStatus, int> PlayerWins = new Dictionary<PlayerStatus, int>();
     public List<PlayerStatus> InGamePlayers = new List<PlayerStatus>();
     GameObject WinningPlayer = null;
 
@@ -131,7 +131,7 @@ public class GameManagerc : MonoBehaviour
         }
         //Debug.Log(mInstance.gameObject);
         m_bRoundOver = false;
-        Physics.gravity = new Vector3(0 , 0 , 10); //why
+        Physics.gravity = new Vector3(0, 0, 10); //why
     }
 
 
@@ -140,15 +140,7 @@ public class GameManagerc : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.G))
         {
-            //tempPoint++;
-            //GameObject go = new GameObject("Point", typeof(RectTransform));
-            //go.AddComponent<CanvasRenderer>();
-            //go.AddComponent<Image>().sprite = test;
-
-            //go.transform.SetParent(AddPointSpot.transform);
-            //go.transform.position += new Vector3(AddPointSpot.transform.position.x + 40 * tempPoint , AddPointSpot.transform.position.y);
-            //go.transform.localScale = new Vector3(1,1,1);
-
+            Rematch();
         }
         if (InGamePlayers.Count > 1)
         {
@@ -262,7 +254,7 @@ public class GameManagerc : MonoBehaviour
                 //Debug.LogError("Points required have been reached");
                 Time.timeScale = 0;
                 //open the finish panel, UI manager will set all the children to true, thus rendering them
-                UIManager.Instance.OpenUIElement(FinishUIPanel , true);
+                UIManager.Instance.OpenUIElement(FinishUIPanel, true);
                 UIManager.Instance.RemoveLastPanel = false;
                 //Reset the event managers current selected object to the rematch button
                 FindObjectOfType<EventSystem>().SetSelectedGameObject(null);
@@ -295,7 +287,7 @@ public class GameManagerc : MonoBehaviour
                     //Debug.LogError("Points required have been reached");
                     Time.timeScale = 0;
                     //open the finish panel, UI manager will set all the children to true, thus rendering them
-                    UIManager.Instance.OpenUIElement(FinishUIPanel , true);
+                    UIManager.Instance.OpenUIElement(FinishUIPanel, true);
                     UIManager.Instance.RemoveLastPanel = false;
                     //Reset the event managers current selected object to the rematch button
                     FindObjectOfType<EventSystem>().SetSelectedGameObject(null);
@@ -318,7 +310,7 @@ public class GameManagerc : MonoBehaviour
         //TODO Load Character select / win screen;
     }
 
-    void OnSceneLoaded(Scene scene , LoadSceneMode mode)
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         //oh fukc
         //check if the instance is this game object
@@ -334,7 +326,7 @@ public class GameManagerc : MonoBehaviour
                     go.transform.DetachChildren();
                     mbMapLoaded = true;
                     ControllerManager.Instance.FindSpawns();
-                    CharacterSelectionManager.Instance.LoadPlayers(); 
+                    CharacterSelectionManager.Instance.LoadPlayers();
                 }
                 //If I found the finished game panel
                 if (GameObject.Find("FinishedGamePanel"))
@@ -375,7 +367,7 @@ public class GameManagerc : MonoBehaviour
                         //Obtain the amount of points they own. For every point they own, make a point sprite to visualize their points.
                         for (int j = 0; j < PlayerWins[InGamePlayers[i]]; ++j)
                         {
-                            GameObject go = new GameObject("Point" , typeof(RectTransform));
+                            GameObject go = new GameObject("Point", typeof(RectTransform));
                             go.AddComponent<CanvasRenderer>();
                             go.AddComponent<Image>().sprite = PointSprite;
                             //Get the specific player's point origin and set the newly made point's parent to this
@@ -383,7 +375,7 @@ public class GameManagerc : MonoBehaviour
                             //Get the position of the point origin
                             Vector3 AddPointSpot = PointOrigins[XboxControllerPlayerNumbers[InGamePlayers[i].GetComponent<ControllerSetter>().mXboxController]].transform.position;
                             //depending on score (j) move the point to an offset based on how many points they have
-                            go.transform.position += new Vector3(AddPointSpot.x + 40 * j , AddPointSpot.y);
+                            go.transform.position += new Vector3(AddPointSpot.x + 40 * j, AddPointSpot.y);
 
                         }
 
@@ -402,7 +394,7 @@ public class GameManagerc : MonoBehaviour
     public void AddPlayer(PlayerStatus aPlayer)
     {
         InGamePlayers.Add(aPlayer);
-        PlayerWins.Add(aPlayer , 0);
+        PlayerWins.Add(aPlayer, 0);
     }
 
 
@@ -413,7 +405,7 @@ public class GameManagerc : MonoBehaviour
         //The round is not over
         m_bRoundOver = false;
         //reset every player
-        foreach (KeyValuePair<PlayerStatus , int> item in PlayerWins)
+        foreach (KeyValuePair<PlayerStatus, int> item in PlayerWins)
         {
             item.Key.ResetPlayer();
         }
@@ -473,14 +465,14 @@ public class GameManagerc : MonoBehaviour
         mbFinishedShowingScores = false;
         //now this for loop is not necassary. only need to add new points, hmm. 
 
-        GameObject go = new GameObject("Point" , typeof(RectTransform));
+        GameObject go = new GameObject("Point", typeof(RectTransform));
         go.AddComponent<CanvasRenderer>();
         go.AddComponent<Image>().sprite = PointSprite;
         yield return new WaitForSeconds(1);
         go.transform.SetParent(PointOrigins[XboxControllerPlayerNumbers[player.GetComponent<ControllerSetter>().mXboxController]].transform);
         //go.transform.position += new Vector3(AddPointSpot.transform.position.x + 40 * tempPoint , AddPointSpot.transform.position.y);
         Vector3 AddPointSpot = PointOrigins[XboxControllerPlayerNumbers[player.GetComponent<ControllerSetter>().mXboxController]].transform.position;
-        go.transform.position += new Vector3(AddPointSpot.x + 40 * PlayerWins[player] , AddPointSpot.y);
+        go.transform.position += new Vector3(AddPointSpot.x + 40 * PlayerWins[player], AddPointSpot.y);
         yield return new WaitForSeconds(2);
         mbFinishedShowingScores = true;
         PointsPanel.SetActive(false);
