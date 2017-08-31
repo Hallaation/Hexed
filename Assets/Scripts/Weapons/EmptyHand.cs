@@ -40,6 +40,12 @@ public class EmptyHand : Weapon
                     if(Overlap[i].transform.tag == "Player")
                     {
                         Overlap[i].transform.GetComponent<PlayerStatus>().TimesPunched++;
+                        if(Overlap[i].transform.GetComponent<PlayerStatus>().TimesPunched >= 3)
+                        {
+                            Overlap[i].transform.GetComponent<PlayerStatus>().StunPlayer(transform.up * KnockBack);
+                            Overlap[i].transform.GetComponent<PlayerStatus>().TimesPunched = 0;
+                            Overlap[i].transform.GetComponent<Move>().StatusApplied();//GetComponent<Move>().StatusApplied();
+                        }
                     }
                 }
             }

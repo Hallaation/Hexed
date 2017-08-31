@@ -457,6 +457,7 @@ public class Move : MonoBehaviour
         BodyAnimator.SetBool("UnarmedAttack", false);
         BodyAnimator.SetBool("Moving", false);
         BodyAnimator.SetBool("IsKilling", false);
+        //GetComponent<PolygonCollider2D>().enabled = false; //? Is this right?
         transform.Find("StunnedCollider").GetComponent<PolygonCollider2D>().enabled = false;
         if (heldWeapon)
         {

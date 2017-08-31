@@ -171,11 +171,11 @@ public class PlayerStatus : MonoBehaviour
         else
         {
             this.GetComponent<Collider2D>().isTrigger = false;
-
+            GetComponent<PolygonCollider2D>().enabled = true;
             if (this.transform.GetChild(0).tag == "Stunned")
             {
                 Debug.Log(this.transform.GetChild(0).tag);
-                this.transform.GetChild(1).gameObject.GetComponent<PolygonCollider2D>().enabled = false;        //TODO Check up on this and above something seems fishy
+                this.transform.GetChild(1).gameObject.GetComponent<PolygonCollider2D>().enabled = false;        //? child 0 is weaponSpot...
             }
             else
             {
@@ -201,8 +201,8 @@ public class PlayerStatus : MonoBehaviour
         //? should probably set a timer to reset these?
         if (m_iTimesPunched >= 2)
         {
-            //   StunPlayer();
-            //  GetComponent<Move>().StatusApplied();
+            //StunPlayer();
+            //GetComponent<Move>().StatusApplied();
             //m_iTimesPunched = 0;
         }
 
@@ -324,7 +324,7 @@ public class PlayerStatus : MonoBehaviour
         {
             stunTimer.CurrentTime -= m_fStunTimerReduction;
         }
-        Debug.Log(stunTimer.CurrentTime / stunTimer.mfTimeToWait);
+      //  Debug.Log(stunTimer.CurrentTime / stunTimer.mfTimeToWait);
     }
 
     void SetAllAnimatorsFalse()
