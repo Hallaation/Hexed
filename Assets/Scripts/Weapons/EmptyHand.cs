@@ -32,12 +32,13 @@ public class EmptyHand : Weapon
             
             if(PunchHitBox.IsTouchingLayers(1 << 8))
             {
-                Debug.Log("Punch");
+                //Debug.Log("Punch");
                
                 Collider2D[] Overlap = Physics2D.OverlapBoxAll(PunchHitBox.transform.position, PunchHitBox.size, 0, 1<<8);
                 int TotalCollisions = Overlap.Length;
                 for(int i = 0; i < TotalCollisions; ++i)
                 {
+                    //TODO add a raycast to check for wall
                     if(Overlap[i].transform.tag == "Player" && Overlap[i].transform != this.transform)
                     {
                         Overlap[i].transform.GetComponent<PlayerStatus>().TimesPunched++;
