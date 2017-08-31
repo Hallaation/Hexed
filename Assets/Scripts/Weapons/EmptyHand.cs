@@ -35,6 +35,7 @@ public class EmptyHand : Weapon
                 //Debug.Log("Punch");
                
                 Collider2D[] Overlap = Physics2D.OverlapBoxAll(PunchHitBox.transform.position, PunchHitBox.size, 0, 1<<8);
+         
                 int TotalCollisions = Overlap.Length;
                 for(int i = 0; i < TotalCollisions; ++i)
                 {
