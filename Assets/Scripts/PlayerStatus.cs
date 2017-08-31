@@ -224,13 +224,6 @@ public class PlayerStatus : MonoBehaviour
                     PlayerSprite.GetComponent<Renderer>().material.color = _playerColour;
             }
         }
-        //? should probably set a timer to reset these?
-        if (m_iTimesPunched >= 2)
-        {
-            //StunPlayer();
-            //GetComponent<Move>().StatusApplied();
-            //m_iTimesPunched = 0;
-        }
 
     }
 

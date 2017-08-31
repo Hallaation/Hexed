@@ -10,9 +10,9 @@ public class Gun : Weapon
     public int m_iAmmo = 30;
     public GameObject bullet;
     [SerializeField]
-    public float m_fSpreadJitter = 1.0f;
+    private float m_fSpreadJitter = 1.0f;
     public float m_fSpreadIncrease = 0.1f;
-    private float m_fMaxJitter;
+    public float m_fMaxJitter = 1.0f;
 
     public float m_fBulletSpawnOffSet = 2.0f;
     public float m_fFiringForce = 20.0f;
@@ -32,7 +32,7 @@ public class Gun : Weapon
             MuzzelFlash = transform.GetChild(3).GetComponent<ParticleSystem>();
 
         //the max jitter is determined in the editor, this is to simply remember the maximum jitter desired
-        m_fMaxJitter = m_fSpreadJitter;
+        //m_fMaxJitter = m_fSpreadJitter;
         m_fSpreadJitter = 0;
         //set the spread jitter to 0
         //make a timer with a wait time of 0.2f, around the human average reaction speed
@@ -96,18 +96,18 @@ public class Gun : Weapon
     void FireBullet()
     {
         //Whenever fire bullet mis called, Make the bullet prefab, get the damage from the player that is holding this gun
-        GameObject FiredBullet = Instantiate(bullet , this.transform.parent.position + this.transform.parent.up * m_fBulletSpawnOffSet , this.transform.rotation);
+        GameObject FiredBullet = Instantiate(bullet, this.transform.parent.position + this.transform.parent.up * m_fBulletSpawnOffSet, this.transform.rotation);
         FiredBullet.GetComponent<Bullet>().bulletOwner = GetComponentInParent<PlayerStatus>();
         FiredBullet.GetComponent<Bullet>().m_iDamage = this.m_iDamage;
         FiredBullet.GetComponent<Bullet>().m_bGiveIFrames = m_bGivePlayersIFrames;
         //Make a quaternion on the forward vector to determine the bullet spread jitter and set the bullet's rotation to the jitter
-        FiredBullet.transform.rotation = this.transform.parent.rotation * Quaternion.Euler(Vector3.forward * m_fSpreadJitter * Random.Range(-1.0f , 1.0f));
+        FiredBullet.transform.rotation = this.transform.parent.rotation * Quaternion.Euler(Vector3.forward * m_fSpreadJitter * Random.Range(-1.0f, 1.0f));
         //apply an initial force to the bullet's rigidbody based on what direction the bullet is facing,
-        FiredBullet.GetComponent<Rigidbody2D>().AddForce(FiredBullet.transform.up * m_fFiringForce , ForceMode2D.Impulse);
+        FiredBullet.GetComponent<Rigidbody2D>().AddForce(FiredBullet.transform.up * m_fFiringForce, ForceMode2D.Impulse);
         //! Based on the bullet's velocity vector, get a rotation from it and change the bullets rotation to represent the velocity vector;
         Vector2 dir = FiredBullet.GetComponent<Rigidbody2D>().velocity;
-        float angle = Mathf.Atan2(dir.y , dir.x) * Mathf.Rad2Deg;
-        FiredBullet.GetComponent<Transform>().rotation = Quaternion.AngleAxis(angle , Vector3.forward);
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        FiredBullet.GetComponent<Transform>().rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         //!If I do have a Muzzel flash particle, play them.
         if (MuzzelFlash != null)
             MuzzelFlash.Play();

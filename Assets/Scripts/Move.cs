@@ -37,7 +37,7 @@ public class Move : MonoBehaviour
     public float movementSpeed = 10.0f;
     public float throwingForce = 100.0f;
     float StoredMoveSpeed;
-    public bool m_b2DMode = true;
+    //public bool m_b2DMode = true;
     EmptyHand defaultWeapon;
     [HideInInspector]
     public Vector2 vibrationValue;
@@ -46,6 +46,7 @@ public class Move : MonoBehaviour
     float MoveDelayTimer;
     public float StartMoveDelay = 3;
     public Vector3 m_LeftStickRotation;
+    public float StickDeadZone = 0.12f;
     private Text _AmmoText;
     // Use this for initialization
     void Start()
@@ -61,6 +62,9 @@ public class Move : MonoBehaviour
                 BodyAnimator = transform.Find("Sprites").transform.Find("Character001_Body").GetComponent<Animator>();
             }
         }
+        if (crosshair)
+            crosshair.AddComponent<CrosshairClamp>();
+
         vibrationValue = Vector2.zero;
         //setting up any references to other classes needed.
         m_controller = GetComponent<ControllerSetter>();
@@ -211,43 +215,37 @@ public class Move : MonoBehaviour
             GetComponent<BaseAbility>().UseSpecialAbility(false);
         }
     }
+
     Vector3 CheckDeadZone(Vector3 controllerInput, float deadzone)
     {
         //if any of the numbers are below a certain deadzone, they get zeroed.
         Vector3 temp = controllerInput;
-        if (Mathf.Abs(temp.x) <= deadzone)
+        if (temp.magnitude < deadzone)
         {
-            temp.x = 0;
-        }
-        if (Mathf.Abs(temp.y) <= deadzone)
-        {
-            temp.y = 0;
-        }
-        if (Mathf.Abs(temp.z) <= deadzone)
-        {
-            temp.z = 0;
-        }
+            temp = Vector3.zero;
+        }        
         return temp;
     }
+
     void CalculateMovement()
     {
-
         Vector3 movement = Vector3.zero;
-        //get our raw input
-        //moves on X,Y when in 2D mode
-        //otherwise moves on Z,X in 3D
-        //condition ? true : false
-        movement = (!m_b2DMode) ? new Vector3(XCI.GetAxis(XboxAxis.LeftStickX, m_controller.mXboxController), 0, XCI.GetAxis(XboxAxis.LeftStickY, m_controller.mXboxController)) : new Vector3(XCI.GetAxis(XboxAxis.LeftStickX, m_controller.mXboxController), XCI.GetAxis(XboxAxis.LeftStickY, m_controller.mXboxController));
-
+        
+        //Gets the input from the left stick to determine the movement
+        movement = new Vector3(XCI.GetAxis(XboxAxis.LeftStickX, m_controller.mXboxController), XCI.GetAxis(XboxAxis.LeftStickY, m_controller.mXboxController));
+        //Vrotation used to determine what way the character to rotate
         Vector3 vrotation = Vector3.zero;
-        Vector3 Lvrotation = Vector3.zero; // consistently left stick rotation
-        m_LeftStickRotation = new Vector2(GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Left.X, GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Left.Y);
-        //Quaternion temp = Quaternion.LookRotation(m_LeftStickRotation);
+        Vector3 LeftStickRotation = Vector3.zero; // consistently left stick rotation
+        m_LeftStickRotation = new Vector2(-GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Left.X, GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Left.Y);
+
         // FeetAnimator.transform.rotation = new Quaternion(0, 0, temp.z, temp.w);
         if (!m_bStopStickRotation)
         {
-            vrotation = new Vector2(GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Right.X, GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Right.Y);
-            Lvrotation = new Vector2(GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Left.X, GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Left.Y);
+            //vrotation = new Vector2(-GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Right.X, GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Right.Y);
+
+            vrotation = new Vector2(-XCI.GetAxisRaw(XboxAxis.RightStickX, m_controller.mXboxController), XCI.GetAxisRaw(XboxAxis.RightStickY, m_controller.mXboxController));
+
+            LeftStickRotation = new Vector2(-GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Left.X, GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Left.Y);
         }
         //if im not getting any input from the right stick, make my rotation from the left stick instead
         //if rotation is none and stick rotation is allowed
@@ -255,7 +253,10 @@ public class Move : MonoBehaviour
         {
             //turn off the crosshair
             crosshair.SetActive(false);
-            vrotation = new Vector2(GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Left.X, GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Left.Y);
+            //vrotation = new Vector2(-GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Left.X, GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Left.Y);
+
+            vrotation = new Vector2(-XCI.GetAxisRaw(XboxAxis.LeftStickX, m_controller.mXboxController), XCI.GetAxisRaw(XboxAxis.LeftStickY, m_controller.mXboxController));
+            
         }
         else
         {
@@ -263,19 +264,19 @@ public class Move : MonoBehaviour
             crosshair.SetActive(!m_bStopStickRotation);
         }
 
-        //check the deadzone for rotation
-        vrotation = CheckDeadZone(vrotation, 0.1f);
-        Lvrotation = CheckDeadZone(Lvrotation, 0.05f);
-        if (vrotation.magnitude != 0)
+        //Do deadzone calculations
+        vrotation = CheckDeadZone(vrotation, StickDeadZone);
+        LeftStickRotation = CheckDeadZone(LeftStickRotation, StickDeadZone);
+        
+        if (vrotation != Vector3.zero)
         {
-            //ternary operator asking if 2dmode, does rotation based on which mode
-            //if 2D, the rotation twists around the Z axis
-            //otherwise 3D, the rotation twists around Y axis;
-            this.transform.rotation = (!m_b2DMode) ? Quaternion.Euler(0, Mathf.Atan2(vrotation.x, vrotation.y) * Mathf.Rad2Deg, 0) : this.transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(-vrotation.x, vrotation.y) * Mathf.Rad2Deg);
+            //Set the rotation to the Stick rotation
+            this.transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(vrotation.x, vrotation.y) * Mathf.Rad2Deg);
+
             //! This makes the feet face the left sticks direction. Quaternions are wierd.
-            if (Lvrotation.magnitude != 0 && FeetAnimator)
+            if (LeftStickRotation.magnitude != 0 && FeetAnimator)
             {
-                transform.Find("Sprites").transform.Find("Character001_Feet").transform.rotation = (!m_b2DMode) ? Quaternion.Euler(0, Mathf.Atan2(Lvrotation.x, Lvrotation.y) * Mathf.Rad2Deg, 0) : transform.Find("Sprites").transform.Find("Character001_Feet").transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(-Lvrotation.x, Lvrotation.y) * Mathf.Rad2Deg);
+                transform.Find("Sprites").transform.Find("Character001_Feet").transform.rotation = transform.Find("Sprites").transform.Find("Character001_Feet").transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(-LeftStickRotation.x, LeftStickRotation.y) * Mathf.Rad2Deg);
                 transform.Find("Sprites").transform.Find("Character001_Feet").transform.rotation *= Quaternion.Euler(0, 0, 90);
             }
         }
@@ -287,12 +288,6 @@ public class Move : MonoBehaviour
             _rigidBody.velocity = movement * movementSpeed;
 
         }
-        else
-        {
-            _characterController.Move(movement * movementSpeed * Time.deltaTime);
-
-        }
-
 
         //animation checks go here
         if (FeetAnimator != null)

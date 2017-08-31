@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CrosshairClamp : MonoBehaviour {
-    
+public class CrosshairClamp : MonoBehaviour
+{
+
     private float m_fRotation = 45;
 
 
-    void FixedUpdate()
+    void Update()
     {
-        this.transform.rotation = Quaternion.Euler(new Vector3(0 , 0 , m_fRotation));
+        this.transform.rotation = Quaternion.Euler(new Vector3(0, 0, m_fRotation));
     }
 }
