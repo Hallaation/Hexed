@@ -221,7 +221,7 @@ public class GamemodeSelection : MonoBehaviour
                 //GameManagerc.Instance.m_iPointsNeeded = mPointsToWin[m_iPointWinIndex];
                 break;
             case PickType.MAPPICK:
-                
+                _mapSprite.sprite = mapSprites[m_iMapPickIndex];
                 break;
         }
 

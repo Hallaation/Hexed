@@ -412,11 +412,13 @@ public class Move : MonoBehaviour
         m_bHoldingWeapon = true;
         SetHoldingGun(0);
         if (BodyAnimator != null)
+        {
             if (heldWeapon.tag == "OneHanded")
             {
                 BodyAnimator.SetBool("HoldingOneHandedGun", true);
             }
-        BodyAnimator.SetBool("HoldingTwoHandedGun", true);
+            BodyAnimator.SetBool("HoldingTwoHandedGun", true);
+        }
         vibrationValue.y = 0.5f; //vibrate controller for haptic feedback
     }
     void Attack(bool TriggerCheck)
@@ -572,22 +574,25 @@ public class Move : MonoBehaviour
     ///</summary>
     private void SetHoldingGun(int HandsOccupied)  // Input the amount of hands needed to hold weapon. If no weapon input 0 for 0 hands.
     {
-        switch (HandsOccupied)
+        if (BodyAnimator)
         {
-            case 0:
-                BodyAnimator.SetBool("HoldingOneHandedGun", false); // Sets animators
-                BodyAnimator.SetBool("HoldingTwoHandedGun", false);
-                break;
-            case 1:
-                BodyAnimator.SetBool("HoldingOneHandedGun", true);
-                BodyAnimator.SetBool("HoldingTwoHandedGun", false);
-                break;
-            case 2:
-                BodyAnimator.SetBool("HoldingOneHandedGun", false);
-                BodyAnimator.SetBool("HoldingTwoHandedGun", true);
-                break;
-            default:
-                break;
+            switch (HandsOccupied)
+            {
+                case 0:
+                    BodyAnimator.SetBool("HoldingOneHandedGun", false); // Sets animators
+                    BodyAnimator.SetBool("HoldingTwoHandedGun", false);
+                    break;
+                case 1:
+                    BodyAnimator.SetBool("HoldingOneHandedGun", true);
+                    BodyAnimator.SetBool("HoldingTwoHandedGun", false);
+                    break;
+                case 2:
+                    BodyAnimator.SetBool("HoldingOneHandedGun", false);
+                    BodyAnimator.SetBool("HoldingTwoHandedGun", true);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }
