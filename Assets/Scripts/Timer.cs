@@ -13,11 +13,11 @@ public class Timer
     {
         mfTimeToWait = a_fTimeToWait;
     }
-
+    //Time the timer is going to tick for
     public float mfTimeToWait = 0;
     private float mfTimer = 0;
 
-    //what are properties
+    
     public float CurrentTime { get { return mfTimer; } set { mfTimer = value; } }
 
     public void SetTimer(float SetTime) { mfTimer = SetTime; } 

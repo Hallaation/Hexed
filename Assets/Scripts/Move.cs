@@ -46,6 +46,7 @@ public class Move : MonoBehaviour
     float MoveDelayTimer;
     public float StartMoveDelay = 3;
     public Vector3 m_LeftStickRotation;
+    private Text _AmmoText;
     // Use this for initialization
     void Start()
     {
@@ -101,9 +102,10 @@ public class Move : MonoBehaviour
 
         defaultWeapon = GetComponent<EmptyHand>();
         // Delay
+        _AmmoText = PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_AmmoText.GetComponent<Text>();
         MoveDelayTimer = 0;
         StoredMoveSpeed = movementSpeed;
-       StartCoroutine( DelayMovement());
+        StartCoroutine(DelayMovement());
     }
 
     // Update is called once per frame
@@ -123,36 +125,36 @@ public class Move : MonoBehaviour
                     CheckForDownedKill();
                     Special();
                 }
-                /*
+
                 //! an ammo text changing for UI, move this to another function then change to sprites/masking later
                 if (heldWeapon)
                 {
                     if (heldWeapon.GetComponent<Gun>())
                     {
-                   //     _AmmoText.text = heldWeapon.GetComponent<Gun>().m_iAmmo.ToString();
+                        _AmmoText.text = heldWeapon.GetComponent<Gun>().m_iAmmo.ToString();
                     }
                     else
                     {
-                     //   _AmmoText.text = "Infinite Ammo";
+                        _AmmoText.text = "Infinite Ammo";
                     }
                 }
                 else
                 {
-              //      _AmmoText.text = "you punch";
+                    _AmmoText.text = "you punch";
                 }
-                */
+
             }
             else //otherwise set the iskilling to false so it can return the animation to idle
             {
                 runningAnimation = false;
-             //   _rigidBody.velocity = Vector2.zero;
-                GetComponentInChildren<Animator>().SetBool("IsKilling" , false);
+                //   _rigidBody.velocity = Vector2.zero;
+                GetComponentInChildren<Animator>().SetBool("IsKilling", false);
             }
 
         }
         else
         {
-          //  _rigidBody.velocity = Vector2.zero;
+            //  _rigidBody.velocity = Vector2.zero;
         }
     }
     IEnumerator DelayMovement()
@@ -165,7 +167,7 @@ public class Move : MonoBehaviour
     bool TriggerReleaseCheck()
     {
         //IF the right trigger is being pressed down
-        if (XCI.GetAxis(XboxAxis.RightTrigger , m_controller.mXboxController) > 0)
+        if (XCI.GetAxis(XboxAxis.RightTrigger, m_controller.mXboxController) > 0)
         {
             return m_bTriggerReleased;  //return trigger released (im assuming this is false by default);
         }
@@ -177,7 +179,7 @@ public class Move : MonoBehaviour
 
     void FixedUpdate()
     {
-      
+
         //Buggy with XBone controller with high frame rates.
         //GamePad.SetVibration(m_controller.mPlayerIndex , XCI.GetAxis(XboxAxis.LeftTrigger , m_controller.mXboxController) , XCI.GetAxis(XboxAxis.RightTrigger , m_controller.mXboxController));
         //vibrationValue = new Vector2(XCI.GetAxis(XboxAxis.LeftTrigger , m_controller.mXboxController) , XCI.GetAxis(XboxAxis.RightTrigger , m_controller.mXboxController));
@@ -192,7 +194,7 @@ public class Move : MonoBehaviour
 
         if (_characterController)
         {
-            Vector3 gravity = new Vector3(0 , -9.8f , 0);
+            Vector3 gravity = new Vector3(0, -9.8f, 0);
             _characterController.Move(gravity * (1 - Time.fixedDeltaTime * 0.5f));
         }
     }
@@ -200,16 +202,16 @@ public class Move : MonoBehaviour
     void Special()
     {
 
-        if (XCI.GetAxis(XboxAxis.LeftTrigger , m_controller.mXboxController) > 0)
+        if (XCI.GetAxis(XboxAxis.LeftTrigger, m_controller.mXboxController) > 0)
         {
             GetComponent<BaseAbility>().UseSpecialAbility(true);
         }
-        else if (XCI.GetAxis(XboxAxis.LeftTrigger , m_controller.mXboxController) <= 0)
+        else if (XCI.GetAxis(XboxAxis.LeftTrigger, m_controller.mXboxController) <= 0)
         {
             GetComponent<BaseAbility>().UseSpecialAbility(false);
         }
     }
-    Vector3 CheckDeadZone(Vector3 controllerInput , float deadzone)
+    Vector3 CheckDeadZone(Vector3 controllerInput, float deadzone)
     {
         //if any of the numbers are below a certain deadzone, they get zeroed.
         Vector3 temp = controllerInput;
@@ -235,16 +237,16 @@ public class Move : MonoBehaviour
         //moves on X,Y when in 2D mode
         //otherwise moves on Z,X in 3D
         //condition ? true : false
-        movement = (!m_b2DMode) ? new Vector3(XCI.GetAxis(XboxAxis.LeftStickX , m_controller.mXboxController) , 0 , XCI.GetAxis(XboxAxis.LeftStickY , m_controller.mXboxController)) : new Vector3(XCI.GetAxis(XboxAxis.LeftStickX , m_controller.mXboxController) , XCI.GetAxis(XboxAxis.LeftStickY , m_controller.mXboxController));
+        movement = (!m_b2DMode) ? new Vector3(XCI.GetAxis(XboxAxis.LeftStickX, m_controller.mXboxController), 0, XCI.GetAxis(XboxAxis.LeftStickY, m_controller.mXboxController)) : new Vector3(XCI.GetAxis(XboxAxis.LeftStickX, m_controller.mXboxController), XCI.GetAxis(XboxAxis.LeftStickY, m_controller.mXboxController));
 
         Vector3 vrotation = Vector3.zero;
         Vector3 Lvrotation = Vector3.zero; // consistently left stick rotation
-        m_LeftStickRotation = new Vector2(GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Left.X , GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Left.Y);
+        m_LeftStickRotation = new Vector2(GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Left.X, GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Left.Y);
         //Quaternion temp = Quaternion.LookRotation(m_LeftStickRotation);
-       // FeetAnimator.transform.rotation = new Quaternion(0, 0, temp.z, temp.w);
+        // FeetAnimator.transform.rotation = new Quaternion(0, 0, temp.z, temp.w);
         if (!m_bStopStickRotation)
         {
-            vrotation = new Vector2(GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Right.X , GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Right.Y);
+            vrotation = new Vector2(GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Right.X, GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Right.Y);
             Lvrotation = new Vector2(GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Left.X, GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Left.Y);
         }
         //if im not getting any input from the right stick, make my rotation from the left stick instead
@@ -253,7 +255,7 @@ public class Move : MonoBehaviour
         {
             //turn off the crosshair
             crosshair.SetActive(false);
-            vrotation = new Vector2(GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Left.X , GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Left.Y);
+            vrotation = new Vector2(GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Left.X, GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Left.Y);
         }
         else
         {
@@ -262,14 +264,14 @@ public class Move : MonoBehaviour
         }
 
         //check the deadzone for rotation
-        vrotation = CheckDeadZone(vrotation , 0.1f);
+        vrotation = CheckDeadZone(vrotation, 0.1f);
         Lvrotation = CheckDeadZone(Lvrotation, 0.05f);
         if (vrotation.magnitude != 0)
         {
             //ternary operator asking if 2dmode, does rotation based on which mode
             //if 2D, the rotation twists around the Z axis
             //otherwise 3D, the rotation twists around Y axis;
-              this.transform.rotation = (!m_b2DMode) ? Quaternion.Euler(0 , Mathf.Atan2(vrotation.x , vrotation.y) * Mathf.Rad2Deg , 0) : this.transform.rotation = Quaternion.Euler(0 , 0 , Mathf.Atan2(-vrotation.x , vrotation.y) * Mathf.Rad2Deg);
+            this.transform.rotation = (!m_b2DMode) ? Quaternion.Euler(0, Mathf.Atan2(vrotation.x, vrotation.y) * Mathf.Rad2Deg, 0) : this.transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(-vrotation.x, vrotation.y) * Mathf.Rad2Deg);
             //! This makes the feet face the left sticks direction. Quaternions are wierd.
             if (Lvrotation.magnitude != 0 && FeetAnimator)
             {
@@ -283,12 +285,12 @@ public class Move : MonoBehaviour
             //this.transform.position += movement * movementSpeed * Time.deltaTime;
             //_rigidBody.AddForce(movement * movementSpeed * Time.deltaTime , ForceMode2D.Impulse);
             _rigidBody.velocity = movement * movementSpeed;
-            
+
         }
         else
         {
             _characterController.Move(movement * movementSpeed * Time.deltaTime);
-            
+
         }
 
 
@@ -306,7 +308,7 @@ public class Move : MonoBehaviour
         }
     }
 
-    public void ThrowMyWeapon(Vector2 movement , Vector2 throwDirection , bool tossWeapon)
+    public void ThrowMyWeapon(Vector2 movement, Vector2 throwDirection, bool tossWeapon)
     {
         if (heldWeapon && heldWeapon.GetComponent<Weapon>().m_bActive)
         {
@@ -332,7 +334,7 @@ public class Move : MonoBehaviour
                 heldWeapon = null;
                 if (BodyAnimator != null)
                     SetHoldingGun(0);
-                    
+
             }
         }
     }
@@ -340,47 +342,47 @@ public class Move : MonoBehaviour
     {
         //both the LB and B button will be used to pickup weapons, pressing these again will determine how the weapon being held will be thrown away.
         //Pressing B button will do a small throw and land just in front of where the player threw it away.
-        if (XCI.GetButtonDown(XboxButton.B , m_controller.mXboxController))
+        if (XCI.GetButtonDown(XboxButton.B, m_controller.mXboxController))
         {
-            Vector2 movement = new Vector3(XCI.GetAxis(XboxAxis.LeftStickX , m_controller.mXboxController) , XCI.GetAxis(XboxAxis.LeftStickY , m_controller.mXboxController));
-            Vector2 throwDirection = new Vector2(this.transform.up.x , this.transform.up.y);
+            Vector2 movement = new Vector3(XCI.GetAxis(XboxAxis.LeftStickX, m_controller.mXboxController), XCI.GetAxis(XboxAxis.LeftStickY, m_controller.mXboxController));
+            Vector2 throwDirection = new Vector2(this.transform.up.x, this.transform.up.y);
 
-            PickUpWeaponCheck(movement , throwDirection , false);
+            PickUpWeaponCheck(movement, throwDirection, false);
         }
         //pressing LB will throw the weapon away at a higher velocity, essentially making a projectile, this throw will be used to stun players.
-        if (XCI.GetButtonDown(XboxButton.LeftBumper , m_controller.mXboxController))
+        if (XCI.GetButtonDown(XboxButton.LeftBumper, m_controller.mXboxController))
         {
-            Vector2 movement = new Vector3(XCI.GetAxis(XboxAxis.LeftStickX , m_controller.mXboxController) , XCI.GetAxis(XboxAxis.LeftStickY , m_controller.mXboxController));
-            Vector2 throwDirection = new Vector2(this.transform.up.x , this.transform.up.y);
+            Vector2 movement = new Vector3(XCI.GetAxis(XboxAxis.LeftStickX, m_controller.mXboxController), XCI.GetAxis(XboxAxis.LeftStickY, m_controller.mXboxController));
+            Vector2 throwDirection = new Vector2(this.transform.up.x, this.transform.up.y);
 
-            PickUpWeaponCheck(movement , throwDirection , true);
+            PickUpWeaponCheck(movement, throwDirection, true);
         }
     }
 
 
-    bool PickUpWeaponCheck(Vector2 stickMovement , Vector2 throwingDirection , bool tossWeapon)
+    bool PickUpWeaponCheck(Vector2 stickMovement, Vector2 throwingDirection, bool tossWeapon)
     {
 
-        Collider2D hitCollider = Physics2D.OverlapCircle(this.transform.position , 1.0f , (1 << 12));
+        Collider2D hitCollider = Physics2D.OverlapCircle(this.transform.position, 1.0f, (1 << 12));
 
         //If there is a weapon being held, the weapon will be thrown away.
         if (heldWeapon)
         {
-            ThrowMyWeapon(stickMovement , throwingDirection , tossWeapon);
+            ThrowMyWeapon(stickMovement, throwingDirection, tossWeapon);
         }
         //if the overlap circle found something, pickup the weapon
         if (hitCollider)
         {
             Vector3 pos = transform.position;
             Vector3 Dir = hitCollider.gameObject.transform.position - transform.position;
-           
+
 
             RaycastHit2D hitPoint = Physics2D.Raycast(pos, Dir.normalized, 1, 1 << LayerMask.NameToLayer("Wall"));
 
             if (hitPoint.transform == null)
             {
                 if (hitCollider.transform.parent.parent == null)
-                
+
                 {
                     PickUpWeaon(hitCollider);
                     return true;
@@ -410,11 +412,11 @@ public class Move : MonoBehaviour
         m_bHoldingWeapon = true;
         SetHoldingGun(0);
         if (BodyAnimator != null)
-            if(heldWeapon.tag == "OneHanded")
+            if (heldWeapon.tag == "OneHanded")
             {
                 BodyAnimator.SetBool("HoldingOneHandedGun", true);
             }
-            BodyAnimator.SetBool("HoldingTwoHandedGun", true);
+        BodyAnimator.SetBool("HoldingTwoHandedGun", true);
         vibrationValue.y = 0.5f; //vibrate controller for haptic feedback
     }
     void Attack(bool TriggerCheck)
@@ -432,7 +434,7 @@ public class Move : MonoBehaviour
                     vibrationValue.x = 0.45f;
 
                 }
-                
+
                 m_bTriggerReleased = false;
             }
             else
@@ -453,15 +455,17 @@ public class Move : MonoBehaviour
     {
         //called outside
         //whenever a status is applied to player (stunned / killed) they drop their weapon
-
-        BodyAnimator.SetBool("UnarmedAttack", false);
-        BodyAnimator.SetBool("Moving", false);
-        BodyAnimator.SetBool("IsKilling", false);
-        //GetComponent<PolygonCollider2D>().enabled = false; //? Is this right?
+        //
+        if (BodyAnimator)
+        {
+            BodyAnimator.SetBool("UnarmedAttack", false);
+            BodyAnimator.SetBool("Moving", false);
+            BodyAnimator.SetBool("IsKilling", false);
+        }
         transform.Find("StunnedCollider").GetComponent<PolygonCollider2D>().enabled = false;
         if (heldWeapon)
         {
-            ThrowMyWeapon(Vector2.zero , this.transform.up , false);
+            ThrowMyWeapon(Vector2.zero, this.transform.up, false);
         }
     }
 
@@ -496,10 +500,10 @@ public class Move : MonoBehaviour
     void CheckForDownedKill()
     {
         //look for controller input x
-        if (XCI.GetButtonDown(XboxButton.X , m_controller.mXboxController))
+        if (XCI.GetButtonDown(XboxButton.X, m_controller.mXboxController))
         {
             //look for any colliders around me (will also hit myself)
-            Collider2D[] hitCollider = Physics2D.OverlapCircleAll(this.transform.position , 1.0f , 1 << 8);
+            Collider2D[] hitCollider = Physics2D.OverlapCircleAll(this.transform.position, 1.0f, 1 << 8);
 
             //for every other collider found in the circle, kill them.
             foreach (Collider2D collidersFound in hitCollider)
@@ -513,7 +517,7 @@ public class Move : MonoBehaviour
                         {
                             runningAnimation = true;
                             _rigidBody.velocity = Vector2.zero;
-                            this.GetComponentInChildren<Animator>().SetBool("IsKilling" , true);
+                            this.GetComponentInChildren<Animator>().SetBool("IsKilling", true);
                             collidersFound.GetComponent<PlayerStatus>().KillPlayer(this.GetComponent<PlayerStatus>());
                         }
                     }
@@ -568,8 +572,8 @@ public class Move : MonoBehaviour
     ///</summary>
     private void SetHoldingGun(int HandsOccupied)  // Input the amount of hands needed to hold weapon. If no weapon input 0 for 0 hands.
     {
-            switch (HandsOccupied)
-            {
+        switch (HandsOccupied)
+        {
             case 0:
                 BodyAnimator.SetBool("HoldingOneHandedGun", false); // Sets animators
                 BodyAnimator.SetBool("HoldingTwoHandedGun", false);
@@ -584,6 +588,6 @@ public class Move : MonoBehaviour
                 break;
             default:
                 break;
-            }
+        }
     }
 }
