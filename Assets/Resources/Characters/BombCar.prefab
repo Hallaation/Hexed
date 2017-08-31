@@ -601,10 +601,10 @@ MonoBehaviour:
   SelectionSprites:
   - {fileID: 21300008, guid: 8560db96e33c8ae4a837c261da8941ce, type: 3}
   - {fileID: 21300030, guid: 8560db96e33c8ae4a837c261da8941ce, type: 3}
-  currentMana: 9999
-  m_fMaximumMana: 9999
-  PassiveManaRegeneration: 10
-  ManaCost: 10
+  currentMana: 0
+  m_fMaximumMana: 100
+  PassiveManaRegeneration: 2.5
+  ManaCost: 40
   RepeatedUsage: 0
   repeatedManaCost: 0.5
   m_fMinimumManaRequired: 40
@@ -629,12 +629,12 @@ MonoBehaviour:
   crosshair: {fileID: 1063368504496694}
   weaponMount: {fileID: 1559593556326958}
   fistObject: {fileID: 0}
-  movementSpeed: 20
-  throwingForce: 200
+  movementSpeed: 10
+  throwingForce: 300
   m_b2DMode: 1
   vibrationValue: {x: 0, y: 0}
   playerSpirte: {fileID: 1920517061907646}
-  StartMoveDelay: 0
+  StartMoveDelay: 3
   m_LeftStickRotation: {x: 0, y: 0, z: 0}
 --- !u!114 &114629155787306394
 MonoBehaviour:
