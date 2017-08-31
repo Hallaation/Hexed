@@ -46,6 +46,7 @@ public class Move : MonoBehaviour
     float MoveDelayTimer;
     public float StartMoveDelay = 3;
     public Vector3 m_LeftStickRotation;
+    private Text _AmmoText;
     // Use this for initialization
     void Start()
     {
@@ -101,6 +102,7 @@ public class Move : MonoBehaviour
 
         defaultWeapon = GetComponent<EmptyHand>();
         // Delay
+        _AmmoText = PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_AmmoText.GetComponent<Text>();
         MoveDelayTimer = 0;
         StoredMoveSpeed = movementSpeed;
         StartCoroutine(DelayMovement());
@@ -123,24 +125,24 @@ public class Move : MonoBehaviour
                     CheckForDownedKill();
                     Special();
                 }
-                /*
+
                 //! an ammo text changing for UI, move this to another function then change to sprites/masking later
                 if (heldWeapon)
                 {
                     if (heldWeapon.GetComponent<Gun>())
                     {
-                   //     _AmmoText.text = heldWeapon.GetComponent<Gun>().m_iAmmo.ToString();
+                        _AmmoText.text = heldWeapon.GetComponent<Gun>().m_iAmmo.ToString();
                     }
                     else
                     {
-                     //   _AmmoText.text = "Infinite Ammo";
+                        _AmmoText.text = "Infinite Ammo";
                     }
                 }
                 else
                 {
-              //      _AmmoText.text = "you punch";
+                    _AmmoText.text = "you punch";
                 }
-                */
+
             }
             else //otherwise set the iskilling to false so it can return the animation to idle
             {
