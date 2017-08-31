@@ -2594,6 +2594,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4055451763003332}
+  - component: {fileID: 114739826721897260}
   m_Layer: 0
   m_Name: Level_005_Apartments_001
   m_TagString: Untagged
@@ -12081,6 +12082,19 @@ MonoBehaviour:
   Shard7: {fileID: 1892843197466164, guid: a0ab298c426213f419abd3e7a63e0741, type: 2}
   Shard8: {fileID: 1900600958523060, guid: 530dcee7bfc2cae4481be70bf03bffad, type: 2}
   BrokenGlass: {fileID: 21300042, guid: 32c6bbd958884694ea3040273541c9c5, type: 3}
+--- !u!114 &114739826721897260
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1483517586692462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5208463403a292488f42fdaad38cbd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mapName: Apartments
+  mapSelectionSprite: {fileID: 21300000, guid: 7aa5893c90b847046aa002710baba5eb, type: 3}
 --- !u!114 &114740451376733460
 MonoBehaviour:
   m_ObjectHideFlags: 1
