@@ -9,11 +9,14 @@ public class CharacterSelectionManager : MonoBehaviour
     public GameObject[] CharacterArray;
 
     public Dictionary<GameObject , bool> CharacterSelectionStatus;
+    public int JoinedPlayers = 0;
     //Each controller will have a gameobject(their player);
     public Dictionary<XboxCtrlrInput.XboxController , GameObject> playerSelectedCharacter = new Dictionary<XboxCtrlrInput.XboxController , GameObject>();
 
     static CharacterSelectionManager mInstance = null;
     public bool m_bMovedToMainScene = false;
+
+    public bool LetPlayersSelectCharacters = false;
     //lazy singleton if an instance of this doesn't exist, make one
     //Instance property 
     public static CharacterSelectionManager Instance
@@ -40,6 +43,7 @@ public class CharacterSelectionManager : MonoBehaviour
     // Use this for initialization
     private void Awake()
     {
+        SingletonTester.Instance.AddSingleton(this);
         SceneManager.sceneLoaded += OnSceneLoaded;
         Object[] temp = Resources.LoadAll("Characters" , typeof(GameObject));
         CharacterArray = new GameObject[temp.Length];
@@ -60,6 +64,15 @@ public class CharacterSelectionManager : MonoBehaviour
     void Update()
     {
 
+       //if (UIManager.Instance.menuStatus.Peek() == FindObjectOfType<SelectionUIElements>().transform.parent.parent.gameObject && /* need to check if the animation has ended*/ true)
+       //{
+       //    LetPlayersSelectCharacters = true;
+       //}
+       //else
+       //{
+       //    LetPlayersSelectCharacters = false;
+       //}
+
         if (Input.GetKeyDown(KeyCode.R))
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
@@ -69,7 +82,8 @@ public class CharacterSelectionManager : MonoBehaviour
             //only load the scene if I still havnt moved to arena scene
             if (Input.GetButtonDown("Start") && !m_bMovedToMainScene)
             {
-                SceneManager.LoadScene(2); //oh fuck.
+                UIManager.Instance.MainMenuChangePanel(GameObject.Find("Third_Panel"));
+                //SceneManager.LoadScene(2); //oh fuck.
             }
         }
 
@@ -105,11 +119,6 @@ public class CharacterSelectionManager : MonoBehaviour
     }
     void OnSceneLoaded(Scene scene , LoadSceneMode mode)
     {
-        //if my currnet scene is 1 (when loaded into the game arean and I havn't already moved in, spawn the players
-        //if (scene.buildIndex == 1 && !m_bMovedToMainScene)
-        //{
-        //
-        //}
 
         if (scene.buildIndex == 0)
         {

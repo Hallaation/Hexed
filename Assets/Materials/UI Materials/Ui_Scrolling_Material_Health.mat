@@ -10,55 +10,32 @@ Material:
   m_Shader: {fileID: 4800000, guid: 586fec13c3b714a419c6896a25d93a6e, type: 3}
   m_ShaderKeywords: ETC1_EXTERNAL_ALPHA _ALPHAPREMULTIPLY_ON
   m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
+  disabledShaderPasses: []
   m_SavedProperties:
-    serializedVersion: 2
+    serializedVersion: 3
     m_TexEnvs:
-    - first:
-        name: <noninit>
-      second:
+    - <noninit>:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - first:
-        name: _MainTex
-      second:
+    - _MainTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 2591.391, y: 2591.391}
+        m_Offset: {x: 2611.9255, y: 2611.9255}
     m_Floats:
-    - first:
-        name: <noninit>
-      second: 0
-    - first:
-        name: PixelSnap
-      second: 0
-    - first:
-        name: _ColorMask
-      second: 15
-    - first:
-        name: _Stencil
-      second: 0
-    - first:
-        name: _StencilComp
-      second: 8
-    - first:
-        name: _StencilOp
-      second: 0
-    - first:
-        name: _StencilReadMask
-      second: 255
-    - first:
-        name: _StencilWriteMask
-      second: 255
-    - first:
-        name: _UseUIAlphaClip
-      second: 0
+    - <noninit>: 0
+    - PixelSnap: 0
+    - _ColorMask: 15
+    - _Stencil: 0
+    - _StencilComp: 8
+    - _StencilOp: 0
+    - _StencilReadMask: 255
+    - _StencilWriteMask: 255
+    - _UseUIAlphaClip: 0
     m_Colors:
-    - first:
-        name: <noninit>
-      second: {r: 0, g: 1.2842395e-34, b: 0, a: 1.2842322e-34}
-    - first:
-        name: _Color
-      second: {r: 1, g: 0, b: 0, a: 1}
+    - <noninit>: {r: 0, g: 1.2842395e-34, b: 0, a: 1.2842322e-34}
+    - _Color: {r: 1, g: 0, b: 0, a: 1}

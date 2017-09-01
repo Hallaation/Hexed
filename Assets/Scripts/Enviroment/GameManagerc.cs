@@ -45,8 +45,6 @@ public enum Gamemode_type
 {
     LAST_MAN_STANDING_DEATHMATCH, //last person to stand earns a point, probably the default
     DEATHMATCH_POINTS, //killing a player will earn them a point, up to a certain point
-    DEATHMATCH_TIMED, //kill as many players as you can in the allocated time
-    CAPTURE_THE_FLAG, //unsued, probably not going to implement, put it in here for the lols;
 
 }
 
@@ -114,6 +112,7 @@ public class GameManagerc : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        SingletonTester.Instance.AddSingleton(this);
         //Find the 
 
         DeathmatchTimer = new Timer(m_fTimedDeathMatchTime);
@@ -164,13 +163,13 @@ public class GameManagerc : MonoBehaviour
                     RoundEndDeathMatchMaxPoints();
                     CheckPlayersPoints();
                     break;
-                case Gamemode_type.DEATHMATCH_TIMED:
-                    RoundEndDeathMatchTimed();
-                    break;
-                case Gamemode_type.CAPTURE_THE_FLAG:
-                    //RoundEndLastManStanding();
-                    m_bRoundOver = true;
-                    break;
+                //case Gamemode_type.DEATHMATCH_TIMED:
+                //    RoundEndDeathMatchTimed();
+                //    break;
+                //case Gamemode_type.CAPTURE_THE_FLAG:
+                //    //RoundEndLastManStanding();
+                //    m_bRoundOver = true;
+                //    break;
                 default:
                     break;
             }
@@ -476,6 +475,7 @@ public class GameManagerc : MonoBehaviour
         yield return new WaitForSeconds(2);
         mbFinishedShowingScores = true;
         PointsPanel.SetActive(false);
+        
     }
 }
 

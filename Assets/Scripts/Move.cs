@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using XboxCtrlrInput;
 using XInputDotNetPure;
+using UnityEngine.SceneManagement;
 //////////////////////
 //                  //
 //   Louis Nguyen   //
@@ -49,7 +50,7 @@ public class Move : MonoBehaviour
     public float StickDeadZone = 0.12f;
     private Text _AmmoText;
     // Use this for initialization
-    void Start()
+    void Awake()
     {
         if (transform.Find("Sprites"))
         {
@@ -105,8 +106,8 @@ public class Move : MonoBehaviour
         }
 
         defaultWeapon = GetComponent<EmptyHand>();
+        SceneManager.sceneLoaded += OnSceneLoaded;
         // Delay
-        _AmmoText = PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_AmmoText.GetComponent<Text>();
         MoveDelayTimer = 0;
         StoredMoveSpeed = movementSpeed;
         StartCoroutine(DelayMovement());
@@ -135,16 +136,16 @@ public class Move : MonoBehaviour
                 {
                     if (heldWeapon.GetComponent<Gun>())
                     {
-                        _AmmoText.text = heldWeapon.GetComponent<Gun>().m_iAmmo.ToString();
+                        //_AmmoText.text = heldWeapon.GetComponent<Gun>().m_iAmmo.ToString();
                     }
                     else
                     {
-                        _AmmoText.text = "Infinite Ammo";
+                        //_AmmoText.text = "Infinite Ammo";
                     }
                 }
                 else
                 {
-                    _AmmoText.text = "you punch";
+                    //_AmmoText.text = "you punch";
                 }
 
             }
@@ -276,7 +277,7 @@ public class Move : MonoBehaviour
             //! This makes the feet face the left sticks direction. Quaternions are wierd.
             if (LeftStickRotation.magnitude != 0 && FeetAnimator)
             {
-                transform.Find("Sprites").transform.Find("Character001_Feet").transform.rotation = transform.Find("Sprites").transform.Find("Character001_Feet").transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(-LeftStickRotation.x, LeftStickRotation.y) * Mathf.Rad2Deg);
+                transform.Find("Sprites").transform.Find("Character001_Feet").transform.rotation = transform.Find("Sprites").transform.Find("Character001_Feet").transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(LeftStickRotation.x, LeftStickRotation.y) * Mathf.Rad2Deg);
                 transform.Find("Sprites").transform.Find("Character001_Feet").transform.rotation *= Quaternion.Euler(0, 0, 90);
             }
         }
@@ -589,5 +590,11 @@ public class Move : MonoBehaviour
                     break;
             }
         }
+    }
+
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        _AmmoText = PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_AmmoText.GetComponent<Text>();
     }
 }

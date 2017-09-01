@@ -5,9 +5,15 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using XboxCtrlrInput;
+
 public class UIManager : MonoBehaviour
 {
-
+    Dictionary<string, string> MenuTransitionBoolParameters = new Dictionary<string, string>
+    {
+        {"First_Panel", "MoveToFirstPanel" },
+        {"Second_Panel", "MoveToSecondPanel" },
+        {"Third_Panel", "MoveToThirdPanel" }
+    };
     //CS LUL
     public static UIManager mInstance;
 
@@ -17,8 +23,10 @@ public class UIManager : MonoBehaviour
     //only used if all else fails
     private GameObject defaultToReturnTo;
     private EventSystem _eventSystem;
+    private Animator m_bMenuAnimator;
+    private UINavigation uiNavigationInstance;
     public bool m_bRemoveLastPanel;
-
+    public bool m_bInMainMenu = false;
     public bool RemoveLastPanel { get { return m_bRemoveLastPanel; } set { m_bRemoveLastPanel = value; } }
     // Use this for initialization
 
@@ -47,11 +55,15 @@ public class UIManager : MonoBehaviour
 
     void Awake()
     {
+        uiNavigationInstance = UINavigation.Instance;
+        m_bMenuAnimator = FindObjectOfType<Canvas>().GetComponent<Animator>();
+        //Add me to the singleton tester
+        SingletonTester.Instance.AddSingleton(this);
         SceneManager.sceneLoaded += OnSceneLoad;
 
         //instance = FindObjectOfType<UIManager>();
 
-        
+
         _eventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
         selected = _eventSystem.currentSelectedGameObject;
         menuStatus = new Stack<GameObject>();
@@ -62,10 +74,84 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    void MainMenuUpdate()
+    {
+        CharacterSelectionManager.Instance.LetPlayersSelectCharacters = m_bMenuAnimator.GetCurrentAnimatorStateInfo(0).IsName("Title_Section_Second_Static");
+        if (menuStatus.Peek().name == "First_Panel")
+        {
+            //Change the button animation according to what is selected.
+            switch (_eventSystem.currentSelectedGameObject.name)
+            {
+                case "Credits_Button": break;
+                case "Settings_Button": break;
+                case "Quit_Button": break;
+                case "VS_Button": break;
+                default: break;
+            }
+        }
+
+        for (int i = 0; i < XCI.GetNumPluggedCtrlrs(); ++i)
+        {
+            if (XCI.GetButtonDown(XboxButton.B, XboxController.First + i))
+            {
+                //Scan for every plugged in controller B button
+                MainMenuBack();
+            }
+        }
+
+    }
+
+    public void MainMenuBack()
+    {
+        //If the menu status only has 1 object in it, dont do anything
+        if (menuStatus.Count == 1 || CharacterSelectionManager.Instance.JoinedPlayers > 0)
+        {
+            return;
+        }
+        else
+        {
+            menuStatus.Pop();
+            //Swap the trigger to whatever the parameter is.
+            m_bMenuAnimator.SetTrigger(MenuTransitionBoolParameters[menuStatus.Peek().name]);
+            DefaultButton temp = menuStatus.Peek().GetComponent<DefaultButton>();
+            if (temp)
+            {
+                //Set the default button
+                SetCurrentSelected(temp.defaultButton);
+            }
+        }
+    }
+
+    public void MainMenuChangePanel(GameObject panelToMove)
+    {
+        if (!menuStatus.Contains(panelToMove))
+        {
+            menuStatus.Push(panelToMove);
+            //swap the trigger to the corresponding parameter name
+            m_bMenuAnimator.SetTrigger(MenuTransitionBoolParameters[panelToMove.name]);
+            //Find the default button, if none found, set to null
+            DefaultButton temp = panelToMove.GetComponent<DefaultButton>();
+            if (temp)
+            {
+                //Set the default button
+                SetCurrentSelected(temp.defaultButton);
+            }
+            else
+            {
+                SetCurrentSelected(null);
+            }
+        }
+    }
     // Update is called once per frame
     void Update()
     {
 
+        if (m_bInMainMenu)
+        {
+            MainMenuUpdate();
+            return;
+        }
+        Debug.Log("I should never reach here");
         //if the current selected is null
         if (menuStatus.Count > 0)
         {
@@ -88,13 +174,13 @@ public class UIManager : MonoBehaviour
         //If I press B return to the previous UI thing.
         for (int i = 0; i < (int)XInputDotNetPure.PlayerIndex.Four; ++i)
         {
-            if (XCI.GetButtonDown(XboxButton.B , XboxController.First + i))
+            if (XCI.GetButtonDown(XboxButton.B, XboxController.First + i))
             {
                 Back();
             }
 
             //If I press start and the menu status (stack of UI elements) is nothing, push the default panel into the stack.
-            if (XCI.GetButton(XboxButton.Start , XboxController.First + i) && menuStatus.Count <= 0)
+            if (XCI.GetButton(XboxButton.Start, XboxController.First + i) && menuStatus.Count <= 0)
             {
                 if (!menuStatus.Contains(defaultPanel))
                 {
@@ -114,12 +200,13 @@ public class UIManager : MonoBehaviour
         //If I don't want to remove the default panel and the top of the stack is the default,  exit the function
         //if (!RemoveDefaultPanel && menuStatus.Peek() == defaultPanel) 
         //    return;
-        
+
         //if the menu status count is 1 and I don't want to remove the last panel, exit out of the function
-        if (menuStatus.Count == 1 && !m_bRemoveLastPanel)
+        if (menuStatus.Count == 1 && m_bRemoveLastPanel)
         {
             return;
         }
+
         if (menuStatus.Count >= 1)
         {
             menuStatus.Peek().SetActive(false);
@@ -139,10 +226,11 @@ public class UIManager : MonoBehaviour
         }
     }
 
+
     //whatever the element is, push it into the stack 
     public void OpenUIElement(GameObject ElementToOpen, bool openChildren = false)
     {
-        
+
         //Debug.Log(current);
         if (!menuStatus.Contains(ElementToOpen))
         {
@@ -173,25 +261,39 @@ public class UIManager : MonoBehaviour
 
     }
 
-    void OnSceneLoad(Scene scene , LoadSceneMode mode)
+
+
+    void OnSceneLoad(Scene scene, LoadSceneMode mode)
     {
         menuStatus.Clear();
-        //if im not in scene 0, remove last panel is true (allowing game to go back)
+        //very specific scene, if in this scene, I want to remove the last panel
         if (scene.buildIndex == 2)
         {
-            m_bRemoveLastPanel = false;
+            m_bRemoveLastPanel = true;
         }
-        else if(scene.buildIndex != 0)
+
+        else if (scene.buildIndex != 0) //otherwise don't allow the removal of the last panel;
         {
             //don't allow the last panel to be removed 
-            m_bRemoveLastPanel = true;
+            m_bRemoveLastPanel = false;
+        }
+        else if (scene.buildIndex == 0) //else if I am in the main scene menu (assuming it is 0 as of right now)
+        {
+            m_bInMainMenu = true;
+            //find the first panel and push it to the stack
+            menuStatus.Push(GameObject.Find("First_Panel"));
         }
         else
         {
-            m_bRemoveLastPanel = false;
+            m_bRemoveLastPanel = true;
         }
 
     }
 
+    void SetCurrentSelected(GameObject a_selected)
+    {
+        _eventSystem.SetSelectedGameObject(null);
+        _eventSystem.SetSelectedGameObject(a_selected);
+    }
 
 }
