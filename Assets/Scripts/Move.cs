@@ -17,8 +17,7 @@ public class Move : MonoBehaviour
 {
     ControllerSetter m_controller;
     CharacterController _characterController;
-    bool PlayerIsActive = true; public bool getActive() { return PlayerIsActive; }
-    public void setActive(bool Active) { PlayerIsActive = Active; }
+    bool PlayerIsActive = true; public bool getActive() { return PlayerIsActive; } public void SetActive(bool a_PlayerActive) { PlayerIsActive = a_PlayerActive; }
     PlayerStatus m_status;
     [HideInInspector]
     public GameObject heldWeapon = null;
@@ -44,6 +43,7 @@ public class Move : MonoBehaviour
     [HideInInspector]
     public GameObject playerSpirte;
     float MoveDelayTimer;
+
     public float StartMoveDelay = 3;
     public Vector3 m_LeftStickRotation;
     public float StickDeadZone = 0.12f;
@@ -115,7 +115,7 @@ public class Move : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!m_status.IsDead && !m_status.IsStunned)
+        if (!m_status.IsDead && !m_status.IsStunned && !m_status.m_bMiniStun)
         {
             //if the walking animation isnt running, do everything else
             if (!GetComponentInChildren<Animator>().GetCurrentAnimatorStateInfo(0).IsName("WalkingMan") && !runningAnimation)
@@ -276,7 +276,7 @@ public class Move : MonoBehaviour
             //! This makes the feet face the left sticks direction. Quaternions are wierd.
             if (LeftStickRotation.magnitude != 0 && FeetAnimator)
             {
-                transform.Find("Sprites").transform.Find("Character001_Feet").transform.rotation = transform.Find("Sprites").transform.Find("Character001_Feet").transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(-LeftStickRotation.x, LeftStickRotation.y) * Mathf.Rad2Deg);
+                transform.Find("Sprites").transform.Find("Character001_Feet").transform.rotation = transform.Find("Sprites").transform.Find("Character001_Feet").transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(LeftStickRotation.x, LeftStickRotation.y) * Mathf.Rad2Deg);
                 transform.Find("Sprites").transform.Find("Character001_Feet").transform.rotation *= Quaternion.Euler(0, 0, 90);
             }
         }
@@ -590,4 +590,6 @@ public class Move : MonoBehaviour
             }
         }
     }
+
+
 }

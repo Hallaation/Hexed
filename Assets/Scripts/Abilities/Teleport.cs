@@ -63,7 +63,7 @@ public class Teleport : BaseAbility
   
                 //makes a quaternion
                 Quaternion LeftStickRotation = new Quaternion();
-                LeftStickRotation = Quaternion.Euler(0 , 0 , Mathf.Atan2(-GetComponent<Move>().m_LeftStickRotation.x , GetComponent<Move>().m_LeftStickRotation.y) * Mathf.Rad2Deg); // This works
+                LeftStickRotation = Quaternion.Euler(0 , 0 , Mathf.Atan2(GetComponent<Move>().m_LeftStickRotation.x , GetComponent<Move>().m_LeftStickRotation.y) * Mathf.Rad2Deg); // This works
                 Vector3 rotation = LeftStickRotation * Vector3.up;
                 
                 //makes a rotation vector from the left stick's rotation
