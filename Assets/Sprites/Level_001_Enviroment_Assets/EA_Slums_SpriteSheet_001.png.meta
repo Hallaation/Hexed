@@ -1,22 +1,22 @@
 fileFormatVersion: 2
 guid: 10a630f0a37b46c4e9c1246135ad631a
-timeCreated: 1504250496
-licenseType: Pro
+timeCreated: 1504273944
+licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: EA_Slums_Cement_Angled_01
-    21300002: EA_Slums_Cement_Long_01
-    21300004: EA_Slums_Cement_Short_01
+    21300000: EA_Slums_Concrete_Angled_01
+    21300002: EA_Slums_Concrete_Long_01
+    21300004: EA_Slums_Concrete_Short_01
     21300006: EA_Slums_GlassSolid_Angled_01
     21300008: EA_Slums_GlassSolid_Long_01
     21300010: EA_Slums_GlassSolid_Short_01
     21300012: EA_Slums_Door_Wood_Long_01
     21300014: EA_Slums_Door_Wood_Long_02
-    21300016: EA_Slums_SpriteSheet_001_8
+    21300016: EA_Slums_Train_Track_01
     21300018: EA_Slums_SpriteSheet_001_9
     21300020: EA_Slums_SpriteSheet_001_10
     21300022: EA_Slums_SpriteSheet_001_11
-    21300024: EA_Slums_SpriteSheet_001_12
+    21300024: EA_Slums_Bar_Bench_01
     21300026: EA_Slums_SpriteSheet_001_13
     21300028: EA_Slums_SpriteSheet_001_14
     21300030: EA_Slums_SpriteSheet_001_15
@@ -26,16 +26,16 @@ TextureImporter:
     21300038: EA_Slums_SpriteSheet_001_19
     21300040: EA_Slums_SpriteSheet_001_20
     21300042: EA_Slums_SpriteSheet_001_21
-    21300044: EA_Slums_Cement_Angled_02
-    21300046: EA_Slums_Cement_Long_02
-    21300048: EA_Slums_Cement_Short_02
+    21300044: EA_Slums_Concrete_Angled_02
+    21300046: EA_Slums_Concrete_Long_02
+    21300048: EA_Slums_Concrete_Short_02
     21300050: EA_Slums_GlassBroken_Angled_01
     21300052: EA_Slums_GlassBroken_Long_01
     21300054: EA_Slums_GlassBroken_Short_01
     21300056: EA_Slums_SpriteSheet_001_28
-    21300058: EA_Slums_Cement_Angled_03
-    21300060: EA_Slums_Cement_Long_03
-    21300062: EA_Slums_Cement_Short_03
+    21300058: EA_Slums_Concrete_Angled_03
+    21300060: EA_Slums_Concrete_Long_03
+    21300062: EA_Slums_Concrete_Short_03
     21300064: EA_Slums_Glass_Shards_01
     21300066: EA_Slums_Glass_Shards_05
     21300068: EA_Slums_Door_Steel_Long_01
@@ -43,7 +43,7 @@ TextureImporter:
     21300072: EA_Slums_SpriteSheet_001_36
     21300074: EA_Slums_Glass_Shards_02
     21300076: EA_Slums_Glass_Shards_06
-    21300078: EA_Slums_SpriteSheet_001_39
+    21300078: EA_Slums_Train_Track_02
     21300080: EA_Slums_Glass_Shards_03
     21300082: EA_Slums_Glass_Shards_07
     21300084: EA_Slums_Glass_Shards_04
@@ -60,15 +60,15 @@ TextureImporter:
     21300106: EA_Slums_SpriteSheet_001_53
     21300108: EA_Slums_SpriteSheet_001_54
     21300110: EA_Slums_SpriteSheet_001_55
-    21300112: EA_Slums_Cement_Corner_01
-    21300114: EA_Slums_Cement_Corner_02
-    21300116: EA_Slums_Cement_Corner_03
-    21300118: EA_Slums_SpriteSheet_001_59
-    21300120: EA_Slums_SpriteSheet_001_60
+    21300112: EA_Slums_Concrete_Corner_01
+    21300114: EA_Slums_Concrete_Corner_02
+    21300116: EA_Slums_Concrete_Corner_03
+    21300118: EA_Slums_Baricade_01
+    21300120: EA_Slums_Baricade_02
     21300122: EA_Slums_SpriteSheet_001_61
-    21300124: EA_Slums_Cement_CornerAngled_01
-    21300126: EA_Slums_Cement_CornerAngled_02
-    21300128: EA_Slums_Cement_CornerAngled_03
+    21300124: EA_Slums_Concrete_CornerAngled_01
+    21300126: EA_Slums_Concrete_CornerAngled_02
+    21300128: EA_Slums_Concrete_CornerAngled_03
     21300130: EA_Slums_Door_Steel_Short_01
     21300132: EA_Slums_Door_Steel_Short_02
     21300134: EA_Slums_Tin_Angled_01
@@ -79,7 +79,7 @@ TextureImporter:
     21300144: EA_Slums_Tin_Short_02
     21300146: EA_Slums_Door_Tin_Long_01
     21300148: EA_Slums_Door_Tin_Long_02
-    21300150: EA_Slums_SpriteSheet_001_75
+    21300150: EA_Slums_Train_Track_03
     21300152: EA_Slums_SpriteSheet_001_76
     21300154: EA_Slums_SpriteSheet_001_77
     21300156: EA_Slums_SpriteSheet_001_78
@@ -97,7 +97,7 @@ TextureImporter:
     21300180: EA_Slums_Tin_Corner_01
     21300182: EA_Slums_Tin_Corner_02
     21300184: EA_Slums_Tin_Corner_03
-    21300186: EA_Slums_SpriteSheet_001_93
+    21300186: EA_Slums_Train_Tunnel_01
     21300188: EA_Slums_Tin_CornerAngled_01
     21300190: EA_Slums_Tin_CornerAngled_02
     21300192: EA_Slums_Tin_CornerAngled_03
@@ -195,7 +195,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: EA_Slums_Cement_Angled_01
+      name: EA_Slums_Concrete_Angled_01
       rect:
         serializedVersion: 2
         x: 83
@@ -208,7 +208,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: EA_Slums_Cement_Long_01
+      name: EA_Slums_Concrete_Long_01
       rect:
         serializedVersion: 2
         x: 118
@@ -221,7 +221,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: EA_Slums_Cement_Short_01
+      name: EA_Slums_Concrete_Short_01
       rect:
         serializedVersion: 2
         x: 152
@@ -237,10 +237,10 @@ TextureImporter:
       name: EA_Slums_GlassSolid_Angled_01
       rect:
         serializedVersion: 2
-        x: 260
-        y: 1848
-        width: 19
-        height: 141
+        x: 257
+        y: 1847
+        width: 25
+        height: 142
       alignment: 1
       pivot: {x: 0, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -250,9 +250,9 @@ TextureImporter:
       name: EA_Slums_GlassSolid_Long_01
       rect:
         serializedVersion: 2
-        x: 285
+        x: 282
         y: 1889
-        width: 19
+        width: 25
         height: 100
       alignment: 1
       pivot: {x: 0, y: 1}
@@ -263,9 +263,9 @@ TextureImporter:
       name: EA_Slums_GlassSolid_Short_01
       rect:
         serializedVersion: 2
-        x: 310
+        x: 307
         y: 1939
-        width: 19
+        width: 25
         height: 50
       alignment: 1
       pivot: {x: 0, y: 1}
@@ -280,8 +280,8 @@ TextureImporter:
         y: 1774
         width: 15
         height: 215
-      alignment: 1
-      pivot: {x: 0, y: 1}
+      alignment: 2
+      pivot: {x: 0.5, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -293,26 +293,26 @@ TextureImporter:
         y: 1774
         width: 15
         height: 215
-      alignment: 1
-      pivot: {x: 0, y: 1}
+      alignment: 2
+      pivot: {x: 0.5, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: EA_Slums_SpriteSheet_001_8
+      name: EA_Slums_Train_Track_01
       rect:
         serializedVersion: 2
         x: 448
-        y: 1689
-        width: 296
-        height: 301
-      alignment: 1
-      pivot: {x: 0, y: 1}
+        y: 1690
+        width: 295
+        height: 300
+      alignment: 9
+      pivot: {x: 0.181, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: EA_Slums_SpriteSheet_001_12
+      name: EA_Slums_Bar_Bench_01
       rect:
         serializedVersion: 2
         x: 1397
@@ -325,7 +325,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: EA_Slums_Cement_Angled_02
+      name: EA_Slums_Concrete_Angled_02
       rect:
         serializedVersion: 2
         x: 83
@@ -338,7 +338,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: EA_Slums_Cement_Long_02
+      name: EA_Slums_Concrete_Long_02
       rect:
         serializedVersion: 2
         x: 118
@@ -351,7 +351,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: EA_Slums_Cement_Short_02
+      name: EA_Slums_Concrete_Short_02
       rect:
         serializedVersion: 2
         x: 152
@@ -367,10 +367,10 @@ TextureImporter:
       name: EA_Slums_GlassBroken_Angled_01
       rect:
         serializedVersion: 2
-        x: 260
-        y: 1698
-        width: 19
-        height: 141
+        x: 257
+        y: 1697
+        width: 25
+        height: 142
       alignment: 1
       pivot: {x: 0, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -380,9 +380,9 @@ TextureImporter:
       name: EA_Slums_GlassBroken_Long_01
       rect:
         serializedVersion: 2
-        x: 285
+        x: 282
         y: 1739
-        width: 19
+        width: 25
         height: 100
       alignment: 1
       pivot: {x: 0, y: 1}
@@ -393,9 +393,9 @@ TextureImporter:
       name: EA_Slums_GlassBroken_Short_01
       rect:
         serializedVersion: 2
-        x: 310
+        x: 307
         y: 1789
-        width: 19
+        width: 25
         height: 50
       alignment: 1
       pivot: {x: 0, y: 1}
@@ -403,7 +403,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: EA_Slums_Cement_Angled_03
+      name: EA_Slums_Concrete_Angled_03
       rect:
         serializedVersion: 2
         x: 83
@@ -416,7 +416,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: EA_Slums_Cement_Long_03
+      name: EA_Slums_Concrete_Long_03
       rect:
         serializedVersion: 2
         x: 118
@@ -429,7 +429,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: EA_Slums_Cement_Short_03
+      name: EA_Slums_Concrete_Short_03
       rect:
         serializedVersion: 2
         x: 152
@@ -475,8 +475,8 @@ TextureImporter:
         y: 1533
         width: 15
         height: 215
-      alignment: 1
-      pivot: {x: 0, y: 1}
+      alignment: 2
+      pivot: {x: 0.5, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -488,8 +488,8 @@ TextureImporter:
         y: 1533
         width: 15
         height: 215
-      alignment: 1
-      pivot: {x: 0, y: 1}
+      alignment: 2
+      pivot: {x: 0.5, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -533,15 +533,15 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: EA_Slums_SpriteSheet_001_39
+      name: EA_Slums_Train_Track_02
       rect:
         serializedVersion: 2
         x: 448
-        y: 1364
-        width: 294
-        height: 303
-      alignment: 1
-      pivot: {x: 0, y: 1}
+        y: 1366
+        width: 295
+        height: 300
+      alignment: 9
+      pivot: {x: 0.181, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -598,7 +598,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: EA_Slums_Cement_Corner_01
+      name: EA_Slums_Concrete_Corner_01
       rect:
         serializedVersion: 2
         x: 83
@@ -611,7 +611,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: EA_Slums_Cement_Corner_02
+      name: EA_Slums_Concrete_Corner_02
       rect:
         serializedVersion: 2
         x: 124
@@ -624,7 +624,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: EA_Slums_Cement_Corner_03
+      name: EA_Slums_Concrete_Corner_03
       rect:
         serializedVersion: 2
         x: 165
@@ -637,7 +637,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: EA_Slums_SpriteSheet_001_59
+      name: EA_Slums_Baricade_01
       rect:
         serializedVersion: 2
         x: 800
@@ -650,7 +650,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: EA_Slums_SpriteSheet_001_60
+      name: EA_Slums_Baricade_02
       rect:
         serializedVersion: 2
         x: 975
@@ -663,7 +663,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: EA_Slums_Cement_CornerAngled_01
+      name: EA_Slums_Concrete_CornerAngled_01
       rect:
         serializedVersion: 2
         x: 82
@@ -676,7 +676,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: EA_Slums_Cement_CornerAngled_02
+      name: EA_Slums_Concrete_CornerAngled_02
       rect:
         serializedVersion: 2
         x: 124
@@ -689,7 +689,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: EA_Slums_Cement_CornerAngled_03
+      name: EA_Slums_Concrete_CornerAngled_03
       rect:
         serializedVersion: 2
         x: 166
@@ -709,8 +709,8 @@ TextureImporter:
         y: 1398
         width: 15
         height: 110
-      alignment: 1
-      pivot: {x: 0, y: 1}
+      alignment: 2
+      pivot: {x: 0.5, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -722,8 +722,8 @@ TextureImporter:
         y: 1398
         width: 15
         height: 110
-      alignment: 1
-      pivot: {x: 0, y: 1}
+      alignment: 2
+      pivot: {x: 0.5, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -813,8 +813,8 @@ TextureImporter:
         y: 1138
         width: 15
         height: 215
-      alignment: 1
-      pivot: {x: 0, y: 1}
+      alignment: 2
+      pivot: {x: 0.5, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -826,21 +826,21 @@ TextureImporter:
         y: 1138
         width: 15
         height: 215
-      alignment: 1
-      pivot: {x: 0, y: 1}
+      alignment: 2
+      pivot: {x: 0.5, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: EA_Slums_SpriteSheet_001_75
+      name: EA_Slums_Train_Track_03
       rect:
         serializedVersion: 2
-        x: 450
+        x: 448
         y: 1044
-        width: 294
-        height: 301
-      alignment: 1
-      pivot: {x: 0, y: 1}
+        width: 295
+        height: 300
+      alignment: 9
+      pivot: {x: 0.181, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -923,15 +923,15 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: EA_Slums_SpriteSheet_001_93
+      name: EA_Slums_Train_Tunnel_01
       rect:
         serializedVersion: 2
         x: 448
         y: 696
         width: 344
         height: 304
-      alignment: 1
-      pivot: {x: 0, y: 1}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0

@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 61846187205379926}
   - component: {fileID: 114243614894238674}
   m_Layer: 14
-  m_Name: Glass Prefab
+  m_Name: GlassSolid_Long_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -36,7 +36,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1762035757360004}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 5, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -55,7 +55,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_Offset: {x: 0.125, y: -0.5}
   serializedVersion: 2
-  m_Size: {x: 0.25, y: 1}
+  m_Size: {x: 0.19, y: 1}
 --- !u!114 &114243614894238674
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -71,11 +71,11 @@ MonoBehaviour:
   Shard2: {fileID: 1985535643236222, guid: e962cee5a1fd0cc45b5471f2abf669c0, type: 2}
   Shard3: {fileID: 1892843197466164, guid: a0ab298c426213f419abd3e7a63e0741, type: 2}
   Shard4: {fileID: 1900600958523060, guid: 530dcee7bfc2cae4481be70bf03bffad, type: 2}
-  Shard5: {fileID: 1225311367282430, guid: cffb2633cc17fbc43acd316b2581de61, type: 2}
-  Shard6: {fileID: 1985535643236222, guid: e962cee5a1fd0cc45b5471f2abf669c0, type: 2}
-  Shard7: {fileID: 1892843197466164, guid: a0ab298c426213f419abd3e7a63e0741, type: 2}
-  Shard8: {fileID: 1900600958523060, guid: 530dcee7bfc2cae4481be70bf03bffad, type: 2}
-  BrokenGlass: {fileID: 21300042, guid: 32c6bbd958884694ea3040273541c9c5, type: 3}
+  Shard5: {fileID: 1900600958523060, guid: a974c83dc295d2e4ba963b5fdf1764af, type: 2}
+  Shard6: {fileID: 1900600958523060, guid: 4a552016c5ebf4c4ebbdbc52c9018ea6, type: 2}
+  Shard7: {fileID: 1900600958523060, guid: 75816279637cea74cbfecebc8d19509a, type: 2}
+  Shard8: {fileID: 1900600958523060, guid: 7dcff7edb8aae894a8e809f6ae5887ad, type: 2}
+  BrokenGlass: {fileID: 21300052, guid: 10a630f0a37b46c4e9c1246135ad631a, type: 3}
 --- !u!212 &212494253667126374
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -107,7 +107,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 9
-  m_Sprite: {fileID: 21300006, guid: 32c6bbd958884694ea3040273541c9c5, type: 3}
+  m_Sprite: {fileID: 21300008, guid: 10a630f0a37b46c4e9c1246135ad631a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
