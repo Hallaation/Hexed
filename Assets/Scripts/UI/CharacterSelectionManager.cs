@@ -85,19 +85,22 @@ public class CharacterSelectionManager : MonoBehaviour
 
     public void LoadPlayers()
     {
-        for (int i = 0; i < playerSelectedCharacter.Count; ++i)
+        if (!m_bMovedToMainScene)
         {
-            ControllerManager.Instance.FindSpawns();
-            GameObject go = Instantiate(playerSelectedCharacter[XboxController.First + i] , ControllerManager.Instance.spawnPoints[i].position , Quaternion.identity , null);
-            go.GetComponent<ControllerSetter>().SetController(PlayerIndex.One + i);
-            go.GetComponent<ControllerSetter>().m_playerNumber = i;
-            go.GetComponent<PlayerStatus>().spawnIndex = i;
-            PlayerUIArray.Instance.playerElements[i].gameObject.SetActive(true);
-            GameManagerc.Instance.AddPlayer(go.GetComponent<PlayerStatus>());
-            DontDestroyOnLoad(go);
-            go.SetActive(true);
-            CameraControl.mInstance.m_Targets.Add(go.transform);
-            m_bMovedToMainScene = true;
+            for (int i = 0; i < playerSelectedCharacter.Count; ++i)
+            {
+                ControllerManager.Instance.FindSpawns();
+                GameObject go = Instantiate(playerSelectedCharacter[XboxController.First + i], ControllerManager.Instance.spawnPoints[i].position, Quaternion.identity, null);
+                go.GetComponent<ControllerSetter>().SetController(PlayerIndex.One + i);
+                go.GetComponent<ControllerSetter>().m_playerNumber = i;
+                go.GetComponent<PlayerStatus>().spawnIndex = i;
+                PlayerUIArray.Instance.playerElements[i].gameObject.SetActive(true);
+                GameManagerc.Instance.AddPlayer(go.GetComponent<PlayerStatus>());
+                DontDestroyOnLoad(go);
+                go.SetActive(true);
+                CameraControl.mInstance.m_Targets.Add(go.transform);
+                m_bMovedToMainScene = true;
+            }
         }
     }
     void OnSceneLoaded(Scene scene , LoadSceneMode mode)

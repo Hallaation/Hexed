@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using XboxCtrlrInput;
+using XInputDotNetPure;
 public class PlayerStatus : MonoBehaviour
 {
     private float m_iMaxHealth;
@@ -23,6 +25,7 @@ public class PlayerStatus : MonoBehaviour
 
     public float m_fStunTime = 1;
     public float m_fMaximumStunWait = 2;
+    public float m_fStunTimerReduction = 0.5f;
     Timer stunTimer;
     Timer resetStunTimer;
     [HideInInspector]
@@ -39,9 +42,42 @@ public class PlayerStatus : MonoBehaviour
     Rigidbody2D _rigidbody;
     [HideInInspector]
     public int spawnIndex;
+
+    public SpriteRenderer stunBar;
+    public SpriteRenderer stunMask;
+    private GameObject stunBarContainer;
+    [Range(0, 0.22f)]
+    public float fill;
     //if the player is dead, the renderer will change their colour to gray, and all physics simulation of the player's rigidbody will be turned off.
     void Start()
     {
+        stunBarContainer = new GameObject("StunBarContainer");
+        
+        stunBar = transform.Find("Sprites").Find("Stunbar").GetComponent<SpriteRenderer>();
+        stunMask = transform.Find("Sprites").Find("StunbarMask").GetComponent<SpriteRenderer>();
+
+        stunBarContainer.transform.SetParent(transform.Find("Sprites"));
+
+        stunBar.gameObject.transform.SetParent(stunBarContainer.transform);
+        stunMask.gameObject.transform.SetParent(stunBarContainer.transform);
+
+        stunBar.transform.localPosition = Vector3.zero;
+        stunMask.transform.localPosition = Vector3.zero;
+
+        stunBarContainer.transform.localPosition = Vector3.zero;
+        stunBarContainer.transform.position += Vector3.up * 1.2f;
+        stunBarContainer.transform.localRotation = Quaternion.Euler(new Vector3(0,0,90));
+
+        stunBarContainer.SetActive(false);
+
+        if (stunBar && stunMask)
+        {
+            stunMask.material.shader = Shader.Find("Custom/MaskTest");
+            stunMask.material.renderQueue = 3000;
+            stunBar.material.shader = Shader.Find("Sprites/Default");
+            stunBar.material.renderQueue = 3002;
+        }
+
         m_InvincibilityTimer = new Timer(m_fInvincibleTime);
         _rigidbody = GetComponent<Rigidbody2D>();
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -64,8 +100,8 @@ public class PlayerStatus : MonoBehaviour
 
         _HealthMask = PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_HealthBarMask;
         _ScoreText = PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_ScoreText.GetComponent<Text>();
-        PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_healthScrolllingIcon.GetComponent<Image>().material.SetColor("_Color" , _playerColour);
-        PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_StaticObjectMaterial.SetColor("_Color" , _playerColour);
+        PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_healthScrolllingIcon.GetComponent<Image>().material.SetColor("_Color", _playerColour);
+        PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_StaticObjectMaterial.SetColor("_Color", _playerColour);
 
         foreach (var item in PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_objects)
         {
@@ -80,7 +116,14 @@ public class PlayerStatus : MonoBehaviour
     }
     void Update()
     {
+        if (stunBarContainer.activeSelf)
+        {
+            float sunOffset = stunTimer.CurrentTime / stunTimer.mfTimeToWait * 0.25f;
+            stunMask.material.SetTextureOffset("_MainTex", new Vector2(0.25f - sunOffset, 0));
+        }
 
+        if (m_iHealth <= 0)
+            m_iHealth = 0;
 
         StartCoroutine(InvinciblityTime());
         //update my score
@@ -109,7 +152,7 @@ public class PlayerStatus : MonoBehaviour
         if (_HealthMask)
         {
             float xOffset = m_iHealth * -0.0791f;
-            _HealthMask.GetComponent<Image>().material.SetTextureOffset("_MainTex" , new Vector2(0 + xOffset , 0));
+            _HealthMask.GetComponent<Image>().material.SetTextureOffset("_MainTex", new Vector2(0 + xOffset, 0));
         }
 
         //if im dead, set my colour to gray, turn of all physics simulations and exit the function
@@ -121,7 +164,7 @@ public class PlayerStatus : MonoBehaviour
             this.GetComponent<Rigidbody2D>().simulated = false;
             killMePrompt.SetActive(false);
             killMeArea.SetActive(false);
-            
+
             return;
         }
 
@@ -131,6 +174,14 @@ public class PlayerStatus : MonoBehaviour
             SetAllAnimatorsFalse();
             killMeArea.SetActive(true);
             PlayerSprite.material.color = Color.cyan;
+
+            //set the stun bar location
+            stunBarContainer.transform.localPosition = Vector3.zero;
+            stunBarContainer.transform.position += Vector3.up * 1.2f;
+            stunBar.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+            stunMask.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+            stunBarContainer.SetActive(true);
+            CheckForButtonMash();
             //this.GetComponent<Renderer>().material.color = Color.cyan;
             if (this.transform.GetChild(1).tag == "Stunned")
             {
@@ -150,11 +201,11 @@ public class PlayerStatus : MonoBehaviour
         else
         {
             this.GetComponent<Collider2D>().isTrigger = false;
-
+            stunBarContainer.SetActive(false);
             if (this.transform.GetChild(0).tag == "Stunned")
             {
                 Debug.Log(this.transform.GetChild(0).tag);
-                this.transform.GetChild(1).gameObject.GetComponent<PolygonCollider2D>().enabled = false;        //TODO Check up on this and above something seems fishy
+                this.transform.GetChild(1).gameObject.GetComponent<PolygonCollider2D>().enabled = false;        //? child 0 is weaponSpot...
             }
             else
             {
@@ -169,20 +220,9 @@ public class PlayerStatus : MonoBehaviour
             }
             else //if no rendere was found
             {
-
                 if (!m_bInvincible)
-
-                    PlayerSprite.GetComponent<Renderer>().material.color = _playerColour; //?
-
-
+                    PlayerSprite.GetComponent<Renderer>().material.color = _playerColour;
             }
-        }
-        //? should probably set a timer to reset these?
-        if (m_iTimesPunched >= 2)
-        {
-            //   StunPlayer();
-            //  GetComponent<Move>().StatusApplied();
-            //m_iTimesPunched = 0;
         }
 
     }
@@ -192,7 +232,6 @@ public class PlayerStatus : MonoBehaviour
         //stun the player called outside of class
         //Vector3 a = ThrownItemVelocity.normalized;
         // _rigidbody.velocity = (a * StunedSlide);
-
         SetAllAnimatorsFalse();
         _rigidbody.velocity = ThrownItemVelocity;
         m_bStunned = true;
@@ -210,13 +249,13 @@ public class PlayerStatus : MonoBehaviour
         this.GetComponent<Rigidbody2D>().simulated = true;
 
         this.transform.position = ControllerManager.Instance.spawnPoints[spawnIndex].position;
-        GetComponent<Move>().ThrowMyWeapon(Vector2.zero , Vector2.up , false);
+        GetComponent<Move>().ThrowMyWeapon(Vector2.zero, Vector2.up, false);
 
         this.GetComponent<Collider2D>().isTrigger = true;
         m_bInvincible = true;
     }
 
-    void OnSceneLoaded(Scene scene , LoadSceneMode mode)
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         if (scene.buildIndex == 0)
         {
@@ -228,8 +267,8 @@ public class PlayerStatus : MonoBehaviour
 
         _HealthMask = PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_HealthBarMask;
         _ScoreText = PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_ScoreText.GetComponent<Text>();
-        PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_healthScrolllingIcon.GetComponent<Image>().material.SetColor("_Color" , _playerColour);
-        PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_StaticObjectMaterial.SetColor("_Color" , _playerColour);
+        PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_healthScrolllingIcon.GetComponent<Image>().material.SetColor("_Color", _playerColour);
+        PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_StaticObjectMaterial.SetColor("_Color", _playerColour);
 
         foreach (var item in PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_objects)
         {
@@ -298,25 +337,39 @@ public class PlayerStatus : MonoBehaviour
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
+    void CheckForButtonMash()
+    {
+        if (XCI.GetButtonDown(XboxButton.X, GetComponent<ControllerSetter>().mXboxController))
+        {
+            stunTimer.CurrentTime += m_fStunTimerReduction;
+        }
+
+    }
+
     void SetAllAnimatorsFalse()
     {
         Animator Body = GetComponent<Move>().GetBodyAnimator();
         Animator Feet = GetComponent<Move>().GetFeetAnimator();
 
-        Body.SetBool(0, false);
-        Body.SetBool(1, false);
-        Body.SetBool(2, false);
-        Body.SetBool(3, false);
-        Body.SetBool(4, false);
-        Body.SetBool(5, false);
-        Body.SetBool(6, false);
-        Body.SetBool(7, false);
-        Body.SetBool(8, false);
-        Body.SetBool(9, false);
-        Body.SetBool(10, false);
-        Body.SetBool(11, false);
-
-        Feet.SetBool("Moving", false); // Doesnt Work Not Sure why.
-        
+        //If the body animator is found, go through each parameter, and set it to false
+        if (Body)
+        {
+            foreach (AnimatorControllerParameter parameter in Body.parameters)
+            {
+                Body.SetBool(parameter.name, false);
+            }
+        }
+        //same with feet
+        if (Feet)
+        {
+            foreach (AnimatorControllerParameter parameter in Feet.parameters)
+            {
+                Feet.SetBool(parameter.name, false);
+            }
+        }
     }
 }
+
+
+
+
