@@ -24,6 +24,7 @@ public class UIManager : MonoBehaviour
     private GameObject defaultToReturnTo;
     private EventSystem _eventSystem;
     private Animator m_bMenuAnimator;
+    private Animator m_ButtonAnimator;
     private UINavigation uiNavigationInstance;
     public bool m_bRemoveLastPanel;
     public bool m_bInMainMenu = false;
@@ -82,10 +83,18 @@ public class UIManager : MonoBehaviour
             //Change the button animation according to what is selected.
             switch (_eventSystem.currentSelectedGameObject.name)
             {
-                case "Credits_Button": break;
-                case "Settings_Button": break;
-                case "Quit_Button": break;
-                case "VS_Button": break;
+                case "Credits_Button":
+                    m_ButtonAnimator.SetTrigger("SelectedCredits");
+                    break;
+                case "Settings_Button":
+                    m_ButtonAnimator.SetTrigger("SelectedSettings");
+                    break;
+                case "Quit_Button":
+                    m_ButtonAnimator.SetTrigger("SelectedQuit");
+                        break;
+                case "VS_Button":
+                    m_ButtonAnimator.SetTrigger("SelectedVS");
+                    break;
                 default: break;
             }
         }
@@ -104,7 +113,7 @@ public class UIManager : MonoBehaviour
     public void MainMenuBack()
     {
         //If the menu status only has 1 object in it, dont do anything
-        if (menuStatus.Count == 1 || CharacterSelectionManager.Instance.JoinedPlayers > 0)
+        if (menuStatus.Count == 1 || CharacterSelectionManager.Instance.JoinedPlayers < 4)
         {
             return;
         }
@@ -113,6 +122,7 @@ public class UIManager : MonoBehaviour
             menuStatus.Pop();
             //Swap the trigger to whatever the parameter is.
             m_bMenuAnimator.SetTrigger(MenuTransitionBoolParameters[menuStatus.Peek().name]);
+            m_ButtonAnimator = menuStatus.Peek().GetComponent<Animator>();
             DefaultButton temp = menuStatus.Peek().GetComponent<DefaultButton>();
             if (temp)
             {
@@ -129,6 +139,7 @@ public class UIManager : MonoBehaviour
             menuStatus.Push(panelToMove);
             //swap the trigger to the corresponding parameter name
             m_bMenuAnimator.SetTrigger(MenuTransitionBoolParameters[panelToMove.name]);
+            m_ButtonAnimator = panelToMove.GetComponent<Animator>();
             //Find the default button, if none found, set to null
             DefaultButton temp = panelToMove.GetComponent<DefaultButton>();
             if (temp)
@@ -282,6 +293,7 @@ public class UIManager : MonoBehaviour
             m_bInMainMenu = true;
             //find the first panel and push it to the stack
             menuStatus.Push(GameObject.Find("First_Panel"));
+            m_ButtonAnimator = menuStatus.Peek().GetComponent<Animator>();
         }
         else
         {
