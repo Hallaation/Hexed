@@ -63,6 +63,7 @@ public class Glass : MonoBehaviour
         GlassSpriteRenderer.sprite = BrokenGlass;
         GlassCollider.enabled = false;
         IsShattered = true;
+        GlassSpriteRenderer.sortingOrder = -10;
 
     }
 

@@ -309,8 +309,10 @@ public class Move : MonoBehaviour
         if (heldWeapon && heldWeapon.GetComponent<Weapon>().m_bActive)
         {
             //throw the weapon away
+            heldWeapon.transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = 0; //? Puts gun layer behinde player layer when it's dropped. 
             if (/*movement.magnitude == 0 ||*/ !tossWeapon)
             {
+
                 //drop the weapon. magic number 2.
                 heldWeapon.GetComponent<Weapon>().throwWeapon(throwDirection * 2);
                 heldWeapon.GetComponent<Weapon>().previousOwner = this.gameObject;
@@ -332,6 +334,7 @@ public class Move : MonoBehaviour
                     SetHoldingGun(0);
 
             }
+           
         }
     }
     void CheckForPickup()
@@ -364,7 +367,9 @@ public class Move : MonoBehaviour
         //If there is a weapon being held, the weapon will be thrown away.
         if (heldWeapon)
         {
+            
             ThrowMyWeapon(stickMovement, throwingDirection, tossWeapon);
+            
         }
         //if the overlap circle found something, pickup the weapon
         if (hitCollider)
@@ -397,6 +402,7 @@ public class Move : MonoBehaviour
     void PickUpWeaon(Collider2D hitCollider)
     {
         heldWeapon = hitCollider.transform.parent.gameObject;
+        heldWeapon.transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = 4; //? Puts gun layer infront of player layer when picked up. 
         hitCollider.gameObject.transform.parent.SetParent(this.transform);
         hitCollider.gameObject.transform.parent.position = weaponMount.transform.position; //set position to the weapon mount spot
         hitCollider.gameObject.transform.parent.rotation = weaponMount.transform.rotation; //set its rotation
@@ -406,7 +412,7 @@ public class Move : MonoBehaviour
         weaponRigidBody.angularVelocity = 0.0f; //set any angular velocity to nothing
 
         m_bHoldingWeapon = true;
-        SetHoldingGun(0);
+        SetHoldingGun(0); //? Probably un-necessary
         if (BodyAnimator != null)
         {
             if (heldWeapon.tag == "OneHanded")
