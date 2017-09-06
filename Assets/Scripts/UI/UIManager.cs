@@ -150,6 +150,10 @@ public class UIManager : MonoBehaviour
                     m_ButtonAnimator.SetBool("IsCredits", false);
                     break;
             }
+            foreach (var dropdown in menuStatus.Peek().GetComponentsInChildren<Dropdown>())
+            {
+                dropdown.Hide();
+            }
 
             menuStatus.Peek().SetActive(false);
             menuStatus.Pop();
@@ -282,25 +286,9 @@ public class UIManager : MonoBehaviour
 
     IEnumerator WaitForAnimation(GameObject PanelToOpen)
     {
-        yield return new WaitForSeconds(1);
-        //Turn on the panel
-        PanelToOpen.SetActive(true);
-        //Turn on any children
-        if (PanelToOpen.transform.childCount > 0)
-        {
-            for (int i = 0; i < PanelToOpen.transform.childCount; ++i)
-            {
-                PanelToOpen.transform.GetChild(i).gameObject.SetActive(true);
-            }
-        }
-        //Add it to menustatus
-        menuStatus.Push(PanelToOpen);
-        _eventSystem.SetSelectedGameObject(null);
-        if (menuStatus.Peek().GetComponentInChildren<Button>())
-        {
-            _eventSystem.SetSelectedGameObject(null);
-            _eventSystem.SetSelectedGameObject(menuStatus.Peek().GetComponentInChildren<Button>().gameObject);
-        }
+        //yield return new WaitForSeconds(1);
+
+        yield return null;
     }
     public void MenuOpenPanel(GameObject PanelToOpen, string AnimationParameter = "")
     {
@@ -318,7 +306,26 @@ public class UIManager : MonoBehaviour
             }
             m_bOpenedPanel = true;
             m_ButtonAnimator.SetBool(AnimationParameter, true);
-            StartCoroutine(WaitForAnimation(PanelToOpen));
+
+            //Turn on the panel
+            PanelToOpen.SetActive(true);
+            //Turn on any children
+            if (PanelToOpen.transform.childCount > 0)
+            {
+                for (int i = 0; i < PanelToOpen.transform.childCount; ++i)
+                {
+                    PanelToOpen.transform.GetChild(i).gameObject.SetActive(true);
+                }
+            }
+            //Add it to menustatus
+            menuStatus.Push(PanelToOpen);
+            _eventSystem.SetSelectedGameObject(null);
+            if (menuStatus.Peek().GetComponentInChildren<Button>())
+            {
+                _eventSystem.SetSelectedGameObject(null);
+                _eventSystem.SetSelectedGameObject(menuStatus.Peek().GetComponentInChildren<Button>().gameObject);
+            }
+            //StartCoroutine(WaitForAnimation(PanelToOpen));
         }
     }
 

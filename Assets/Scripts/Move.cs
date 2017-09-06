@@ -19,7 +19,7 @@ public class Move : MonoBehaviour
     ControllerSetter m_controller;
     CharacterController _characterController;
     bool PlayerIsActive = true; public bool getActive() { return PlayerIsActive; }
-    public void setActive(bool Active) { PlayerIsActive = Active; }
+    public void SetActive(bool a_PlayerActive) { PlayerIsActive = a_PlayerActive; }
     PlayerStatus m_status;
     [HideInInspector]
     public GameObject heldWeapon = null;
