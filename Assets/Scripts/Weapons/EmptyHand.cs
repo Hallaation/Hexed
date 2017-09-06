@@ -53,7 +53,7 @@ public class EmptyHand : Weapon
                 }
             }
             shotReady = false;
-            RaycastHit2D[] results;
+          //  RaycastHit2D[] results;
 
 
             //Vector3 center = PunchHitBox.transform.postion + item.center;

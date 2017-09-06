@@ -16,7 +16,7 @@ public class SelectionUIElements : MonoBehaviour
     [Space]
     //Varaibles to do UI stuff
     private CharacterSelectionManager selectionManager;
-    public bool m_bNotJoined = true;
+    public bool m_bNotJoined = false;
     private bool m_bPlayerJoined = false;
     private bool m_bSelectedCharacter = false;
     private bool[] StickMovement; // index 0 for left horizontal, index 1 for right horizontal
@@ -30,6 +30,7 @@ public class SelectionUIElements : MonoBehaviour
     // Use this for initialization
     void Awake()
     {
+        m_bNotJoined = false;
         m_Animator = GetComponent<Animator>();
         //make a copy-ish of my transform
         GameObject temp = new GameObject("return point" , typeof(RectTransform));
@@ -226,6 +227,7 @@ public class SelectionUIArray : MonoBehaviour
         int count = 0;
         foreach (var item in array)
         {
+            //If item is not joined, they have pressed B
             if (!item.m_bNotJoined)
             {
                 count++;

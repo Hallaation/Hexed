@@ -26,8 +26,8 @@ public class SettingsManager : MonoBehaviour
         //subscribe onfullscreentoggle to value changed event;
         fullscreenToggle.onValueChanged.AddListener(delegate { onFullScreenToggle(); });
         resolutionDropdwon.onValueChanged.AddListener(delegate { onResolutionChange(); });
-        textureQualityDropdown.onValueChanged.AddListener(delegate { onTextureQualityChange(); });
-        AAdropdown.onValueChanged.AddListener(delegate { onAntialiasingChange(); });
+        //textureQualityDropdown.onValueChanged.AddListener(delegate { onTextureQualityChange(); });
+        //AAdropdown.onValueChanged.AddListener(delegate { onAntialiasingChange(); });
         vSyncDrop.onValueChanged.AddListener(delegate { onVsyncChange(); });
         masterVolumeSlider.onValueChanged.AddListener(delegate { OnMasterVolumeChange(); });
         applyButton.onClick.AddListener(delegate { OnApplyButtonClick(); });
@@ -44,7 +44,7 @@ public class SettingsManager : MonoBehaviour
 
     public void onResolutionChange()
     {
-        Screen.SetResolution(resolutions[resolutionDropdwon.value].width , resolutions[resolutionDropdwon.value].height , gameSettings.Fullscreen);
+        Screen.SetResolution(resolutions[resolutionDropdwon.value].width, resolutions[resolutionDropdwon.value].height, gameSettings.Fullscreen);
         gameSettings.resolutionIndex = resolutionDropdwon.value;
     }
 
@@ -76,26 +76,29 @@ public class SettingsManager : MonoBehaviour
     {
         Debug.Log("settings saved");
         string jsonData = JsonUtility.ToJson(gameSettings, true);
-        File.WriteAllText(Application.persistentDataPath + "/gameSettings.json" , jsonData);
+        File.WriteAllText(Application.persistentDataPath + "/gameSettings.json", jsonData);
     }
-    
+
     public void LoadSettings()
     {
-        gameSettings = JsonUtility.FromJson<Settings>(File.ReadAllText(Application.persistentDataPath + "/gameSettings.json"));
-        masterVolumeSlider.value = gameSettings.musicVolume;
-        AAdropdown.value = (int)Mathf.Sqrt(gameSettings.antiAliasing);
-        textureQualityDropdown.value = textureQualityDropdown.options.Count + gameSettings.textureQuality;
-        resolutionDropdwon.value = gameSettings.resolutionIndex;
-        fullscreenToggle.isOn = gameSettings.Fullscreen;
-        Debug.Log("Settinsg loaded");
+        if (File.Exists(Application.persistentDataPath + "/gameSettings.json"))
+        {
+            gameSettings = JsonUtility.FromJson<Settings>(File.ReadAllText(Application.persistentDataPath + "/gameSettings.json"));
+            masterVolumeSlider.value = gameSettings.musicVolume;
+            //AAdropdown.value = (int)Mathf.Sqrt(gameSettings.antiAliasing);
+            //textureQualityDropdown.value = textureQualityDropdown.options.Count + gameSettings.textureQuality;
+            resolutionDropdwon.value = gameSettings.resolutionIndex;
+            fullscreenToggle.isOn = gameSettings.Fullscreen;
+            Debug.Log("Settinsg loaded");
 
-        resolutionDropdwon.RefreshShownValue();
+            resolutionDropdwon.RefreshShownValue();
 
 
-        OnMasterVolumeChange();
-        onAntialiasingChange();
-        onFullScreenToggle();
-        onResolutionChange();
-        onTextureQualityChange();
+            OnMasterVolumeChange();
+            onFullScreenToggle();
+            onResolutionChange();
+            //onAntialiasingChange();
+            //onTextureQualityChange();
+        }
     }
 }

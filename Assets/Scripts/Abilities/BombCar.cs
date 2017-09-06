@@ -12,18 +12,18 @@ public class BombCar : BaseAbility {
 
     bool ButtonHasBeenUp = true;
    // bool CarIsActive = false;
-    Rigidbody2D _rigidBody;
+   // Rigidbody2D _rigidBody;
     ControllerSetter m_controller;
-    Move Movement;
+    //Move Movement;
     // Use this for initialization
 
     public override void Initialise()
     {
         ManaCost = 50f;
         m_controller = GetComponent<ControllerSetter>();
-        _rigidBody = GetComponent<Rigidbody2D>();
+       // _rigidBody = GetComponent<Rigidbody2D>();
         RegenMana = true;
-        Movement = GetComponent<Move>();
+      //  Movement = GetComponent<Move>();
 
     }
     public override void AdditionalLogic()

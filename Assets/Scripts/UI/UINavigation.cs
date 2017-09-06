@@ -29,18 +29,20 @@ public class UINavigation : MonoBehaviour
         }
     }
 
+   
     // Use this for initialization
     void Start()
     {
         SingletonTester.Instance.AddSingleton(this);
 
         _EventSystem = FindObjectOfType<EventSystem>();
+
+
     }
 
     // Update is called once per frame
     void Update()
     {
-
         //only look for objects if the event system is selecting something
         //if (_EventSystem.currentSelectedGameObject)
         //{
@@ -53,40 +55,47 @@ public class UINavigation : MonoBehaviour
             {
                 if (XCI.GetButtonDown(XboxButton.DPadDown, XboxController.First + i))
                 {
-                    if (_EventSystem.currentSelectedGameObject.GetComponent<Button>().navigation.selectOnDown != null)
+                    if (_EventSystem.currentSelectedGameObject.GetComponent<Selectable>().navigation.selectOnDown != null)
                     //Debug.Log("left is null");
                     {
-                        GameObject select = _EventSystem.currentSelectedGameObject.GetComponent<Button>().navigation.selectOnDown.gameObject;
+                        GameObject select = _EventSystem.currentSelectedGameObject.GetComponent<Selectable>().navigation.selectOnDown.gameObject;
                         _EventSystem.SetSelectedGameObject(null);
                         _EventSystem.SetSelectedGameObject(select);
                     }
                 }
                 if (XCI.GetButtonDown(XboxButton.DPadUp, XboxController.First + i))
                 {
-                    if (_EventSystem.currentSelectedGameObject.GetComponent<Button>().navigation.selectOnUp != null)
+                    if (_EventSystem.currentSelectedGameObject.GetComponent<Selectable>().navigation.selectOnUp != null)
                     //Debug.Log("left is null");
                     {
-                        GameObject select = _EventSystem.currentSelectedGameObject.GetComponent<Button>().navigation.selectOnUp.gameObject;
+                        //DpadMovement[0, 0] = false;   //useless
+                        //temp.CurrentTime = 0;         //useless
+                        GameObject select = _EventSystem.currentSelectedGameObject.GetComponent<Selectable>().navigation.selectOnUp.gameObject;
                         _EventSystem.SetSelectedGameObject(null);
                         _EventSystem.SetSelectedGameObject(select);
                     }
                 }
                 if (XCI.GetButtonDown(XboxButton.DPadLeft, XboxController.First + i))
                 {
-                    if (_EventSystem.currentSelectedGameObject.GetComponent<Button>().navigation.selectOnLeft != null)
+                    if (_EventSystem.currentSelectedGameObject.GetComponent<Slider>())
+                        _EventSystem.currentSelectedGameObject.GetComponent<Slider>().value -= 0.1f;
+                    if (_EventSystem.currentSelectedGameObject.GetComponent<Selectable>().navigation.selectOnLeft != null)
                     //Debug.Log("left is null");
                     {
-                        GameObject select = _EventSystem.currentSelectedGameObject.GetComponent<Button>().navigation.selectOnLeft.gameObject;
+                        GameObject select = _EventSystem.currentSelectedGameObject.GetComponent<Selectable>().navigation.selectOnLeft.gameObject;
                         _EventSystem.SetSelectedGameObject(null);
                         _EventSystem.SetSelectedGameObject(select);
                     }
                 }
                 if (XCI.GetButtonDown(XboxButton.DPadRight, XboxController.First + i))
                 {
-                    if (_EventSystem.currentSelectedGameObject.GetComponent<Button>().navigation.selectOnRight != null)
+                    if (_EventSystem.currentSelectedGameObject.GetComponent<Slider>())
+                        _EventSystem.currentSelectedGameObject.GetComponent<Slider>().value += 0.1f;
+
+                    if (_EventSystem.currentSelectedGameObject.GetComponent<Selectable>().navigation.selectOnRight != null)
                     //Debug.Log("left is null");
                     {
-                        GameObject select = _EventSystem.currentSelectedGameObject.GetComponent<Button>().navigation.selectOnRight.gameObject;
+                        GameObject select = _EventSystem.currentSelectedGameObject.GetComponent<Selectable>().navigation.selectOnRight.gameObject;
                         _EventSystem.SetSelectedGameObject(null);
                         _EventSystem.SetSelectedGameObject(select);
                     }
