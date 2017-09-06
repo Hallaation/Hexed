@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using XboxCtrlrInput;
 using XInputDotNetPure;
+using UnityEngine.SceneManagement;
 //////////////////////
 //                  //
 //   Louis Nguyen   //
@@ -17,7 +18,8 @@ public class Move : MonoBehaviour
 {
     ControllerSetter m_controller;
     CharacterController _characterController;
-    bool PlayerIsActive = true; public bool getActive() { return PlayerIsActive; } public void SetActive(bool a_PlayerActive) { PlayerIsActive = a_PlayerActive; }
+    bool PlayerIsActive = true; public bool getActive() { return PlayerIsActive; }
+    public void setActive(bool Active) { PlayerIsActive = Active; }
     PlayerStatus m_status;
     [HideInInspector]
     public GameObject heldWeapon = null;
@@ -43,13 +45,12 @@ public class Move : MonoBehaviour
     [HideInInspector]
     public GameObject playerSpirte;
     float MoveDelayTimer;
-
     public float StartMoveDelay = 3;
     public Vector3 m_LeftStickRotation;
     public float StickDeadZone = 0.12f;
     private Text _AmmoText;
     // Use this for initialization
-    void Start()
+    void Awake()
     {
         if (transform.Find("Sprites"))
         {
@@ -105,8 +106,8 @@ public class Move : MonoBehaviour
         }
 
         defaultWeapon = GetComponent<EmptyHand>();
+        SceneManager.sceneLoaded += OnSceneLoaded;
         // Delay
-        _AmmoText = PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_AmmoText.GetComponent<Text>();
         MoveDelayTimer = 0;
         StoredMoveSpeed = movementSpeed;
         StartCoroutine(DelayMovement());
@@ -115,7 +116,7 @@ public class Move : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!m_status.IsDead && !m_status.IsStunned && !m_status.m_bMiniStun)
+        if (!m_status.IsDead && !m_status.IsStunned)
         {
             //if the walking animation isnt running, do everything else
             if (!GetComponentInChildren<Animator>().GetCurrentAnimatorStateInfo(0).IsName("WalkingMan") && !runningAnimation)
@@ -135,16 +136,16 @@ public class Move : MonoBehaviour
                 {
                     if (heldWeapon.GetComponent<Gun>())
                     {
-                        _AmmoText.text = heldWeapon.GetComponent<Gun>().m_iAmmo.ToString();
+                        //_AmmoText.text = heldWeapon.GetComponent<Gun>().m_iAmmo.ToString();
                     }
                     else
                     {
-                        _AmmoText.text = "Infinite Ammo";
+                        //_AmmoText.text = "Infinite Ammo";
                     }
                 }
                 else
                 {
-                    _AmmoText.text = "you punch";
+                    //_AmmoText.text = "you punch";
                 }
 
             }
@@ -308,8 +309,10 @@ public class Move : MonoBehaviour
         if (heldWeapon && heldWeapon.GetComponent<Weapon>().m_bActive)
         {
             //throw the weapon away
+            heldWeapon.transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = 0; //? Puts gun layer behinde player layer when it's dropped. 
             if (/*movement.magnitude == 0 ||*/ !tossWeapon)
             {
+
                 //drop the weapon. magic number 2.
                 heldWeapon.GetComponent<Weapon>().throwWeapon(throwDirection * 2);
                 heldWeapon.GetComponent<Weapon>().previousOwner = this.gameObject;
@@ -331,6 +334,7 @@ public class Move : MonoBehaviour
                     SetHoldingGun(0);
 
             }
+           
         }
     }
     void CheckForPickup()
@@ -363,7 +367,9 @@ public class Move : MonoBehaviour
         //If there is a weapon being held, the weapon will be thrown away.
         if (heldWeapon)
         {
+            
             ThrowMyWeapon(stickMovement, throwingDirection, tossWeapon);
+            
         }
         //if the overlap circle found something, pickup the weapon
         if (hitCollider)
@@ -396,6 +402,7 @@ public class Move : MonoBehaviour
     void PickUpWeaon(Collider2D hitCollider)
     {
         heldWeapon = hitCollider.transform.parent.gameObject;
+        heldWeapon.transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = 4; //? Puts gun layer infront of player layer when picked up. 
         hitCollider.gameObject.transform.parent.SetParent(this.transform);
         hitCollider.gameObject.transform.parent.position = weaponMount.transform.position; //set position to the weapon mount spot
         hitCollider.gameObject.transform.parent.rotation = weaponMount.transform.rotation; //set its rotation
@@ -405,7 +412,7 @@ public class Move : MonoBehaviour
         weaponRigidBody.angularVelocity = 0.0f; //set any angular velocity to nothing
 
         m_bHoldingWeapon = true;
-        SetHoldingGun(0);
+        SetHoldingGun(0); //? Probably un-necessary
         if (BodyAnimator != null)
         {
             if (heldWeapon.tag == "OneHanded")
@@ -592,4 +599,8 @@ public class Move : MonoBehaviour
     }
 
 
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        _AmmoText = PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_AmmoText.GetComponent<Text>();
+    }
 }

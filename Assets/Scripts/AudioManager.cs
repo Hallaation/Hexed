@@ -13,7 +13,7 @@ public class AudioManager : MonoBehaviour {
 	// Use this for initialization
 	void Awake ()
     {
-        SingletonTester.Instance.AddSingleton(this);
+        //SingletonTester.Instance.AddSingleton(this);
 	}
 	
 	// Update is called once per frame
@@ -21,4 +21,6 @@ public class AudioManager : MonoBehaviour {
     {
 		
 	}
+
+
 }

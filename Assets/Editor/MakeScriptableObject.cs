@@ -6,11 +6,11 @@ using UnityEditor;
 public class MakeScriptableObject
 {
 
-    [MenuItem("Assets/Create/PlayerColours")]
-    public static void CreatePlayerColourAsset()
+    [MenuItem("Assets/Create/PlayerColors")]
+    public static void CreatePlayerColorAsset()
     {
-        PlayerColours playercolours = ScriptableObject.CreateInstance<PlayerColours>();
-        AssetDatabase.CreateAsset(playercolours, "Assets/Resources/PlayerColours.asset");
+        PlayerColors playerColors = ScriptableObject.CreateInstance<PlayerColors>();
+        AssetDatabase.CreateAsset(playerColors, "Assets/Resources/PlayerColors.asset");
         AssetDatabase.SaveAssets();
     }
 

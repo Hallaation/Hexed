@@ -45,8 +45,6 @@ public enum Gamemode_type
 {
     LAST_MAN_STANDING_DEATHMATCH, //last person to stand earns a point, probably the default
     DEATHMATCH_POINTS, //killing a player will earn them a point, up to a certain point
-    DEATHMATCH_TIMED, //kill as many players as you can in the allocated time
-    CAPTURE_THE_FLAG, //unsued, probably not going to implement, put it in here for the lols;
 
 }
 
@@ -68,15 +66,15 @@ public class GameManagerc : MonoBehaviour
     //public List<int> PlayerWins = new List<int>();
     public Dictionary<PlayerStatus, int> PlayerWins = new Dictionary<PlayerStatus, int>();
     public List<PlayerStatus> InGamePlayers = new List<PlayerStatus>();
-    GameObject WinningPlayer = null;
+   // GameObject WinningPlayer = null;
 
     public Gamemode_type m_gameMode = Gamemode_type.LAST_MAN_STANDING_DEATHMATCH;
 
     public int m_iPointsNeeded = 5;
-    public float m_fTimedDeathMatchTime;
+   // public float m_fTimedDeathMatchTime;
 
     static GameManagerc mInstance = null;
-    Timer DeathmatchTimer;
+   // Timer DeathmatchTimer;
     //lets keep the variables at the top shall we
     private GameObject FinishUIPanel;
     private bool m_bRoundOver;
@@ -114,9 +112,10 @@ public class GameManagerc : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        SingletonTester.Instance.AddSingleton(this);
         //Find the 
 
-        DeathmatchTimer = new Timer(m_fTimedDeathMatchTime);
+        //DeathmatchTimer = new Timer(m_fTimedDeathMatchTime);
         waitForRoundEnd = new Timer(3);
         mInstance = GameManagerc.Instance;
         if (mInstance.gameObject != this.gameObject)
@@ -164,13 +163,13 @@ public class GameManagerc : MonoBehaviour
                     RoundEndDeathMatchMaxPoints();
                     CheckPlayersPoints();
                     break;
-                case Gamemode_type.DEATHMATCH_TIMED:
-                    RoundEndDeathMatchTimed();
-                    break;
-                case Gamemode_type.CAPTURE_THE_FLAG:
-                    //RoundEndLastManStanding();
-                    m_bRoundOver = true;
-                    break;
+                //case Gamemode_type.DEATHMATCH_TIMED:
+                //    RoundEndDeathMatchTimed();
+                //    break;
+                //case Gamemode_type.CAPTURE_THE_FLAG:
+                //    //RoundEndLastManStanding();
+                //    m_bRoundOver = true;
+                //    break;
                 default:
                     break;
             }
@@ -414,7 +413,7 @@ public class GameManagerc : MonoBehaviour
         {
             PlayerWins[item] = 0;
         }
-        WinningPlayer = null; // still unsued
+       // WinningPlayer = null; // still unsued
         m_bRoundOver = false;
         mbFinishedShowingScores = false;
 
@@ -476,6 +475,7 @@ public class GameManagerc : MonoBehaviour
         yield return new WaitForSeconds(2);
         mbFinishedShowingScores = true;
         PointsPanel.SetActive(false);
+        
     }
 }
 

@@ -29,8 +29,8 @@ public class PlayerStatus : MonoBehaviour
     public float m_fStunTimerReduction = 0.5f;
     Timer stunTimer;
     Timer resetStunTimer;
-    [HideInInspector]
-    public Color _playerColour;
+   
+    public Color _playerColor;
     private Renderer PlayerSprite;
 
 
@@ -49,7 +49,7 @@ public class PlayerStatus : MonoBehaviour
     private GameObject stunBarContainer;
     [Range(0, 0.22f)]
     public float fill;
-    //if the player is dead, the renderer will change their colour to gray, and all physics simulation of the player's rigidbody will be turned off.
+    //if the player is dead, the renderer will change their Color to gray, and all physics simulation of the player's rigidbody will be turned off.
     void Start()
     {
         stunBarContainer = new GameObject("StunBarContainer");
@@ -83,26 +83,26 @@ public class PlayerStatus : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody2D>();
         SceneManager.sceneLoaded += OnSceneLoaded;
         m_iMaxHealth = m_iHealth;
-        //initialize my timer and get the player's colour to return to.
+        //initialize my timer and get the player's Color to return to.
         stunTimer = new Timer(m_fStunTime);
         resetStunTimer = new Timer(m_fMaximumStunWait);
-        //_playerColour = GetComponent<Renderer>().material.color;
+        //_playerColor = GetComponent<Renderer>().material.color;
         if (GetComponent<Renderer>())
         {
             PlayerSprite = GetComponent<Renderer>();
-            _playerColour = GetComponent<Renderer>().material.color;
+            _playerColor = GetComponent<Renderer>().material.color;
         }
         else
         {
             PlayerSprite = transform.Find("Sprites").Find("PlayerSprite").GetComponent<Renderer>();
-            _playerColour = transform.Find("Sprites").Find("PlayerSprite").GetComponent<Renderer>().material.color;
+            _playerColor = transform.Find("Sprites").Find("PlayerSprite").GetComponent<Renderer>().material.color;
         }
         killMePrompt.SetActive(false);
 
         _HealthMask = PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_HealthBarMask;
         _ScoreText = PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_ScoreText.GetComponent<Text>();
-        PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_healthScrolllingIcon.GetComponent<Image>().material.SetColor("_Color", _playerColour);
-        PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_StaticObjectMaterial.SetColor("_Color", _playerColour);
+        PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_healthScrolllingIcon.GetComponent<Image>().material.SetColor("_Color", _playerColor);
+        PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_StaticObjectMaterial.SetColor("_Color", _playerColor);
 
         foreach (var item in PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_objects)
         {
@@ -156,7 +156,7 @@ public class PlayerStatus : MonoBehaviour
             _HealthMask.GetComponent<Image>().material.SetTextureOffset("_MainTex", new Vector2(0 + xOffset, 0));
         }
 
-        //if im dead, set my colour to gray, turn of all physics simulations and exit the function
+        //if im dead, set my Color to gray, turn of all physics simulations and exit the function
         if (m_bDead)
         {
             //this.GetComponent<Renderer>().material.color = Color.grey;
@@ -217,12 +217,12 @@ public class PlayerStatus : MonoBehaviour
             //If I find a regular renderer
             if (GetComponent<Renderer>())
             {
-                GetComponent<Renderer>().material.color = _playerColour;
+                GetComponent<Renderer>().material.color = _playerColor;
             }
             else //if no rendere was found
             {
                 if (!m_bInvincible)
-                    PlayerSprite.GetComponent<Renderer>().material.color = _playerColour;
+                    PlayerSprite.GetComponent<Renderer>().material.color = _playerColor;
             }
         }
 
@@ -299,8 +299,8 @@ public class PlayerStatus : MonoBehaviour
 
         _HealthMask = PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_HealthBarMask;
         _ScoreText = PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_ScoreText.GetComponent<Text>();
-        PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_healthScrolllingIcon.GetComponent<Image>().material.SetColor("_Color", _playerColour);
-        PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_StaticObjectMaterial.SetColor("_Color", _playerColour);
+        PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_healthScrolllingIcon.GetComponent<Image>().material.SetColor("_Color", _playerColor);
+        PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_StaticObjectMaterial.SetColor("_Color", _playerColor);
 
         foreach (var item in PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_objects)
         {
@@ -327,7 +327,7 @@ public class PlayerStatus : MonoBehaviour
         {
             m_iHealth -= aBullet.m_iDamage;
             //If the game mode is either the timed deathmatch or scores appointed on kills deathmatch, then give them points
-            if (m_iHealth <= 0 && (GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_POINTS || GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_TIMED))
+            if (m_iHealth <= 0 && (GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_POINTS /*|| GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_TIMED*/))
             {
                 //update the bullet owner's score
                 GameManagerc.Instance.PlayerWins[aBullet.bulletOwner]++;
@@ -358,7 +358,7 @@ public class PlayerStatus : MonoBehaviour
             PlayerSprite.GetComponent<Renderer>().material.color = Color.white;
             yield return new WaitForSecondsRealtime(test);
             PlayerSprite.GetComponent<Renderer>().material = m;
-            PlayerSprite.GetComponent<Renderer>().material.color = _playerColour;
+            PlayerSprite.GetComponent<Renderer>().material.color = _playerColor;
         }
 
         yield return null;

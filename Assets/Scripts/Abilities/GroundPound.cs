@@ -21,7 +21,7 @@ public class GroundPound : BaseAbility
     // Use this for initialization
     public override void Initialise()
     {
-        GroundPoundCollider = transform.GetChild(0).GetComponent<CircleCollider2D>();
+        GroundPoundCollider = transform.Find("SlamCollider").GetComponent<CircleCollider2D>();
         MoveScript = GetComponent<Move>();
         GroundPoundCollider.radius = SpeedOfGrowthPerFrame;
         Slamer = GetComponent<PlayerStatus>();

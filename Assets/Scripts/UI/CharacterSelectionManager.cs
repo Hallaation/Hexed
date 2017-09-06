@@ -9,11 +9,14 @@ public class CharacterSelectionManager : MonoBehaviour
     public GameObject[] CharacterArray;
 
     public Dictionary<GameObject , bool> CharacterSelectionStatus;
+    public int JoinedPlayers = 0;
     //Each controller will have a gameobject(their player);
     public Dictionary<XboxCtrlrInput.XboxController , GameObject> playerSelectedCharacter = new Dictionary<XboxCtrlrInput.XboxController , GameObject>();
 
     static CharacterSelectionManager mInstance = null;
     public bool m_bMovedToMainScene = false;
+
+    public bool LetPlayersSelectCharacters = false;
     //lazy singleton if an instance of this doesn't exist, make one
     //Instance property 
     public static CharacterSelectionManager Instance
@@ -40,6 +43,7 @@ public class CharacterSelectionManager : MonoBehaviour
     // Use this for initialization
     private void Awake()
     {
+        SingletonTester.Instance.AddSingleton(this);
         SceneManager.sceneLoaded += OnSceneLoaded;
         Object[] temp = Resources.LoadAll("Characters" , typeof(GameObject));
         CharacterArray = new GameObject[temp.Length];
@@ -59,7 +63,6 @@ public class CharacterSelectionManager : MonoBehaviour
 
     void Update()
     {
-
         if (Input.GetKeyDown(KeyCode.R))
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
@@ -69,7 +72,8 @@ public class CharacterSelectionManager : MonoBehaviour
             //only load the scene if I still havnt moved to arena scene
             if (Input.GetButtonDown("Start") && !m_bMovedToMainScene)
             {
-                SceneManager.LoadScene(2); //oh fuck.
+                UIManager.Instance.MainMenuChangePanel(GameObject.Find("Third_Panel"));
+                //SceneManager.LoadScene(2); //oh fuck.
             }
         }
 
@@ -83,33 +87,33 @@ public class CharacterSelectionManager : MonoBehaviour
         }
     }
 
-    public void LoadPlayers()
+    public void LoadPlayers() //! SpawnPlayers, Spawn Players,
     {
         if (!m_bMovedToMainScene)
         {
             for (int i = 0; i < playerSelectedCharacter.Count; ++i)
             {
                 ControllerManager.Instance.FindSpawns();
-                GameObject go = Instantiate(playerSelectedCharacter[XboxController.First + i], ControllerManager.Instance.spawnPoints[i].position, Quaternion.identity, null);
+                Vector3 spawnPosition = ControllerManager.Instance.spawnPoints[i].position; //Get the spawn position
+                //Make the gameojbect and keep a reference scoped to the single loop
+                GameObject go = Instantiate(playerSelectedCharacter[XboxController.First + i], spawnPosition, Quaternion.identity, null);
+                //Set anything required for the player to work.
                 go.GetComponent<ControllerSetter>().SetController(PlayerIndex.One + i);
                 go.GetComponent<ControllerSetter>().m_playerNumber = i;
                 go.GetComponent<PlayerStatus>().spawnIndex = i;
+                //Find the Array for players
                 PlayerUIArray.Instance.playerElements[i].gameObject.SetActive(true);
+                //Make a reference in game manager
                 GameManagerc.Instance.AddPlayer(go.GetComponent<PlayerStatus>());
-                DontDestroyOnLoad(go);
-                go.SetActive(true);
-                CameraControl.mInstance.m_Targets.Add(go.transform);
+                DontDestroyOnLoad(go);//turn it on
+                go.SetActive(true);   
+                CameraControl.mInstance.m_Targets.Add(go.transform); //make a reference in camera control
                 m_bMovedToMainScene = true;
             }
         }
     }
     void OnSceneLoaded(Scene scene , LoadSceneMode mode)
     {
-        //if my currnet scene is 1 (when loaded into the game arean and I havn't already moved in, spawn the players
-        //if (scene.buildIndex == 1 && !m_bMovedToMainScene)
-        //{
-        //
-        //}
 
         if (scene.buildIndex == 0)
         {
