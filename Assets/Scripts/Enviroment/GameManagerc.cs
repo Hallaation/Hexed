@@ -66,15 +66,15 @@ public class GameManagerc : MonoBehaviour
     //public List<int> PlayerWins = new List<int>();
     public Dictionary<PlayerStatus, int> PlayerWins = new Dictionary<PlayerStatus, int>();
     public List<PlayerStatus> InGamePlayers = new List<PlayerStatus>();
-    GameObject WinningPlayer = null;
+   // GameObject WinningPlayer = null;
 
     public Gamemode_type m_gameMode = Gamemode_type.LAST_MAN_STANDING_DEATHMATCH;
 
     public int m_iPointsNeeded = 5;
-    public float m_fTimedDeathMatchTime;
+   // public float m_fTimedDeathMatchTime;
 
     static GameManagerc mInstance = null;
-    Timer DeathmatchTimer;
+   // Timer DeathmatchTimer;
     //lets keep the variables at the top shall we
     private GameObject FinishUIPanel;
     private bool m_bRoundOver;
@@ -115,7 +115,7 @@ public class GameManagerc : MonoBehaviour
         SingletonTester.Instance.AddSingleton(this);
         //Find the 
 
-        DeathmatchTimer = new Timer(m_fTimedDeathMatchTime);
+        //DeathmatchTimer = new Timer(m_fTimedDeathMatchTime);
         waitForRoundEnd = new Timer(3);
         mInstance = GameManagerc.Instance;
         if (mInstance.gameObject != this.gameObject)
@@ -413,7 +413,7 @@ public class GameManagerc : MonoBehaviour
         {
             PlayerWins[item] = 0;
         }
-        WinningPlayer = null; // still unsued
+       // WinningPlayer = null; // still unsued
         m_bRoundOver = false;
         mbFinishedShowingScores = false;
 
