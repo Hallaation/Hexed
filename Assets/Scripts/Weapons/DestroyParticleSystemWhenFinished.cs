@@ -12,12 +12,12 @@ public class DestroyParticleSystemWhenFinished : MonoBehaviour {
 	
 	void Update ()
     {
-        if (ps)
-        {
-            if (!ps.IsAlive())
-            {
-                Destroy(gameObject);
-            }
-        }
+        //if (ps)
+        //{
+        //    if (!ps.IsAlive())
+        //    {
+        //        Destroy(gameObject);
+        //    }
+        //}
 	}
 }
