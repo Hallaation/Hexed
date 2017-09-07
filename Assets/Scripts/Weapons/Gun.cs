@@ -14,7 +14,7 @@ public class Gun : Weapon
     public float m_fSpreadIncrease = 0.1f;
     public float m_fMaxJitter = 1.0f;
 
-    public float m_fBulletSpawnOffSet = 2.0f;
+    public float m_fBulletSpawnOffSet = -.1f; //? Don't put below 0.009?
     public float m_fFiringForce = 20.0f;
     public bool m_bAutomatic;
     [Header("BurstFire Settings")]
