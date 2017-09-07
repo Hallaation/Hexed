@@ -66,15 +66,15 @@ public class GameManagerc : MonoBehaviour
     //public List<int> PlayerWins = new List<int>();
     public Dictionary<PlayerStatus, int> PlayerWins = new Dictionary<PlayerStatus, int>();
     public List<PlayerStatus> InGamePlayers = new List<PlayerStatus>();
-   // GameObject WinningPlayer = null;
+    // GameObject WinningPlayer = null;
 
     public Gamemode_type m_gameMode = Gamemode_type.LAST_MAN_STANDING_DEATHMATCH;
 
     public int m_iPointsNeeded = 5;
-   // public float m_fTimedDeathMatchTime;
+    // public float m_fTimedDeathMatchTime;
 
     static GameManagerc mInstance = null;
-   // Timer DeathmatchTimer;
+    // Timer DeathmatchTimer;
     //lets keep the variables at the top shall we
     private GameObject FinishUIPanel;
     private bool m_bRoundOver;
@@ -139,8 +139,20 @@ public class GameManagerc : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.G))
         {
+            GoToStart();
+            //Rematch();
+            //MapToLoad = null;
+            //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+        if (Input.GetKeyDown(KeyCode.H))
+        {
             Rematch();
         }
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            KillPlayer1();
+        }
+
         if (InGamePlayers.Count > 1)
         {
             StartCoroutine(CheckForRoundEnd());
@@ -197,7 +209,10 @@ public class GameManagerc : MonoBehaviour
         }
         yield return null;
     }
-
+    void KillPlayer1()
+    {
+        InGamePlayers[0].KillPlayer(InGamePlayers[1]);
+    }
     /// <summary>
     /// Points are awarded if a player is the last man standing
     /// </summary>
@@ -229,11 +244,11 @@ public class GameManagerc : MonoBehaviour
                     PlayerWins[player] += 1;
                     //TODO Point tallying screen goes here.
                     StartCoroutine(AddPointsToPanel(player));
-
                     // Debug.Break();
                 }
                 ++i; //probably unused, keeping it here in case it is actually used.
             }
+            CheckPlayersPoints();
         }
 
     }
@@ -276,7 +291,7 @@ public class GameManagerc : MonoBehaviour
     {
         //If player has reached the points required to win
         //And I havn't shown the finished panel yet, show it, set the show panel to true so this doesnt run again.
-        if (mbFinishedShowingScores && !mbFinishedPanelShown)
+        if (mbFinishedShowingScores)
         {
             foreach (var player in InGamePlayers)
             {
@@ -326,6 +341,7 @@ public class GameManagerc : MonoBehaviour
                     mbMapLoaded = true;
                     ControllerManager.Instance.FindSpawns();
                     CharacterSelectionManager.Instance.LoadPlayers();
+                    Debug.Log("Loaded map and players");
                 }
                 //If I found the finished game panel
                 if (GameObject.Find("FinishedGamePanel"))
@@ -413,7 +429,7 @@ public class GameManagerc : MonoBehaviour
         {
             PlayerWins[item] = 0;
         }
-       // WinningPlayer = null; // still unsued
+        // WinningPlayer = null; // still unsued
         m_bRoundOver = false;
         mbFinishedShowingScores = false;
 
@@ -427,35 +443,40 @@ public class GameManagerc : MonoBehaviour
     /// </summary>
     public void GoToStart()
     {
+        Time.timeScale = 1;
         //clear the players list
         for (int i = 0; i < InGamePlayers.Count; i++)
         {
             InGamePlayers[i].Clear();
             InGamePlayers[i].gameObject.SetActive(false);
+            Destroy(InGamePlayers[i].gameObject, 1);
         }
-
+        InGamePlayers = new List<PlayerStatus>();
 
         //turn off all the singletons
         UIManager.Instance.gameObject.SetActive(false);
         ControllerManager.Instance.gameObject.SetActive(false);
         CharacterSelectionManager.Instance.gameObject.SetActive(false);
         PlayerUIArray.Instance.gameObject.SetActive(false);
-        GameManagerc.Instance.gameObject.SetActive(false);
+        //GameManagerc.Instance.gameObject.SetActive(false);
+        UINavigation.Instance.gameObject.SetActive(false);
         //Destroy the singleton objects
+
         Destroy(PlayerUIArray.Instance.gameObject);
         Destroy(UIManager.Instance.gameObject);
         Destroy(ControllerManager.Instance.gameObject);
         Destroy(CharacterSelectionManager.Instance.gameObject);
-        Destroy(this.gameObject);
+        // Destroy(GameManagerc.Instance.gameObject);
+        Destroy(UINavigation.Instance.gameObject);
         //reset the time scale
-        Time.timeScale = 1;
         //? Don't know why but the scene loads before all the logic even happens
-        //WTF scene begings to load even though line hasnt been called. what is happening. 
-        SceneManager.LoadScene(0);
+        //WTF Scene isn't clearing itself, 
+        StartCoroutine(waitForSeconds(0.2f));
     }
     IEnumerator waitForSeconds(float time)
     {
         yield return new WaitForSecondsRealtime(time);
+        SceneManager.LoadScene(0);
     }
 
     IEnumerator AddPointsToPanel(PlayerStatus player)
@@ -475,7 +496,7 @@ public class GameManagerc : MonoBehaviour
         yield return new WaitForSeconds(2);
         mbFinishedShowingScores = true;
         PointsPanel.SetActive(false);
-        
+
     }
 }
 
