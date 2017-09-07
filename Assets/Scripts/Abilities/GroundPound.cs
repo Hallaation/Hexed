@@ -148,7 +148,7 @@ public class GroundPound : BaseAbility
         MoveScript.enabled = true;
         MoveScript.SetActive(true);
         ButtonHasBeenUp = false;
-            currentMana -= ManaCost;
+           
         GroundPoundCollider.radius = SpeedOfGrowthPerFrame;
         Corotuine = true;
 
