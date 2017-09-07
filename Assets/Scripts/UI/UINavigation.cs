@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-
+using UnityEngine.SceneManagement;
 using XboxCtrlrInput;
 using XInputDotNetPure;
 public class UINavigation : MonoBehaviour
@@ -24,7 +24,7 @@ public class UINavigation : MonoBehaviour
                 {
                     mInstance = (new GameObject("UINavigation")).AddComponent<UINavigation>();
                 }
-                DontDestroyOnLoad(mInstance.gameObject);
+                //DontDestroyOnLoad(mInstance.gameObject);
             }
             return mInstance;
         }
@@ -32,15 +32,17 @@ public class UINavigation : MonoBehaviour
 
    
     // Use this for initialization
-    void Start()
+    void Awake()
     {
         SingletonTester.Instance.AddSingleton(this);
-
-        _EventSystem = FindObjectOfType<EventSystem>();
-
+        SceneManager.sceneLoaded += OnSceneLoad;
+        //_EventSystem = FindObjectOfType<EventSystem>();
 
     }
-
+    void OnSceneLoad(Scene scene, LoadSceneMode mode)
+    {
+        _EventSystem = FindObjectOfType<EventSystem>();
+    }
     // Update is called once per frame
     void Update()
     {

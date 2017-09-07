@@ -186,9 +186,9 @@ public class Move : MonoBehaviour
     {
 
         //Buggy with XBone controller with high frame rates.
-        //GamePad.SetVibration(m_controller.mPlayerIndex , XCI.GetAxis(XboxAxis.LeftTrigger , m_controller.mXboxController) , XCI.GetAxis(XboxAxis.RightTrigger , m_controller.mXboxController));
-        //vibrationValue = new Vector2(XCI.GetAxis(XboxAxis.LeftTrigger , m_controller.mXboxController) , XCI.GetAxis(XboxAxis.RightTrigger , m_controller.mXboxController));
-        // GamePad.SetVibration(m_controller.mPlayerIndex , vibrationValue.x , vibrationValue.y);
+        GamePad.SetVibration(m_controller.mPlayerIndex , XCI.GetAxis(XboxAxis.LeftTrigger , m_controller.mXboxController) , XCI.GetAxis(XboxAxis.RightTrigger , m_controller.mXboxController));
+        vibrationValue = new Vector2(XCI.GetAxis(XboxAxis.LeftTrigger , m_controller.mXboxController) , XCI.GetAxis(XboxAxis.RightTrigger , m_controller.mXboxController));
+         GamePad.SetVibration(m_controller.mPlayerIndex , vibrationValue.x , vibrationValue.y);
 
         //  vibrationValue *= 0.99f; //magic numbers.
 
@@ -435,8 +435,8 @@ public class Move : MonoBehaviour
                 //attack using the weapon im holding. if an attack was done, set a vibration on my controller.
                 if (heldWeapon.GetComponent<Weapon>().Attack(TriggerCheck))
                 {
+                    //CameraShake.Instance.ShakeCamera();
                     vibrationValue.x = 0.45f;
-
                 }
 
                 m_bTriggerReleased = false;

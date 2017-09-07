@@ -52,9 +52,9 @@ public class UIManager : MonoBehaviour
                 if (mInstance == null)
                 {
                     //if not found, make an object and attach me to it
-                    mInstance = (new GameObject("ControllerManager")).AddComponent<UIManager>();
+                    mInstance = (new GameObject("UIManager")).AddComponent<UIManager>();
                 }
-                mInstance.gameObject.name = "Singleton container";
+                //mInstance.gameObject.name = "Singleton container";
                 DontDestroyOnLoad(mInstance.gameObject);
 
             }
@@ -213,6 +213,9 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.P))
+            CameraShake.Instance.ShakeCamera();
+
         if (m_bInMainMenu)
         {
             MainMenuUpdate();
@@ -269,7 +272,7 @@ public class UIManager : MonoBehaviour
         //    return;
 
         //if the menu status count is 1 and I don't want to remove the last panel, exit out of the function
-        if (menuStatus.Count == 1 && m_bRemoveLastPanel)
+        if (menuStatus.Count == 1 && !m_bRemoveLastPanel)
         {
             return;
         }
