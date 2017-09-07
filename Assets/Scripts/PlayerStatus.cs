@@ -310,7 +310,7 @@ public class PlayerStatus : MonoBehaviour
     public void KillPlayer(PlayerStatus killer)
     {
         //kill the player, called outside of class (mostly used for downed kills)
-        if (!m_bInvincible)
+        if (/*!m_bInvincible*/true)
         {
             SetAllAnimatorsFalse();
             m_iHealth = 0;

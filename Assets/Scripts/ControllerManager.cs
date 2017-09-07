@@ -36,7 +36,7 @@ public class ControllerManager : MonoBehaviour
     }
 
     //dictionary used to determine if the controller index has been assigned yet.
-    Dictionary<PlayerIndex , bool> playerIdx = new Dictionary<PlayerIndex , bool>
+    Dictionary<PlayerIndex, bool> playerIdx = new Dictionary<PlayerIndex, bool>
     {
         {PlayerIndex.One, false },
         {PlayerIndex.Two, false },
@@ -45,7 +45,7 @@ public class ControllerManager : MonoBehaviour
     };
 
     //dictionary mapping XCI index with the XInputDotNet indexes
-    Dictionary<PlayerIndex , XboxController> xboxControllers = new Dictionary<PlayerIndex , XboxController>
+    Dictionary<PlayerIndex, XboxController> xboxControllers = new Dictionary<PlayerIndex, XboxController>
     {
         {PlayerIndex.One, XboxController.First },
         {PlayerIndex.Two, XboxController.Second },
@@ -63,7 +63,7 @@ public class ControllerManager : MonoBehaviour
     public GameObject playerPrefab2;
     public Transform[] spawnPoints;
 
-   // List<GameObject> players = new List<GameObject>();
+    // List<GameObject> players = new List<GameObject>();
     void Awake()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -101,16 +101,16 @@ public class ControllerManager : MonoBehaviour
             GamePadState testState = GamePad.GetState(testIndex);
             if (testState.IsConnected &&
                 !playerIdx[testIndex] &&
-                (XCI.GetButtonDown(XboxButton.Start , xboxControllers[testIndex]) || XCI.GetButtonDown(XboxButton.Back , xboxControllers[testIndex]))
+                (XCI.GetButtonDown(XboxButton.Start, xboxControllers[testIndex]) || XCI.GetButtonDown(XboxButton.Back, xboxControllers[testIndex]))
                 && DebugMode)
             //if the player of index i has pressed Start, and their controller is connected, and their controller has yet to be assgined
             {
 
                 //assign a controller and spawn the player
                 playerIdx[testIndex] = true;
-                if (XCI.GetButtonDown(XboxButton.Start , xboxControllers[testIndex]))
+                if (XCI.GetButtonDown(XboxButton.Start, xboxControllers[testIndex]))
                 {
-                    GameObject go2 = Instantiate(playerPrefab , spawnPoints[nextPlayer].position , Quaternion.identity , null);
+                    GameObject go2 = Instantiate(playerPrefab, spawnPoints[nextPlayer].position, Quaternion.identity, null);
                     go2.GetComponent<ControllerSetter>().SetController(testIndex);
                     go2.GetComponent<ControllerSetter>().m_playerNumber = i;
                     go2.GetComponent<PlayerStatus>().spawnIndex = nextPlayer;
@@ -126,9 +126,9 @@ public class ControllerManager : MonoBehaviour
                         ref_cameraController.m_Targets.Add(go2.transform);
                     }
                 }
-                else if (XCI.GetButtonDown(XboxButton.Back , xboxControllers[testIndex]))
+                else if (XCI.GetButtonDown(XboxButton.Back, xboxControllers[testIndex]))
                 {
-                    GameObject go = Instantiate(playerPrefab2 , spawnPoints[nextPlayer].position , Quaternion.identity , null);
+                    GameObject go = Instantiate(playerPrefab2, spawnPoints[nextPlayer].position, Quaternion.identity, null);
                     go.GetComponent<ControllerSetter>().SetController(testIndex);
                     go.GetComponent<ControllerSetter>().m_playerNumber = i;
                     go.GetComponent<PlayerStatus>().spawnIndex = nextPlayer;
@@ -151,7 +151,7 @@ public class ControllerManager : MonoBehaviour
 
         yield return new WaitForEndOfFrame();
     }
-    void AddAbility(int abilityIndex , GameObject playerToAddAbility)
+    void AddAbility(int abilityIndex, GameObject playerToAddAbility)
     {
         if (addedAbility)
         {
@@ -197,7 +197,7 @@ public class ControllerManager : MonoBehaviour
         }
 
     }
-    void OnSceneLoaded(Scene scene , LoadSceneMode mode)
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         ControllerManager[] items = FindObjectsOfType<ControllerManager>() as ControllerManager[];
 
@@ -208,7 +208,7 @@ public class ControllerManager : MonoBehaviour
                 //Destroy(items[i].gameObject);
             }
         }
-        
+
         if (scene.buildIndex != 0)
         {
             GameObject spawnParent = GameObject.FindGameObjectWithTag("SpawnPoints");
@@ -227,15 +227,14 @@ public class ControllerManager : MonoBehaviour
 
     public void FindSpawns()
     {
-        if (GameManagerc.Instance.mbMapLoaded)
+
+        GameObject spawnParent = GameObject.FindGameObjectWithTag("SpawnPoints");
+        //Find the spawn points
+        spawnPoints = new Transform[spawnParent.transform.childCount];
+        for (int i = 0; i < spawnParent.transform.childCount; ++i)
         {
-            GameObject spawnParent = GameObject.FindGameObjectWithTag("SpawnPoints");
-            //Find the spawn points
-            spawnPoints = new Transform[spawnParent.transform.childCount];
-            for (int i = 0; i < spawnParent.transform.childCount; ++i)
-            {
-                spawnPoints[i] = spawnParent.transform.GetChild(i);
-            }
+            spawnPoints[i] = spawnParent.transform.GetChild(i);
         }
+
     }
 }

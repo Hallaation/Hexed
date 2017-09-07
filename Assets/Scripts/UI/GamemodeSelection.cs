@@ -135,8 +135,7 @@ public class GamemodeSelection : MonoBehaviour
         if (UIManager.Instance.menuStatus.Peek() == this.transform.parent.parent.gameObject)
         {
             CheckForStickReset();
-            Debug.Log(_button.transform.parent);
-            Debug.Log(_eventSystem.currentSelectedGameObject.transform.parent);
+
             //if the event systems currently selected object is my assigned buttons parent, do the things according to my type.
             if (_eventSystem.currentSelectedGameObject.transform.parent == _button.transform.parent)
             {
