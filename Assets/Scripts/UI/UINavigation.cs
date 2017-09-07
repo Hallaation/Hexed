@@ -50,6 +50,7 @@ public class UINavigation : MonoBehaviour
         //    //Instead of searching, all of these navigation will have to be set in the inspector/editor itself. 
         //    //For every directional button, get the button's navigation on up/down/left/right and set the event system's selected object to these.
         //}
+
         if (_EventSystem.currentSelectedGameObject)
         {
             for (int i = 0; i < XCI.GetNumPluggedCtrlrs(); i++)

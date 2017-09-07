@@ -268,7 +268,7 @@ TrailRenderer:
     alignment: 0
     textureMode: 0
   m_MinVertexDistance: 0
-  m_Autodestruct: 1
+  m_Autodestruct: 0
 --- !u!114 &114378356598025532
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -294,7 +294,7 @@ ParticleSystem:
   simulationSpeed: 1
   looping: 0
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   autoRandomSeed: 1
   startDelay:
     scalar: 0
@@ -338,7 +338,7 @@ ParticleSystem:
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: 729877568
+  randomSeed: -1095675361
   InitialModule:
     serializedVersion: 3
     enabled: 1

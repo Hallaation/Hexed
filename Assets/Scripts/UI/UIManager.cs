@@ -28,7 +28,7 @@ public class UIManager : MonoBehaviour
 
     //Main menu stuff
     [Space]
-    [Header ("Main Menu Variables")]
+    [Header("Main Menu Variables")]
     public bool m_bInMainMenu = false;
     private GameObject m_SettingsPanel;
     private GameObject m_CreditsPanel;
@@ -74,7 +74,7 @@ public class UIManager : MonoBehaviour
         m_SettingsPanel.SetActive((!m_SettingsPanel));
 
         //instance = FindObjectOfType<UIManager>();
-        
+
         _eventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
         selected = _eventSystem.currentSelectedGameObject;
         menuStatus = new Stack<GameObject>();
@@ -129,7 +129,6 @@ public class UIManager : MonoBehaviour
 
     }
 
-
     public void MainMenuBack()
     {
         //If the menu status only has 1 object in it, dont do anything
@@ -139,6 +138,16 @@ public class UIManager : MonoBehaviour
         }
         else if (m_bOpenedPanel)
         {
+            //If any of the dropboxes are open, hide them and exit this function
+            foreach (var dropdown in menuStatus.Peek().GetComponentsInChildren<Dropdown>())
+            {
+                if (dropdown.transform.childCount > 3)
+                {
+                    dropdown.Hide();
+                    return;
+                }
+            }
+            //depending on what panel is being closed, do the different animation thing.
             switch (menuStatus.Peek().name)
             {
                 case "Options_Panel":
@@ -150,11 +159,12 @@ public class UIManager : MonoBehaviour
                     m_ButtonAnimator.SetBool("IsCredits", false);
                     break;
             }
-            foreach (var dropdown in menuStatus.Peek().GetComponentsInChildren<Dropdown>())
+            //Save my changes here
+            if (SettingsManager.Instance.UnsavedChanges)
             {
-                dropdown.Hide();
+                SettingsManager.Instance.OnApplyButtonClick();
             }
-
+            //set the first object on the stack to false
             menuStatus.Peek().SetActive(false);
             menuStatus.Pop();
             m_ButtonAnimator = menuStatus.Peek().GetComponent<Animator>();

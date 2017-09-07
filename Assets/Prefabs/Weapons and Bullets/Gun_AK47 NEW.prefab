@@ -69,7 +69,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4828262548686524}
-  - component: {fileID: 58199406430124616}
+  - component: {fileID: 58776948240969992}
   m_Layer: 12
   m_Name: Collider
   m_TagString: Untagged
@@ -96,8 +96,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1197723866840090}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -5.9, y: 5.35, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -4.77, y: 5.34, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_Children:
   - {fileID: 4605829996525652}
@@ -150,9 +150,9 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
---- !u!58 &58199406430124616
+--- !u!58 &58776948240969992
 CircleCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -196,17 +196,18 @@ MonoBehaviour:
   m_bAutomaticGun: 1
   m_bBurstFire: 0
   m_bGivePlayersIFrames: 0
-  KnockBack: 0
+  KnockBack: 5
   MaxShadow: 0.2
   MinShadow: 0
   ShadowGrowthSpeed: 0.2
   m_bActive: 1
   previousOwner: {fileID: 0}
   m_bMoveWeaponSpriteUp: 0
-  m_iAmmo: 30
-  bullet: {fileID: 1928104826133792, guid: 7b1d5a4de82f724468c78516eca036b0, type: 2}
-  m_fSpreadJitter: 5
-  m_fSpreadIncrease: 15
+  m_iAmmo: 2147483647
+  bullet: {fileID: 0}
+  m_fSpreadJitter: 20
+  m_fSpreadIncrease: 10
+  m_fMaxJitter: 1
   m_fBulletSpawnOffSet: 1
   m_fFiringForce: 0.25
   m_bAutomatic: 0
