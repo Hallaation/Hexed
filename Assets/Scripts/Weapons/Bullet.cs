@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    CircleCollider2D Hit;
+    CircleCollider2D m_CircleCollider;
     Vector2 m_vVelocity;
     Vector3 PreviousVelocity;
+    float PreviousRotation;
     public Vector3 GetPreviousVelocity() { return PreviousVelocity; }
     public Vector2 Velocity { get { return m_vVelocity; } set { m_vVelocity = value; } }
     ParticleSystem ParticleSparks;
@@ -25,9 +26,9 @@ public class Bullet : MonoBehaviour
     {
         BulletSprite = GetComponent<SpriteRenderer>();
         ParticleSparks = GetComponentInChildren<ParticleSystem>();
-        Hit = GetComponent<CircleCollider2D>();
+        m_CircleCollider = GetComponent<CircleCollider2D>();
         m_rigidBody = GetComponent<Rigidbody2D>();
-
+        PreviousRotation = GetComponent<Rigidbody2D>().rotation;
         PreviousVelocity = GetComponent<Rigidbody2D>().velocity;
         // Destroy(this.gameObject , 5);
     }
@@ -67,14 +68,30 @@ public class Bullet : MonoBehaviour
 
         //}
         PreviousVelocity = this.GetComponent<Rigidbody2D>().velocity;
+        PreviousRotation = m_rigidBody.rotation;
         Vector2 dir = m_rigidBody.velocity;
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
-
-
+      
         VChildPrevRotation = transform.localEulerAngles;
     }
+    //? THIS
+    //private void FixedUpdate()
+    //{
+    //    Ray2D WallCheckRay = new Ray2D(transform.position, -transform.right);
+    //    RaycastHit2D RayHit = Physics2D.Raycast(WallCheckRay.origin, WallCheckRay.direction, m_rigidBody.velocity.magnitude, 1 << 10);
+    //    Debug.DrawRay(WallCheckRay.origin, WallCheckRay.direction, Color.red, 9999.0f);                       
+    //    float a = (transform.rotation * m_rigidBody.velocity).y;
+    //    if (RayHit.distance < a)
+    //    {
+    //        m_rigidBody.isKinematic = true;
+    //        transform.position = RayHit.point;
+    //        StartCoroutine(PlayParticle(RayHit.point));
+    //    }
+       
+    //}
+
 
     IEnumerator PlayParticle(Collision2D hit)
     {
@@ -92,22 +109,42 @@ public class Bullet : MonoBehaviour
         yield return new WaitForSecondsRealtime(ParticleSparks.main.duration);
         Destroy(this.gameObject);
     }
+    //? And THis
+    //IEnumerator PlayParticle(Vector2 HitPoint)
+    //{
+    //    Debug.Log("RaySpark");
+    //    if (ParticleSparks != null)
+    //    {
+    //        transform.GetChild(0).localEulerAngles = new Vector3(VChildPrevRotation.x, VChildPrevRotation.y, VChildPrevRotation.z); // parent - 90z
+    //        transform.position = new Vector3(HitPoint.x, HitPoint.y, 0);
+    //        ParticleSparks.Play();
+
+    //        //GameObject hitInstance = Instantiate(HitParticle, this.transform.position, Quaternion.identity) as GameObject;
+    //        //hitInstance.transform.up = hit.transform.up;
+    //        //hitInstance.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
+    //    }
+    //    yield return new WaitForSecondsRealtime(ParticleSparks.main.duration);
+    //    Destroy(this.gameObject);
+    //}
 
     void OnCollisionEnter2D(Collision2D hit)
     {
+        if(m_rigidBody.isKinematic == false)
         if (hit.collider.tag == "Shield")
         {
             this.GetComponent<Rigidbody2D>().velocity = Vector3.Reflect(transform.up + PreviousVelocity, hit.transform.up);
 
             return;
         }
+        m_CircleCollider.enabled = false;
+        m_rigidBody.rotation = PreviousRotation;
         //if I hit a wall, a door, some glass or a "height objecct" I will stop everything.
         if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Wall") || hit.transform.gameObject.layer == LayerMask.NameToLayer("Door") || hit.transform.gameObject.layer == LayerMask.NameToLayer("Glass") || hit.transform.gameObject.layer == LayerMask.NameToLayer("HeightObject"))
         {
             m_rigidBody.velocity = Vector2.zero;
             m_rigidBody.simulated = false;
             BulletSprite.enabled = false;
-            Hit.enabled = false;
+
             if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Wall"))
                 StartCoroutine(PlayParticle(hit));
             else
