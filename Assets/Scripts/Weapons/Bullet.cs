@@ -8,7 +8,7 @@ public class Bullet : MonoBehaviour
     Vector2 m_vVelocity;
     Vector3 PreviousVelocity;
     public Vector3 GetPreviousVelocity() { return PreviousVelocity; }
-    public Vector2 Velocity { get { return m_vVelocity; }  set { m_vVelocity = value; } }
+    public Vector2 Velocity { get { return m_vVelocity; } set { m_vVelocity = value; } }
     ParticleSystem ParticleSparks;
     SpriteRenderer BulletSprite;
     Rigidbody2D m_rigidBody;
@@ -20,7 +20,7 @@ public class Bullet : MonoBehaviour
     public bool m_bGiveIFrames = false;
     //public GameObject HitParticle;
 
-  
+
     void Start()
     {
         BulletSprite = GetComponent<SpriteRenderer>();
@@ -29,10 +29,10 @@ public class Bullet : MonoBehaviour
         m_rigidBody = GetComponent<Rigidbody2D>();
 
         PreviousVelocity = GetComponent<Rigidbody2D>().velocity;
-       // Destroy(this.gameObject , 5);
+        // Destroy(this.gameObject , 5);
     }
-	// Update is called once per frame
-	void Update ()
+    // Update is called once per frame
+    void Update()
     {
 
         //raycasts in front for collision check
@@ -72,7 +72,7 @@ public class Bullet : MonoBehaviour
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
 
-      
+
         VChildPrevRotation = transform.localEulerAngles;
     }
 
@@ -81,15 +81,15 @@ public class Bullet : MonoBehaviour
         Debug.Log("spark");
         if (ParticleSparks != null)
         {
-            transform.GetChild(0).localEulerAngles = new Vector3(VChildPrevRotation.x,VChildPrevRotation.y,VChildPrevRotation.z - 90); // parent - 90z
-            transform.position = new Vector3(hit.contacts[0].point.x,hit.contacts[0].point.y,0);
+            transform.GetChild(0).localEulerAngles = new Vector3(VChildPrevRotation.x, VChildPrevRotation.y, VChildPrevRotation.z); // parent - 90z
+            transform.position = new Vector3(hit.contacts[0].point.x, hit.contacts[0].point.y, 0);
             ParticleSparks.Play();
 
             //GameObject hitInstance = Instantiate(HitParticle, this.transform.position, Quaternion.identity) as GameObject;
             //hitInstance.transform.up = hit.transform.up;
             //hitInstance.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
         }
-        yield return new WaitForSeconds(.4f);
+        yield return new WaitForSecondsRealtime(ParticleSparks.main.duration);
         Destroy(this.gameObject);
     }
 
@@ -103,7 +103,7 @@ public class Bullet : MonoBehaviour
         }
         //if I hit a wall, a door, some glass or a "height objecct" I will stop everything.
         if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Wall") || hit.transform.gameObject.layer == LayerMask.NameToLayer("Door") || hit.transform.gameObject.layer == LayerMask.NameToLayer("Glass") || hit.transform.gameObject.layer == LayerMask.NameToLayer("HeightObject"))
-        {          
+        {
             m_rigidBody.velocity = Vector2.zero;
             m_rigidBody.simulated = false;
             BulletSprite.enabled = false;
@@ -111,6 +111,7 @@ public class Bullet : MonoBehaviour
             if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Wall"))
                 StartCoroutine(PlayParticle(hit));
             else
+                //print("lol");
                 Destroy(this.gameObject);
 
             //TODO Play Spark effect
@@ -126,16 +127,16 @@ public class Bullet : MonoBehaviour
                 {
                     hit.transform.GetComponent<PlayerStatus>().IsDead = true;
                 }
-              
+
                 Destroy(this.gameObject);
             }
         }
-        
+
     }
 
     void OnTriggerEnter2D()
     {
-       
+
     }
 
 }

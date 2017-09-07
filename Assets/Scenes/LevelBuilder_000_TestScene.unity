@@ -5378,6 +5378,26 @@ Transform:
   m_PrefabParentObject: {fileID: 4449191571688328, guid: bfb7af45aa304094aa3ff4a6ca53437d,
     type: 2}
   m_PrefabInternal: {fileID: 124721527}
+--- !u!1 &1721534204 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1877943089600360, guid: 5bebd3d6dfe97864b83ab0b29febc846,
+    type: 2}
+  m_PrefabInternal: {fileID: 845456535}
+--- !u!58 &1721534206
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1721534204}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 1
 --- !u!4 &1732422103 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4449191571688328, guid: bfb7af45aa304094aa3ff4a6ca53437d,
@@ -5729,6 +5749,10 @@ Prefab:
         type: 2}
       propertyPath: m_bAutomaticGun
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1565912102136700, guid: 0be01b46b027d8243b89e0cbf6a7b5d9, type: 2}
+      propertyPath: m_TagString
+      value: OneHanded
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0be01b46b027d8243b89e0cbf6a7b5d9, type: 2}

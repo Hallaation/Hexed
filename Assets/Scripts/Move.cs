@@ -19,7 +19,7 @@ public class Move : MonoBehaviour
     ControllerSetter m_controller;
     CharacterController _characterController;
     bool PlayerIsActive = true; public bool getActive() { return PlayerIsActive; }
-    public void setActive(bool Active) { PlayerIsActive = Active; }
+    public void SetActive(bool a_PlayerActive) { PlayerIsActive = a_PlayerActive; }
     PlayerStatus m_status;
     [HideInInspector]
     public GameObject heldWeapon = null;
@@ -44,11 +44,11 @@ public class Move : MonoBehaviour
     public Vector2 vibrationValue;
     [HideInInspector]
     public GameObject playerSpirte;
-    float MoveDelayTimer;
+    //float MoveDelayTimer;
     public float StartMoveDelay = 3;
     public Vector3 m_LeftStickRotation;
     public float StickDeadZone = 0.12f;
-    private Text _AmmoText;
+  //  private Text _AmmoText;
     // Use this for initialization
     void Awake()
     {
@@ -108,7 +108,7 @@ public class Move : MonoBehaviour
         defaultWeapon = GetComponent<EmptyHand>();
         SceneManager.sceneLoaded += OnSceneLoaded;
         // Delay
-        MoveDelayTimer = 0;
+       // MoveDelayTimer = 0;
         StoredMoveSpeed = movementSpeed;
         StartCoroutine(DelayMovement());
     }
@@ -601,6 +601,6 @@ public class Move : MonoBehaviour
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        _AmmoText = PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_AmmoText.GetComponent<Text>();
+        //_AmmoText = PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_AmmoText.GetComponent<Text>();
     }
 }

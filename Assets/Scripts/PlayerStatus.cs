@@ -13,6 +13,7 @@ public class PlayerStatus : MonoBehaviour
     int m_iPreviousTimesPunched = 0;
     bool m_bDead = false;
     bool m_bStunned = false;
+    public bool m_bMiniStun;
     public float StunedSlide = 400;
     public int m_iScore;
     public bool m_bInvincible = false;
@@ -52,7 +53,7 @@ public class PlayerStatus : MonoBehaviour
     void Start()
     {
         stunBarContainer = new GameObject("StunBarContainer");
-        
+
         stunBar = transform.Find("Sprites").Find("Stunbar").GetComponent<SpriteRenderer>();
         stunMask = transform.Find("Sprites").Find("StunbarMask").GetComponent<SpriteRenderer>();
 
@@ -66,7 +67,7 @@ public class PlayerStatus : MonoBehaviour
 
         stunBarContainer.transform.localPosition = Vector3.zero;
         stunBarContainer.transform.position += Vector3.up * 1.2f;
-        stunBarContainer.transform.localRotation = Quaternion.Euler(new Vector3(0,0,90));
+        stunBarContainer.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, 90));
 
         stunBarContainer.SetActive(false);
 
@@ -227,6 +228,30 @@ public class PlayerStatus : MonoBehaviour
 
     }
 
+
+    public void MiniStun(Vector3 ForceApplied, float StunTime)
+    {
+        m_bMiniStun = true;
+        SetAllAnimatorsFalse();
+        //        GetComponent<Move>().SetActive(false);
+        _rigidbody.velocity = ForceApplied;
+        Debug.Log("Corotuine should be here");
+       StartCoroutine( MiniStun(StunTime));
+
+    }
+    public IEnumerator MiniStun(float StunTime)
+    {
+        Debug.Log(StunTime);
+        yield return new WaitForSeconds(StunTime);
+        m_bMiniStun = false;
+        yield return null;
+        Debug.Log("Done");
+    }
+    /// <summary>
+    /// Used for combining a stun effect with a knock back. If no stun required use "Knockback()"
+    /// </summary>
+    /// <param name="ThrownItemVelocity"></param>
+
     public void StunPlayer(Vector3 ThrownItemVelocity)
     {
         //stun the player called outside of class
@@ -237,7 +262,14 @@ public class PlayerStatus : MonoBehaviour
         m_bStunned = true;
         m_iTimesPunched = 0;
     }
-
+    /// <summary>
+    /// Used for knocking a player back without stunning them.
+    /// </summary>
+    /// <param name="KnockBackVelocity"></param>
+    public void KnockBack(Vector3 KnockBackVelocity) 
+    {
+        _rigidbody.velocity = KnockBackVelocity;
+    }
 
 
     public void ResetPlayer()
@@ -339,9 +371,12 @@ public class PlayerStatus : MonoBehaviour
 
     void CheckForButtonMash()
     {
-        if (XCI.GetButtonDown(XboxButton.X, GetComponent<ControllerSetter>().mXboxController))
+        if (!m_bMiniStun)
         {
-            stunTimer.CurrentTime += m_fStunTimerReduction;
+            if (XCI.GetButtonDown(XboxButton.X, GetComponent<ControllerSetter>().mXboxController))
+            {
+                stunTimer.CurrentTime += m_fStunTimerReduction;
+            }
         }
 
     }

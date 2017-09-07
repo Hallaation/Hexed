@@ -50,7 +50,7 @@ public class GroundPound : BaseAbility
     IEnumerator GroundPoundAbility()
     {
         currentMana -= ManaCost;
-        MoveScript.setActive(false);
+        MoveScript.SetActive(false);
         _rigidBody.velocity = Vector2.zero;
         // Debug.Break();
         ButtonHasBeenUp = false;
@@ -146,9 +146,9 @@ public class GroundPound : BaseAbility
         //TODO Use Collider.OverlapCollider
         // Collider[] Collider = Physics.c(transform.position, i, 1 << LayerMask.NameToLayer("Player")); //? Currently doesnt collide.
         MoveScript.enabled = true;
-        MoveScript.setActive(true);
+        MoveScript.SetActive(true);
         ButtonHasBeenUp = false;
-            currentMana -= ManaCost;
+           
         GroundPoundCollider.radius = SpeedOfGrowthPerFrame;
         Corotuine = true;
 

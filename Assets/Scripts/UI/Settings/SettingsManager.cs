@@ -17,6 +17,25 @@ public class SettingsManager : MonoBehaviour
     public Resolution[] resolutions;
     public Settings gameSettings;
 
+    private bool m_bUnsavedChanges = false;
+    public bool UnsavedChanges { get { return m_bUnsavedChanges; } }
+
+    private static SettingsManager mInstance;
+
+    public static SettingsManager Instance
+    {
+        get
+        {
+            if (!mInstance)
+            {
+                mInstance = (SettingsManager)FindObjectOfType(typeof(SettingsManager));
+
+            }
+
+            return mInstance;
+        }
+    }
+
     // Use this for initialization
     void OnEnable()
     {
@@ -40,36 +59,52 @@ public class SettingsManager : MonoBehaviour
     }
 
     public void onFullScreenToggle()
-    { gameSettings.Fullscreen = Screen.fullScreen = fullscreenToggle.isOn; }
+    {
+        /*Screen.fullScreen = */
+        gameSettings.Fullscreen = fullscreenToggle.isOn;
+        m_bUnsavedChanges = true;
+    }
 
     public void onResolutionChange()
     {
-        Screen.SetResolution(resolutions[resolutionDropdwon.value].width, resolutions[resolutionDropdwon.value].height, gameSettings.Fullscreen);
         gameSettings.resolutionIndex = resolutionDropdwon.value;
+        m_bUnsavedChanges = true;
     }
 
     public void onTextureQualityChange()
     {
-        QualitySettings.masterTextureLimit = gameSettings.textureQuality = textureQualityDropdown.options.Count - textureQualityDropdown.value;
+        /*QualitySettings.masterTextureLimit =*/
+        gameSettings.textureQuality = textureQualityDropdown.options.Count - textureQualityDropdown.value;
+        m_bUnsavedChanges = true;
     }
 
     public void onAntialiasingChange()
     {
-        QualitySettings.antiAliasing = gameSettings.antiAliasing = (int)AAdropdown.value * (int)AAdropdown.value;
+        /*QualitySettings.antiAliasing = */
+        gameSettings.antiAliasing = (int)AAdropdown.value * (int)AAdropdown.value;
+        m_bUnsavedChanges = true;
     }
 
     public void onVsyncChange()
     {
-        QualitySettings.vSyncCount = gameSettings.vSync = vSyncDrop.value;
+        /*QualitySettings.vSyncCount = */
+        gameSettings.vSync = vSyncDrop.value;
+        m_bUnsavedChanges = true;
     }
 
     public void OnMasterVolumeChange()
     {
-        AudioListener.volume = gameSettings.musicVolume = masterVolumeSlider.value;
+        /*AudioListener.volume = */
+        gameSettings.musicVolume = masterVolumeSlider.value;
+        m_bUnsavedChanges = true;
     }
 
     public void OnApplyButtonClick()
     {
+        Screen.fullScreen = gameSettings.Fullscreen;
+        Screen.SetResolution(resolutions[gameSettings.resolutionIndex].width, resolutions[gameSettings.resolutionIndex].height, gameSettings.Fullscreen);
+        QualitySettings.vSyncCount = gameSettings.vSync;
+        AudioListener.volume = gameSettings.musicVolume;
         SaveSettings();
     }
     public void SaveSettings()
@@ -77,6 +112,7 @@ public class SettingsManager : MonoBehaviour
         Debug.Log("settings saved");
         string jsonData = JsonUtility.ToJson(gameSettings, true);
         File.WriteAllText(Application.persistentDataPath + "/gameSettings.json", jsonData);
+        print(Application.persistentDataPath);
     }
 
     public void LoadSettings()
