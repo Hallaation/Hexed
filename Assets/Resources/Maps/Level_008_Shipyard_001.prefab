@@ -14750,10 +14750,10 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 4386328216425888}
-  - {fileID: 4373966744366992}
-  - {fileID: 4148753118182540}
   - {fileID: 4761275515538230}
+  - {fileID: 4386328216425888}
+  - {fileID: 4148753118182540}
+  - {fileID: 4373966744366992}
   m_Father: {fileID: 4274177995466454}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -15285,7 +15285,7 @@ Transform:
   - {fileID: 4768410878154142}
   - {fileID: 4951847431180762}
   m_Father: {fileID: 4308649343047136}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90.00001}
 --- !u!4 &4375454625112682
 Transform:
@@ -15423,7 +15423,7 @@ Transform:
   - {fileID: 4238350596820142}
   - {fileID: 4837494630494440}
   m_Father: {fileID: 4308649343047136}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -60.000004}
 --- !u!4 &4388100993345654
 Transform:
@@ -19300,7 +19300,7 @@ Transform:
   - {fileID: 4613981414889652}
   - {fileID: 4140180599176310}
   m_Father: {fileID: 4308649343047136}
-  m_RootOrder: 3
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90.00001}
 --- !u!4 &4761585941277106
 Transform:
@@ -22229,11 +22229,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae25850cfcbaae2439d77f3f6d8188da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_HeldSprite: {fileID: 0}
   m_fTimeBetweenShots: 0.75
   m_iDamage: 1
   m_bAutomaticGun: 1
   m_bBurstFire: 1
   m_bGivePlayersIFrames: 0
+  m_b2Handed: 0
   KnockBack: 0
   MaxShadow: 0
   MinShadow: 0
@@ -22262,11 +22264,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae25850cfcbaae2439d77f3f6d8188da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_HeldSprite: {fileID: 0}
   m_fTimeBetweenShots: 0
   m_iDamage: 1
   m_bAutomaticGun: 0
   m_bBurstFire: 0
   m_bGivePlayersIFrames: 0
+  m_b2Handed: 0
   KnockBack: 0
   MaxShadow: 0
   MinShadow: 0
@@ -22295,11 +22299,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae25850cfcbaae2439d77f3f6d8188da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_HeldSprite: {fileID: 0}
   m_fTimeBetweenShots: 0.35
   m_iDamage: 1
   m_bAutomaticGun: 1
   m_bBurstFire: 1
   m_bGivePlayersIFrames: 0
+  m_b2Handed: 0
   KnockBack: 0
   MaxShadow: 0
   MinShadow: 0
@@ -22341,11 +22347,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae25850cfcbaae2439d77f3f6d8188da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_HeldSprite: {fileID: 0}
   m_fTimeBetweenShots: 0.15
   m_iDamage: 1
   m_bAutomaticGun: 1
   m_bBurstFire: 0
   m_bGivePlayersIFrames: 0
+  m_b2Handed: 0
   KnockBack: 5
   MaxShadow: 0.2
   MinShadow: 0
@@ -22353,7 +22361,7 @@ MonoBehaviour:
   m_bActive: 1
   previousOwner: {fileID: 0}
   m_bMoveWeaponSpriteUp: 0
-  m_iAmmo: 2147483647
+  m_iAmmo: 30
   bullet: {fileID: 0}
   m_fSpreadJitter: 20
   m_fSpreadIncrease: 10
