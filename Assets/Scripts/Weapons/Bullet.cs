@@ -12,6 +12,7 @@ public class Bullet : MonoBehaviour
     public Vector3 GetPreviousVelocity() { return PreviousVelocity; }
     public Vector2 Velocity { get { return m_vVelocity; } set { m_vVelocity = value; } }
     ParticleSystem ParticleSparks;
+    ParticleSystem[] WallCollidedParticles;
     SpriteRenderer BulletSprite;
     Rigidbody2D m_rigidBody;
     Vector3 VChildPrevRotation;
@@ -29,6 +30,7 @@ public class Bullet : MonoBehaviour
 
         BulletSprite = GetComponent<SpriteRenderer>();
         ParticleSparks = GetComponentInChildren<ParticleSystem>();
+        WallCollidedParticles = GetComponentsInChildren<ParticleSystem>();
         m_CircleCollider = GetComponent<CircleCollider2D>();
         m_rigidBody = GetComponent<Rigidbody2D>();
         PreviousRotation = GetComponent<Rigidbody2D>().rotation;
@@ -79,15 +81,16 @@ public class Bullet : MonoBehaviour
 
         VChildPrevRotation = transform.localEulerAngles;
     }
-    //? THIS
+    //? THIS is done. lol
     private void FixedUpdate()
     {
         if (!m_bStopRayCasts)
         {
             Ray2D WallCheckRay = new Ray2D(transform.position, transform.right);
             //Raycast from me, to my right vector (because all the rotations are fucked) on the distance I'll travel for the next frame.
-            //Only raycast against the player, wall, door and glass
-            RaycastHit2D RayHit = Physics2D.Raycast(WallCheckRay.origin, WallCheckRay.direction, m_rigidBody.velocity.magnitude * Time.fixedDeltaTime * 2, (1 << 8 | 1 << 9 | 1 << 10 | 1 << 14 | 1 << 11));
+            //Only raycast against the player, wall, door and glass 
+            RaycastHit2D RayHit = Physics2D.Raycast(WallCheckRay.origin, WallCheckRay.direction, m_rigidBody.velocity.magnitude * Time.fixedDeltaTime * 2,
+                (/*Player */ 1 << 8 | /*Shield*/ 1 << 9 | /* Wall */1 << 10 |/*Glass*/ 1 << 14 | /*Door*/ 1 << 11));
             Debug.DrawRay(WallCheckRay.origin, WallCheckRay.direction * m_rigidBody.velocity.magnitude * Time.fixedDeltaTime * 2, Color.red, 10.0f);
 
             //Debug.Break();
@@ -116,6 +119,8 @@ public class Bullet : MonoBehaviour
                     m_rigidBody.simulated = false;
                     BulletSprite.enabled = false;
                     transform.position = RayHit.point;
+                    Destroy(this.gameObject, 1);
+
                 }
                 else
                 {
@@ -166,21 +171,38 @@ public class Bullet : MonoBehaviour
         yield return new WaitForSecondsRealtime(ParticleSparks.main.duration);
         Destroy(this.gameObject);
     }
-    //? And THis
+
+    /// <summary>
+    /// Called whenever the raycast hits a wall
+    /// </summary>
+    /// <param name="HitPoint"></param>
+    /// <returns></returns>
     IEnumerator PlayParticle(Vector2 HitPoint)
     {
         Debug.Log("RaySpark");
-        if (ParticleSparks != null)
+        // if (ParticleSparks != null)
+        // {
+        //     transform.GetChild(0).localEulerAngles = new Vector3(VChildPrevRotation.x, VChildPrevRotation.y, VChildPrevRotation.z); // parent - 90z
+        //     transform.position = new Vector3(HitPoint.x, HitPoint.y, 0);
+        //     ParticleSparks.Play();
+        //
+        //     //GameObject hitInstance = Instantiate(HitParticle, this.transform.position, Quaternion.identity) as GameObject;
+        //     //hitInstance.transform.up = hit.transform.up;
+        //     //hitInstance.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
+        // }
+        float longestParticleDuration = 0;
+        if (WallCollidedParticles.Length > 0)
         {
-            transform.GetChild(0).localEulerAngles = new Vector3(VChildPrevRotation.x, VChildPrevRotation.y, VChildPrevRotation.z); // parent - 90z
-            transform.position = new Vector3(HitPoint.x, HitPoint.y, 0);
-            ParticleSparks.Play();
-
-            //GameObject hitInstance = Instantiate(HitParticle, this.transform.position, Quaternion.identity) as GameObject;
-            //hitInstance.transform.up = hit.transform.up;
-            //hitInstance.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
+            transform.GetChild(0).localEulerAngles = new Vector3(VChildPrevRotation.x, VChildPrevRotation.y, VChildPrevRotation.z);
+            foreach (ParticleSystem particle in WallCollidedParticles)
+            {
+                if (particle.main.duration > longestParticleDuration)
+                    longestParticleDuration = particle.main.duration;
+                particle.Play();
+            }
         }
-        yield return new WaitForSecondsRealtime(ParticleSparks.main.duration);
+        //Wait for the longest particle
+        yield return new WaitForSecondsRealtime(longestParticleDuration);
         Destroy(this.gameObject);
     }
 

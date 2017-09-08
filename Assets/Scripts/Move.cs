@@ -33,7 +33,8 @@ public class Move : MonoBehaviour
     public GameObject crosshair;
     protected Animator FeetAnimator; public Animator GetFeetAnimator() { return FeetAnimator; }
     protected Animator BodyAnimator; public Animator GetBodyAnimator() { return BodyAnimator; }
-    public GameObject weaponMount;
+    public Transform weapon1HandedMount;
+    public Transform weapon2HandedMount;
     public GameObject fistObject;
     public float movementSpeed = 10.0f;
     public float throwingForce = 100.0f;
@@ -52,6 +53,9 @@ public class Move : MonoBehaviour
     // Use this for initialization
     void Awake()
     {
+        weapon1HandedMount = transform.Find("1HandedSpot");
+        weapon2HandedMount = transform.Find("2HandedSpot");
+
         if (transform.Find("Sprites"))
         {
             if (transform.Find("Sprites").transform.Find("Character001_Feet"))
@@ -186,9 +190,9 @@ public class Move : MonoBehaviour
     {
 
         //Buggy with XBone controller with high frame rates.
-        GamePad.SetVibration(m_controller.mPlayerIndex , XCI.GetAxis(XboxAxis.LeftTrigger , m_controller.mXboxController) , XCI.GetAxis(XboxAxis.RightTrigger , m_controller.mXboxController));
-        vibrationValue = new Vector2(XCI.GetAxis(XboxAxis.LeftTrigger , m_controller.mXboxController) , XCI.GetAxis(XboxAxis.RightTrigger , m_controller.mXboxController));
-         GamePad.SetVibration(m_controller.mPlayerIndex , vibrationValue.x , vibrationValue.y);
+        //GamePad.SetVibration(m_controller.mPlayerIndex , XCI.GetAxis(XboxAxis.LeftTrigger , m_controller.mXboxController) , XCI.GetAxis(XboxAxis.RightTrigger , m_controller.mXboxController));
+        //vibrationValue = new Vector2(XCI.GetAxis(XboxAxis.LeftTrigger , m_controller.mXboxController) , XCI.GetAxis(XboxAxis.RightTrigger , m_controller.mXboxController));
+        // GamePad.SetVibration(m_controller.mPlayerIndex , vibrationValue.x , vibrationValue.y);
 
         //  vibrationValue *= 0.99f; //magic numbers.
 
@@ -404,8 +408,17 @@ public class Move : MonoBehaviour
         heldWeapon = hitCollider.transform.parent.gameObject;
         heldWeapon.transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = 4; //? Puts gun layer infront of player layer when picked up. 
         hitCollider.gameObject.transform.parent.SetParent(this.transform);
-        hitCollider.gameObject.transform.parent.position = weaponMount.transform.position; //set position to the weapon mount spot
-        hitCollider.gameObject.transform.parent.rotation = weaponMount.transform.rotation; //set its rotation
+        //! if the weapon isn't a 2 handed weapon, mount it to the 1 handed location
+        if (!hitCollider.transform.parent.gameObject.GetComponent<Weapon>().m_b2Handed)
+        {
+            hitCollider.gameObject.transform.parent.position = weapon1HandedMount.position; //set position to the weapon mount spot
+            hitCollider.gameObject.transform.parent.rotation = weapon1HandedMount.rotation; //set its rotation
+        }
+        else //! mount it to the 2handed mounting position
+        {
+            hitCollider.gameObject.transform.parent.position = weapon2HandedMount.position; //set position to the weapon mount spot
+            hitCollider.gameObject.transform.parent.rotation = weapon2HandedMount.rotation; //set its rotation
+        }
         Rigidbody2D weaponRigidBody = hitCollider.transform.parent.GetComponent<Rigidbody2D>(); //find its rigidbody in its parent
         weaponRigidBody.simulated = false; //turn off any of its simulation
         weaponRigidBody.velocity = Vector2.zero; //set any velocity to nothing

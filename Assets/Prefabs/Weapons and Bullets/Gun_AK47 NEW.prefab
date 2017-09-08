@@ -70,6 +70,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4828262548686524}
   - component: {fileID: 58776948240969992}
+  - component: {fileID: 58008320975400170}
   m_Layer: 12
   m_Name: Collider
   m_TagString: Untagged
@@ -152,6 +153,20 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 0
+--- !u!58 &58008320975400170
+CircleCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1877943089600360}
+  m_Enabled: 0
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 1
 --- !u!58 &58776948240969992
 CircleCollider2D:
   m_ObjectHideFlags: 1
@@ -161,7 +176,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
@@ -191,11 +206,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae25850cfcbaae2439d77f3f6d8188da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_HeldSprite: {fileID: 0}
   m_fTimeBetweenShots: 0.15
   m_iDamage: 1
   m_bAutomaticGun: 1
   m_bBurstFire: 0
   m_bGivePlayersIFrames: 0
+  m_b2Handed: 0
   KnockBack: 5
   MaxShadow: 0.2
   MinShadow: 0
@@ -204,11 +221,11 @@ MonoBehaviour:
   previousOwner: {fileID: 0}
   m_bMoveWeaponSpriteUp: 0
   m_iAmmo: 2147483647
-  bullet: {fileID: 0}
+  bullet: {fileID: 1124563433790592, guid: 86b0deeed3cd2df42bfe06a447223f5e, type: 2}
   m_fSpreadJitter: 20
   m_fSpreadIncrease: 10
   m_fMaxJitter: 1
-  m_fBulletSpawnOffSet: 1
+  m_fBulletSpawnOffSet: 0.1
   m_fFiringForce: 0.25
   m_bAutomatic: 0
   m_iBurstFire: 0
