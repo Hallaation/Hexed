@@ -128,7 +128,10 @@ public class PlayerStatus : MonoBehaviour
 
         StartCoroutine(InvinciblityTime());
         //update my score
-        m_iScore = GameManagerc.Instance.PlayerWins[this];
+        if (GameManagerc.Instance.PlayerWins.ContainsKey(this))
+        {
+            m_iScore = GameManagerc.Instance.PlayerWins[this];
+        }
         //Debug.LogError(GetComponent<ControllerSetter>().m_playerNumber);
         if (_ScoreText != null)
         {

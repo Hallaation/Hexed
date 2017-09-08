@@ -1,16 +1,23 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Door : MonoBehaviour
+public class Door : MonoBehaviour, IHitByBullet
 {
     public float DoorAngleOfBounce;
     public int DoorBounceForce;
     public HingeJoint2D DoorHinge;
     Rigidbody2D MyRigidBody;
-   // bool HasBounced = false;
-   // float timer;
-   // float freezeTimer;
+
+    public void HitByBullet(Vector3 a_Vecocity, Vector3 HitPoint)
+    {
+        this.GetComponent<Rigidbody2D>().AddForceAtPosition(a_Vecocity, HitPoint); //hah
+    }
+
+    // bool HasBounced = false;
+    // float timer;
+    // float freezeTimer;
     // Use this for initialization
     void Start()
     {
@@ -42,8 +49,6 @@ public class Door : MonoBehaviour
                // HasBounced = false;
                // timer += Time.deltaTime;
             }
-        
-
     }
 
 
