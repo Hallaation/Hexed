@@ -30,6 +30,7 @@ public class PlayerStatus : MonoBehaviour
     Timer stunTimer;
     Timer resetStunTimer;
    
+    [HideInInspector]
     public Color _playerColor;
     private Renderer PlayerSprite;
 
@@ -195,7 +196,7 @@ public class PlayerStatus : MonoBehaviour
             {
                 this.transform.GetChild(0).gameObject.GetComponent<Collider2D>().enabled = true;
             }
-            this.GetComponent<Collider2D>().isTrigger = true;
+            this.GetComponent<Move>().MakeCollidersTriggers(true);
             if (stunTimer.Tick(Time.deltaTime))
             {
                 m_bStunned = false;
@@ -204,7 +205,7 @@ public class PlayerStatus : MonoBehaviour
         //if not stunned dont kill me
         else
         {
-            this.GetComponent<Collider2D>().isTrigger = false;
+            this.GetComponent<Move>().MakeCollidersTriggers(false);
             stunBarContainer.SetActive(false);
             if (this.transform.GetChild(1).tag == "Stunned")
             {
