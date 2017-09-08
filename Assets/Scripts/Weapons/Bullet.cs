@@ -12,6 +12,7 @@ public class Bullet : MonoBehaviour
     public Vector3 GetPreviousVelocity() { return PreviousVelocity; }
     public Vector2 Velocity { get { return m_vVelocity; } set { m_vVelocity = value; } }
     ParticleSystem ParticleSparks;
+    ParticleSystem[] WallCollidedParticles;
     SpriteRenderer BulletSprite;
     Rigidbody2D m_rigidBody;
     Vector3 VChildPrevRotation;
@@ -29,6 +30,7 @@ public class Bullet : MonoBehaviour
 
         BulletSprite = GetComponent<SpriteRenderer>();
         ParticleSparks = GetComponentInChildren<ParticleSystem>();
+        WallCollidedParticles = GetComponentsInChildren<ParticleSystem>();
         m_CircleCollider = GetComponent<CircleCollider2D>();
         m_rigidBody = GetComponent<Rigidbody2D>();
         PreviousRotation = GetComponent<Rigidbody2D>().rotation;
@@ -166,20 +168,30 @@ public class Bullet : MonoBehaviour
         yield return new WaitForSecondsRealtime(ParticleSparks.main.duration);
         Destroy(this.gameObject);
     }
+
     //? And THis
     IEnumerator PlayParticle(Vector2 HitPoint)
     {
         Debug.Log("RaySpark");
-        if (ParticleSparks != null)
+        // if (ParticleSparks != null)
+        // {
+        //     transform.GetChild(0).localEulerAngles = new Vector3(VChildPrevRotation.x, VChildPrevRotation.y, VChildPrevRotation.z); // parent - 90z
+        //     transform.position = new Vector3(HitPoint.x, HitPoint.y, 0);
+        //     ParticleSparks.Play();
+        //
+        //     //GameObject hitInstance = Instantiate(HitParticle, this.transform.position, Quaternion.identity) as GameObject;
+        //     //hitInstance.transform.up = hit.transform.up;
+        //     //hitInstance.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
+        // }
+        if (WallCollidedParticles.Length > 0)
         {
-            transform.GetChild(0).localEulerAngles = new Vector3(VChildPrevRotation.x, VChildPrevRotation.y, VChildPrevRotation.z); // parent - 90z
-            transform.position = new Vector3(HitPoint.x, HitPoint.y, 0);
-            ParticleSparks.Play();
-
-            //GameObject hitInstance = Instantiate(HitParticle, this.transform.position, Quaternion.identity) as GameObject;
-            //hitInstance.transform.up = hit.transform.up;
-            //hitInstance.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
+            transform.GetChild(0).localEulerAngles = new Vector3(VChildPrevRotation.x, VChildPrevRotation.y, VChildPrevRotation.z);
+            foreach (ParticleSystem particle in WallCollidedParticles)
+            {
+                particle.Play();
+            }
         }
+
         yield return new WaitForSecondsRealtime(ParticleSparks.main.duration);
         Destroy(this.gameObject);
     }
