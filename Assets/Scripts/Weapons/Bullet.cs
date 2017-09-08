@@ -86,12 +86,12 @@ public class Bullet : MonoBehaviour
     {
         if (!m_bStopRayCasts)
         {
-            Ray2D WallCheckRay = new Ray2D(transform.position, transform.right);
+           // Ray2D WallCheckRay = new Ray2D(transform.position, transform.right);
             //Raycast from me, to my right vector (because all the rotations are fucked) on the distance I'll travel for the next frame.
             //Only raycast against the player, wall, door and glass 
-            RaycastHit2D RayHit = Physics2D.Raycast(WallCheckRay.origin, WallCheckRay.direction, m_rigidBody.velocity.magnitude * Time.fixedDeltaTime * 2,
+            RaycastHit2D RayHit = Physics2D.Raycast(this.transform.position, this.transform.right, m_rigidBody.velocity.magnitude * Time.fixedDeltaTime * 2,
                 (/*Player */ 1 << 8 | /*Shield*/ 1 << 9 | /* Wall */1 << 10 |/*Glass*/ 1 << 14 | /*Door*/ 1 << 11));
-            Debug.DrawRay(WallCheckRay.origin, WallCheckRay.direction * m_rigidBody.velocity.magnitude * Time.fixedDeltaTime * 2, Color.red, 10.0f);
+            Debug.DrawRay(this.transform.position, this.transform.right * m_rigidBody.velocity.magnitude * Time.fixedDeltaTime * 2, Color.red, 10.0f);
 
             //Debug.Break();
             if (RayHit)
@@ -110,10 +110,10 @@ public class Bullet : MonoBehaviour
                 else if (RayHit.transform.gameObject.layer != LayerMask.NameToLayer("Player"))
                 {
                     //If I find a hitbybullet interface, call its function
-                    if (RayHit.transform.gameObject.GetComponent<IHitByBullet>() != null)
-                    {
-                        RayHit.transform.gameObject.GetComponent<IHitByBullet>().HitByBullet(m_rigidBody.velocity, RayHit.point);
-                    }
+                   // if (RayHit.transform.gameObject.GetComponent<IHitByBullet>() != null)
+                   // {
+                   //     RayHit.transform.gameObject.GetComponent<IHitByBullet>().HitByBullet(m_rigidBody.velocity, RayHit.point);
+                   // }
                     m_bStopRayCasts = true;
                     m_rigidBody.velocity = Vector2.zero;
                     m_rigidBody.simulated = false;

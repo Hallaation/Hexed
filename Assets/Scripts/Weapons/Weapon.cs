@@ -103,7 +103,10 @@ public class Weapon : MonoBehaviour
         //If my transform has a parent (its being held by a player)
         else if (transform.parent)
         {
-            WeaponSpriteRenderer.sprite = m_HeldSprite;
+            if (m_HeldSprite != null)
+            {
+                WeaponSpriteRenderer.sprite = m_HeldSprite;
+            }
             //find the shadow sprite renderer
             if (this.transform.childCount > 2 && tag != "Player")
             {

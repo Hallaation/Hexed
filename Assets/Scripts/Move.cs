@@ -389,7 +389,7 @@ public class Move : MonoBehaviour
                 if (hitCollider.transform.parent.parent == null)
 
                 {
-                    PickUpWeaon(hitCollider);
+                    PickupWeapon(hitCollider);
                     return true;
                 }
             }
@@ -403,10 +403,11 @@ public class Move : MonoBehaviour
         return false;
     }
 
-    void PickUpWeaon(Collider2D hitCollider)
+    void PickupWeapon(Collider2D hitCollider)
     {
         heldWeapon = hitCollider.transform.parent.gameObject;
         heldWeapon.transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = 4; //? Puts gun layer infront of player layer when picked up. 
+        heldWeapon.transform.GetChild(0).transform.localPosition = new Vector3(0, 0, 0); //! Resets Shadow on pickup.
         hitCollider.gameObject.transform.parent.SetParent(this.transform);
         //! if the weapon isn't a 2 handed weapon, mount it to the 1 handed location
         if (!hitCollider.transform.parent.gameObject.GetComponent<Weapon>().m_b2Handed)
@@ -446,12 +447,16 @@ public class Move : MonoBehaviour
                 if (BodyAnimator != null)
                     BodyAnimator.SetBool("UnarmedAttack", false);
                 //attack using the weapon im holding. if an attack was done, set a vibration on my controller.
-                if (heldWeapon.GetComponent<Weapon>().Attack(TriggerCheck))
+               // Ray2D ray = new Ray2D(this.transform.position, this.transform.up);
+                RaycastHit2D hit = Physics2D.Raycast(this.transform.position, this.transform.up, 1f, (1 << 10 |  1 << 11 | 1 << 14));
+                if (!hit)
                 {
-                    //CameraShake.Instance.ShakeCamera();
-                    vibrationValue.x = 0.45f;
+                    if (heldWeapon.GetComponent<Weapon>().Attack(TriggerCheck))
+                    {
+                        //CameraShake.Instance.ShakeCamera();
+                        vibrationValue.x = 0.45f;
+                    }
                 }
-
                 m_bTriggerReleased = false;
             }
             else
@@ -479,6 +484,7 @@ public class Move : MonoBehaviour
             BodyAnimator.SetBool("Moving", false);
             BodyAnimator.SetBool("IsKilling", false);
         }
+        if(transform.Find("StunnedCollider"))
         transform.Find("StunnedCollider").GetComponent<PolygonCollider2D>().enabled = false;
         if (heldWeapon)
         {
