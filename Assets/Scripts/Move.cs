@@ -49,15 +49,30 @@ public class Move : MonoBehaviour
     public float StartMoveDelay = 3;
     public Vector3 m_LeftStickRotation;
     public float StickDeadZone = 0.12f;
+    public string ColorDatabaseKey = "Player1";
+    private Database ColorDatabase;
+    private Dictionary<string, Color> colorDictionary;
+    //  private Text _AmmoText;
 
     private PolygonCollider2D m_NoHandsCollider;
     private PolygonCollider2D m_OneHandCollider;
     private PolygonCollider2D m_TwoHandedCollider;
 
-  //  private Text _AmmoText;
     // Use this for initialization
     void Awake()
     {
+        if (!ColorDatabase)
+        {
+            ColorDatabase = Resources.Load("Database") as Database;
+
+            colorDictionary = new Dictionary<string, Color>();
+            for (int i = 0; i < ColorDatabase.colors.Length; i++)
+            {
+                if (!colorDictionary.ContainsKey(ColorDatabase.colors[i].PlayerType))
+                    colorDictionary.Add(ColorDatabase.colors[i].PlayerType, ColorDatabase.colors[i].playerColor);
+            }
+        }
+
         weapon1HandedMount = transform.Find("1HandedSpot");
         weapon2HandedMount = transform.Find("2HandedSpot");
 
@@ -102,26 +117,35 @@ public class Move : MonoBehaviour
                 temp = transform.Find("Sprites").Find("PlayerSprite").GetComponent<Renderer>();
             else temp = null;
         }
-        switch (m_controller.mPlayerIndex)
+        if (colorDictionary.ContainsKey(ColorDatabaseKey))
         {
-            case PlayerIndex.One:
-                temp.material.color = Color.red;
-                break;
-            case PlayerIndex.Two:
-                temp.material.color = Color.blue;
-                break;
-            case PlayerIndex.Three:
-                temp.material.color = Color.magenta;
-                break;
-            case PlayerIndex.Four:
-                temp.material.color = Color.yellow;
-                break;
+            temp.material.color = colorDictionary[ColorDatabaseKey];
         }
+        else
+        {
+            temp.material.color = Color.red;
+        }
+        //temp.material.color = PlayerColor;
+        //switch (m_controller.mPlayerIndex)
+        //{
+        //    case PlayerIndex.One:
+        //        temp.material.color = Color.red;
+        //        break;
+        //    case PlayerIndex.Two:
+        //        temp.material.color = Color.blue;
+        //        break;
+        //    case PlayerIndex.Three:
+        //        temp.material.color = Color.magenta;
+        //        break;
+        //    case PlayerIndex.Four:
+        //        temp.material.color = Color.yellow;
+        //        break;
+        //}
 
         defaultWeapon = GetComponent<EmptyHand>();
         SceneManager.sceneLoaded += OnSceneLoaded;
         // Delay
-       // MoveDelayTimer = 0;
+        // MoveDelayTimer = 0;
         StoredMoveSpeed = movementSpeed;
         StartCoroutine(DelayMovement());
     }
@@ -237,14 +261,14 @@ public class Move : MonoBehaviour
         if (temp.magnitude < deadzone)
         {
             temp = Vector3.zero;
-        }        
+        }
         return temp;
     }
 
     void CalculateMovement()
     {
         Vector3 movement = Vector3.zero;
-        
+
         //Gets the input from the left stick to determine the movement
         movement = new Vector3(XCI.GetAxis(XboxAxis.LeftStickX, m_controller.mXboxController), XCI.GetAxis(XboxAxis.LeftStickY, m_controller.mXboxController));
         //Vrotation used to determine what way the character to rotate
@@ -270,7 +294,7 @@ public class Move : MonoBehaviour
             //vrotation = new Vector2(-GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Left.X, GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Left.Y);
 
             vrotation = new Vector2(-XCI.GetAxisRaw(XboxAxis.LeftStickX, m_controller.mXboxController), XCI.GetAxisRaw(XboxAxis.LeftStickY, m_controller.mXboxController));
-            
+
         }
         else
         {
@@ -281,7 +305,7 @@ public class Move : MonoBehaviour
         //Do deadzone calculations
         vrotation = CheckDeadZone(vrotation, StickDeadZone);
         LeftStickRotation = CheckDeadZone(LeftStickRotation, StickDeadZone);
-        
+
         if (vrotation != Vector3.zero)
         {
             //Set the rotation to the Stick rotation
@@ -347,7 +371,7 @@ public class Move : MonoBehaviour
                     SetHoldingGun(0);
 
             }
-           
+
         }
     }
     void CheckForPickup()
@@ -380,9 +404,9 @@ public class Move : MonoBehaviour
         //If there is a weapon being held, the weapon will be thrown away.
         if (heldWeapon)
         {
-            
+
             ThrowMyWeapon(stickMovement, throwingDirection, tossWeapon);
-            
+
         }
         //if the overlap circle found something, pickup the weapon
         if (hitCollider)
@@ -457,8 +481,8 @@ public class Move : MonoBehaviour
                 if (BodyAnimator != null)
                     BodyAnimator.SetBool("UnarmedAttack", false);
                 //attack using the weapon im holding. if an attack was done, set a vibration on my controller.
-               // Ray2D ray = new Ray2D(this.transform.position, this.transform.up);
-                RaycastHit2D hit = Physics2D.Raycast(this.transform.position, this.transform.up, 1f, (1 << 10 |  1 << 11 | 1 << 14));
+                // Ray2D ray = new Ray2D(this.transform.position, this.transform.up);
+                RaycastHit2D hit = Physics2D.Raycast(this.transform.position, this.transform.up, 1f, (1 << 10 | 1 << 11 | 1 << 14));
                 if (!hit)
                 {
                     if (heldWeapon.GetComponent<Weapon>().Attack(TriggerCheck))

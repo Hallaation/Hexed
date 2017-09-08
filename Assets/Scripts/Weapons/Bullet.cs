@@ -129,14 +129,11 @@ public class Bullet : MonoBehaviour
                     {
                         //Debug.Log("Hit player");
                         //Debug.Log("Raycast hit player");
-                        PlayerStatus PlayerIHit = RayHit.transform.GetComponentInParent<PlayerStatus>(); //Store the player I hit temporarily
-                        if (!PlayerIHit.m_bInvincible) //If player isn't invincible
+                        PlayerStatus PlayerIHit = RayHit.transform.GetComponent<PlayerStatus>(); //Store the player I hit temporarily
+                        RayHit.transform.GetComponent<PlayerStatus>().HitPlayer(this, m_bGiveIFrames);
+                        if (RayHit.transform.GetComponent<PlayerStatus>().m_iHealth <= 0)
                         {
-                            PlayerIHit.m_iHealth -= m_iDamage; //Deduct the player's health based on my damage
-                            if (PlayerIHit.m_iHealth <= 0) //If below 0, the player I hit is dead
-                            {
-                                PlayerIHit.IsDead = true;
-                            }
+                            RayHit.transform.GetComponent<PlayerStatus>().IsDead = true;
                         }
                         //RayHit.transform.GetComponent<Move>().StatusApplied();
                         Destroy(this.gameObject); //Destroy me beacuse I have no other purpose, 

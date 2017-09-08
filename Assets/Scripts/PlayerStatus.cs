@@ -30,6 +30,7 @@ public class PlayerStatus : MonoBehaviour
     Timer stunTimer;
     Timer resetStunTimer;
    
+    [HideInInspector]
     public Color _playerColor;
     private Renderer PlayerSprite;
 
