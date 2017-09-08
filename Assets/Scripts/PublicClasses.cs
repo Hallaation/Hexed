@@ -145,3 +145,20 @@ public class Colors
     public static readonly Color Yellow = new Color32(255, 255, 0, 255);
     public static readonly Color YellowGreen = new Color32(154, 205, 50, 255);
 }
+
+
+public class Copy
+{
+    public static T CopyComponent<T>(T original, GameObject destination) where T : Component
+    {
+        System.Type type = original.GetType();
+        Component copy = destination.AddComponent(type);
+        System.Reflection.FieldInfo[] fields = type.GetFields();
+        foreach (System.Reflection.FieldInfo field in fields)
+        {
+            field.SetValue(copy, field.GetValue(original));
+        }
+        return copy as T;
+    }
+
+}

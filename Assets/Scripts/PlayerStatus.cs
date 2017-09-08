@@ -128,7 +128,10 @@ public class PlayerStatus : MonoBehaviour
 
         StartCoroutine(InvinciblityTime());
         //update my score
-        m_iScore = GameManagerc.Instance.PlayerWins[this];
+        if (GameManagerc.Instance.PlayerWins.ContainsKey(this))
+        {
+            m_iScore = GameManagerc.Instance.PlayerWins[this];
+        }
         //Debug.LogError(GetComponent<ControllerSetter>().m_playerNumber);
         if (_ScoreText != null)
         {
@@ -186,11 +189,11 @@ public class PlayerStatus : MonoBehaviour
             //this.GetComponent<Renderer>().material.color = Color.cyan;
             if (this.transform.GetChild(1).tag == "Stunned")
             {
-                this.transform.GetChild(1).gameObject.GetComponent<PolygonCollider2D>().enabled = true;
+                this.transform.GetChild(1).gameObject.GetComponent<Collider2D>().enabled = true;
             }
             else
             {
-                this.transform.GetChild(1).gameObject.GetComponent<PolygonCollider2D>().enabled = true;
+                this.transform.GetChild(0).gameObject.GetComponent<Collider2D>().enabled = true;
             }
             this.GetComponent<Collider2D>().isTrigger = true;
             if (stunTimer.Tick(Time.deltaTime))
@@ -203,14 +206,14 @@ public class PlayerStatus : MonoBehaviour
         {
             this.GetComponent<Collider2D>().isTrigger = false;
             stunBarContainer.SetActive(false);
-            if (this.transform.GetChild(0).tag == "Stunned")
+            if (this.transform.GetChild(1).tag == "Stunned")
             {
                 Debug.Log(this.transform.GetChild(0).tag);
-                this.transform.GetChild(1).gameObject.GetComponent<PolygonCollider2D>().enabled = false;        //? child 0 is weaponSpot...
+                this.transform.GetChild(1).gameObject.GetComponent<Collider2D>().enabled = false;        //? child 0 is weaponSpot... 
             }
             else
             {
-                this.transform.GetChild(1).gameObject.GetComponent<PolygonCollider2D>().enabled = false;
+                this.transform.GetChild(0).gameObject.GetComponent<Collider2D>().enabled = false;
             }
             killMeArea.SetActive(false);
             killMePrompt.SetActive(false);

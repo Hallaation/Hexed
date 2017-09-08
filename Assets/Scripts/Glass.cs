@@ -1,8 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Glass : MonoBehaviour
+public class Glass : MonoBehaviour, IHitByBullet
 {
     //? What is an array
     public GameObject Shard1;
@@ -74,15 +75,15 @@ public class Glass : MonoBehaviour
         //for every shard, instantiate them and set their rotation and velocity.
         //Their velocity will be based on the velocity of the bullet hitting them
         //for shards indexes 4 and below, their angular velocity will be changed to the bullet's velocity magnitude.
-        //The shards will be instantiated along the object's up vector, the range will be randomed so they spawn in random locations of the glass piece
+        //The shards will be instantiated along the object's up vector, the range will be UnityEngine.Randomed so they spawn in UnityEngine.Random locations of the glass piece
         
         for (int i = 0; i < Shards.Length; i++)
         {
-            shardObjects[i] = Instantiate(Shard1 , this.transform.position + this.transform.up * Random.Range(-1f , 0f) , this.transform.rotation);
-            shardObjects[i].transform.rotation = Quaternion.Euler(Vector3.forward * Random.Range(40 , 180));
-            //shardObjects[i].GetComponent<Rigidbody2D>().velocity = hit.gameObject.GetComponent<Rigidbody2D>().velocity * Random.Range(0.03f , .1f);
+            shardObjects[i] = Instantiate(Shard1 , this.transform.position + this.transform.up * UnityEngine.Random.Range(-1f , 0f) , this.transform.rotation);
+            shardObjects[i].transform.rotation = Quaternion.Euler(Vector3.forward * UnityEngine.Random.Range(40 , 180));
+            //shardObjects[i].GetComponent<Rigidbody2D>().velocity = hit.gameObject.GetComponent<Rigidbody2D>().velocity * UnityEngine.Random.Range(0.03f , .1f);
 
-            shardObjects[i].GetComponent<Rigidbody2D>().AddForce(hit.gameObject.GetComponent<Bullet>().GetPreviousVelocity() * Random.Range(0.03f , .1f), ForceMode2D.Impulse);
+            shardObjects[i].GetComponent<Rigidbody2D>().AddForce(hit.gameObject.GetComponent<Bullet>().GetPreviousVelocity() * UnityEngine.Random.Range(0.03f , .1f), ForceMode2D.Impulse);
             if (i < 4)
             {
                 shardObjects[i].GetComponent<Rigidbody2D>().angularVelocity = hit.gameObject.GetComponent<Rigidbody2D>().velocity.magnitude;
@@ -98,18 +99,42 @@ public class Glass : MonoBehaviour
         //for every shard, instantiate them and set their rotation and velocity.
         //Their velocity will be based on the velocity of the bullet hitting them
         //for shards indexes 4 and below, their angular velocity will be changed to the bullet's velocity magnitude.
-        //The shards will be instantiated along the object's up vector, the range will be randomed so they spawn in random locations of the glass piece
+        //The shards will be instantiated along the object's up vector, the range will be UnityEngine.Randomed so they spawn in UnityEngine.Random locations of the glass piece
         for (int i = 0; i < Shards.Length; i++)
         {
-            shardObjects[i] = Instantiate(Shard1 , this.transform.position + this.transform.up * Random.Range(-1f , 0f) , this.transform.rotation);
-            shardObjects[i].transform.rotation = Quaternion.Euler(Vector3.forward * Random.Range(40 , 180));
-            //shardObjects[i].GetComponent<Rigidbody2D>().velocity = hit.gameObject.GetComponent<Rigidbody2D>().velocity * Random.Range(0.03f , .1f);
-            shardObjects[i].GetComponent<Rigidbody2D>().AddForce(hit.gameObject.GetComponent<Rigidbody2D>().velocity * Random.Range(0.03f , .1f) , ForceMode2D.Impulse);
+            shardObjects[i] = Instantiate(Shard1 , this.transform.position + this.transform.up * UnityEngine.Random.Range(-1f , 0f) , this.transform.rotation);
+            shardObjects[i].transform.rotation = Quaternion.Euler(Vector3.forward * UnityEngine.Random.Range(40 , 180));
+            //shardObjects[i].GetComponent<Rigidbody2D>().velocity = hit.gameObject.GetComponent<Rigidbody2D>().velocity * UnityEngine.Random.Range(0.03f , .1f);
+            shardObjects[i].GetComponent<Rigidbody2D>().AddForce(hit.gameObject.GetComponent<Rigidbody2D>().velocity * UnityEngine.Random.Range(0.03f , .1f) , ForceMode2D.Impulse);
             if (i < 4)
             {
                 shardObjects[i].GetComponent<Rigidbody2D>().angularVelocity = hit.gameObject.GetComponent<Rigidbody2D>().velocity.magnitude;
             }
         }
 
+    }
+
+
+    public void HitByBullet(Vector3 a_Vecocity, Vector3 HitPoint)
+    {
+        Shatter();
+        Debug.Log("Does this ever get called");
+        //make a temporary array to hold all the shard objects
+        GameObject[] shardObjects = new GameObject[Shards.Length];
+        //for every shard, instantiate them and set their rotation and velocity.
+        //Their velocity will be based on the velocity of the bullet hitting them
+        //for shards indexes 4 and below, their angular velocity will be changed to the bullet's velocity magnitude.
+        //The shards will be instantiated along the object's up vector, the range will be UnityEngine.Randomed so they spawn in UnityEngine.Random locations of the glass piece
+        for (int i = 0; i < Shards.Length; i++)
+        {
+            shardObjects[i] = Instantiate(Shard1, this.transform.position + this.transform.up * UnityEngine.Random.Range(-1f, 0f), this.transform.rotation);
+            shardObjects[i].transform.rotation = Quaternion.Euler(Vector3.forward * UnityEngine.Random.Range(40, 180));
+            //shardObjects[i].GetComponent<Rigidbody2D>().velocity = hit.gameObject.GetComponent<Rigidbody2D>().velocity * UnityEngine.Random.Range(0.03f , .1f);
+            shardObjects[i].GetComponent<Rigidbody2D>().AddForce(a_Vecocity * UnityEngine.Random.Range(0.03f, .1f), ForceMode2D.Impulse);
+            if (i < 4)
+            {
+                shardObjects[i].GetComponent<Rigidbody2D>().angularVelocity = a_Vecocity.magnitude;
+            }
+        }
     }
 }

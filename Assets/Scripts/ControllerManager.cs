@@ -111,6 +111,7 @@ public class ControllerManager : MonoBehaviour
                 if (XCI.GetButtonDown(XboxButton.Start, xboxControllers[testIndex]))
                 {
                     GameObject go2 = Instantiate(playerPrefab, spawnPoints[nextPlayer].position, Quaternion.identity, null);
+                    go2.SetActive(true);
                     go2.GetComponent<ControllerSetter>().SetController(testIndex);
                     go2.GetComponent<ControllerSetter>().m_playerNumber = i;
                     go2.GetComponent<PlayerStatus>().spawnIndex = nextPlayer;
@@ -129,6 +130,7 @@ public class ControllerManager : MonoBehaviour
                 else if (XCI.GetButtonDown(XboxButton.Back, xboxControllers[testIndex]))
                 {
                     GameObject go = Instantiate(playerPrefab2, spawnPoints[nextPlayer].position, Quaternion.identity, null);
+                    go.SetActive(true);
                     go.GetComponent<ControllerSetter>().SetController(testIndex);
                     go.GetComponent<ControllerSetter>().m_playerNumber = i;
                     go.GetComponent<PlayerStatus>().spawnIndex = nextPlayer;
