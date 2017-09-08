@@ -129,7 +129,7 @@ public class Bullet : MonoBehaviour
                     {
                         //Debug.Log("Hit player");
                         //Debug.Log("Raycast hit player");
-                        PlayerStatus PlayerIHit = RayHit.transform.GetComponent<PlayerStatus>(); //Store the player I hit temporarily
+                        PlayerStatus PlayerIHit = RayHit.transform.GetComponentInParent<PlayerStatus>(); //Store the player I hit temporarily
                         if (!PlayerIHit.m_bInvincible) //If player isn't invincible
                         {
                             PlayerIHit.m_iHealth -= m_iDamage; //Deduct the player's health based on my damage

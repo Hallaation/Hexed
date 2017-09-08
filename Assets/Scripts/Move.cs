@@ -49,6 +49,11 @@ public class Move : MonoBehaviour
     public float StartMoveDelay = 3;
     public Vector3 m_LeftStickRotation;
     public float StickDeadZone = 0.12f;
+
+    private PolygonCollider2D m_NoHandsCollider;
+    private PolygonCollider2D m_OneHandCollider;
+    private PolygonCollider2D m_TwoHandedCollider;
+
   //  private Text _AmmoText;
     // Use this for initialization
     void Awake()
@@ -72,6 +77,10 @@ public class Move : MonoBehaviour
 
         vibrationValue = Vector2.zero;
         //setting up any references to other classes needed.
+        m_NoHandsCollider = transform.Find("Colliders").Find("NoHands").GetComponent<PolygonCollider2D>();
+        m_OneHandCollider = transform.Find("Colliders").Find("1Hand").GetComponent<PolygonCollider2D>();
+        m_TwoHandedCollider = transform.Find("Colliders").Find("2Hands").GetComponent<PolygonCollider2D>();
+        m_NoHandsCollider.enabled = true;
         m_controller = GetComponent<ControllerSetter>();
         m_status = GetComponent<PlayerStatus>();
         _rigidBody = GetComponent<Rigidbody2D>();
@@ -431,9 +440,10 @@ public class Move : MonoBehaviour
         {
             if (heldWeapon.tag == "OneHanded")
             {
-                BodyAnimator.SetBool("HoldingOneHandedGun", true);
+                SetHoldingGun(1);
             }
-            BodyAnimator.SetBool("HoldingTwoHandedGun", true);
+            else
+                SetHoldingGun(2);
         }
         vibrationValue.y = 0.5f; //vibrate controller for haptic feedback
     }
@@ -483,7 +493,9 @@ public class Move : MonoBehaviour
             BodyAnimator.SetBool("UnarmedAttack", false);
             BodyAnimator.SetBool("Moving", false);
             BodyAnimator.SetBool("IsKilling", false);
+            
         }
+        
         if(transform.Find("StunnedCollider"))
         transform.Find("StunnedCollider").GetComponent<PolygonCollider2D>().enabled = false;
         if (heldWeapon)
@@ -602,14 +614,23 @@ public class Move : MonoBehaviour
                 case 0:
                     BodyAnimator.SetBool("HoldingOneHandedGun", false); // Sets animators
                     BodyAnimator.SetBool("HoldingTwoHandedGun", false);
+                    m_NoHandsCollider.enabled = true;
+                    m_OneHandCollider.enabled = false;
+                    m_TwoHandedCollider.enabled = false;
                     break;
                 case 1:
                     BodyAnimator.SetBool("HoldingOneHandedGun", true);
                     BodyAnimator.SetBool("HoldingTwoHandedGun", false);
+                    m_NoHandsCollider.enabled = false;
+                    m_OneHandCollider.enabled = true;
+                    m_TwoHandedCollider.enabled = false;
                     break;
                 case 2:
                     BodyAnimator.SetBool("HoldingOneHandedGun", false);
                     BodyAnimator.SetBool("HoldingTwoHandedGun", true);
+                    m_NoHandsCollider.enabled = false;
+                    m_OneHandCollider.enabled = false;
+                    m_TwoHandedCollider.enabled = true;
                     break;
                 default:
                     break;
@@ -617,9 +638,26 @@ public class Move : MonoBehaviour
         }
     }
 
+   public void MakeCollidersTriggers(bool Trigger)
+    {
+        if (Trigger == true)
+        {
+            m_NoHandsCollider.isTrigger = true;
+            m_OneHandCollider.isTrigger = true;
+            m_TwoHandedCollider.isTrigger = true;
+        }
+        else
+        {
+            m_NoHandsCollider.isTrigger = false;
+            m_OneHandCollider.isTrigger = false;
+            m_TwoHandedCollider.isTrigger = false;
+        }
+    }
 
+    
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         //_AmmoText = PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_AmmoText.GetComponent<Text>();
     }
+
 }
