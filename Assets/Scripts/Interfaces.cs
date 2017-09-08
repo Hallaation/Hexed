@@ -6,3 +6,8 @@ public interface IHitByBullet
 {
     void HitByBullet(Vector3 a_Vecocity, Vector3 HitPoint);
 }
+
+public interface test
+{
+
+}
