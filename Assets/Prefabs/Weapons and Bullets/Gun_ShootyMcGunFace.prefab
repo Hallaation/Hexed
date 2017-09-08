@@ -60,7 +60,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4082274667996288
 Transform:
   m_ObjectHideFlags: 1
@@ -93,8 +93,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1565912102136700}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.72, y: 5.05, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.49, y: 7.36, z: -5.296875}
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_Children:
   - {fileID: 4612613489843890}
@@ -161,11 +161,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae25850cfcbaae2439d77f3f6d8188da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_HeldSprite: {fileID: 0}
   m_fTimeBetweenShots: 0.75
   m_iDamage: 1
   m_bAutomaticGun: 1
   m_bBurstFire: 1
   m_bGivePlayersIFrames: 0
+  m_b2Handed: 0
   KnockBack: 0
   MaxShadow: 0
   MinShadow: 0
@@ -174,9 +176,10 @@ MonoBehaviour:
   previousOwner: {fileID: 0}
   m_bMoveWeaponSpriteUp: 0
   m_iAmmo: 35
-  bullet: {fileID: 1928104826133792, guid: 7b1d5a4de82f724468c78516eca036b0, type: 2}
+  bullet: {fileID: 1928104826133792, guid: cb8bab3de28b752498df0390ebf4bdc5, type: 2}
   m_fSpreadJitter: 7
   m_fSpreadIncrease: 1000
+  m_fMaxJitter: 1
   m_fBulletSpawnOffSet: 1
   m_fFiringForce: 0.25
   m_bAutomatic: 0
