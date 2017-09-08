@@ -170,7 +170,11 @@ public class Bullet : MonoBehaviour
         Destroy(this.gameObject);
     }
 
-    //? And THis
+    /// <summary>
+    /// Called whenever the raycast hits a wall
+    /// </summary>
+    /// <param name="HitPoint"></param>
+    /// <returns></returns>
     IEnumerator PlayParticle(Vector2 HitPoint)
     {
         Debug.Log("RaySpark");

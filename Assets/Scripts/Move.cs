@@ -190,9 +190,9 @@ public class Move : MonoBehaviour
     {
 
         //Buggy with XBone controller with high frame rates.
-        GamePad.SetVibration(m_controller.mPlayerIndex , XCI.GetAxis(XboxAxis.LeftTrigger , m_controller.mXboxController) , XCI.GetAxis(XboxAxis.RightTrigger , m_controller.mXboxController));
-        vibrationValue = new Vector2(XCI.GetAxis(XboxAxis.LeftTrigger , m_controller.mXboxController) , XCI.GetAxis(XboxAxis.RightTrigger , m_controller.mXboxController));
-         GamePad.SetVibration(m_controller.mPlayerIndex , vibrationValue.x , vibrationValue.y);
+        //GamePad.SetVibration(m_controller.mPlayerIndex , XCI.GetAxis(XboxAxis.LeftTrigger , m_controller.mXboxController) , XCI.GetAxis(XboxAxis.RightTrigger , m_controller.mXboxController));
+        //vibrationValue = new Vector2(XCI.GetAxis(XboxAxis.LeftTrigger , m_controller.mXboxController) , XCI.GetAxis(XboxAxis.RightTrigger , m_controller.mXboxController));
+        // GamePad.SetVibration(m_controller.mPlayerIndex , vibrationValue.x , vibrationValue.y);
 
         //  vibrationValue *= 0.99f; //magic numbers.
 
