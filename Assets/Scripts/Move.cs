@@ -484,6 +484,7 @@ public class Move : MonoBehaviour
             BodyAnimator.SetBool("Moving", false);
             BodyAnimator.SetBool("IsKilling", false);
         }
+        if(transform.Find("StunnedCollider"))
         transform.Find("StunnedCollider").GetComponent<PolygonCollider2D>().enabled = false;
         if (heldWeapon)
         {

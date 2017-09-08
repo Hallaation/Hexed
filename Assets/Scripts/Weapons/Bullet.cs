@@ -110,10 +110,10 @@ public class Bullet : MonoBehaviour
                 else if (RayHit.transform.gameObject.layer != LayerMask.NameToLayer("Player"))
                 {
                     //If I find a hitbybullet interface, call its function
-                    if (RayHit.transform.gameObject.GetComponent<IHitByBullet>() != null)
-                    {
-                        RayHit.transform.gameObject.GetComponent<IHitByBullet>().HitByBullet(m_rigidBody.velocity, RayHit.point);
-                    }
+                   // if (RayHit.transform.gameObject.GetComponent<IHitByBullet>() != null)
+                   // {
+                   //     RayHit.transform.gameObject.GetComponent<IHitByBullet>().HitByBullet(m_rigidBody.velocity, RayHit.point);
+                   // }
                     m_bStopRayCasts = true;
                     m_rigidBody.velocity = Vector2.zero;
                     m_rigidBody.simulated = false;
