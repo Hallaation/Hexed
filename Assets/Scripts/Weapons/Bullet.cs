@@ -75,8 +75,8 @@ public class Bullet : MonoBehaviour
         PreviousVelocity = this.GetComponent<Rigidbody2D>().velocity;
         PreviousRotation = m_rigidBody.rotation;
         Vector2 dir = m_rigidBody.velocity;
-        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        float angle = Mathf.Atan2(dir.y , dir.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.AngleAxis(angle , Vector3.forward);
 
 
         VChildPrevRotation = transform.localEulerAngles;
@@ -86,12 +86,12 @@ public class Bullet : MonoBehaviour
     {
         if (!m_bStopRayCasts)
         {
-           // Ray2D WallCheckRay = new Ray2D(transform.position, transform.right);
+            // Ray2D WallCheckRay = new Ray2D(transform.position, transform.right);
             //Raycast from me, to my right vector (because all the rotations are fucked) on the distance I'll travel for the next frame.
             //Only raycast against the player, wall, door and glass 
-            RaycastHit2D RayHit = Physics2D.Raycast(this.transform.position, this.transform.right, m_rigidBody.velocity.magnitude * Time.fixedDeltaTime * 2,
+            RaycastHit2D RayHit = Physics2D.Raycast(this.transform.position , this.transform.right , m_rigidBody.velocity.magnitude * Time.fixedDeltaTime * 2 ,
                 (/*Player */ 1 << 8 | /*Shield*/ 1 << 9 | /* Wall */1 << 10 |/*Glass*/ 1 << 14 | /*Door*/ 1 << 11));
-            Debug.DrawRay(this.transform.position, this.transform.right * m_rigidBody.velocity.magnitude * Time.fixedDeltaTime * 2, Color.red, 10.0f);
+            Debug.DrawRay(this.transform.position , this.transform.right * m_rigidBody.velocity.magnitude * Time.fixedDeltaTime * 2 , Color.red , 10.0f);
 
             //Debug.Break();
             if (RayHit)
@@ -110,16 +110,16 @@ public class Bullet : MonoBehaviour
                 else if (RayHit.transform.gameObject.layer != LayerMask.NameToLayer("Player"))
                 {
                     //If I find a hitbybullet interface, call its function
-                   // if (RayHit.transform.gameObject.GetComponent<IHitByBullet>() != null)
-                   // {
-                   //     RayHit.transform.gameObject.GetComponent<IHitByBullet>().HitByBullet(m_rigidBody.velocity, RayHit.point);
-                   // }
+                    if (RayHit.transform.gameObject.GetComponent<IHitByBullet>() != null)
+                    {
+                        RayHit.transform.gameObject.GetComponent<IHitByBullet>().HitByBullet(m_rigidBody.velocity , RayHit.point);
+                    }
                     m_bStopRayCasts = true;
                     m_rigidBody.velocity = Vector2.zero;
                     m_rigidBody.simulated = false;
                     BulletSprite.enabled = false;
                     transform.position = RayHit.point;
-                    Destroy(this.gameObject, 1);
+                    Destroy(this.gameObject , 1);
 
                 }
                 else
@@ -130,7 +130,7 @@ public class Bullet : MonoBehaviour
                         //Debug.Log("Hit player");
                         //Debug.Log("Raycast hit player");
                         PlayerStatus PlayerIHit = RayHit.transform.GetComponent<PlayerStatus>(); //Store the player I hit temporarily
-                        RayHit.transform.GetComponent<PlayerStatus>().HitPlayer(this, m_bGiveIFrames);
+                        RayHit.transform.GetComponent<PlayerStatus>().HitPlayer(this , m_bGiveIFrames);
                         if (RayHit.transform.GetComponent<PlayerStatus>().m_iHealth <= 0)
                         {
                             RayHit.transform.GetComponent<PlayerStatus>().IsDead = true;
@@ -157,8 +157,8 @@ public class Bullet : MonoBehaviour
         Debug.Log("spark");
         if (ParticleSparks != null)
         {
-            transform.GetChild(0).localEulerAngles = new Vector3(VChildPrevRotation.x, VChildPrevRotation.y, VChildPrevRotation.z); // parent - 90z
-            transform.position = new Vector3(hit.contacts[0].point.x, hit.contacts[0].point.y, 0);
+            transform.GetChild(0).localEulerAngles = new Vector3(VChildPrevRotation.x , VChildPrevRotation.y , VChildPrevRotation.z); // parent - 90z
+            transform.position = new Vector3(hit.contacts[0].point.x , hit.contacts[0].point.y , 0);
             ParticleSparks.Play();
 
             //GameObject hitInstance = Instantiate(HitParticle, this.transform.position, Quaternion.identity) as GameObject;
@@ -190,7 +190,7 @@ public class Bullet : MonoBehaviour
         float longestParticleDuration = 0;
         if (WallCollidedParticles.Length > 0)
         {
-            transform.GetChild(0).localEulerAngles = new Vector3(VChildPrevRotation.x, VChildPrevRotation.y, VChildPrevRotation.z);
+            transform.GetChild(0).localEulerAngles = new Vector3(VChildPrevRotation.x , VChildPrevRotation.y , VChildPrevRotation.z);
             foreach (ParticleSystem particle in WallCollidedParticles)
             {
                 if (particle.main.duration > longestParticleDuration)
@@ -209,7 +209,7 @@ public class Bullet : MonoBehaviour
         if (m_rigidBody.isKinematic == false)
             if (hit.collider.tag == "Shield")
             {
-                this.GetComponent<Rigidbody2D>().velocity = Vector3.Reflect(transform.up + PreviousVelocity, hit.transform.up);
+                this.GetComponent<Rigidbody2D>().velocity = Vector3.Reflect(transform.up + PreviousVelocity , hit.transform.up);
 
                 return;
             }
@@ -236,7 +236,7 @@ public class Bullet : MonoBehaviour
             if (!hit.transform.GetComponent<PlayerStatus>().IsStunned && hit.transform.GetComponent<PlayerStatus>() != bulletOwner)
             {
                 //hit.transform.GetComponent<PlayerStatus>().m_iHealth -= m_iDamage;
-                hit.transform.GetComponent<PlayerStatus>().HitPlayer(this, m_bGiveIFrames);
+                hit.transform.GetComponent<PlayerStatus>().HitPlayer(this , m_bGiveIFrames);
                 if (hit.transform.GetComponent<PlayerStatus>().m_iHealth <= 0)
                 {
                     hit.transform.GetComponent<PlayerStatus>().IsDead = true;
