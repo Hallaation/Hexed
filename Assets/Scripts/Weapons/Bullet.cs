@@ -81,15 +81,16 @@ public class Bullet : MonoBehaviour
 
         VChildPrevRotation = transform.localEulerAngles;
     }
-    //? THIS
+    //? THIS is done. lol
     private void FixedUpdate()
     {
         if (!m_bStopRayCasts)
         {
             Ray2D WallCheckRay = new Ray2D(transform.position, transform.right);
             //Raycast from me, to my right vector (because all the rotations are fucked) on the distance I'll travel for the next frame.
-            //Only raycast against the player, wall, door and glass
-            RaycastHit2D RayHit = Physics2D.Raycast(WallCheckRay.origin, WallCheckRay.direction, m_rigidBody.velocity.magnitude * Time.fixedDeltaTime * 2, (1 << 8 | 1 << 9 | 1 << 10 | 1 << 14 | 1 << 11));
+            //Only raycast against the player, wall, door and glass 
+            RaycastHit2D RayHit = Physics2D.Raycast(WallCheckRay.origin, WallCheckRay.direction, m_rigidBody.velocity.magnitude * Time.fixedDeltaTime * 2, 
+                (/*Player */ 1 << 8 | /*Shield*/ 1 << 9 | /* Wall */1 << 10 |/*Glass*/ 1 << 14 | /*Door*/ 1 << 11));
             Debug.DrawRay(WallCheckRay.origin, WallCheckRay.direction * m_rigidBody.velocity.magnitude * Time.fixedDeltaTime * 2, Color.red, 10.0f);
 
             //Debug.Break();
@@ -183,16 +184,19 @@ public class Bullet : MonoBehaviour
         //     //hitInstance.transform.up = hit.transform.up;
         //     //hitInstance.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
         // }
+        float longestParticleDuration = 0;
         if (WallCollidedParticles.Length > 0)
         {
             transform.GetChild(0).localEulerAngles = new Vector3(VChildPrevRotation.x, VChildPrevRotation.y, VChildPrevRotation.z);
             foreach (ParticleSystem particle in WallCollidedParticles)
             {
+                if (particle.main.duration > longestParticleDuration)
+                    longestParticleDuration = particle.main.duration;
                 particle.Play();
             }
         }
-
-        yield return new WaitForSecondsRealtime(ParticleSparks.main.duration);
+        //Wait for the longest particle
+        yield return new WaitForSecondsRealtime(longestParticleDuration);
         Destroy(this.gameObject);
     }
 
