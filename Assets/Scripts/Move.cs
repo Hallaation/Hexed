@@ -49,10 +49,30 @@ public class Move : MonoBehaviour
     public float StartMoveDelay = 3;
     public Vector3 m_LeftStickRotation;
     public float StickDeadZone = 0.12f;
-  //  private Text _AmmoText;
+    public string ColorDatabaseKey = "Player1";
+    private Database ColorDatabase;
+    private Dictionary<string, Color> colorDictionary;
+    //  private Text _AmmoText;
+
+    private PolygonCollider2D m_NoHandsCollider;
+    private PolygonCollider2D m_OneHandCollider;
+    private PolygonCollider2D m_TwoHandedCollider;
+
     // Use this for initialization
     void Awake()
     {
+        if (!ColorDatabase)
+        {
+            ColorDatabase = Resources.Load("Database") as Database;
+
+            colorDictionary = new Dictionary<string, Color>();
+            for (int i = 0; i < ColorDatabase.colors.Length; i++)
+            {
+                if (!colorDictionary.ContainsKey(ColorDatabase.colors[i].PlayerType))
+                    colorDictionary.Add(ColorDatabase.colors[i].PlayerType, ColorDatabase.colors[i].playerColor);
+            }
+        }
+
         weapon1HandedMount = transform.Find("1HandedSpot");
         weapon2HandedMount = transform.Find("2HandedSpot");
 
@@ -72,6 +92,10 @@ public class Move : MonoBehaviour
 
         vibrationValue = Vector2.zero;
         //setting up any references to other classes needed.
+        m_NoHandsCollider = transform.Find("Colliders").Find("NoHands").GetComponent<PolygonCollider2D>();
+        m_OneHandCollider = transform.Find("Colliders").Find("1Hand").GetComponent<PolygonCollider2D>();
+        m_TwoHandedCollider = transform.Find("Colliders").Find("2Hands").GetComponent<PolygonCollider2D>();
+        m_NoHandsCollider.enabled = true;
         m_controller = GetComponent<ControllerSetter>();
         m_status = GetComponent<PlayerStatus>();
         _rigidBody = GetComponent<Rigidbody2D>();
@@ -93,26 +117,35 @@ public class Move : MonoBehaviour
                 temp = transform.Find("Sprites").Find("PlayerSprite").GetComponent<Renderer>();
             else temp = null;
         }
-        switch (m_controller.mPlayerIndex)
+        if (colorDictionary.ContainsKey(ColorDatabaseKey))
         {
-            case PlayerIndex.One:
-                temp.material.color = Color.red;
-                break;
-            case PlayerIndex.Two:
-                temp.material.color = Color.blue;
-                break;
-            case PlayerIndex.Three:
-                temp.material.color = Color.magenta;
-                break;
-            case PlayerIndex.Four:
-                temp.material.color = Color.yellow;
-                break;
+            temp.material.color = colorDictionary[ColorDatabaseKey];
         }
+        else
+        {
+            temp.material.color = Color.red;
+        }
+        //temp.material.color = PlayerColor;
+        //switch (m_controller.mPlayerIndex)
+        //{
+        //    case PlayerIndex.One:
+        //        temp.material.color = Color.red;
+        //        break;
+        //    case PlayerIndex.Two:
+        //        temp.material.color = Color.blue;
+        //        break;
+        //    case PlayerIndex.Three:
+        //        temp.material.color = Color.magenta;
+        //        break;
+        //    case PlayerIndex.Four:
+        //        temp.material.color = Color.yellow;
+        //        break;
+        //}
 
         defaultWeapon = GetComponent<EmptyHand>();
         SceneManager.sceneLoaded += OnSceneLoaded;
         // Delay
-       // MoveDelayTimer = 0;
+        // MoveDelayTimer = 0;
         StoredMoveSpeed = movementSpeed;
         StartCoroutine(DelayMovement());
     }
@@ -228,14 +261,14 @@ public class Move : MonoBehaviour
         if (temp.magnitude < deadzone)
         {
             temp = Vector3.zero;
-        }        
+        }
         return temp;
     }
 
     void CalculateMovement()
     {
         Vector3 movement = Vector3.zero;
-        
+
         //Gets the input from the left stick to determine the movement
         movement = new Vector3(XCI.GetAxis(XboxAxis.LeftStickX, m_controller.mXboxController), XCI.GetAxis(XboxAxis.LeftStickY, m_controller.mXboxController));
         //Vrotation used to determine what way the character to rotate
@@ -261,7 +294,7 @@ public class Move : MonoBehaviour
             //vrotation = new Vector2(-GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Left.X, GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Left.Y);
 
             vrotation = new Vector2(-XCI.GetAxisRaw(XboxAxis.LeftStickX, m_controller.mXboxController), XCI.GetAxisRaw(XboxAxis.LeftStickY, m_controller.mXboxController));
-            
+
         }
         else
         {
@@ -272,7 +305,7 @@ public class Move : MonoBehaviour
         //Do deadzone calculations
         vrotation = CheckDeadZone(vrotation, StickDeadZone);
         LeftStickRotation = CheckDeadZone(LeftStickRotation, StickDeadZone);
-        
+
         if (vrotation != Vector3.zero)
         {
             //Set the rotation to the Stick rotation
@@ -338,7 +371,7 @@ public class Move : MonoBehaviour
                     SetHoldingGun(0);
 
             }
-           
+
         }
     }
     void CheckForPickup()
@@ -371,9 +404,9 @@ public class Move : MonoBehaviour
         //If there is a weapon being held, the weapon will be thrown away.
         if (heldWeapon)
         {
-            
+
             ThrowMyWeapon(stickMovement, throwingDirection, tossWeapon);
-            
+
         }
         //if the overlap circle found something, pickup the weapon
         if (hitCollider)
@@ -389,7 +422,7 @@ public class Move : MonoBehaviour
                 if (hitCollider.transform.parent.parent == null)
 
                 {
-                    PickUpWeaon(hitCollider);
+                    PickupWeapon(hitCollider);
                     return true;
                 }
             }
@@ -403,10 +436,11 @@ public class Move : MonoBehaviour
         return false;
     }
 
-    void PickUpWeaon(Collider2D hitCollider)
+    void PickupWeapon(Collider2D hitCollider)
     {
         heldWeapon = hitCollider.transform.parent.gameObject;
         heldWeapon.transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = 4; //? Puts gun layer infront of player layer when picked up. 
+        heldWeapon.transform.GetChild(0).transform.localPosition = new Vector3(0, 0, 0); //! Resets Shadow on pickup.
         hitCollider.gameObject.transform.parent.SetParent(this.transform);
         //! if the weapon isn't a 2 handed weapon, mount it to the 1 handed location
         if (!hitCollider.transform.parent.gameObject.GetComponent<Weapon>().m_b2Handed)
@@ -430,9 +464,10 @@ public class Move : MonoBehaviour
         {
             if (heldWeapon.tag == "OneHanded")
             {
-                BodyAnimator.SetBool("HoldingOneHandedGun", true);
+                SetHoldingGun(1);
             }
-            BodyAnimator.SetBool("HoldingTwoHandedGun", true);
+            else
+                SetHoldingGun(2);
         }
         vibrationValue.y = 0.5f; //vibrate controller for haptic feedback
     }
@@ -446,12 +481,16 @@ public class Move : MonoBehaviour
                 if (BodyAnimator != null)
                     BodyAnimator.SetBool("UnarmedAttack", false);
                 //attack using the weapon im holding. if an attack was done, set a vibration on my controller.
-                if (heldWeapon.GetComponent<Weapon>().Attack(TriggerCheck))
+                // Ray2D ray = new Ray2D(this.transform.position, this.transform.up);
+                RaycastHit2D hit = Physics2D.Raycast(this.transform.position, this.transform.up, 1f, (1 << 10 | 1 << 11 | 1 << 14));
+                if (!hit)
                 {
-                    //CameraShake.Instance.ShakeCamera();
-                    vibrationValue.x = 0.45f;
+                    if (heldWeapon.GetComponent<Weapon>().Attack(TriggerCheck))
+                    {
+                        //CameraShake.Instance.ShakeCamera();
+                        vibrationValue.x = 0.45f;
+                    }
                 }
-
                 m_bTriggerReleased = false;
             }
             else
@@ -478,7 +517,10 @@ public class Move : MonoBehaviour
             BodyAnimator.SetBool("UnarmedAttack", false);
             BodyAnimator.SetBool("Moving", false);
             BodyAnimator.SetBool("IsKilling", false);
+            
         }
+        
+        if(transform.Find("StunnedCollider"))
         transform.Find("StunnedCollider").GetComponent<PolygonCollider2D>().enabled = false;
         if (heldWeapon)
         {
@@ -596,14 +638,23 @@ public class Move : MonoBehaviour
                 case 0:
                     BodyAnimator.SetBool("HoldingOneHandedGun", false); // Sets animators
                     BodyAnimator.SetBool("HoldingTwoHandedGun", false);
+                    m_NoHandsCollider.enabled = true;
+                    m_OneHandCollider.enabled = false;
+                    m_TwoHandedCollider.enabled = false;
                     break;
                 case 1:
                     BodyAnimator.SetBool("HoldingOneHandedGun", true);
                     BodyAnimator.SetBool("HoldingTwoHandedGun", false);
+                    m_NoHandsCollider.enabled = false;
+                    m_OneHandCollider.enabled = true;
+                    m_TwoHandedCollider.enabled = false;
                     break;
                 case 2:
                     BodyAnimator.SetBool("HoldingOneHandedGun", false);
                     BodyAnimator.SetBool("HoldingTwoHandedGun", true);
+                    m_NoHandsCollider.enabled = false;
+                    m_OneHandCollider.enabled = false;
+                    m_TwoHandedCollider.enabled = true;
                     break;
                 default:
                     break;
@@ -611,9 +662,26 @@ public class Move : MonoBehaviour
         }
     }
 
+   public void MakeCollidersTriggers(bool Trigger)
+    {
+        if (Trigger == true)
+        {
+            m_NoHandsCollider.isTrigger = true;
+            m_OneHandCollider.isTrigger = true;
+            m_TwoHandedCollider.isTrigger = true;
+        }
+        else
+        {
+            m_NoHandsCollider.isTrigger = false;
+            m_OneHandCollider.isTrigger = false;
+            m_TwoHandedCollider.isTrigger = false;
+        }
+    }
 
+    
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         //_AmmoText = PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_AmmoText.GetComponent<Text>();
     }
+
 }

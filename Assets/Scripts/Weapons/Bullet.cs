@@ -86,12 +86,12 @@ public class Bullet : MonoBehaviour
     {
         if (!m_bStopRayCasts)
         {
-            Ray2D WallCheckRay = new Ray2D(transform.position, transform.right);
+           // Ray2D WallCheckRay = new Ray2D(transform.position, transform.right);
             //Raycast from me, to my right vector (because all the rotations are fucked) on the distance I'll travel for the next frame.
             //Only raycast against the player, wall, door and glass 
-            RaycastHit2D RayHit = Physics2D.Raycast(WallCheckRay.origin, WallCheckRay.direction, m_rigidBody.velocity.magnitude * Time.fixedDeltaTime * 2,
+            RaycastHit2D RayHit = Physics2D.Raycast(this.transform.position, this.transform.right, m_rigidBody.velocity.magnitude * Time.fixedDeltaTime * 2,
                 (/*Player */ 1 << 8 | /*Shield*/ 1 << 9 | /* Wall */1 << 10 |/*Glass*/ 1 << 14 | /*Door*/ 1 << 11));
-            Debug.DrawRay(WallCheckRay.origin, WallCheckRay.direction * m_rigidBody.velocity.magnitude * Time.fixedDeltaTime * 2, Color.red, 10.0f);
+            Debug.DrawRay(this.transform.position, this.transform.right * m_rigidBody.velocity.magnitude * Time.fixedDeltaTime * 2, Color.red, 10.0f);
 
             //Debug.Break();
             if (RayHit)
@@ -110,10 +110,10 @@ public class Bullet : MonoBehaviour
                 else if (RayHit.transform.gameObject.layer != LayerMask.NameToLayer("Player"))
                 {
                     //If I find a hitbybullet interface, call its function
-                    if (RayHit.transform.gameObject.GetComponent<IHitByBullet>() != null)
-                    {
-                        RayHit.transform.gameObject.GetComponent<IHitByBullet>().HitByBullet(m_rigidBody.velocity, RayHit.point);
-                    }
+                   // if (RayHit.transform.gameObject.GetComponent<IHitByBullet>() != null)
+                   // {
+                   //     RayHit.transform.gameObject.GetComponent<IHitByBullet>().HitByBullet(m_rigidBody.velocity, RayHit.point);
+                   // }
                     m_bStopRayCasts = true;
                     m_rigidBody.velocity = Vector2.zero;
                     m_rigidBody.simulated = false;
@@ -130,13 +130,10 @@ public class Bullet : MonoBehaviour
                         //Debug.Log("Hit player");
                         //Debug.Log("Raycast hit player");
                         PlayerStatus PlayerIHit = RayHit.transform.GetComponent<PlayerStatus>(); //Store the player I hit temporarily
-                        if (!PlayerIHit.m_bInvincible) //If player isn't invincible
+                        RayHit.transform.GetComponent<PlayerStatus>().HitPlayer(this, m_bGiveIFrames);
+                        if (RayHit.transform.GetComponent<PlayerStatus>().m_iHealth <= 0)
                         {
-                            PlayerIHit.m_iHealth -= m_iDamage; //Deduct the player's health based on my damage
-                            if (PlayerIHit.m_iHealth <= 0) //If below 0, the player I hit is dead
-                            {
-                                PlayerIHit.IsDead = true;
-                            }
+                            RayHit.transform.GetComponent<PlayerStatus>().IsDead = true;
                         }
                         //RayHit.transform.GetComponent<Move>().StatusApplied();
                         Destroy(this.gameObject); //Destroy me beacuse I have no other purpose, 

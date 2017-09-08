@@ -69,8 +69,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4828262548686524}
-  - component: {fileID: 58776948240969992}
-  - component: {fileID: 58008320975400170}
+  - component: {fileID: 58539244455751024}
   m_Layer: 12
   m_Name: Collider
   m_TagString: Untagged
@@ -97,8 +96,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1197723866840090}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.77, y: 5.34, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -1, w: 0.0000029653306}
+  m_LocalPosition: {x: -3.18, y: 6.32, z: -5.296875}
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_Children:
   - {fileID: 4605829996525652}
@@ -106,7 +105,7 @@ Transform:
   - {fileID: 4067935782165266}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -180.00002}
 --- !u!4 &4605829996525652
 Transform:
   m_ObjectHideFlags: 1
@@ -114,7 +113,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1405942928552206}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.12944962, z: 0}
   m_LocalScale: {x: 3.6781611, y: 3.6781611, z: 3.6781611}
   m_Children: []
   m_Father: {fileID: 4490090486993772}
@@ -153,21 +152,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 0
---- !u!58 &58008320975400170
-CircleCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1877943089600360}
-  m_Enabled: 0
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 1
---- !u!58 &58776948240969992
+--- !u!58 &58539244455751024
 CircleCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -176,7 +161,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
@@ -220,9 +205,9 @@ MonoBehaviour:
   m_bActive: 1
   previousOwner: {fileID: 0}
   m_bMoveWeaponSpriteUp: 0
-  m_iAmmo: 2147483647
-  bullet: {fileID: 1124563433790592, guid: 86b0deeed3cd2df42bfe06a447223f5e, type: 2}
-  m_fSpreadJitter: 20
+  m_iAmmo: 30
+  bullet: {fileID: 1928104826133792, guid: 7b1d5a4de82f724468c78516eca036b0, type: 2}
+  m_fSpreadJitter: 0
   m_fSpreadIncrease: 10
   m_fMaxJitter: 1
   m_fBulletSpawnOffSet: 0.1
@@ -243,7 +228,7 @@ SpriteRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -260,7 +245,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
-  m_SortingOrder: -5
+  m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: da8da47eb60060b4ca5f426ef78cee85, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

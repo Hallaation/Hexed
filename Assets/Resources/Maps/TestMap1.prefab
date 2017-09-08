@@ -5705,11 +5705,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae25850cfcbaae2439d77f3f6d8188da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_HeldSprite: {fileID: 0}
   m_fTimeBetweenShots: 0
   m_iDamage: 0
   m_bAutomaticGun: 0
   m_bBurstFire: 0
   m_bGivePlayersIFrames: 0
+  m_b2Handed: 0
   KnockBack: 0
   MaxShadow: 0
   MinShadow: 0
@@ -5721,6 +5723,7 @@ MonoBehaviour:
   bullet: {fileID: 1928104826133792, guid: 7b1d5a4de82f724468c78516eca036b0, type: 2}
   m_fSpreadJitter: 1
   m_fSpreadIncrease: 0.1
+  m_fMaxJitter: 1
   m_fBulletSpawnOffSet: 1
   m_fFiringForce: 0.02
   m_bAutomatic: 0
@@ -5826,11 +5829,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae25850cfcbaae2439d77f3f6d8188da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_HeldSprite: {fileID: 0}
   m_fTimeBetweenShots: 0.5
   m_iDamage: 0
   m_bAutomaticGun: 0
   m_bBurstFire: 1
   m_bGivePlayersIFrames: 0
+  m_b2Handed: 0
   KnockBack: 0
   MaxShadow: 0
   MinShadow: 0
@@ -5842,6 +5847,7 @@ MonoBehaviour:
   bullet: {fileID: 1928104826133792, guid: 26c7aaea0cded2b40b91a42678ca6f95, type: 2}
   m_fSpreadJitter: 5
   m_fSpreadIncrease: 0.1
+  m_fMaxJitter: 1
   m_fBulletSpawnOffSet: 1
   m_fFiringForce: 0.25
   m_bAutomatic: 0
@@ -5953,11 +5959,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae25850cfcbaae2439d77f3f6d8188da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_HeldSprite: {fileID: 0}
   m_fTimeBetweenShots: 0.75
   m_iDamage: 0
   m_bAutomaticGun: 1
   m_bBurstFire: 0
   m_bGivePlayersIFrames: 0
+  m_b2Handed: 0
   KnockBack: 0
   MaxShadow: 0
   MinShadow: 0
@@ -5969,6 +5977,7 @@ MonoBehaviour:
   bullet: {fileID: 1928104826133792, guid: cb8bab3de28b752498df0390ebf4bdc5, type: 2}
   m_fSpreadJitter: 15
   m_fSpreadIncrease: 0.1
+  m_fMaxJitter: 1
   m_fBulletSpawnOffSet: 1
   m_fFiringForce: 0.25
   m_bAutomatic: 0
@@ -6005,11 +6014,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae25850cfcbaae2439d77f3f6d8188da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_HeldSprite: {fileID: 0}
   m_fTimeBetweenShots: 0.15
   m_iDamage: 1
   m_bAutomaticGun: 1
   m_bBurstFire: 0
   m_bGivePlayersIFrames: 0
+  m_b2Handed: 0
   KnockBack: 0
   MaxShadow: 0.2
   MinShadow: 0
@@ -6021,6 +6032,7 @@ MonoBehaviour:
   bullet: {fileID: 0}
   m_fSpreadJitter: 20
   m_fSpreadIncrease: 10
+  m_fMaxJitter: 1
   m_fBulletSpawnOffSet: 1
   m_fFiringForce: 0.25
   m_bAutomatic: 0
@@ -6078,7 +6090,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapName: Map1
-  mapSelectionSprite: {fileID: 21300000, guid: a6125fe19330838408a496cbc1d4b211, type: 3}
+  mapSelectionSprite: {fileID: 0}
 --- !u!114 &114812679910630198
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -6110,11 +6122,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae25850cfcbaae2439d77f3f6d8188da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_HeldSprite: {fileID: 0}
   m_fTimeBetweenShots: 0.15
   m_iDamage: 1
   m_bAutomaticGun: 1
   m_bBurstFire: 0
   m_bGivePlayersIFrames: 0
+  m_b2Handed: 0
   KnockBack: 0
   MaxShadow: 0.2
   MinShadow: 0
@@ -6126,6 +6140,7 @@ MonoBehaviour:
   bullet: {fileID: 1928104826133792, guid: 7b1d5a4de82f724468c78516eca036b0, type: 2}
   m_fSpreadJitter: 10
   m_fSpreadIncrease: 0.1
+  m_fMaxJitter: 1
   m_fBulletSpawnOffSet: 1
   m_fFiringForce: 0.25
   m_bAutomatic: 0
