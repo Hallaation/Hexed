@@ -110,8 +110,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1880336961509972}
   m_LocalRotation: {x: -0, y: -0, z: 0.13052596, w: 0.99144495}
-  m_LocalPosition: {x: -8, y: 5.5, z: 0}
-  m_LocalScale: {x: 0.80000013, y: 0.80000013, z: 8}
+  m_LocalPosition: {x: -3, y: 5.5, z: 0}
+  m_LocalScale: {x: 0.6, y: 0.6, z: 8}
   m_Children:
   - {fileID: 4655407004906006}
   - {fileID: 4299949985001338}
@@ -175,7 +175,7 @@ CapsuleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 1.85, y: 0.77}
@@ -192,7 +192,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_HeldSprite: {fileID: 21300020, guid: b063c0329a4c3ad42a58400a56d129ae, type: 3}
-  m_fTimeBetweenShots: 1
+  m_fTimeBetweenShots: 0.8
   m_iDamage: 1
   m_bAutomaticGun: 1
   m_bBurstFire: 1
@@ -211,10 +211,10 @@ MonoBehaviour:
   m_fSpreadIncrease: 300
   m_fMaxJitter: 300
   m_fBulletSpawnOffSet: 1.75
-  m_fFiringForce: 0.25
+  m_fFiringForce: 0.2
   m_bAutomatic: 0
   m_iBurstFire: 5
-  m_fTimeBetweenBurstShots: 0
+  m_fTimeBetweenBurstShots: -0.1
 --- !u!212 &212377377192078294
 SpriteRenderer:
   m_ObjectHideFlags: 1
