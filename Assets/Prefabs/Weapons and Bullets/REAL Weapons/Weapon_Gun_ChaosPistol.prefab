@@ -69,7 +69,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4147487305101980}
-  - component: {fileID: 58870866825566398}
+  - component: {fileID: 70323848402284448}
   m_Layer: 12
   m_Name: Collider
   m_TagString: Untagged
@@ -96,16 +96,16 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1088063092901144}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.71, y: 5.38, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: 0.13052596, w: 0.99144495}
+  m_LocalPosition: {x: -10.71, y: 5.38, z: 0}
+  m_LocalScale: {x: 0.8, y: 0.8, z: 1}
   m_Children:
   - {fileID: 4777184916552946}
   - {fileID: 4147487305101980}
   - {fileID: 4558572172847092}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 15.000001}
 --- !u!4 &4558572172847092
 Transform:
   m_ObjectHideFlags: 1
@@ -114,7 +114,7 @@ Transform:
   m_GameObject: {fileID: 1552174693651454}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4285909556499424}
   m_RootOrder: 2
@@ -127,7 +127,7 @@ Transform:
   m_GameObject: {fileID: 1287359363866966}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4285909556499424}
   m_RootOrder: 0
@@ -147,13 +147,13 @@ Rigidbody2D:
   m_LinearDrag: 2
   m_AngularDrag: 2
   m_GravityScale: 0
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 75593ba3a54ba6848a35ce524a35ce4f, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 0
---- !u!58 &58870866825566398
-CircleCollider2D:
+--- !u!70 &70323848402284448
+CapsuleCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -163,9 +163,9 @@ CircleCollider2D:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_UsedByEffector: 0
-  m_Offset: {x: -0.06, y: 0.07}
-  serializedVersion: 2
-  m_Radius: 0.82
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 1, y: 0.85}
+  m_Direction: 1
 --- !u!70 &70995622039002928
 CapsuleCollider2D:
   m_ObjectHideFlags: 1
@@ -178,7 +178,7 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_Offset: {x: -0.03, y: 0}
-  m_Size: {x: 0.86, y: 0.58}
+  m_Size: {x: 0.85, y: 0.6}
   m_Direction: 1
 --- !u!114 &114353718130910256
 MonoBehaviour:
@@ -210,8 +210,8 @@ MonoBehaviour:
   m_fSpreadJitter: 1
   m_fSpreadIncrease: 10
   m_fMaxJitter: 1
-  m_fBulletSpawnOffSet: 1.7
-  m_fFiringForce: 0.25
+  m_fBulletSpawnOffSet: 1.45
+  m_fFiringForce: 0.2
   m_bAutomatic: 0
   m_iBurstFire: 0
   m_fTimeBetweenBurstShots: 0

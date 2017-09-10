@@ -22,6 +22,8 @@ public class Bullet : MonoBehaviour
     public float m_iDamage;
     public bool m_bGiveIFrames = false;
 
+	public TrailRenderer trail;
+
     //public GameObject HitParticle;
 
 
@@ -35,6 +37,11 @@ public class Bullet : MonoBehaviour
         m_rigidBody = GetComponent<Rigidbody2D>();
         PreviousRotation = GetComponent<Rigidbody2D>().rotation;
         PreviousVelocity = GetComponent<Rigidbody2D>().velocity;
+		if (trail != null)
+		{
+			trail.sortingLayerName = "Bullet";
+			trail.sortingOrder = 0;
+		}
         // Destroy(this.gameObject , 5);
     }
     // Update is called once per frame
