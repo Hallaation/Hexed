@@ -44,11 +44,11 @@ public class Door : MonoBehaviour, IHitByBullet
                // HasBounced = true;
                // timer = 0;
             }
-            else
-            {
-               // HasBounced = false;
-               // timer += Time.deltaTime;
-            }
+            //else
+            //{
+            //   // HasBounced = false;
+            //   // timer += Time.deltaTime;
+            //}
     }
 
 

@@ -63,13 +63,13 @@ public class Teleport : BaseAbility
   
                 //makes a quaternion
                 Quaternion LeftStickRotation = new Quaternion();
-                LeftStickRotation = Quaternion.Euler(0 , 0 , Mathf.Atan2(GetComponent<Move>().m_LeftStickRotation.x , GetComponent<Move>().m_LeftStickRotation.y) * Mathf.Rad2Deg); // This works
+                LeftStickRotation = Quaternion.Euler(0 , 0 , Mathf.Atan2(m_MoveOwner.m_LeftStickRotation.x , m_MoveOwner.m_LeftStickRotation.y) * Mathf.Rad2Deg); // This works
                 Vector3 rotation = LeftStickRotation * Vector3.up;
                 
                 //makes a rotation vector from the left stick's rotation
 
                 //if there is any rotation from the left stick, the player will teleport the direction of the left stick, otherwise they will teleport the way they are looking
-                if (GetComponent<Move>().m_LeftStickRotation.magnitude > 0)
+                if (m_MoveOwner.m_LeftStickRotation.magnitude > 0)
                 {
                     
                     Vector2 V2rotation = new Vector2(rotation.x, rotation.y);

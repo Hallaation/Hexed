@@ -89,6 +89,7 @@ public class GameManagerc : MonoBehaviour
     private bool mbInstanceIsMe = false;
     private bool mbFinishedPanelShown = false;
     public bool mbMapLoaded = false;
+    //Lazy singleton
     public static GameManagerc Instance
     {
         get
@@ -209,6 +210,7 @@ public class GameManagerc : MonoBehaviour
         }
         yield return null;
     }
+
     void KillPlayer1()
     {
         InGamePlayers[0].KillPlayer(InGamePlayers[1]);
@@ -252,6 +254,7 @@ public class GameManagerc : MonoBehaviour
         }
 
     }
+
     void RoundEndDeathMatchMaxPoints()
     {
         foreach (PlayerStatus player in InGamePlayers)
@@ -273,7 +276,7 @@ public class GameManagerc : MonoBehaviour
                 //Reset the event managers current selected object to the rematch button
                 FindObjectOfType<EventSystem>().SetSelectedGameObject(null);
                 FindObjectOfType<EventSystem>().SetSelectedGameObject(FinishUIPanel.transform.Find("Rematch").gameObject);
-
+                
                 //TODO Load Character select / win screen;
                 //TODO Sort players by score?
             }
@@ -293,7 +296,7 @@ public class GameManagerc : MonoBehaviour
         //And I havn't shown the finished panel yet, show it, set the show panel to true so this doesnt run again.
         if (mbFinishedShowingScores)
         {
-            foreach (var player in InGamePlayers)
+            foreach (PlayerStatus player in InGamePlayers)
             {
                 if (PlayerWins[player] >= m_iPointsNeeded)
                 {
@@ -341,7 +344,7 @@ public class GameManagerc : MonoBehaviour
                     mbMapLoaded = true;
                     ControllerManager.Instance.FindSpawns();
                     CharacterSelectionManager.Instance.LoadPlayers();
-                    Debug.Log("Loaded map and players");
+                    //Debug.Log("Loaded map and players");
                 }
                 //If I found the finished game panel
                 if (GameObject.Find("FinishedGamePanel"))
@@ -473,6 +476,7 @@ public class GameManagerc : MonoBehaviour
         //WTF Scene isn't clearing itself, 
         StartCoroutine(waitForSeconds(0.2f));
     }
+
     IEnumerator waitForSeconds(float time)
     {
         yield return new WaitForSecondsRealtime(time);

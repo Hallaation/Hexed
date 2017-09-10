@@ -16,6 +16,7 @@ public enum PickType
 public class GamemodeSelection : MonoBehaviour
 {
     private Button _button;
+    private Text _buttonText;
     private EventSystem _eventSystem;
     //private Text _pointText;
 
@@ -46,7 +47,7 @@ public class GamemodeSelection : MonoBehaviour
         m_iPointWinIndex = 0;
         m_iMapPickIndex = 0;
         _button = GetComponentInChildren<Button>();
-
+        _buttonText = GetComponentInChildren<Text>();
         _eventSystem = FindObjectOfType<EventSystem>();
         StickMovement = new bool[2] { false, false };
 
@@ -135,7 +136,6 @@ public class GamemodeSelection : MonoBehaviour
         if (UIManager.Instance.menuStatus.Peek() == this.transform.parent.parent.gameObject)
         {
             CheckForStickReset();
-
             //if the event systems currently selected object is my assigned buttons parent, do the things according to my type.
             if (_eventSystem.currentSelectedGameObject.transform.parent == _button.transform.parent)
             {
@@ -252,10 +252,10 @@ public class GamemodeSelection : MonoBehaviour
                     switch (m_GamemodeSelected)
                     {
                         case Gamemode_type.LAST_MAN_STANDING_DEATHMATCH:
-                            _button.GetComponentInChildren<Text>().text = "Gamemode: Last Man Standing DM";
+                            _buttonText.text = "Gamemode: Last Man Standing DM";
                             break;
                         case Gamemode_type.DEATHMATCH_POINTS:
-                            _button.GetComponentInChildren<Text>().text = "Gamemode: MaxKills Deathmatch";
+                            _buttonText.text = "Gamemode: MaxKills Deathmatch";
                             break;
                         //case Gamemode_type.DEATHMATCH_TIMED:
                         //    _button.GetComponentInChildren<Text>().text = "Gamemode: Timed Deathmatch";
@@ -279,7 +279,7 @@ public class GamemodeSelection : MonoBehaviour
                 if (XCI.GetAxis(XboxAxis.LeftStickX, XboxController.First + i) != 0)
                 {
                     ResetSticks = false;
-                    Debug.Log("one of them isnt 0");
+                    //Debug.Log("one of them isnt 0");
                     i = int.MaxValue;
                     break;
                 }

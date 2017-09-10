@@ -28,53 +28,52 @@ public class EmptyHand : Weapon
         {
 
             BoxCollider2D PunchHitBox = transform.Find("Punch").GetComponent<BoxCollider2D>();
-            
-            if(PunchHitBox.IsTouchingLayers(1 << 8)) // If Punch Hitbox is touching PLayer layer.
+
+            if (PunchHitBox.IsTouchingLayers(1 << 8)) // If Punch Hitbox is touching PLayer layer.
             {
                 //Debug.Log("Punch");
-               
-                Collider2D[] Overlap = Physics2D.OverlapBoxAll(PunchHitBox.transform.position, PunchHitBox.size, 0, 1<<8); //An Overlap collider with the punch hitbox. There is probably a better way.
-         
-                int TotalCollisions = Overlap.Length;
-                for(int i = 0; i < TotalCollisions; ++i)
-                {
-                   
 
-                    if(Overlap[i].transform.tag == "Player" && Overlap[i].transform != this.transform) // If hit another player
+                Collider2D[] Overlap = Physics2D.OverlapBoxAll(PunchHitBox.transform.position , PunchHitBox.size , 0 , 1 << 8); //An Overlap collider with the punch hitbox. There is probably a better way. 
+
+                int TotalCollisions = Overlap.Length;
+                for (int i = 0; i < TotalCollisions; ++i)
+                {
+                    if (Overlap[i].transform.tag == "Player" && Overlap[i].transform != this.transform) // If hit another player
                     {
 
                         bool HitPlayerFirst = true;
-                        RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up, (PunchHitBox.transform.position.y + PunchHitBox.size.y)  , 1 << LayerMask.NameToLayer("Wall"));
+                        RaycastHit2D hit = Physics2D.Raycast(transform.position , transform.up , (PunchHitBox.transform.position.y + PunchHitBox.size.y) , 1 << LayerMask.NameToLayer("Wall"));
                         if (hit.collider != null) // If hit a wall, check to see it hits the wall before the player if it does, stop the check here.
                         {
-                            float DistanceToPlayer = Vector3.Distance(transform.position, Overlap[i].transform.position);
-                           float DistanceToWall = Vector3.Distance(transform.position, hit.point);
+                            float DistanceToPlayer = Vector3.Distance(transform.position , Overlap[i].transform.position);
+                            float DistanceToWall = Vector3.Distance(transform.position , hit.point);
                             if (DistanceToWall < DistanceToPlayer) // If Hit wall first.
                             {
                                 HitPlayerFirst = false;
-                                Debug.Log("HitWallFirst");
+                                //Debug.Log("HitWallFirst");
                             }
-                            Debug.Log("HitPlayerFirst");
+                            //Debug.Log("HitPlayerFirst");
                         }
                         if (HitPlayerFirst && Overlap[i].GetComponent<PlayerStatus>().IsStunned == false)// If wall check returns player first. Punch as normal.
                         {
-                            Overlap[i].transform.GetComponent<PlayerStatus>().TimesPunched++;
-                            Overlap[i].GetComponent<PlayerStatus>().MiniStun(this.transform.up * KnockBack, PunchFlinchTime);
-                          
-                            Debug.Log("PunchedEnemy");
-                            if (Overlap[i].transform.GetComponent<PlayerStatus>().TimesPunched >= 3)
+                            PlayerStatus hitPlayer = Overlap[i].GetComponent<PlayerStatus>();
+                            hitPlayer.TimesPunched++;
+                            hitPlayer.MiniStun(this.transform.up * KnockBack , PunchFlinchTime);
+
+                            //Debug.Log("PunchedEnemy");
+                            if (hitPlayer.TimesPunched >= 3)
                             {
-                                Overlap[i].transform.GetComponent<PlayerStatus>().StunPlayer(transform.up * KnockBack);
-                                Overlap[i].transform.GetComponent<PlayerStatus>().TimesPunched = 0;
-                                Overlap[i].transform.GetComponent<Move>().StatusApplied();//GetComponent<Move>().StatusApplied();
-                                Debug.Log("StunnedEnemy");
+                                hitPlayer.StunPlayer(transform.up * KnockBack);
+                                hitPlayer.TimesPunched = 0;
+                                hitPlayer.GetComponent<Move>().StatusApplied();//GetComponent<Move>().StatusApplied();
+                                //Debug.Log("StunnedEnemy");
                             }
                         }
                     }
                 }
             }
             shotReady = false;
-          //  RaycastHit2D[] results;
+            //  RaycastHit2D[] results;
 
 
             //Vector3 center = PunchHitBox.transform.postion + item.center;
@@ -99,16 +98,16 @@ public class EmptyHand : Weapon
             //            hit.transform.GetComponent<PlayerStatus>().StunPlayer(this.transform.up * KnockBack * 10);
             //            hit.transform.GetComponent<Move>().StatusApplied();
             //        }
-                    
+
             //        return true;
             //    }
             //}
-            
+
             //Debug.DrawRay(ray.origin , ray.direction);
         }
-        
+
         return false;
-        
+
     }
 
 }

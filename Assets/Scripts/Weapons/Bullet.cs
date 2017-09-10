@@ -137,10 +137,10 @@ public class Bullet : MonoBehaviour
                         //Debug.Log("Hit player");
                         //Debug.Log("Raycast hit player");
                         PlayerStatus PlayerIHit = RayHit.transform.GetComponent<PlayerStatus>(); //Store the player I hit temporarily
-                        RayHit.transform.GetComponent<PlayerStatus>().HitPlayer(this , m_bGiveIFrames);
-                        if (RayHit.transform.GetComponent<PlayerStatus>().m_iHealth <= 0)
+                        PlayerIHit.HitPlayer(this , m_bGiveIFrames);
+                        if (PlayerIHit.m_iHealth <= 0)
                         {
-                            RayHit.transform.GetComponent<PlayerStatus>().IsDead = true;
+                            PlayerIHit.IsDead = true;
                         }
                         //RayHit.transform.GetComponent<Move>().StatusApplied();
                         Destroy(this.gameObject); //Destroy me beacuse I have no other purpose, 

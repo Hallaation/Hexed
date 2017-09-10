@@ -121,7 +121,6 @@ public class UIManager : MonoBehaviour
         {
             if (XCI.GetButtonDown(XboxButton.B, XboxController.First + i))
             {
-
                 //Scan for every plugged in controller B button
                 MainMenuBack();
             }
@@ -136,9 +135,9 @@ public class UIManager : MonoBehaviour
         {
             return;
         }
-        else if (m_bOpenedPanel)
+        else if (m_bOpenedPanel) //only will run If a panel was open (Credits or Settings)
         {
-            //If any of the dropboxes are open, hide them and exit this function
+            //If I find any dropboxes and they are open, hide them
             foreach (var dropdown in menuStatus.Peek().GetComponentsInChildren<Dropdown>())
             {
                 if (dropdown.transform.childCount > 3)
@@ -169,7 +168,7 @@ public class UIManager : MonoBehaviour
             menuStatus.Pop();
             m_ButtonAnimator = menuStatus.Peek().GetComponent<Animator>();
             DefaultButton temp = menuStatus.Peek().GetComponent<DefaultButton>();
-            Debug.Log(menuStatus.Peek());
+            //Debug.Log(menuStatus.Peek());
             _eventSystem.SetSelectedGameObject(null);
             _eventSystem.SetSelectedGameObject(temp.defaultButton);
             m_bOpenedPanel = false;
@@ -216,6 +215,7 @@ public class UIManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.P))
             CameraShake.Instance.ShakeCamera();
 
+        //If loaded in main menu, run the main menu update
         if (m_bInMainMenu)
         {
             MainMenuUpdate();
@@ -228,7 +228,6 @@ public class UIManager : MonoBehaviour
             if (!GameObject.Find("EventSystem").GetComponent<EventSystem>().currentSelectedGameObject)
             {
                 //set the selected
-                Debug.Log("Currently selecting null");
                 //when all else fails, return to a default
                 if (!selected)
                 {
@@ -242,7 +241,7 @@ public class UIManager : MonoBehaviour
             }
         }
         //If I press B return to the previous UI thing.
-        for (int i = 0; i < (int)XInputDotNetPure.PlayerIndex.Four; ++i)
+        for (int i = 0; i < XCI.GetNumPluggedCtrlrs(); ++i)
         {
             if (XCI.GetButtonDown(XboxButton.B, XboxController.First + i))
             {
@@ -296,13 +295,14 @@ public class UIManager : MonoBehaviour
         }
     }
 
-
+    //Useless right now
     IEnumerator WaitForAnimation(GameObject PanelToOpen)
     {
         //yield return new WaitForSeconds(1);
 
         yield return null;
     }
+
     public void MenuOpenPanel(GameObject PanelToOpen, string AnimationParameter = "")
     {
         if (!menuStatus.Contains(PanelToOpen))
@@ -333,7 +333,7 @@ public class UIManager : MonoBehaviour
             //Add it to menustatus
             menuStatus.Push(PanelToOpen);
             _eventSystem.SetSelectedGameObject(null);
-            if (menuStatus.Peek().GetComponentInChildren<Button>())
+            if (menuStatus.Peek().GetComponentInChildren<Button>()) //Find any button
             {
                 _eventSystem.SetSelectedGameObject(null);
                 _eventSystem.SetSelectedGameObject(menuStatus.Peek().GetComponentInChildren<Button>().gameObject);

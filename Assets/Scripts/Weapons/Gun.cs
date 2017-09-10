@@ -96,18 +96,19 @@ public class Gun : Weapon
     void FireBullet()
     {
         //Whenever fire bullet mis called, Make the bullet prefab, get the damage from the player that is holding this gun
-        GameObject FiredBullet = Instantiate(bullet, this.transform.parent.position + this.transform.parent.up * m_fBulletSpawnOffSet, this.transform.rotation);
-        FiredBullet.GetComponent<Bullet>().bulletOwner = GetComponentInParent<PlayerStatus>();
-        FiredBullet.GetComponent<Bullet>().m_iDamage = this.m_iDamage;
-        FiredBullet.GetComponent<Bullet>().m_bGiveIFrames = m_bGivePlayersIFrames;
+        GameObject FiredBullet = Instantiate(bullet , this.transform.parent.position + this.transform.parent.up * m_fBulletSpawnOffSet , this.transform.rotation);
+        Bullet bulletComponent = FiredBullet.GetComponent<Bullet>();
+        bulletComponent.bulletOwner = GetComponentInParent<PlayerStatus>();
+        bulletComponent.m_iDamage = this.m_iDamage;
+        bulletComponent.m_bGiveIFrames = m_bGivePlayersIFrames;
         //Make a quaternion on the forward vector to determine the bullet spread jitter and set the bullet's rotation to the jitter
-        FiredBullet.transform.rotation = this.transform.parent.rotation * Quaternion.Euler(Vector3.forward * m_fSpreadJitter * Random.Range(-1.0f, 1.0f));
+        FiredBullet.transform.rotation = this.transform.parent.rotation * Quaternion.Euler(Vector3.forward * m_fSpreadJitter * Random.Range(-1.0f , 1.0f));
         //apply an initial force to the bullet's rigidbody based on what direction the bullet is facing,
-        FiredBullet.GetComponent<Rigidbody2D>().AddForce(FiredBullet.transform.up * m_fFiringForce, ForceMode2D.Impulse);
+        FiredBullet.GetComponent<Rigidbody2D>().AddForce(FiredBullet.transform.up * m_fFiringForce , ForceMode2D.Impulse);
         //! Based on the bullet's velocity vector, get a rotation from it and change the bullets rotation to represent the velocity vector;
         Vector2 dir = FiredBullet.GetComponent<Rigidbody2D>().velocity;
-        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        FiredBullet.GetComponent<Transform>().rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        float angle = Mathf.Atan2(dir.y , dir.x) * Mathf.Rad2Deg;
+        FiredBullet.GetComponent<Transform>().rotation = Quaternion.AngleAxis(angle , Vector3.forward);
         //!If I do have a Muzzel flash particle, play them.
         if (MuzzelFlash != null)
             MuzzelFlash.Play();

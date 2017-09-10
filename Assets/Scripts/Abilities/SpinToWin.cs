@@ -34,11 +34,11 @@ public class SpinToWin : BaseAbility
     {
         //find the gameobject containing the sprite, and set its parent to be the player's sprite (pure laziness)
         spinSprite = this.transform.Find("SpinSprite").gameObject;
-        if (!GetComponent<Move>().playerSpirte)
+        if (!m_MoveOwner.playerSpirte)
         {
-            GetComponent<Move>().FindSprite();
+            m_MoveOwner.FindSprite();
         }
-        spinSprite.transform.SetParent(GetComponent<Move>().playerSpirte.transform);
+        spinSprite.transform.SetParent(m_MoveOwner.playerSpirte.transform);
         spinSprite.SetActive(false);
     }
 
@@ -64,11 +64,11 @@ public class SpinToWin : BaseAbility
 
             RegenMana = false;
             currentMana -= repeatedManaCost * Time.deltaTime;
-            GetComponent<Move>().HideWeapon(true);
+            m_MoveOwner.HideWeapon(true);
             //should use an animation instead of hacking it like this, but whatever.
-            GetComponent<Move>().playerSpirte.transform.rotation = Quaternion.Euler(new Vector3(0 , 0 , GetComponent<Move>().playerSpirte.transform.rotation.eulerAngles.z + RotationSpeed));
+            m_MoveOwner.playerSpirte.transform.rotation = Quaternion.Euler(new Vector3(0 , 0 , m_MoveOwner.playerSpirte.transform.rotation.eulerAngles.z + RotationSpeed));
             //disable stick rotation and turn on the radius
-            GetComponent<Move>().m_bStopStickRotation = true;
+            m_MoveOwner.m_bStopStickRotation = true;
             spinSprite.SetActive(true);
 
             //overlap circle against player layer
@@ -84,12 +84,12 @@ public class SpinToWin : BaseAbility
         }
         else
         {
-            GetComponent<Move>().HideWeapon(false);
+            m_MoveOwner.HideWeapon(false);
             PowerReset = false;
             //let the player rotate again, turn the spin radius indicator off and reset the rotation and allow the player to rotate with their sticks
-            GetComponent<Move>().m_bStopStickRotation = false;
+            m_MoveOwner.m_bStopStickRotation = false;
             spinSprite.SetActive(false);
-            GetComponent<Move>().playerSpirte.transform.rotation = this.transform.rotation;
+            m_MoveOwner.playerSpirte.transform.rotation = this.transform.rotation;
         }
         yield return null;
     }

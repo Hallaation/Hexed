@@ -27,11 +27,12 @@ public class BaseAbility : MonoBehaviour
     //TODO otherwise all the shield is block bullets and knock over players when run over with it.
 
     protected Text _AbilityTypeText;
+    protected Move m_MoveOwner;
     public GameObject manaBar;
 
     void Start()
     {
-        
+        m_MoveOwner = this.GetComponent<Move>();
         // mana = GameObject.Find("Mana").GetComponent<UnityEngine.UI.Text>();
         Initialise();
 

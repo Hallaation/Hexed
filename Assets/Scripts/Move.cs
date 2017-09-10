@@ -92,7 +92,7 @@ public class Move : MonoBehaviour
 
         vibrationValue = Vector2.zero;
         //setting up any references to other classes needed.
-        m_NoHandsCollider = transform.Find("Colliders").Find("NoHands").GetComponent<PolygonCollider2D>();
+        m_NoHandsCollider = transform.Find("Colliders").Find("NoHands").GetComponent<PolygonCollider2D>(); 
         m_OneHandCollider = transform.Find("Colliders").Find("1Hand").GetComponent<PolygonCollider2D>();
         m_TwoHandedCollider = transform.Find("Colliders").Find("2Hands").GetComponent<PolygonCollider2D>();
         m_NoHandsCollider.enabled = true;
@@ -171,8 +171,9 @@ public class Move : MonoBehaviour
                 //! an ammo text changing for UI, move this to another function then change to sprites/masking later
                 if (heldWeapon)
                 {
-                    if (heldWeapon.GetComponent<Gun>())
+                    if (heldWeapon.GetType() == typeof(Gun))
                     {
+                        Debug.Log("test");
                         //_AmmoText.text = heldWeapon.GetComponent<Gun>().m_iAmmo.ToString();
                     }
                     else
