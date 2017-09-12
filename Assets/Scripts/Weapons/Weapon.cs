@@ -186,10 +186,10 @@ public class Weapon : MonoBehaviour
             //if it enters a trigger (another player in this case") the hit player gets stunned. calls the status applied to drop their weapon.
             if (GetComponent<Rigidbody2D>().velocity.magnitude >= 10 && a_collider.tag == "Player" && a_collider.gameObject != previousOwner)
             {
-                if (a_collider.GetComponent<PlayerStatus>().IsStunned == false)
+                if (a_collider.GetComponentInParent<PlayerStatus>().IsStunned == false)
                 {
-                    a_collider.GetComponent<PlayerStatus>().StunPlayer(_rigidbody.velocity * KnockBack);
-                    a_collider.GetComponent<Move>().StatusApplied();
+                    a_collider.GetComponentInParent<PlayerStatus>().StunPlayer(_rigidbody.velocity * KnockBack);
+                    a_collider.GetComponentInParent<Move>().StatusApplied();
                 }
             }
         }

@@ -12,7 +12,7 @@ public class PlayerStatus : MonoBehaviour
     int m_iTimesPunched = 0;
     int m_iPreviousTimesPunched = 0;
     bool m_bDead = false;
-    bool m_bStunned = false;
+    public bool m_bStunned = false;
     public bool m_bMiniStun;
     public float StunedSlide = 400;
     public int m_iScore;

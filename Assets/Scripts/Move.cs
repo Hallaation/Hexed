@@ -73,6 +73,7 @@ public class Move : MonoBehaviour
             }
         }
 
+
         weapon1HandedMount = transform.Find("1HandedSpot");
         weapon2HandedMount = transform.Find("2HandedSpot");
 
@@ -521,8 +522,8 @@ public class Move : MonoBehaviour
             
         }
         
-        if(transform.Find("StunnedCollider"))
-        transform.Find("StunnedCollider").GetComponent<PolygonCollider2D>().enabled = false;
+        if(transform.Find("Colliders"))
+        //transform.Find("Colliders").GetComponent<PolygonCollider2D>().enabled = false;
         if (heldWeapon)
         {
             ThrowMyWeapon(Vector2.zero, this.transform.up, false);
@@ -534,7 +535,7 @@ public class Move : MonoBehaviour
         //if im standing on a stunned player, show a prompt (x) to kill the stunned player
         if (a_collider.tag == "Player")
         {
-            PlayerStatus other = a_collider.GetComponent<PlayerStatus>();
+            PlayerStatus other = a_collider.GetComponentInParent<PlayerStatus>();
             if (other.IsStunned)
             {
                 other.killMePrompt.SetActive(true);
@@ -552,7 +553,7 @@ public class Move : MonoBehaviour
         //turn off the kill prompt as I am no longer in rang.e
         if (a_collider.tag == "Player")
         {
-            a_collider.GetComponent<PlayerStatus>().killMePrompt.SetActive(false);
+            a_collider.GetComponentInParent<PlayerStatus>().killMePrompt.SetActive(false);
 
         }
 
@@ -563,7 +564,7 @@ public class Move : MonoBehaviour
         if (XCI.GetButtonDown(XboxButton.X, m_controller.mXboxController))
         {
             //look for any colliders around me (will also hit myself)
-            Collider2D[] hitCollider = Physics2D.OverlapCircleAll(this.transform.position, 1.0f, 1 << 8);
+            Collider2D[] hitCollider = Physics2D.OverlapCircleAll(this.transform.position, 1.0f, 1 << 16); // Layer 16 == stunned.
 
             //for every other collider found in the circle, kill them.
             foreach (Collider2D collidersFound in hitCollider)
@@ -571,14 +572,14 @@ public class Move : MonoBehaviour
                 if (collidersFound.gameObject != this.gameObject)
                 {
                     //Null check
-                    if (collidersFound.GetComponent<PlayerStatus>())
+                    if (collidersFound.tag == "Stunned")           //? Never Passes.
                     {
-                        if (collidersFound.GetComponent<PlayerStatus>().IsStunned)
+                        if (collidersFound.gameObject.transform.parent.GetComponent<PlayerStatus>().IsStunned)
                         {
                             runningAnimation = true;
                             _rigidBody.velocity = Vector2.zero;
                             this.GetComponentInChildren<Animator>().SetBool("IsKilling", true);
-                            collidersFound.GetComponent<PlayerStatus>().KillPlayer(this.GetComponent<PlayerStatus>());
+                            collidersFound.transform.parent.GetComponent<PlayerStatus>().KillPlayer(this.GetComponent<PlayerStatus>());
                         }
                     }
                 }

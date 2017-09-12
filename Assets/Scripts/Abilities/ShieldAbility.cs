@@ -44,7 +44,7 @@ public class ShieldAbility : BaseAbility
             RegenMana = false;
             currentMana -= repeatedManaCost * Time.deltaTime;
             Debug.Log("Depleting mana");
-            m_MoveOwner.HideWeapon(true));
+            m_MoveOwner.HideWeapon(true);
             shieldObject.SetActive(true);
         }
         //once the left trigger is at value 0, power reset is fals;e
