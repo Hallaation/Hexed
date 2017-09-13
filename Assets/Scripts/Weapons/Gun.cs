@@ -6,6 +6,13 @@ using UnityEngine;
 [System.Serializable]
 public class Gun : Weapon
 {
+    [Space]
+    [Header("Empty Clip Audio")]
+    public AudioClip m_EmptyClipAudio;
+    [Range(0, 1)]
+    public float EmptyVolume = 1.0f;
+    
+    [Space]
     [Header("Gun Specific")]
     public int m_iAmmo = 30;
     public GameObject bullet;
@@ -16,7 +23,7 @@ public class Gun : Weapon
 
     public float m_fBulletSpawnOffSet = -.1f; //? Don't put below 0.009?
     public float m_fFiringForce = 20.0f;
-    public bool m_bAutomatic;
+   // public bool m_bAutomatic;
     [Header("BurstFire Settings")]
     public int m_iBurstFire;
     public float m_fTimeBetweenBurstShots;
@@ -41,7 +48,6 @@ public class Gun : Weapon
 
     public override bool Attack(bool trigger)
     {
-
         //player will only be allowed to attack once a shot is ready AND they have ammo. This is used to determine the time to wait in between shots.
         if (shotReady && m_iAmmo != 0 && m_bActive && (trigger == true || m_bAutomaticGun == true))
         {
@@ -62,8 +68,12 @@ public class Gun : Weapon
                 return true;
             }
         }
-        else if (m_iAmmo == 0)
+        else if (m_iAmmo == 0 && shotReady)
         {
+            m_AudioSource.clip = m_EmptyClipAudio;
+            m_AudioSource.volume = clipVolume;
+            m_AudioSource.PlayOneShot(m_EmptyClipAudio, clipVolume);
+            shotReady = false;
             //TODO Add an empty chamber sound effect
             //TODO Add gun click sound effect here.
         }
@@ -96,6 +106,7 @@ public class Gun : Weapon
     void FireBullet()
     {
         //Whenever fire bullet mis called, Make the bullet prefab, get the damage from the player that is holding this gun
+
         GameObject FiredBullet = Instantiate(bullet , this.transform.parent.position + this.transform.parent.up * m_fBulletSpawnOffSet , this.transform.rotation);
         Bullet bulletComponent = FiredBullet.GetComponent<Bullet>();
         bulletComponent.bulletOwner = GetComponentInParent<PlayerStatus>();
@@ -113,6 +124,16 @@ public class Gun : Weapon
         if (MuzzelFlash != null)
             MuzzelFlash.Play();
         shotReady = false; //set shot ready to false to enable the timer to tick.
+        //Copy.CopyComponent(m_AudioSource, FiredBullet);
+        m_AudioSource.pitch = Random.Range(0.8f, 1.2f);
+        m_AudioSource.Play();
+        //AudioSource bulletSource = FiredBullet.GetComponent<AudioSource>();
+        //bulletSource.clip = m_AudioClip;
+        //bulletSource.volume = clipVolume;
+        //bulletSource.pitch = Random.Range(0.3f, 0.9f);
+        //bulletSource.Play();
+        //m_AudioSource.PlayOneShot(m_AudioClip, clipVolume);
+        
         --m_iAmmo; //deduct the ammo
     }
 

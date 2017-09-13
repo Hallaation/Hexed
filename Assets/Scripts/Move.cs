@@ -50,6 +50,7 @@ public class Move : MonoBehaviour
     public Vector3 m_LeftStickRotation;
     public float StickDeadZone = 0.12f;
     public string ColorDatabaseKey = "Player1";
+    public AudioClip quack;
     private Database ColorDatabase;
     private Dictionary<string, Color> colorDictionary;
     //  private Text _AmmoText;
@@ -57,10 +58,22 @@ public class Move : MonoBehaviour
     private PolygonCollider2D m_NoHandsCollider;
     private PolygonCollider2D m_OneHandCollider;
     private PolygonCollider2D m_TwoHandedCollider;
-
+    private AudioSource[] m_audioSource;
+    
     // Use this for initialization
     void Awake()
     {
+        //pool of audiosources
+        m_audioSource = new AudioSource[16];
+        GameObject audioSourceContainer = new GameObject("AudioSources");
+        audioSourceContainer.transform.SetParent(this.transform);
+
+        for (int i = 0; i < m_audioSource.Length; ++i)
+        {
+            m_audioSource[i] = audioSourceContainer.AddComponent<AudioSource>();
+            m_audioSource[i].clip = quack;
+        }
+
         if (!ColorDatabase)
         {
             ColorDatabase = Resources.Load("Database") as Database;
@@ -161,6 +174,7 @@ public class Move : MonoBehaviour
             {
                 if (PlayerIsActive)
                 {
+                    Quack();
                     CalculateMovement();
                     CheckForPickup();
                     Attack(TriggerReleaseCheck());
@@ -267,8 +281,27 @@ public class Move : MonoBehaviour
         return temp;
     }
 
+    void Quack()
+    {
+        if (XCI.GetButtonDown(XboxButton.Y, m_controller.mXboxController))
+        {
+            foreach (AudioSource item in m_audioSource)
+            {
+                if (!item.isPlaying)
+                {
+                    Debug.Log("item isnt playing");
+                    item.pitch = 1 + XCI.GetAxis(XboxAxis.LeftTrigger, m_controller.mXboxController);
+                    item.Play();
+                    break;
+                }
+            }
+        }
+
+    }
     void CalculateMovement()
     {
+        //Quack.
+
         Vector3 movement = Vector3.zero;
 
         //Gets the input from the left stick to determine the movement

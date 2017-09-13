@@ -27,13 +27,27 @@ public class Weapon : MonoBehaviour
     public bool m_bActive = true;
     [HideInInspector]
     public GameObject previousOwner; //previous owner used to make sure when the weapon is thrown, it doesnt stun the thrower.
-
     private SpriteRenderer WeaponSpriteRenderer; //The sprite rendere of the weapon sprite
     private Transform weaponSpriteTransform; //The transform of the weapon's sprite 
     public bool m_bMoveWeaponSpriteUp; //A bool used to determine if the weapon sprite will move up or down
+
+    [Space]
+    [Header("Weapon Attack Audio")]
+    public AudioClip m_AudioClip;
+    [Range(0, 1)]
+    public float clipVolume;
+    [Range(-2, 2)]
+    public float clipPitch;
+    protected AudioSource m_AudioSource;
+
     // Use this for initialization
     void Start()
     {
+        m_AudioSource = this.gameObject.AddComponent<AudioSource>();
+        m_AudioSource.clip = m_AudioClip;
+        m_AudioSource.volume = clipVolume;
+        m_AudioSource.pitch = clipPitch;
+        //m_AudioSource = AudioManager.RequestAudioSource(m_AudioClip, clipVolume, clipPitch);
         _rigidbody = GetComponent<Rigidbody2D>();
         TimerBetweenFiring = new Timer(m_fTimeBetweenShots);
         if (this.transform.childCount > 2 && tag != "Player")
@@ -174,6 +188,7 @@ public class Weapon : MonoBehaviour
     public virtual bool Attack(bool trigger)
     {
         return false;
+
     }
 
     public virtual void DoWeaponThings() { }
