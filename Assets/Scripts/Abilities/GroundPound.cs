@@ -105,20 +105,6 @@ public class GroundPound : BaseAbility
             }
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         //? !
         //    if (GroundPoundCollider.IsTouchingLayers(1 << LayerMask.NameToLayer("Player")))
         //{
