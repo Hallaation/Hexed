@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 10a630f0a37b46c4e9c1246135ad631a
-timeCreated: 1504764176
+timeCreated: 1505284388
 licenseType: Pro
 TextureImporter:
   fileIDToRecycleName:
@@ -40,7 +40,7 @@ TextureImporter:
     21300066: EA_Slums_Glass_Shards_05
     21300068: EA_Slums_Door_Steel_Long_01
     21300070: EA_Slums_Door_Steel_Long_02
-    21300072: EA_Slums_SpriteSheet_001_36
+    21300072: EA_Slums_Shelf_Center_001
     21300074: EA_Slums_Glass_Shards_02
     21300076: EA_Slums_Glass_Shards_06
     21300078: EA_Slums_Train_Track_02
@@ -110,6 +110,10 @@ TextureImporter:
     21300206: EA_Slums_CounterTop_003
     21300208: EA_Slums_CounterTop_004
     21300210: EA_Slums_CounterTop_005
+    21300212: EA_Slums_CashRegister_001
+    21300214: EA_Slums_Shelf_Ends_001
+    21300216: EA_Slums_Shelf_Wall_Top_001
+    21300218: EA_Slums_Shelf_Wall_Bottom_001
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -499,13 +503,13 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: EA_Slums_SpriteSheet_001_36
+      name: EA_Slums_Shelf_Center_001
       rect:
         serializedVersion: 2
         x: 798
-        y: 1650
+        y: 1649
         width: 400
-        height: 75
+        height: 77
       alignment: 1
       pivot: {x: 0, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -636,32 +640,6 @@ TextureImporter:
         y: 1514
         width: 25
         height: 25
-      alignment: 1
-      pivot: {x: 0, y: 1}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: EA_Slums_Baricade_01
-      rect:
-        serializedVersion: 2
-        x: 800
-        y: 1498
-        width: 150
-        height: 50
-      alignment: 1
-      pivot: {x: 0, y: 1}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: EA_Slums_Baricade_02
-      rect:
-        serializedVersion: 2
-        x: 975
-        y: 1498
-        width: 150
-        height: 50
       alignment: 1
       pivot: {x: 0, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1039,6 +1017,58 @@ TextureImporter:
         y: 1901
         width: 100
         height: 100
+      alignment: 8
+      pivot: {x: 1, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: EA_Slums_CashRegister_001
+      rect:
+        serializedVersion: 2
+        x: 823
+        y: 1839
+        width: 56
+        height: 51
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: EA_Slums_Shelf_Ends_001
+      rect:
+        serializedVersion: 2
+        x: 798
+        y: 1748
+        width: 500
+        height: 80
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: EA_Slums_Shelf_Wall_Top_001
+      rect:
+        serializedVersion: 2
+        x: 802
+        y: 1583
+        width: 186
+        height: 46
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: EA_Slums_Shelf_Wall_Bottom_001
+      rect:
+        serializedVersion: 2
+        x: 1008
+        y: 1584
+        width: 186
+        height: 46
       alignment: 8
       pivot: {x: 1, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
