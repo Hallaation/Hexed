@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4793291003472360}
   - component: {fileID: 212711348088483026}
+  - component: {fileID: 58508067273898730}
   m_Layer: 0
   m_Name: Weapon_Melee_BaseballBat
   m_TagString: Untagged
@@ -34,12 +35,26 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1796801244791532}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.482, y: -0.475, z: 0}
+  m_LocalPosition: {x: -10.06, y: 5.475558, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &58508067273898730
+CircleCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1796801244791532}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_Offset: {x: 0.43999946, y: -0.0038116276}
+  serializedVersion: 2
+  m_Radius: 0.3
 --- !u!212 &212711348088483026
 SpriteRenderer:
   m_ObjectHideFlags: 1

@@ -124,7 +124,7 @@ public class Gun : Weapon
         if (MuzzelFlash != null)
             MuzzelFlash.Play();
         shotReady = false; //set shot ready to false to enable the timer to tick.
-        Copy.CopyComponent(m_AudioSource, FiredBullet);
+        //Copy.CopyComponent(m_AudioSource, FiredBullet);
         m_AudioSource.pitch = Random.Range(0.3f, 0.9f);
         m_AudioSource.Play();
         //AudioSource bulletSource = FiredBullet.GetComponent<AudioSource>();
