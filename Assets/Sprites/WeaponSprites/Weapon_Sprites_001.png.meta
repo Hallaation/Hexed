@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: b063c0329a4c3ad42a58400a56d129ae
-timeCreated: 1505274783
+timeCreated: 1505276890
 licenseType: Pro
 TextureImporter:
   fileIDToRecycleName:
@@ -37,6 +37,9 @@ TextureImporter:
     21300060: Weapon_Sprites_001_33
     21300062: Weapon_Sprites_001_34
     21300064: Weapon_Sprites_001_35
+    21300066: Weapon_Sprites_BaseballBat_Side_001
+    21300068: Weapon_Sprites_ElectricBat_Side_001
+    21300070: Weapon_Sprites_Knife_Side_001
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -187,7 +190,7 @@ TextureImporter:
         width: 200
         height: 200
       alignment: 9
-      pivot: {x: 0.35, y: 0.5}
+      pivot: {x: 0.35, y: 0.49999878}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -200,7 +203,7 @@ TextureImporter:
         width: 200
         height: 200
       alignment: 9
-      pivot: {x: 0.6, y: 0.5}
+      pivot: {x: 0.25, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -209,11 +212,11 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 400
-        y: 3600
+        y: 3601
         width: 200
         height: 200
       alignment: 9
-      pivot: {x: 0.6, y: 0.5}
+      pivot: {x: 0.61783755, y: 0.4919751}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -226,7 +229,46 @@ TextureImporter:
         width: 200
         height: 200
       alignment: 9
-      pivot: {x: 0.6, y: 0.5}
+      pivot: {x: 0.31, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Weapon_Sprites_BaseballBat_Side_001
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 200
+        width: 200
+        height: 200
+      alignment: 9
+      pivot: {x: 0.28000024, y: 0.5019058}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Weapon_Sprites_ElectricBat_Side_001
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 200
+        width: 200
+        height: 200
+      alignment: 9
+      pivot: {x: 0.21500008, y: 0.5019058}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Weapon_Sprites_Knife_Side_001
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 200
+        width: 200
+        height: 200
+      alignment: 9
+      pivot: {x: 0.4, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
