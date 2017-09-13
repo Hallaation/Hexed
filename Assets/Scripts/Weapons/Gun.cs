@@ -125,11 +125,13 @@ public class Gun : Weapon
             MuzzelFlash.Play();
         shotReady = false; //set shot ready to false to enable the timer to tick.
         Copy.CopyComponent(m_AudioSource, FiredBullet);
-        AudioSource bulletSource = FiredBullet.GetComponent<AudioSource>();
-        bulletSource.clip = m_AudioClip;
-        bulletSource.volume = clipVolume;
-        bulletSource.pitch = Random.Range(0.3f, 0.9f);
-        bulletSource.Play();
+        m_AudioSource.pitch = Random.Range(0.3f, 0.9f);
+        m_AudioSource.Play();
+        //AudioSource bulletSource = FiredBullet.GetComponent<AudioSource>();
+        //bulletSource.clip = m_AudioClip;
+        //bulletSource.volume = clipVolume;
+        //bulletSource.pitch = Random.Range(0.3f, 0.9f);
+        //bulletSource.Play();
         //m_AudioSource.PlayOneShot(m_AudioClip, clipVolume);
         
         --m_iAmmo; //deduct the ammo
