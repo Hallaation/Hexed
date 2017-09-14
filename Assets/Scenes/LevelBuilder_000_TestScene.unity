@@ -425,6 +425,10 @@ Prefab:
       propertyPath: m_RootOrder
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 1070225374542288, guid: a42e2eeca35cccd41ab21d97089175df, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a42e2eeca35cccd41ab21d97089175df, type: 2}
   m_IsPrefabParent: 0
@@ -765,7 +769,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 173881420}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.227, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1623538305}
@@ -992,7 +996,7 @@ GameObject:
   - component: {fileID: 202591872}
   - component: {fileID: 202591874}
   - component: {fileID: 202591873}
-  m_Layer: 0
+  m_Layer: 19
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2584,6 +2588,10 @@ Prefab:
       propertyPath: m_iAmmo
       value: 2146736478
       objectReference: {fileID: 0}
+    - target: {fileID: 1197723866840090, guid: 5bebd3d6dfe97864b83ab0b29febc846, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 5bebd3d6dfe97864b83ab0b29febc846, type: 2}
   m_IsPrefabParent: 0
@@ -3895,6 +3903,19 @@ Prefab:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1565912102136700, guid: eb0e4d289ce92ad40bb4d8ba090aaa94, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 58497176907814120, guid: eb0e4d289ce92ad40bb4d8ba090aaa94,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1552059560874482, guid: eb0e4d289ce92ad40bb4d8ba090aaa94, type: 2}
+      propertyPath: m_Layer
+      value: 19
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: eb0e4d289ce92ad40bb4d8ba090aaa94, type: 2}
   m_IsPrefabParent: 0
@@ -5104,9 +5125,9 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
+  m_Mass: 10
+  m_LinearDrag: 2
+  m_AngularDrag: 2
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
@@ -5634,6 +5655,10 @@ Prefab:
     - target: {fileID: 1796801244791532, guid: fb3c2fd87b794ac44b324ccfa1636559, type: 2}
       propertyPath: m_Layer
       value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 1796801244791532, guid: fb3c2fd87b794ac44b324ccfa1636559, type: 2}
+      propertyPath: m_TagString
+      value: 2hMelee
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 212711348088483026, guid: fb3c2fd87b794ac44b324ccfa1636559, type: 2}

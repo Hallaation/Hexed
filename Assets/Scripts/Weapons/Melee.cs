@@ -13,30 +13,24 @@ public class Melee : Weapon
 
     }
     // Use this for initialization
-    void Start()
-    {
 
-    }
 
     // Update is called once per frame
-    void Update()
-    {
 
-    }
 
     public override bool Attack(bool trigger)
     {
         if (shotReady)
         {
 
-            BoxCollider2D MeleeHitBox = transform.Find("Punch").GetComponent<BoxCollider2D>();
+            BoxCollider2D MeleeHitBox = transform.parent.Find("Punch").GetComponent<BoxCollider2D>();
 
             if (MeleeHitBox.IsTouchingLayers(1 << 8)) // If Punch Hitbox is touching PLayer layer.
             {
                 //Debug.Log("Punch");
 
                 Collider2D[] Overlap = Physics2D.OverlapBoxAll(MeleeHitBox.transform.position, MeleeHitBox.size, 0, 1 << 8); //An Overlap collider with the punch hitbox. There is probably a better way. 
-
+                
                 int TotalCollisions = Overlap.Length;
                 for (int i = 0; i < TotalCollisions; ++i)
                 {
