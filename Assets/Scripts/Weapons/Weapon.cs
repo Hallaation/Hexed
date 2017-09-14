@@ -76,8 +76,10 @@ public class Weapon : MonoBehaviour
                 }
             }
             //If my weapon has more than 2 (the shadow object is the third)
+
             if (this.transform.childCount > 2 && tag != "Player" && _rigidbody.velocity.magnitude < .1)
             {
+
                 //turn the sprite renderer on
                 if (transform.GetChild(2).GetComponent<SpriteRenderer>().enabled == false)
                 {
