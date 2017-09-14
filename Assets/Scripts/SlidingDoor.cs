@@ -14,8 +14,35 @@ public class SlidingDoor : MonoBehaviour {
     Vector3 OriginalPosition;
     Vector3 EndPosition;
     bool DoorIsOpening;
+
+    [Space]
+    Rigidbody2D MyRigidBody;
+
+    [Space]
+    [Header("Door Open Audio")]
+    public AudioClip m_MovingClip;
+    [Range(0 , 1)]
+    public float m_MovingVolume = 1;
+
+    [Space]
+    [Header("Door Close Audio")]
+    public AudioClip m_ClosingAudio;
+    [Range(0 , 1)]
+    public float m_ClosingVolume = 1;
+
+    private AudioSource m_audioSource;
+    private bool PlayAudio = false;
+    private bool PlayClosing = false;
     // Use this for initialization
     void Start () {
+        m_audioSource = this.GetComponent<AudioSource>();
+        if (m_audioSource == null)
+        {
+            m_audioSource = this.gameObject.AddComponent<AudioSource>();
+            m_audioSource.playOnAwake = false;
+        }
+        m_audioSource.clip = m_MovingClip;
+        m_audioSource.volume = m_MovingVolume;
         Coll = GetComponent<BoxCollider2D>();
         Coll2d = GetComponent<Collider2D>();
    
@@ -40,7 +67,27 @@ public class SlidingDoor : MonoBehaviour {
                 timer += Time.deltaTime;
             }
         }
-	}
+        if (ChildPosition.position.magnitude >= OriginalPosition.magnitude - 0.1f)
+        {
+            PlayClosing = false;
+        }
+        if (PlayAudio)
+        {
+            m_audioSource.clip = m_MovingClip;
+            m_audioSource.volume = m_MovingVolume;
+            m_audioSource.Play();
+            PlayAudio = false;
+        }
+
+        if (PlayClosing)
+        {
+            m_audioSource.clip = m_ClosingAudio;
+            m_audioSource.volume = m_ClosingVolume;
+            m_audioSource.Play();
+            PlayClosing = false;
+        }
+
+    }
 
     void OnTriggerEnter2D(Collider2D Collider)
     {
@@ -60,7 +107,6 @@ public class SlidingDoor : MonoBehaviour {
         while (timer < TimeToOpen)
         {
             ChildPosition.position += new Vector3(0, ((TravelDistance / TimeToOpen) * Time.deltaTime));
-         
             if(ChildPosition.position.y > OriginalPosition.y + TravelDistance)
             {
                 ChildPosition.position = new Vector3(OriginalPosition.x, OriginalPosition.y + TravelDistance);
@@ -91,6 +137,7 @@ public class SlidingDoor : MonoBehaviour {
     {
         Vector3 startingPosition = ChildPosition.position;
         float ctimer = 0f;
+        PlayAudio = true;
         while (ctimer < TimeToOpen)
         {
             ChildPosition.position = Vector3.Lerp(startingPosition, EndPosition, (ctimer / TimeToOpen));
@@ -104,6 +151,12 @@ public class SlidingDoor : MonoBehaviour {
     {
         Vector3 startingPosition = ChildPosition.position;
         float ctimer = 0f;
+
+        if (startingPosition != OriginalPosition)
+        {
+            PlayClosing = true;
+        }
+
         while (ctimer < TimeToOpen && DoorIsOpening == false)  
         {
             ChildPosition.position = Vector3.Lerp(startingPosition, OriginalPosition, (ctimer / TimeToOpen));

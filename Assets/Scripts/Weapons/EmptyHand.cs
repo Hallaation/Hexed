@@ -3,22 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 public class EmptyHand : Weapon
 {
-    public AudioClip punchEffect;
-    private AudioSource temp; //TODO change to a singleton audio manager later
+    [Space]
+    [Header("Melee Impact Sound")]
+    public AudioClip audioClip;
+    [Range(0 , 1)]
+    public float m_clipVolume = 1;
     public float PunchFlinchTime = .3f;
+
     public override void StartUp()
     {
         this.gameObject.name = "Player + " + GetComponent<ControllerSetter>().m_playerNumber;
-        if (!this.GetComponent<AudioSource>())
-        {
-            temp = this.gameObject.AddComponent<AudioSource>();
-        }
-        else
-        {
-            temp = GetComponent<AudioSource>();
-        }
-        temp.clip = punchEffect;
-        temp.volume = 0.5f;
         stunPlayer = false;
     }
 
@@ -26,7 +20,9 @@ public class EmptyHand : Weapon
     {
         if (shotReady)
         {
-
+            m_AudioSource.clip = m_AudioClip;
+            m_AudioSource.volume = clipVolume;
+            m_AudioSource.Play();
             BoxCollider2D PunchHitBox = transform.Find("Punch").GetComponent<BoxCollider2D>();
 
             if (PunchHitBox.IsTouchingLayers(1 << 8)) // If Punch Hitbox is touching PLayer layer.
@@ -54,19 +50,23 @@ public class EmptyHand : Weapon
                             }
                             //Debug.Log("HitPlayerFirst");
                         }
-                        if (HitPlayerFirst && Overlap[i].GetComponent<PlayerStatus>().IsStunned == false)// If wall check returns player first. Punch as normal.
+                        if (HitPlayerFirst && Overlap[i].GetComponentInParent<PlayerStatus>().IsStunned == false)// If wall check returns player first. Punch as normal.
                         {
-                            PlayerStatus hitPlayer = Overlap[i].GetComponent<PlayerStatus>();
-                            hitPlayer.TimesPunched++;
-                            hitPlayer.MiniStun(this.transform.up * KnockBack , PunchFlinchTime);
-
-                            //Debug.Log("PunchedEnemy");
-                            if (hitPlayer.TimesPunched >= 3)
+                            PlayerStatus hitPlayer = Overlap[i].GetComponentInParent<PlayerStatus>();
+                            if (hitPlayer != this.GetComponent<PlayerStatus>())
                             {
-                                hitPlayer.StunPlayer(transform.up * KnockBack);
-                                hitPlayer.TimesPunched = 0;
-                                hitPlayer.GetComponent<Move>().StatusApplied();//GetComponent<Move>().StatusApplied();
-                                //Debug.Log("StunnedEnemy");
+                                hitPlayer.TimesPunched++;
+                                hitPlayer.MiniStun(this.transform.up * KnockBack , PunchFlinchTime);
+                                hitPlayer.GetComponent<IHitByMelee>().HitByMelee(this , audioClip , m_clipVolume);
+
+                                //Debug.Log("PunchedEnemy");
+                                if (hitPlayer.TimesPunched >= 3)
+                                {
+                                    hitPlayer.StunPlayer(transform.up * KnockBack);
+                                    hitPlayer.TimesPunched = 0;
+                                    hitPlayer.GetComponent<Move>().StatusApplied();//GetComponent<Move>().StatusApplied();
+                                                                                   //Debug.Log("StunnedEnemy");
+                                }
                             }
                         }
                     }

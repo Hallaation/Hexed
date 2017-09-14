@@ -6,3 +6,9 @@ public interface IHitByBullet
 {
     void HitByBullet(Vector3 a_Vecocity, Vector3 HitPoint);
 }
+
+public interface IHitByMelee
+{
+    void HitByMelee(Weapon meleeWeapon , AudioClip soundEffect , float Volume = 1);
+}
+

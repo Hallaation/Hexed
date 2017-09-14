@@ -216,6 +216,7 @@ GameObject:
   - component: {fileID: 50711942252442680}
   - component: {fileID: 60857402282289398}
   - component: {fileID: 114914162753935742}
+  - component: {fileID: 114943357043344940}
   - component: {fileID: 114707463469366004}
   - component: {fileID: 114510534716091180}
   m_Layer: 8
@@ -651,7 +652,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_HeldSprite: {fileID: 0}
-  m_fTimeBetweenShots: 1
+  m_fTimeBetweenShots: 0.48
   m_iDamage: 0
   m_bAutomaticGun: 0
   m_bBurstFire: 0
@@ -664,7 +665,10 @@ MonoBehaviour:
   m_bActive: 1
   previousOwner: {fileID: 0}
   m_bMoveWeaponSpriteUp: 0
-  punchEffect: {fileID: 0}
+  m_AudioClip: {fileID: 0}
+  clipVolume: 1
+  audioClip: {fileID: 8300000, guid: 218397e7ca0b6f3499b6bc3e88df9b86, type: 3}
+  m_clipVolume: 1
   PunchFlinchTime: 0.3
 --- !u!114 &114762347629995032
 MonoBehaviour:
@@ -690,6 +694,8 @@ MonoBehaviour:
   StartMoveDelay: 3
   m_LeftStickRotation: {x: 0, y: 0, z: 0}
   StickDeadZone: 0.12
+  ColorDatabaseKey: Player1
+  quack: {fileID: 0}
 --- !u!114 &114821913010574642
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -713,6 +719,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_iHealth: 3
+  m_bStunned: 0
   m_bMiniStun: 0
   StunedSlide: 400
   m_iScore: 0
@@ -729,6 +736,19 @@ MonoBehaviour:
   stunBar: {fileID: 0}
   stunMask: {fileID: 0}
   fill: 0
+--- !u!114 &114943357043344940
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1619562966071516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1470fd1c36da2d04486d17adb0c656c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_audioClip: {fileID: 8300000, guid: 27c17b0402afa2c4d9b4082c44ad712e, type: 3}
+  clipVolume: 1
 --- !u!212 &212461840266302504
 SpriteRenderer:
   m_ObjectHideFlags: 1

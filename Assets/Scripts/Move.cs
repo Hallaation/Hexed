@@ -58,6 +58,7 @@ public class Move : MonoBehaviour
     private PolygonCollider2D m_NoHandsCollider;
     private PolygonCollider2D m_OneHandCollider;
     private PolygonCollider2D m_TwoHandedCollider;
+
     private AudioSource[] m_audioSource;
     
     // Use this for initialization
@@ -71,6 +72,7 @@ public class Move : MonoBehaviour
         for (int i = 0; i < m_audioSource.Length; ++i)
         {
             m_audioSource[i] = audioSourceContainer.AddComponent<AudioSource>();
+            m_audioSource[i].playOnAwake = false;
             m_audioSource[i].clip = quack;
         }
 
@@ -476,6 +478,7 @@ public class Move : MonoBehaviour
         heldWeapon = hitCollider.transform.parent.gameObject;
         heldWeapon.transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = 4; //? Puts gun layer infront of player layer when picked up. 
         heldWeapon.transform.GetChild(0).transform.localPosition = new Vector3(0, 0, 0); //! Resets Shadow on pickup.
+        heldWeapon.GetComponent<Weapon>().PlayPickup();
         hitCollider.gameObject.transform.parent.SetParent(this.transform);
         //! if the weapon isn't a 2 handed weapon, mount it to the 1 handed location
         if (!hitCollider.transform.parent.gameObject.GetComponent<Weapon>().m_b2Handed)
@@ -497,12 +500,21 @@ public class Move : MonoBehaviour
         SetHoldingGun(0); //? Probably un-necessary
         if (BodyAnimator != null)
         {
-            if (heldWeapon.tag == "OneHanded")
+            switch (heldWeapon.tag)
             {
-                SetHoldingGun(1);
+                case "1hMelee":
+                    SetHoldingMelee(1);
+                    break;
+                case "2hMelee":
+                    SetHoldingMelee(2);
+                    break;
+                case "OneHanded":
+                    SetHoldingGun(1);
+                    break;
+                default:
+                    SetHoldingGun(2);
+                    break;
             }
-            else
-                SetHoldingGun(2);
         }
         vibrationValue.y = 0.5f; //vibrate controller for haptic feedback
     }
@@ -514,7 +526,10 @@ public class Move : MonoBehaviour
             if (m_bHoldingWeapon)
             {
                 if (BodyAnimator != null)
+                {
                     BodyAnimator.SetBool("UnarmedAttack", false);
+                    BodyAnimator.SetBool("Attack", true);
+                }
                 //attack using the weapon im holding. if an attack was done, set a vibration on my controller.
                 // Ray2D ray = new Ray2D(this.transform.position, this.transform.up);
                 RaycastHit2D hit = Physics2D.Raycast(this.transform.position, this.transform.up, 1f, (1 << 10 | 1 << 11 | 1 << 14));
@@ -534,12 +549,18 @@ public class Move : MonoBehaviour
                 //GamePad.SetVibration(m_controller.mPlayerIndex , vibrationValue.x , vibrationValue.y);
                 defaultWeapon.Attack(TriggerCheck);
                 if (BodyAnimator != null)
+                {
                     BodyAnimator.SetBool("UnarmedAttack", true);
+                    BodyAnimator.SetBool("Attack", false);
+                }
                 //currently doesnt actually do melee attacks. using controller vibration for testing purposes
             }
         }
         else if (BodyAnimator != null)
+        {
             BodyAnimator.SetBool("UnarmedAttack", false);
+            BodyAnimator.SetBool("Attack", false);
+        }
     }
 
     public void StatusApplied()
@@ -673,23 +694,68 @@ public class Move : MonoBehaviour
                 case 0:
                     BodyAnimator.SetBool("HoldingOneHandedGun", false); // Sets animators
                     BodyAnimator.SetBool("HoldingTwoHandedGun", false);
+                    BodyAnimator.SetBool("HoldingOneHandedMelee", false);
+                    BodyAnimator.SetBool("HoldingTwoHandedMelee", false);
                     m_NoHandsCollider.enabled = true;
-                    m_OneHandCollider.enabled = false;
+                    m_OneHandCollider.enabled = false;                                          //TODO Update Accordingly MELEE
                     m_TwoHandedCollider.enabled = false;
                     break;
                 case 1:
-                    BodyAnimator.SetBool("HoldingOneHandedGun", true);
+                    BodyAnimator.SetBool("HoldingOneHandedGun", true); 
                     BodyAnimator.SetBool("HoldingTwoHandedGun", false);
-                    m_NoHandsCollider.enabled = false;
-                    m_OneHandCollider.enabled = true;
+                    BodyAnimator.SetBool("HoldingOneHandedMelee", false);
+                    BodyAnimator.SetBool("HoldingTwoHandedMelee", false);
+                    m_NoHandsCollider.enabled = true;                                           //TODO Update Accordingly MELEE
+                    m_OneHandCollider.enabled = false;
                     m_TwoHandedCollider.enabled = false;
                     break;
                 case 2:
                     BodyAnimator.SetBool("HoldingOneHandedGun", false);
-                    BodyAnimator.SetBool("HoldingTwoHandedGun", true);
-                    m_NoHandsCollider.enabled = false;
+                    BodyAnimator.SetBool("HoldingTwoHandedGun", true);                   
+                    BodyAnimator.SetBool("HoldingOneHandedMelee", false);                  
+                    BodyAnimator.SetBool("HoldingTwoHandedMelee", false);
+                    m_NoHandsCollider.enabled = true;
+                    m_OneHandCollider.enabled = false;                                          //TODO Update Accordingly MELEE
+                    m_TwoHandedCollider.enabled = false;
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    private void SetHoldingMelee(int HandsOccupied)
+    {
+        if (BodyAnimator)
+        {
+            switch (HandsOccupied)
+            {
+                case 0:
+                    BodyAnimator.SetBool("HoldingOneHandedGun", false); // Sets animators
+                    BodyAnimator.SetBool("HoldingTwoHandedGun", false);
+                    BodyAnimator.SetBool("HoldingOneHandedMelee", false);
+                    BodyAnimator.SetBool("HoldingTwoHandedMelee", false);
+                    m_NoHandsCollider.enabled = true;
+                    m_OneHandCollider.enabled = false;                                          //TODO Update Accordingly MELEE
+                    m_TwoHandedCollider.enabled = false;
+                    break;
+                case 1:
+                    BodyAnimator.SetBool("HoldingOneHandedGun", false);
+                    BodyAnimator.SetBool("HoldingTwoHandedGun", false);
+                    BodyAnimator.SetBool("HoldingOneHandedMelee", true);
+                    BodyAnimator.SetBool("HoldingTwoHandedMelee", false);
+                    m_NoHandsCollider.enabled = true;                                           //TODO Update Accordingly MELEE
                     m_OneHandCollider.enabled = false;
-                    m_TwoHandedCollider.enabled = true;
+                    m_TwoHandedCollider.enabled = false;
+                    break;
+                case 2:
+                    BodyAnimator.SetBool("HoldingOneHandedGun", false);
+                    BodyAnimator.SetBool("HoldingTwoHandedGun", false);
+                    BodyAnimator.SetBool("HoldingOneHandedMelee", false);
+                    BodyAnimator.SetBool("HoldingTwoHandedMelee", true);
+                    m_NoHandsCollider.enabled = true;
+                    m_OneHandCollider.enabled = false;                                          //TODO Update Accordingly MELEE
+                    m_TwoHandedCollider.enabled = false;
                     break;
                 default:
                     break;
