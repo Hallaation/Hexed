@@ -39,16 +39,16 @@ public class Melee : Weapon
     {
         if (shotReady)
         {
-
-            BoxCollider2D MeleeHitBox = transform.parent.Find("Punch").GetComponent<BoxCollider2D>();
-
-
             
+            BoxCollider2D MeleeHitBox = transform.parent.Find("Punch").GetComponent<BoxCollider2D>();
+            if (m_bActive && trigger == true)
+                Attacking = true; //? needs work
+
 
 
             if (MeleeHitBox.IsTouchingLayers(1 << 8)) // If Punch Hitbox is touching PLayer layer.
             {
-                Attacking = true;
+                
                 StartCoroutine(AttackDuration());
 
                 //Debug.Log("Punch");
