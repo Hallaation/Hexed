@@ -39,8 +39,8 @@ public class Bullet : MonoBehaviour
         PreviousVelocity = GetComponent<Rigidbody2D>().velocity;
         if (trail != null)
         {
-            trail.sortingLayerName = "Bullet";
-            trail.sortingOrder = 0;
+            trail.sortingLayerName = "Defult";
+            trail.sortingOrder = 8;
         }
         // Destroy(this.gameObject , 5);
     }
