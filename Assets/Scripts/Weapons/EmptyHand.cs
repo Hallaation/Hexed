@@ -56,7 +56,7 @@ public class EmptyHand : Weapon
                             if (hitPlayer != this.GetComponent<PlayerStatus>())
                             {
                                 hitPlayer.TimesPunched++;
-                                hitPlayer.MiniStun(this.transform.up * KnockBack , PunchFlinchTime);
+                                hitPlayer.MiniStun(this.transform.up * (KnockBack * 1.5f) , PunchFlinchTime);
                                 hitPlayer.GetComponent<IHitByMelee>().HitByMelee(this , audioClip , m_clipVolume);
 
                                 //Debug.Log("PunchedEnemy");
