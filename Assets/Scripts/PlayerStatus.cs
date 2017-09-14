@@ -236,7 +236,8 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
     public void MiniStun(Vector3 ForceApplied, float StunTime)
     {
         m_bMiniStun = true;
-        SetAllAnimatorsFalse();
+        //TODO change to attacking animators = false maybe.
+        //SetAllAnimatorsFalse();
         //        GetComponent<Move>().SetActive(false);
         _rigidbody.velocity = ForceApplied;
         Debug.Log("Corotuine should be here");
