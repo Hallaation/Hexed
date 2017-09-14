@@ -55,14 +55,18 @@ public class Move : MonoBehaviour
     private Dictionary<string , Color> colorDictionary;
     //  private Text _AmmoText;
 
+    private GameObject previousWeapon = null;
     private PolygonCollider2D m_NoHandsCollider;
     private PolygonCollider2D m_OneHandCollider;
     private PolygonCollider2D m_TwoHandedCollider;
 
     private AudioSource[] m_audioSource;
+
+    Vector3 movement;
     // Use this for initialization
     void Awake()
     {
+        movement = Vector3.zero;
         //pool of audiosources
         m_audioSource = new AudioSource[16];
         GameObject audioSourceContainer = new GameObject("AudioSources");
@@ -303,7 +307,7 @@ public class Move : MonoBehaviour
     {
         //Quack.
 
-        Vector3 movement = Vector3.zero;
+        //movement = Vector3.zero;
 
         //Gets the input from the left stick to determine the movement
         movement = new Vector3(XCI.GetAxis(XboxAxis.LeftStickX , m_controller.mXboxController) , XCI.GetAxis(XboxAxis.LeftStickY , m_controller.mXboxController));
@@ -359,7 +363,7 @@ public class Move : MonoBehaviour
         {
             //this.transform.position += movement * movementSpeed * Time.deltaTime;
             //_rigidBody.AddForce(movement * movementSpeed * Time.deltaTime , ForceMode2D.Impulse);
-            _rigidBody.velocity = movement * movementSpeed;
+            _rigidBody.AddForce( movement * movementSpeed, ForceMode2D.Impulse);
 
         }
 
@@ -441,7 +445,21 @@ public class Move : MonoBehaviour
     bool PickUpWeaponCheck(Vector2 stickMovement , Vector2 throwingDirection , bool tossWeapon)
     {
 
-        Collider2D hitCollider = Physics2D.OverlapCircle(this.transform.position , 1.0f , (1 << 12));
+        Collider2D weaponToPickUp = null;
+
+        Collider2D[] hitCollider = Physics2D.OverlapCircleAll(this.transform.position , 1.0f , (1 << 12));
+        foreach (Collider2D WeaponCollider in hitCollider)
+        {
+            if (WeaponCollider.GetComponentInParent<Weapon>().gameObject != previousWeapon)
+            {
+                weaponToPickUp = WeaponCollider;
+                break;
+            }
+            else if (hitCollider.Length == 1)
+            {
+                weaponToPickUp = WeaponCollider;
+            }
+        }
 
         //If there is a weapon being held, the weapon will be thrown away.
         if (heldWeapon)
@@ -450,26 +468,27 @@ public class Move : MonoBehaviour
             ThrowMyWeapon(stickMovement , throwingDirection , tossWeapon);
 
         }
+
         //if the overlap circle found something, pickup the weapon
-        if (hitCollider)
+        if (weaponToPickUp)
         {
 
             Vector3 pos = transform.position;
-            Vector3 Dir = hitCollider.gameObject.transform.position - transform.position;
+            Vector3 Dir = weaponToPickUp.gameObject.transform.position - transform.position;
 
 
             RaycastHit2D hitPoint = Physics2D.Raycast(pos , Dir.normalized , 1 , 1 << LayerMask.NameToLayer("Wall"));
 
             if (hitPoint.transform == null)
             {
-                if (hitCollider.transform.parent.parent == null)
+                if (weaponToPickUp.transform.parent.parent == null)
 
                 {
-                    PickupWeapon(hitCollider);
+                    PickupWeapon(weaponToPickUp);
                     return true;
                 }
             }
-            else if (hitCollider.transform.parent.parent == null)
+            else if (weaponToPickUp.transform.parent.parent == null)
             {
                 Debug.Log("WallBlock");
                 Debug.DrawLine(pos , pos + Dir , Color.red , Mathf.Infinity);
@@ -502,9 +521,10 @@ public class Move : MonoBehaviour
             Rigidbody2D weaponRigidBody = hitCollider.transform.parent.GetComponent<Rigidbody2D>(); //find its rigidbody in its parent
                                                                                                     //weaponRigidBody.simulated = false; //turn off any of its simulation
             weaponRigidBody.bodyType = RigidbodyType2D.Kinematic;
+            //weaponRigidBody.simulated = false;
             weaponRigidBody.velocity = Vector2.zero; //set any velocity to nothing
             weaponRigidBody.angularVelocity = 0.0f; //set any angular velocity to nothing
-
+            previousWeapon = heldWeapon;
             m_bHoldingWeapon = true;
             SetHoldingGun(0); //? Probably un-necessary
             if (BodyAnimator != null)

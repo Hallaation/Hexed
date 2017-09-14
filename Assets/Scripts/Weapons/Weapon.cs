@@ -241,6 +241,7 @@ public class Weapon : MonoBehaviour
     {
         yield return new WaitForEndOfFrame();
         previousOwner = null;
+
     }
     public void PlayPickup()
     {
