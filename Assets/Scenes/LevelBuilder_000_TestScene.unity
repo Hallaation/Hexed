@@ -4265,6 +4265,20 @@ Prefab:
       propertyPath: m_RootOrder
       value: 18
       objectReference: {fileID: 0}
+    - target: {fileID: 1568182744093302, guid: f6cf4d33fa55bcd4aa96592631dfad82, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114391857428821610, guid: f6cf4d33fa55bcd4aa96592631dfad82,
+        type: 2}
+      propertyPath: KnockBack
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114391857428821610, guid: f6cf4d33fa55bcd4aa96592631dfad82,
+        type: 2}
+      propertyPath: PunchFlinchTime
+      value: 0.33
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f6cf4d33fa55bcd4aa96592631dfad82, type: 2}
   m_IsPrefabParent: 0
@@ -5117,7 +5131,12 @@ MonoBehaviour:
   m_bMoveWeaponSpriteUp: 1
   m_AudioClip: {fileID: 0}
   clipVolume: 0
-  clipPitch: 0
+  PickupAudio: {fileID: 0}
+  pickupVolume: 1
+  DropAudioClip: {fileID: 0}
+  DropAudioVolume: 1
+  ThrowHitAudio: {fileID: 0}
+  ThrowHitAudioVolume: 1
   punchEffect: {fileID: 0}
   OnHitFlinchTime: 0.3
 --- !u!50 &1623538304

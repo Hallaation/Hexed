@@ -336,6 +336,7 @@ public class GameManagerc : MonoBehaviour
             //If the map to load isnt null, load it
             if (scene.buildIndex == 1)
             {
+                UINavigation LoadInstance = UINavigation.Instance;
                 if (MapToLoad)
                 {
                     GameObject go = Instantiate(MapToLoad);
@@ -474,10 +475,10 @@ public class GameManagerc : MonoBehaviour
         //reset the time scale
         //? Don't know why but the scene loads before all the logic even happens
         //WTF Scene isn't clearing itself, 
-        StartCoroutine(waitForSeconds(0.2f));
+        StartCoroutine(WaitForSeconds(0.2f));
     }
 
-    IEnumerator waitForSeconds(float time)
+    IEnumerator WaitForSeconds(float time)
     {
         yield return new WaitForSecondsRealtime(time);
         SceneManager.LoadScene(0);
