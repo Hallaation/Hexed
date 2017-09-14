@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using XboxCtrlrInput;
 using XInputDotNetPure;
-public class PlayerStatus : MonoBehaviour
+public class PlayerStatus : MonoBehaviour, IHitByMelee
 {
     private float m_iMaxHealth;
     public float m_iHealth = 3; //health completely useless right now
@@ -406,6 +406,11 @@ public class PlayerStatus : MonoBehaviour
                 Feet.SetBool(parameter.name, false);
             }
         }
+    }
+
+    public void HitByMelee(Weapon meleeWeapon , AudioClip soundEffect , float Volume = 1)
+    {
+        GetComponent<AudioSource>().PlayOneShot(soundEffect , Volume);
     }
 }
 

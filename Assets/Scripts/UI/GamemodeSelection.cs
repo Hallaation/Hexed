@@ -13,7 +13,7 @@ public enum PickType
     MAPPICK,
 }
 
-public class GamemodeSelection : MonoBehaviour
+public class GamemodeSelection : MonoBehaviour 
 {
     private Button _button;
     private Text _buttonText;

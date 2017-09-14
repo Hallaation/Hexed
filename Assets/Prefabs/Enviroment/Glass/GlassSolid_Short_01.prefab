@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 212494253667126374}
   - component: {fileID: 61846187205379926}
   - component: {fileID: 114243614894238674}
+  - component: {fileID: 114979263905301674}
   m_Layer: 14
   m_Name: GlassSolid_Short_01
   m_TagString: Untagged
@@ -76,6 +77,19 @@ MonoBehaviour:
   Shard7: {fileID: 1900600958523060, guid: 75816279637cea74cbfecebc8d19509a, type: 2}
   Shard8: {fileID: 1900600958523060, guid: 7dcff7edb8aae894a8e809f6ae5887ad, type: 2}
   BrokenGlass: {fileID: 21300054, guid: 10a630f0a37b46c4e9c1246135ad631a, type: 3}
+--- !u!114 &114979263905301674
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1762035757360004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1470fd1c36da2d04486d17adb0c656c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_audioClip: {fileID: 8300000, guid: e41edd3a772aef8419032e3dfecda91c, type: 3}
+  clipVolume: 1
 --- !u!212 &212494253667126374
 SpriteRenderer:
   m_ObjectHideFlags: 1

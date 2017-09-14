@@ -152,6 +152,7 @@ GameObject:
   - component: {fileID: 212799731166534088}
   - component: {fileID: 50819862727543930}
   - component: {fileID: 114504531806896794}
+  - component: {fileID: 114675045598426420}
   - component: {fileID: 114391857428821610}
   - component: {fileID: 114176242053915882}
   m_Layer: 8
@@ -765,7 +766,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_HeldSprite: {fileID: 0}
-  m_fTimeBetweenShots: 0.3
+  m_fTimeBetweenShots: 0.48
   m_iDamage: 0
   m_bAutomaticGun: 0
   m_bBurstFire: 0
@@ -778,11 +779,10 @@ MonoBehaviour:
   m_bActive: 1
   previousOwner: {fileID: 0}
   m_bMoveWeaponSpriteUp: 0
-  m_AudioSource: {fileID: 0}
   m_AudioClip: {fileID: 0}
-  clipVolume: 0
-  clipPitch: 0
-  punchEffect: {fileID: 0}
+  clipVolume: 1
+  audioClip: {fileID: 8300000, guid: 218397e7ca0b6f3499b6bc3e88df9b86, type: 3}
+  m_clipVolume: 1
   PunchFlinchTime: 0.3
 --- !u!114 &114504531806896794
 MonoBehaviour:
@@ -813,6 +813,19 @@ MonoBehaviour:
   stunBar: {fileID: 212975192510898216}
   stunMask: {fileID: 212778096431626180}
   fill: 0
+--- !u!114 &114675045598426420
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1568182744093302}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1470fd1c36da2d04486d17adb0c656c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_audioClip: {fileID: 8300000, guid: 27c17b0402afa2c4d9b4082c44ad712e, type: 3}
+  clipVolume: 1
 --- !u!114 &114790615142462568
 MonoBehaviour:
   m_ObjectHideFlags: 1

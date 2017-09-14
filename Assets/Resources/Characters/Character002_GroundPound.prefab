@@ -249,6 +249,7 @@ GameObject:
   - component: {fileID: 50282635266334710}
   - component: {fileID: 114943705499225814}
   - component: {fileID: 114776530350313710}
+  - component: {fileID: 114373753592284218}
   - component: {fileID: 60551024888239594}
   - component: {fileID: 114535279276193082}
   m_Layer: 8
@@ -792,6 +793,19 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114373753592284218
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1702131539170172}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1470fd1c36da2d04486d17adb0c656c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_audioClip: {fileID: 8300000, guid: 27c17b0402afa2c4d9b4082c44ad712e, type: 3}
+  clipVolume: 1
 --- !u!114 &114506562897422904
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -847,7 +861,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_HeldSprite: {fileID: 0}
-  m_fTimeBetweenShots: 0.3
+  m_fTimeBetweenShots: 0.48
   m_iDamage: 0
   m_bAutomaticGun: 0
   m_bBurstFire: 0
@@ -860,7 +874,10 @@ MonoBehaviour:
   m_bActive: 1
   previousOwner: {fileID: 0}
   m_bMoveWeaponSpriteUp: 0
-  punchEffect: {fileID: 0}
+  m_AudioClip: {fileID: 0}
+  clipVolume: 1
+  audioClip: {fileID: 8300000, guid: 218397e7ca0b6f3499b6bc3e88df9b86, type: 3}
+  m_clipVolume: 1
   PunchFlinchTime: 0.3
 --- !u!114 &114931681181836182
 MonoBehaviour:
@@ -887,6 +904,7 @@ MonoBehaviour:
   m_LeftStickRotation: {x: 0, y: 0, z: 0}
   StickDeadZone: 0.12
   ColorDatabaseKey: Player1
+  quack: {fileID: 0}
 --- !u!114 &114943705499225814
 MonoBehaviour:
   m_ObjectHideFlags: 1

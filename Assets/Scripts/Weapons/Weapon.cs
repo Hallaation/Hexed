@@ -35,18 +35,37 @@ public class Weapon : MonoBehaviour
     [Header("Weapon Attack Audio")]
     public AudioClip m_AudioClip;
     [Range(0, 1)]
-    public float clipVolume;
-    [Range(-2, 2)]
-    public float clipPitch;
+    public float clipVolume = 1;
+
+    [Space]
+    [Header("Pickup Audio")]
+    public AudioClip PickupAudio;
+    [Range(0 , 1)]
+    public float pickupVolume = 1;
+
+    [Space]
+    [Header("Weapon Drop Audio")]
+    public AudioClip DropAudioClip;
+    [Range(0 , 1)]
+    public float DropAudioVolume = 1;
+
+    [Space]
+    [Header("Thrown hit Audio")]
+    public AudioClip ThrowHitAudio;
+    [Range(0 , 1)]
+    public float ThrowHitAudioVolume = 1;
+
+    //[Range(-2, 2)]
+    //public float clipPitch;
     protected AudioSource m_AudioSource;
 
     // Use this for initialization
     void Start()
     {
         m_AudioSource = this.gameObject.AddComponent<AudioSource>();
+        m_AudioSource.playOnAwake = false;
         m_AudioSource.clip = m_AudioClip;
         m_AudioSource.volume = clipVolume;
-        m_AudioSource.pitch = clipPitch;
         //m_AudioSource = AudioManager.RequestAudioSource(m_AudioClip, clipVolume, clipPitch);
         _rigidbody = GetComponent<Rigidbody2D>();
         TimerBetweenFiring = new Timer(m_fTimeBetweenShots);
@@ -173,6 +192,7 @@ public class Weapon : MonoBehaviour
         GetComponent<Rigidbody2D>().simulated = true;
         this.transform.SetParent(null);
         GetComponent<Rigidbody2D>().angularVelocity = 50.0f;
+        m_AudioSource.PlayOneShot(DropAudioClip , DropAudioVolume);
     }
     /// <summary>
     /// Takes in a velocity vector, this will determine how fast it will be thrown out of the player's hand. Low velocity means it can be just dropped.
@@ -185,6 +205,7 @@ public class Weapon : MonoBehaviour
         this.transform.SetParent(null);
         GetComponent<Rigidbody2D>().AddForce(velocity, ForceMode2D.Impulse);
         GetComponent<Rigidbody2D>().angularVelocity = 600.0f;
+        m_AudioSource.PlayOneShot(DropAudioClip , DropAudioVolume);
     }
     //virtual functions
     public virtual bool Attack(bool trigger)
@@ -207,8 +228,15 @@ public class Weapon : MonoBehaviour
                 {
                     a_collider.GetComponentInParent<PlayerStatus>().StunPlayer(_rigidbody.velocity * KnockBack);
                     a_collider.GetComponentInParent<Move>().StatusApplied();
+                    m_AudioSource.PlayOneShot(ThrowHitAudio , ThrowHitAudioVolume);
                 }
             }
         }
+    }
+
+    public void PlayPickup()
+    {
+        Debug.Log("HELP");
+        m_AudioSource.PlayOneShot(PickupAudio , pickupVolume);
     }
 }

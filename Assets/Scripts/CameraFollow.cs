@@ -63,4 +63,5 @@ public class CameraFollow : MonoBehaviour
         target.z = crosshair.transform.position.z;
         crosshair.transform.position = target;
     }
+
 }
