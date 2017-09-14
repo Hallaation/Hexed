@@ -385,7 +385,7 @@ public class Move : MonoBehaviour
             heldWeapon.transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = 0; //? Puts gun layer behinde player layer when it's dropped. 
             if (/*movement.magnitude == 0 ||*/ !tossWeapon)
             {
-
+                heldWeapon.GetComponent<Rigidbody2D>().isKinematic = false;
                 //drop the weapon. magic number 2.
                 heldWeapon.GetComponent<Weapon>().throwWeapon(throwDirection * 2);
                 heldWeapon.GetComponent<Weapon>().previousOwner = this.gameObject;
