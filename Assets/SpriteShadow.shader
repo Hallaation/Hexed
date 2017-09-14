@@ -1,10 +1,13 @@
-Shader "Sprites/SpriteShadow" {
-	Properties {
+Shader "Sprites/SpriteShadow" 
+{
+	Properties 
+	{
 		_Color ("Color", Color) = (1,1,1,1)
 		[PerRendererData]_MainTex ("Sprite Texture", 2D) = "white" {}
 		_Cutoff("Shadow alpha cutoff", Range(0,1)) = 0.5
 	}
-	SubShader {
+	SubShader 
+	{
 		Tags 
 		{ 
 			"Queue"="Geometry"
