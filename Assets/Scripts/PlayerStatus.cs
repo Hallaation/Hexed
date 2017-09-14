@@ -287,7 +287,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         this.transform.position = ControllerManager.Instance.spawnPoints[spawnIndex].position;
         GetComponent<Move>().ThrowMyWeapon(Vector2.zero, Vector2.up, false);
 
-        this.GetComponent<Collider2D>().isTrigger = true;
+       // this.GetComponent<Collider2D>().isTrigger = true;
         m_bInvincible = true;
     }
 

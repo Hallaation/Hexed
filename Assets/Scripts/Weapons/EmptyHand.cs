@@ -12,7 +12,7 @@ public class EmptyHand : Weapon
 
     public override void StartUp()
     {
-        this.gameObject.name = "Player + " + GetComponent<ControllerSetter>().m_playerNumber;
+        //this.gameObject.name = "Player + " + GetComponent<ControllerSetter>().m_playerNumber;
         stunPlayer = false;
     }
 

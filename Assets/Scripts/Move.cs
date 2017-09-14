@@ -60,7 +60,6 @@ public class Move : MonoBehaviour
     private PolygonCollider2D m_TwoHandedCollider;
 
     private AudioSource[] m_audioSource;
-    
     // Use this for initialization
     void Awake()
     {
@@ -400,6 +399,11 @@ public class Move : MonoBehaviour
             else
             {
                 //toss it away with force
+                RaycastHit2D hit = Physics2D.Raycast(this.transform.position , throwDirection , 2.0f , 1 << LayerMask.NameToLayer("Wall"));
+                if (hit)
+                {
+                    heldWeapon.transform.localPosition = Vector3.zero;
+                }
                 heldWeapon.GetComponent<Weapon>().throwWeapon(throwDirection * throwingForce);
                 heldWeapon.GetComponent<Weapon>().previousOwner = this.gameObject;
                 m_bHoldingWeapon = false;
@@ -492,7 +496,8 @@ public class Move : MonoBehaviour
             hitCollider.gameObject.transform.parent.rotation = weapon2HandedMount.rotation; //set its rotation
         }
         Rigidbody2D weaponRigidBody = hitCollider.transform.parent.GetComponent<Rigidbody2D>(); //find its rigidbody in its parent
-        weaponRigidBody.simulated = false; //turn off any of its simulation
+        //weaponRigidBody.simulated = false; //turn off any of its simulation
+        weaponRigidBody.isKinematic = true;
         weaponRigidBody.velocity = Vector2.zero; //set any velocity to nothing
         weaponRigidBody.angularVelocity = 0.0f; //set any angular velocity to nothing
 
