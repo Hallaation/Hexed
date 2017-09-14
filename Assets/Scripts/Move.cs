@@ -62,11 +62,11 @@ public class Move : MonoBehaviour
 
     private AudioSource[] m_audioSource;
 
-    Vector3 movement;
+    //Vector3 movement;
     // Use this for initialization
     void Awake()
     {
-        movement = Vector3.zero;
+       // movement = Vector3.zero;
         //pool of audiosources
         m_audioSource = new AudioSource[16];
         GameObject audioSourceContainer = new GameObject("AudioSources");
@@ -307,7 +307,7 @@ public class Move : MonoBehaviour
     {
         //Quack.
 
-        //movement = Vector3.zero;
+        Vector3 movement = Vector3.zero;
 
         //Gets the input from the left stick to determine the movement
         movement = new Vector3(XCI.GetAxis(XboxAxis.LeftStickX , m_controller.mXboxController) , XCI.GetAxis(XboxAxis.LeftStickY , m_controller.mXboxController));
@@ -363,8 +363,8 @@ public class Move : MonoBehaviour
         {
             //this.transform.position += movement * movementSpeed * Time.deltaTime;
             //_rigidBody.AddForce(movement * movementSpeed * Time.deltaTime , ForceMode2D.Impulse);
-            _rigidBody.AddForce( movement * movementSpeed, ForceMode2D.Impulse);
-
+            //_rigidBody.AddForce( movement * movementSpeed, ForceMode2D.Impulse);
+            _rigidBody.velocity = movement * movementSpeed;
         }
 
         //animation checks go here
