@@ -66,7 +66,6 @@ public class Move : MonoBehaviour
     // Use this for initialization
     void Awake()
     {
-        Application.targetFrameRate = 25;
        // movement = Vector3.zero;
         //pool of audiosources
         m_audioSource = new AudioSource[16];
