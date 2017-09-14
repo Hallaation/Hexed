@@ -207,6 +207,7 @@ public class Weapon : MonoBehaviour
         GetComponent<Rigidbody2D>().AddForce(velocity, ForceMode2D.Impulse);
         GetComponent<Rigidbody2D>().angularVelocity = 600.0f;
         m_AudioSource.PlayOneShot(DropAudioClip , DropAudioVolume);
+        StartCoroutine(SetFalseOwner());
     }
     //virtual functions
     public virtual bool Attack(bool trigger)
@@ -236,9 +237,14 @@ public class Weapon : MonoBehaviour
         }
     }
 
+    IEnumerator SetFalseOwner()
+    {
+        yield return new WaitForEndOfFrame();
+        previousOwner = null;
+
+    }
     public void PlayPickup()
     {
-        Debug.Log("HELP");
         m_AudioSource.PlayOneShot(PickupAudio , pickupVolume);
     }
 }
