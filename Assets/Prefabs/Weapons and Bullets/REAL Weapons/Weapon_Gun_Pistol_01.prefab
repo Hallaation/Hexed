@@ -60,7 +60,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1862103209149548
 GameObject:
   m_ObjectHideFlags: 0
@@ -97,7 +97,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1088063092901144}
   m_LocalRotation: {x: -0, y: -0, z: 0.13052596, w: 0.99144495}
-  m_LocalPosition: {x: -5.71, y: 5.38, z: 0}
+  m_LocalPosition: {x: 5, y: 1, z: 0}
   m_LocalScale: {x: 0.6, y: 0.6, z: 1}
   m_Children:
   - {fileID: 4777184916552946}
@@ -207,7 +207,12 @@ MonoBehaviour:
   m_bMoveWeaponSpriteUp: 0
   m_AudioClip: {fileID: 8300000, guid: 5fa945feb5a330e4fab0227d33c3f710, type: 3}
   clipVolume: 0.6
-  clipPitch: 0
+  PickupAudio: {fileID: 0}
+  pickupVolume: 1
+  DropAudioClip: {fileID: 0}
+  DropAudioVolume: 1
+  ThrowHitAudio: {fileID: 0}
+  ThrowHitAudioVolume: 1
   m_EmptyClipAudio: {fileID: 0}
   EmptyVolume: 1
   m_iAmmo: 999999
@@ -226,13 +231,13 @@ SpriteRenderer:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1287359363866966}
   m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 9a79075822a26f6499f49388eb99e9d1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
