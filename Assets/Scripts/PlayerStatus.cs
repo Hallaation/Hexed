@@ -236,7 +236,8 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
     public void MiniStun(Vector3 ForceApplied, float StunTime)
     {
         m_bMiniStun = true;
-        SetAllAnimatorsFalse();
+        //TODO change to attacking animators = false maybe.
+        //SetAllAnimatorsFalse();
         //        GetComponent<Move>().SetActive(false);
         _rigidbody.velocity = ForceApplied;
         Debug.Log("Corotuine should be here");
@@ -287,7 +288,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         this.transform.position = ControllerManager.Instance.spawnPoints[spawnIndex].position;
         GetComponent<Move>().ThrowMyWeapon(Vector2.zero, Vector2.up, false);
 
-        this.GetComponent<Collider2D>().isTrigger = true;
+       // this.GetComponent<Collider2D>().isTrigger = true;
         m_bInvincible = true;
     }
 

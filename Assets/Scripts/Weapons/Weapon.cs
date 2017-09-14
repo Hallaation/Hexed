@@ -25,7 +25,7 @@ public class Weapon : MonoBehaviour
     protected bool stunPlayer = true;
     Rigidbody2D _rigidbody;
     public bool m_bActive = true;
-    [HideInInspector]
+    //[HideInInspector]
     public GameObject previousOwner; //previous owner used to make sure when the weapon is thrown, it doesnt stun the thrower.
     private SpriteRenderer WeaponSpriteRenderer; //The sprite rendere of the weapon sprite
     private Transform weaponSpriteTransform; //The transform of the weapon's sprite 
@@ -200,12 +200,14 @@ public class Weapon : MonoBehaviour
     /// <param name="velocity"></param>
     public void throwWeapon(Vector2 velocity)
     {
+       
         //turn the physics back on set its parent to null, and apply the velocity. apply an angular velocity for it to spin.
         GetComponent<Rigidbody2D>().simulated = true;
         this.transform.SetParent(null);
         GetComponent<Rigidbody2D>().AddForce(velocity, ForceMode2D.Impulse);
         GetComponent<Rigidbody2D>().angularVelocity = 600.0f;
         m_AudioSource.PlayOneShot(DropAudioClip , DropAudioVolume);
+        StartCoroutine(SetFalseOwner());
     }
     //virtual functions
     public virtual bool Attack(bool trigger)
@@ -222,8 +224,9 @@ public class Weapon : MonoBehaviour
         if (stunPlayer)
         {
             //if it enters a trigger (another player in this case") the hit player gets stunned. calls the status applied to drop their weapon.
-            if (GetComponent<Rigidbody2D>().velocity.magnitude >= 10 && a_collider.tag == "Player" && a_collider.gameObject != previousOwner)
+            if (GetComponent<Rigidbody2D>().velocity.magnitude >= 10 && a_collider.tag == "Player" && a_collider.GetComponentInParent<PlayerStatus>().gameObject != previousOwner)
             {
+                Debug.Log(a_collider.gameObject != previousOwner);
                 if (a_collider.GetComponentInParent<PlayerStatus>().IsStunned == false)
                 {
                     a_collider.GetComponentInParent<PlayerStatus>().StunPlayer(_rigidbody.velocity * KnockBack);
@@ -234,9 +237,14 @@ public class Weapon : MonoBehaviour
         }
     }
 
+    IEnumerator SetFalseOwner()
+    {
+        yield return new WaitForEndOfFrame();
+        previousOwner = null;
+
+    }
     public void PlayPickup()
     {
-        Debug.Log("HELP");
         m_AudioSource.PlayOneShot(PickupAudio , pickupVolume);
     }
 }

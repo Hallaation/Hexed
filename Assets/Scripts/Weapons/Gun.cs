@@ -14,6 +14,7 @@ public class Gun : Weapon
     
     [Space]
     [Header("Gun Specific")]
+    
     public int m_iAmmo = 30;
     public GameObject bullet;
     [SerializeField]

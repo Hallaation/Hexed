@@ -407,7 +407,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1739733801578252}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -15.101, y: 9.921815, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4997030151915032}
@@ -876,6 +876,12 @@ MonoBehaviour:
   m_bMoveWeaponSpriteUp: 0
   m_AudioClip: {fileID: 0}
   clipVolume: 1
+  PickupAudio: {fileID: 0}
+  pickupVolume: 1
+  DropAudioClip: {fileID: 0}
+  DropAudioVolume: 1
+  ThrowHitAudio: {fileID: 0}
+  ThrowHitAudioVolume: 1
   audioClip: {fileID: 8300000, guid: 218397e7ca0b6f3499b6bc3e88df9b86, type: 3}
   m_clipVolume: 1
   PunchFlinchTime: 0.3
