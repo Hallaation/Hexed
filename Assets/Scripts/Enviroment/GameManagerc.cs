@@ -482,6 +482,8 @@ public class GameManagerc : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(time);
         SceneManager.LoadScene(0);
+        GameManagerc.Instance.gameObject.SetActive(false);
+        Destroy(GameManagerc.Instance.gameObject);
     }
 
     IEnumerator AddPointsToPanel(PlayerStatus player)

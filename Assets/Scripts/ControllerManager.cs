@@ -213,15 +213,7 @@ public class ControllerManager : MonoBehaviour
 
         if (scene.buildIndex != 0)
         {
-            GameObject spawnParent = GameObject.FindGameObjectWithTag("SpawnPoints");
-            //Find the spawn points    ////    spawnPoints = new Transform[spawnParent.transform.childCount];
-            if (spawnParent)
-            {
-                for (int i = 0; i < spawnParent.transform.childCount; ++i)
-                {
-                    spawnPoints[i] = spawnParent.transform.GetChild(i);
-                }
-            }
+            FindSpawns();
         }
 
         //look for the spawn points
@@ -233,45 +225,38 @@ public class ControllerManager : MonoBehaviour
         int NumofChildren = 0;
         int PlayerCountIndex = 0;
         GameObject spawnParent = GameObject.FindGameObjectWithTag("SpawnPoints");
-        spawnPoints = new Transform[4];
         //Find the spawn points
         //Figure out which spawn points to get
-        //switch (4 - CharacterSelectionManager.Instance.JoinedPlayers)
-        //{
-        //    case 2:
-        //        spawnPoints = new Transform[spawnParent.transform.GetChild(0).childCount];
-        //        NumofChildren = 2;
-        //        PlayerCountIndex = 0;
-        //        break;
-        //    case 3:
-        //        spawnPoints = new Transform[spawnParent.transform.GetChild(1).childCount];
-        //        NumofChildren = 3;
-        //        PlayerCountIndex = 1;
-        //        break;
-        //    case 4:
-        //        spawnPoints = new Transform[spawnParent.transform.GetChild(2).childCount];
-        //        NumofChildren = 4;
-        //        PlayerCountIndex = 2;
-        //        break;
-        //    default:
-        //        break;
-        //}
+        switch (4 - CharacterSelectionManager.Instance.JoinedPlayers)
+        {
+            case 2:
+                spawnPoints = new Transform[spawnParent.transform.GetChild(0).childCount];
+                NumofChildren = 2;
+                PlayerCountIndex = 0;
+                break;
+            case 3:
+                spawnPoints = new Transform[spawnParent.transform.GetChild(1).childCount];
+                NumofChildren = 3;
+                PlayerCountIndex = 1;
+                break;
+            case 4:
+                spawnPoints = new Transform[spawnParent.transform.GetChild(2).childCount];
+                NumofChildren = 4;
+                PlayerCountIndex = 2;
+                break;
+            default:
+                break;
+        }
 
         //Get the spawn points depdendent on the number of players
-        for (int i = 0; i < 3; ++i)
+        for (int i = 0; i < NumofChildren; ++i)
         {
-            spawnPoints[i] = spawnParent.transform.GetChild(i);
+            //print(spawnParent.transform.GetChild(PlayerCountIndex));
+            //print(spawnParent.transform.GetChild(PlayerCountIndex).GetChild(i));
+            spawnPoints[i] = spawnParent.transform.GetChild(PlayerCountIndex).GetChild(i);
+           
         }
         
         //Scramble array
-        //int ScrambleAmount = 50;
-        //for (int i = 0; i < ScrambleAmount; ++i)
-        //{
-        //    int OriginalRandomIndex = Random.Range(0 , 3);
-        //    int NewIndex = Random.Range(0 , 3);
-        //    Transform temp = spawnPoints[OriginalRandomIndex];
-        //    spawnPoints[OriginalRandomIndex] = spawnPoints[NewIndex];
-        //    spawnPoints[NewIndex] = temp;
-        //}
     }
 }
