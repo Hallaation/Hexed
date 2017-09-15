@@ -34,11 +34,12 @@ public class Weapon : MonoBehaviour
     [Space]
     [Header("Weapon Attack Audio")]
     public AudioClip m_AudioClip;
-    [Range(0, 1)]
+    public bool m_bRandomizePitch = true;
+    [Range(0 , 1)]
     public float clipVolume = 1;
 
     [Space]
-    [Header("Pickup Audio")]
+    [Header("Pickup Audio")] 
     public AudioClip PickupAudio;
     [Range(0 , 1)]
     public float pickupVolume = 1;
@@ -48,12 +49,20 @@ public class Weapon : MonoBehaviour
     public AudioClip DropAudioClip;
     [Range(0 , 1)]
     public float DropAudioVolume = 1;
+    
+    [Space]
+    [Header("Weapon Throw Audio")]
+    public AudioClip ThrowAudioClip;
+    [Range(0 , 1)]
+    public float ThrowAudioVolume = 1;
 
     [Space]
     [Header("Thrown hit Audio")]
     public AudioClip ThrowHitAudio;
+    public bool m_bRandomizeThrowHitPitch = true;
     [Range(0 , 1)]
     public float ThrowHitAudioVolume = 1;
+    private AudioSource hitPlayerAudioSource;
 
     //[Range(-2, 2)]
     //public float clipPitch;
@@ -62,10 +71,16 @@ public class Weapon : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        hitPlayerAudioSource = 
         m_AudioSource = this.gameObject.AddComponent<AudioSource>();
         m_AudioSource.playOnAwake = false;
         m_AudioSource.clip = m_AudioClip;
         m_AudioSource.volume = clipVolume;
+        m_AudioSource.spatialBlend =  1;
+
+        hitPlayerAudioSource = this.gameObject.AddComponent<AudioSource>();
+        hitPlayerAudioSource.playOnAwake = false;
+        hitPlayerAudioSource.spatialBlend =  1;
         //m_AudioSource = AudioManager.RequestAudioSource(m_AudioClip, clipVolume, clipPitch);
         _rigidbody = GetComponent<Rigidbody2D>();
         TimerBetweenFiring = new Timer(m_fTimeBetweenShots);
@@ -74,7 +89,7 @@ public class Weapon : MonoBehaviour
             WeaponSpriteRenderer = transform.GetChild(0).GetComponent<SpriteRenderer>();
             //Debug.Log(WeaponSprite.sprite);
             m_DefaultSprite = WeaponSpriteRenderer.sprite;
-            Debug.Log(m_DefaultSprite);
+
             weaponSpriteTransform = transform.GetChild(0).GetComponent<Transform>();
         }
         StartUp();
@@ -167,11 +182,11 @@ public class Weapon : MonoBehaviour
 
         }
         //wait for next shot, ticks the timer until it is ready for the next shot
-        waitForNextShot();
+        WaitForNextShot();
 
     }
 
-    void waitForNextShot()
+    void WaitForNextShot()
     {
         //once the player has shot a bullet, the timer will start to tick until the desired time. Until the desired time hasn't reached, the player cannot shoot
         if (!shotReady)
@@ -186,7 +201,7 @@ public class Weapon : MonoBehaviour
             }
         }
     }
-    public void dropWeapon()
+    public void DropWeapon()
     {
         //dropping the weapon will turn the physics back on
         GetComponent<Rigidbody2D>().simulated = true;
@@ -198,15 +213,25 @@ public class Weapon : MonoBehaviour
     /// Takes in a velocity vector, this will determine how fast it will be thrown out of the player's hand. Low velocity means it can be just dropped.
     /// </summary>
     /// <param name="velocity"></param>
-    public void throwWeapon(Vector2 velocity)
+    public void ThrowWeapon(Vector2 velocity)
     {
        
         //turn the physics back on set its parent to null, and apply the velocity. apply an angular velocity for it to spin.
         GetComponent<Rigidbody2D>().simulated = true;
         this.transform.SetParent(null);
         GetComponent<Rigidbody2D>().AddForce(velocity, ForceMode2D.Impulse);
-        GetComponent<Rigidbody2D>().angularVelocity = 600.0f;
-        m_AudioSource.PlayOneShot(DropAudioClip , DropAudioVolume);
+        if (velocity.magnitude > 50)
+        {
+            GetComponent<Rigidbody2D>().angularVelocity = 600.0f;
+            m_AudioSource.PlayOneShot(ThrowAudioClip , ThrowAudioVolume);
+        }
+        else
+        {
+            GetComponent<Rigidbody2D>().angularVelocity = 100.0f;
+            m_AudioSource.PlayOneShot(DropAudioClip , DropAudioVolume);
+        }
+        //GetComponent<Rigidbody2D>().angularVelocity = angularVelocity;
+
         StartCoroutine(SetFalseOwner());
     }
     //virtual functions
@@ -226,12 +251,16 @@ public class Weapon : MonoBehaviour
             //if it enters a trigger (another player in this case") the hit player gets stunned. calls the status applied to drop their weapon.
             if (GetComponent<Rigidbody2D>().velocity.magnitude >= 10 && a_collider.tag == "Player" && a_collider.GetComponentInParent<PlayerStatus>().gameObject != previousOwner)
             {
-                Debug.Log(a_collider.gameObject != previousOwner);
+
                 if (a_collider.GetComponentInParent<PlayerStatus>().IsStunned == false)
                 {
                     a_collider.GetComponentInParent<PlayerStatus>().StunPlayer(_rigidbody.velocity * KnockBack);
                     a_collider.GetComponentInParent<Move>().StatusApplied();
-                    m_AudioSource.PlayOneShot(ThrowHitAudio , ThrowHitAudioVolume);
+                    hitPlayerAudioSource.clip = ThrowHitAudio;
+                    hitPlayerAudioSource.volume = ThrowHitAudioVolume;
+                    hitPlayerAudioSource.pitch = (m_bRandomizeThrowHitPitch) ? Random.Range(0.9f , 1.1f) : 1;
+                    hitPlayerAudioSource.Play();
+                    
                 }
             }
         }

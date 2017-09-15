@@ -6,8 +6,10 @@ public class EmptyHand : Weapon
     [Space]
     [Header("Melee Impact Sound")]
     public AudioClip audioClip;
+    public bool m_bRandomizeHitPitch = true;
     [Range(0 , 1)]
     public float m_clipVolume = 1;
+
     public float PunchFlinchTime = .3f;
 
     public override void StartUp()
@@ -55,9 +57,10 @@ public class EmptyHand : Weapon
                             PlayerStatus hitPlayer = Overlap[i].GetComponentInParent<PlayerStatus>();
                             if (hitPlayer != this.GetComponent<PlayerStatus>())
                             {
-                                hitPlayer.TimesPunched++;
+                              //  hitPlayer.TimesPunched++;
                                 hitPlayer.MiniStun(this.transform.up * (KnockBack * 1.5f) , PunchFlinchTime);
-                                hitPlayer.GetComponent<IHitByMelee>().HitByMelee(this , audioClip , m_clipVolume);
+                                float tempPitch = (m_bRandomizeHitPitch) ? Random.Range(0.9f , 1.1f) : 1;
+                                hitPlayer.GetComponent<IHitByMelee>().HitByMelee(this , audioClip , m_clipVolume, tempPitch);
 
                                 //Debug.Log("PunchedEnemy");
                                 if (hitPlayer.TimesPunched >= 3)

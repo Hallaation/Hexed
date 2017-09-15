@@ -4,8 +4,14 @@ using UnityEngine;
 
 public class Melee : Weapon
 {
-    public AudioClip punchEffect;
-    private AudioSource temp; //TODO change to a singleton audio manager later
+    [Space]
+    [Header("Melee Hit Audio")]
+    public AudioClip hitAudioClip;
+    public bool m_bRandomizeHitAudio = true;
+    [Range(0 , 1)]
+    public float hitAudioVolume = 1;
+
+    [Space]
     public float OnHitFlinchTime = .3f;
     bool Attacking;
     public override void StartUp()
@@ -18,7 +24,7 @@ public class Melee : Weapon
     // Update is called once per frame
    void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("Entered");
+
         if (Attacking && other.tag == "Player")
         {
             other.transform.parent.GetComponentInParent<PlayerStatus>().StunPlayer(transform.up * KnockBack);
@@ -27,7 +33,6 @@ public class Melee : Weapon
     }
     void OnTriggerStay2D(Collider2D other)
     {
-        Debug.Log("stay");
         if (Attacking && other.tag == "Player")
         {
             other.transform.parent.GetComponentInParent<PlayerStatus>().StunPlayer(transform.up * KnockBack);
@@ -37,6 +42,7 @@ public class Melee : Weapon
 
     public override bool Attack(bool trigger)
     {
+        /*
         if (shotReady)
         {
             
@@ -119,7 +125,7 @@ public class Melee : Weapon
             //Debug.DrawRay(ray.origin , ray.direction);
             return true;
             }
-      
+      */
         return false;
       
         }
