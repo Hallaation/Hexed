@@ -351,7 +351,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1568182744093302}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -20.1, y: 8.92, z: 0}
+  m_LocalPosition: {x: -8.1, y: 5.42, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4834453555101378}
@@ -464,7 +464,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1454751314594980}
   m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0.72, z: 0}
+  m_LocalPosition: {x: 0, y: 0.545, z: 0}
   m_LocalScale: {x: 1.0000005, y: 1.0000005, z: 0}
   m_Children: []
   m_Father: {fileID: 4141461237438614}
@@ -779,16 +779,16 @@ MonoBehaviour:
   m_bActive: 1
   previousOwner: {fileID: 0}
   m_bMoveWeaponSpriteUp: 0
-  m_AudioClip: {fileID: 0}
-  clipVolume: 1
+  m_AudioClip: {fileID: 8300000, guid: bacff683bb48a44458156a524c965eb9, type: 3}
+  clipVolume: 0.6
   PickupAudio: {fileID: 0}
   pickupVolume: 1
   DropAudioClip: {fileID: 0}
   DropAudioVolume: 1
   ThrowHitAudio: {fileID: 0}
   ThrowHitAudioVolume: 1
-  audioClip: {fileID: 8300000, guid: 218397e7ca0b6f3499b6bc3e88df9b86, type: 3}
-  m_clipVolume: 1
+  audioClip: {fileID: 8300000, guid: 15751d19a0e4c2441ab8cbfbb21c4348, type: 3}
+  m_clipVolume: 0.6
   PunchFlinchTime: 0.3
 --- !u!114 &114504531806896794
 MonoBehaviour:
@@ -830,7 +830,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1470fd1c36da2d04486d17adb0c656c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_audioClip: {fileID: 8300000, guid: 27c17b0402afa2c4d9b4082c44ad712e, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 4b888a7f968ac134c8739ec4a23a7eee, type: 3}
   clipVolume: 1
 --- !u!114 &114790615142462568
 MonoBehaviour:
@@ -853,7 +853,7 @@ MonoBehaviour:
   throwingForce: 300
   vibrationValue: {x: 0, y: 0}
   playerSpirte: {fileID: 0}
-  StartMoveDelay: 3
+  StartMoveDelay: 0
   m_LeftStickRotation: {x: 0, y: 0, z: 0}
   StickDeadZone: 0.12
   ColorDatabaseKey: Player1
