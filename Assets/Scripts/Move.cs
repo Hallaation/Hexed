@@ -393,6 +393,7 @@ public class Move : MonoBehaviour
                 //drop the weapon. magic number 2.
                 heldWeapon.GetComponent<Weapon>().throwWeapon(throwDirection * 2);
                 heldWeapon.GetComponent<Weapon>().previousOwner = this.gameObject;
+                heldWeapon.transform.Find("Sprite").GetComponent<Collider2D>().enabled = false;
                 m_bHoldingWeapon = false;
 
                 heldWeapon = null;
@@ -411,6 +412,7 @@ public class Move : MonoBehaviour
                 heldWeapon.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
                 heldWeapon.GetComponent<Weapon>().throwWeapon(throwDirection * throwingForce);
                 heldWeapon.GetComponent<Weapon>().previousOwner = this.gameObject;
+                heldWeapon.transform.Find("Sprite").GetComponent<Collider2D>().enabled = false;
                 m_bHoldingWeapon = false;
                 heldWeapon = null;
                 if (BodyAnimator != null)
@@ -521,6 +523,7 @@ public class Move : MonoBehaviour
             Rigidbody2D weaponRigidBody = hitCollider.transform.parent.GetComponent<Rigidbody2D>(); //find its rigidbody in its parent
                                                                                                     //weaponRigidBody.simulated = false; //turn off any of its simulation
             weaponRigidBody.bodyType = RigidbodyType2D.Kinematic;
+            weaponRigidBody.transform.Find("Sprite").GetComponent<Collider2D>().enabled = false;
             //weaponRigidBody.simulated = false;
             weaponRigidBody.velocity = Vector2.zero; //set any velocity to nothing
             weaponRigidBody.angularVelocity = 0.0f; //set any angular velocity to nothing
