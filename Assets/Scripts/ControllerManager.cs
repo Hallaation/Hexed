@@ -261,6 +261,16 @@ public class ControllerManager : MonoBehaviour
         {
             spawnPoints[i] = spawnParent.transform.GetChild(PlayerCountIndex).GetChild(i);
         }
-
+        
+        //Scramble array
+        int ScrambleAmount = 50;
+        for (int i = 0; i < ScrambleAmount; ++i)
+        {
+            int OriginalRandomIndex = Random.Range(0 , 3);
+            int NewIndex = Random.Range(0 , 3);
+            Transform temp = spawnPoints[OriginalRandomIndex];
+            spawnPoints[OriginalRandomIndex] = spawnPoints[NewIndex];
+            spawnPoints[NewIndex] = temp;
+        }
     }
 }
