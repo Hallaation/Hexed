@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: f7ffe61a59e884f4490c4949db3a676c
-timeCreated: 1505455092
-licenseType: Pro
+timeCreated: 1505475826
+licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
     21300000: UI_PreGameScreen_ScreenHousing
@@ -9,6 +9,8 @@ TextureImporter:
     21300004: UI_PreGameScreen_ScreenBehind
     21300006: UI_PreGameScreen_ScreenBar_02
     21300008: UI_PreGameScreen_ScreenBar_01
+    21300010: UI_PreGameScreen_Ready
+    21300012: UI_PreGameScreen_Fight
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -107,7 +109,7 @@ TextureImporter:
         width: 1516
         height: 1095
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -120,7 +122,7 @@ TextureImporter:
         width: 1390
         height: 955
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -133,7 +135,7 @@ TextureImporter:
         width: 1390
         height: 956
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -146,7 +148,7 @@ TextureImporter:
         width: 115
         height: 847
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -158,6 +160,32 @@ TextureImporter:
         y: 383
         width: 113
         height: 847
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: UI_PreGameScreen_Ready
+      rect:
+        serializedVersion: 2
+        x: 822
+        y: 957
+        width: 986
+        height: 241
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: UI_PreGameScreen_Fight
+      rect:
+        serializedVersion: 2
+        x: 801
+        y: 476
+        width: 1033
+        height: 241
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
