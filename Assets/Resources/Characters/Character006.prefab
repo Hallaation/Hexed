@@ -754,14 +754,19 @@ MonoBehaviour:
   previousOwner: {fileID: 0}
   m_bMoveWeaponSpriteUp: 0
   m_AudioClip: {fileID: 0}
+  m_bRandomizePitch: 1
   clipVolume: 1
   PickupAudio: {fileID: 0}
   pickupVolume: 1
   DropAudioClip: {fileID: 0}
   DropAudioVolume: 1
+  ThrowAudioClip: {fileID: 0}
+  ThrowAudioVolume: 1
   ThrowHitAudio: {fileID: 0}
+  m_bRandomizeThrowHitPitch: 1
   ThrowHitAudioVolume: 1
   audioClip: {fileID: 8300000, guid: 218397e7ca0b6f3499b6bc3e88df9b86, type: 3}
+  m_bRandomizeHitPitch: 1
   m_clipVolume: 1
   PunchFlinchTime: 0.3
 --- !u!114 &114350157512075850
@@ -820,8 +825,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AbilityIcon: {fileID: 21300000, guid: beb561301c429c1478719366046b5f33, type: 3}
   SelectionSprites:
-  - {fileID: 21300010, guid: 8560db96e33c8ae4a837c261da8941ce, type: 3}
-  - {fileID: 21300032, guid: 8560db96e33c8ae4a837c261da8941ce, type: 3}
+  - {fileID: 21300008, guid: 8560db96e33c8ae4a837c261da8941ce, type: 3}
+  - {fileID: 21300030, guid: 8560db96e33c8ae4a837c261da8941ce, type: 3}
   currentMana: 100
   m_fMaximumMana: 100
   PassiveManaRegeneration: 2.5
@@ -845,6 +850,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_audioClip: {fileID: 8300000, guid: 27c17b0402afa2c4d9b4082c44ad712e, type: 3}
+  m_bRandomizePitch: 0
   clipVolume: 1
 --- !u!114 &114843428782528868
 MonoBehaviour:

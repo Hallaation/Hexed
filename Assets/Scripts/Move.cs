@@ -409,7 +409,7 @@ public class Move : MonoBehaviour
                 //drop the weapon. magic number 2.
                 heldWeapon.GetComponent<Weapon>().ThrowWeapon(throwDirection * 2);
                 heldWeapon.GetComponent<Weapon>().previousOwner = this.gameObject;
-                heldWeapon.transform.Find("Sprite").GetComponent<Collider2D>().enabled = false;
+                //heldWeapon.transform.Find("Sprite").GetComponent<Collider2D>().enabled = false;
                 m_bHoldingWeapon = false;
 
                 heldWeapon = null;
@@ -429,7 +429,7 @@ public class Move : MonoBehaviour
                 heldWeapon.transform.Find("Sprite").GetComponent<Collider2D>().enabled = true;
                 heldWeapon.GetComponent<Weapon>().ThrowWeapon(throwDirection * throwingForce);
                 heldWeapon.GetComponent<Weapon>().previousOwner = this.gameObject;
-                heldWeapon.transform.Find("Sprite").GetComponent<Collider2D>().enabled = false;
+                //heldWeapon.transform.Find("Sprite").GetComponent<Collider2D>().enabled = false;
                 m_bHoldingWeapon = false;
                 heldWeapon = null;
                 if (BodyAnimator != null)
