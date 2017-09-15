@@ -9,6 +9,6 @@ public interface IHitByBullet
 
 public interface IHitByMelee
 {
-    void HitByMelee(Weapon meleeWeapon , AudioClip soundEffect , float Volume = 1);
+    void HitByMelee(Weapon meleeWeapon , AudioClip soundEffect , float Volume = 1, float Pitch = 1);
 }
 

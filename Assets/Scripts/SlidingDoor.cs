@@ -40,6 +40,7 @@ public class SlidingDoor : MonoBehaviour {
         {
             m_audioSource = this.gameObject.AddComponent<AudioSource>();
             m_audioSource.playOnAwake = false;
+            m_audioSource.spatialBlend =  1;
         }
         m_audioSource.clip = m_MovingClip;
         m_audioSource.volume = m_MovingVolume;
