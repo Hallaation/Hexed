@@ -61,22 +61,24 @@ public class Move : MonoBehaviour
     private PolygonCollider2D m_TwoHandedCollider;
 
     private AudioSource[] m_audioSource;
-
+    private GameObject AudioSourcePool;
     //Vector3 movement;
     // Use this for initialization
     void Awake()
     {
-       // movement = Vector3.zero;
+        // movement = Vector3.zero;
+        Application.targetFrameRate = 45;
         //pool of audiosources
         m_audioSource = new AudioSource[16];
-        GameObject audioSourceContainer = new GameObject("AudioSources");
-        audioSourceContainer.transform.SetParent(this.transform);
+        AudioSourcePool = new GameObject("AudioSources");
+        AudioSourcePool.transform.SetParent(this.transform);
 
         for (int i = 0; i < m_audioSource.Length; ++i)
         {
-            m_audioSource[i] = audioSourceContainer.AddComponent<AudioSource>();
+            m_audioSource[i] = AudioSourcePool.AddComponent<AudioSource>();
             m_audioSource[i].playOnAwake = false;
             m_audioSource[i].clip = quack;
+            m_audioSource[i].spatialBlend =  1;
         }
 
         if (!ColorDatabase)
@@ -288,13 +290,16 @@ public class Move : MonoBehaviour
 
     void Quack()
     {
+        //AudioSourcePool.transform.localRotation = Quaternion.identity;
+        //If Y button down
         if (XCI.GetButtonDown(XboxButton.Y , m_controller.mXboxController))
         {
             foreach (AudioSource item in m_audioSource)
             {
+                //look for an audiosource from the pool that isn't active
                 if (!item.isPlaying)
                 {
-                    Debug.Log("item isnt playing");
+                    //set the audiosource to play with the pitch determined by left trigger, break out of the loop.
                     item.pitch = 1 + XCI.GetAxis(XboxAxis.LeftTrigger , m_controller.mXboxController);
                     item.Play();
                     break;
@@ -381,17 +386,28 @@ public class Move : MonoBehaviour
         }
     }
 
-    public void ThrowMyWeapon(Vector2 movement , Vector2 throwDirection , bool tossWeapon)
+    public void ThrowWeapon(Vector2 movement , Vector2 throwDirection , bool tossWeapon)
     {
         if (heldWeapon && heldWeapon.GetComponent<Weapon>().m_bActive)
         {
-            //throw the weapon away
+            //drop the weapon 
             heldWeapon.transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = 0; //? Puts gun layer behinde player layer when it's dropped. 
+            //Determine what type of gun im holding
+            Vector3 GunMountPosition = (!heldWeapon.GetComponent<Weapon>().m_b2Handed) ?/*True*/ weapon1HandedMount.position : /*False*/weapon2HandedMount.position; 
+
             if (/*movement.magnitude == 0 ||*/ !tossWeapon)
             {
+                //Raycast from me to the gun mount position + an arbitrary number. IF I hit something, snap the gun to behind the wall
+                RaycastHit2D hit = Physics2D.Raycast(this.transform.position , throwDirection , (this.transform.position - GunMountPosition).magnitude + 0.3f, 1 << LayerMask.NameToLayer("Wall"));
+                if (hit)
+                {
+                    heldWeapon.transform.position = hit.point + (hit.normal * 0.4f);
+                }
+                Debug.DrawRay(this.transform.position , throwDirection * (this.transform.position - GunMountPosition).magnitude , Color.yellow , 5);
                 heldWeapon.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+                heldWeapon.transform.Find("Sprite").GetComponent<Collider2D>().enabled = true;
                 //drop the weapon. magic number 2.
-                heldWeapon.GetComponent<Weapon>().throwWeapon(throwDirection * 2);
+                heldWeapon.GetComponent<Weapon>().ThrowWeapon(throwDirection * 2);
                 heldWeapon.GetComponent<Weapon>().previousOwner = this.gameObject;
                 heldWeapon.transform.Find("Sprite").GetComponent<Collider2D>().enabled = false;
                 m_bHoldingWeapon = false;
@@ -404,13 +420,14 @@ public class Move : MonoBehaviour
             else
             {
                 //toss it away with force
-                RaycastHit2D hit = Physics2D.Raycast(this.transform.position , throwDirection , 2.0f , 1 << LayerMask.NameToLayer("Wall"));
+                RaycastHit2D hit = Physics2D.Raycast(this.transform.position , throwDirection , (this.transform.position - GunMountPosition).magnitude , 1 << LayerMask.NameToLayer("Wall"));
                 if (hit)
                 {
-                    heldWeapon.transform.localPosition = Vector3.zero;
+                    heldWeapon.transform.localPosition = -this.transform.up * 0.2f;
                 }
                 heldWeapon.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
-                heldWeapon.GetComponent<Weapon>().throwWeapon(throwDirection * throwingForce);
+                heldWeapon.transform.Find("Sprite").GetComponent<Collider2D>().enabled = true;
+                heldWeapon.GetComponent<Weapon>().ThrowWeapon(throwDirection * throwingForce);
                 heldWeapon.GetComponent<Weapon>().previousOwner = this.gameObject;
                 heldWeapon.transform.Find("Sprite").GetComponent<Collider2D>().enabled = false;
                 m_bHoldingWeapon = false;
@@ -449,9 +466,10 @@ public class Move : MonoBehaviour
 
         Collider2D weaponToPickUp = null;
 
-        Collider2D[] hitCollider = Physics2D.OverlapCircleAll(this.transform.position , 1.0f , (1 << 12));
+        Collider2D[] hitCollider = Physics2D.OverlapCircleAll(this.transform.position , 1.0f , /*Pickup layer*/(1 << 12));
         foreach (Collider2D WeaponCollider in hitCollider)
         {
+
             if (WeaponCollider.GetComponentInParent<Weapon>().gameObject != previousWeapon)
             {
                 weaponToPickUp = WeaponCollider;
@@ -467,33 +485,43 @@ public class Move : MonoBehaviour
         if (heldWeapon)
         {
 
-            ThrowMyWeapon(stickMovement , throwingDirection , tossWeapon);
+            ThrowWeapon(stickMovement , throwingDirection , tossWeapon);
 
         }
 
         //if the overlap circle found something, pickup the weapon
         if (weaponToPickUp)
         {
-
+            //Raycast from me
             Vector3 pos = transform.position;
             Vector3 Dir = weaponToPickUp.gameObject.transform.position - transform.position;
 
+            //Quaternion temp = Quaternion.Euler(0,0,Vector3.Angle(transform.position , weaponToPickUp.transform.position));
+            //Dir = temp * transform.up;
 
-            RaycastHit2D hitPoint = Physics2D.Raycast(pos , Dir.normalized , 1 , 1 << LayerMask.NameToLayer("Wall"));
+            RaycastHit2D hitPoint = Physics2D.Raycast(pos , Dir , 1 , (1 << LayerMask.NameToLayer("Wall") | 1 << LayerMask.NameToLayer("FloorGun")));
+            //Debug.DrawRay(this.transform.position , Dir , Color.magenta , 5);
 
             if (hitPoint.transform == null)
             {
-                if (weaponToPickUp.transform.parent.parent == null)
-
+                if (weaponToPickUp.GetComponentInParent<Weapon>().transform.parent == null)
                 {
                     PickupWeapon(weaponToPickUp);
                     return true;
                 }
             }
-            else if (weaponToPickUp.transform.parent.parent == null)
+            else if (hitPoint.transform.GetComponentInParent<Weapon>())
+            {
+                if (weaponToPickUp.GetComponentInParent<Weapon>().transform.parent == null)
+                {
+                    PickupWeapon(weaponToPickUp);
+                    return true;
+                }
+            }
+            else
             {
                 Debug.Log("WallBlock");
-                Debug.DrawLine(pos , pos + Dir , Color.red , Mathf.Infinity);
+                //Debug.DrawLine(pos , pos + Dir , Color.red , Mathf.Infinity);
             }
 
         }
@@ -504,11 +532,11 @@ public class Move : MonoBehaviour
     {
         if (hitCollider.GetComponentInParent<Weapon>().previousOwner != this.gameObject)
         {
-            heldWeapon = hitCollider.transform.parent.gameObject;
+            heldWeapon = hitCollider.GetComponentInParent<Weapon>().gameObject;
             heldWeapon.transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = 4; //? Puts gun layer infront of player layer when picked up. 
             heldWeapon.transform.GetChild(0).transform.localPosition = new Vector3(0 , 0 , 0); //! Resets Shadow on pickup.
             heldWeapon.GetComponent<Weapon>().PlayPickup();
-            hitCollider.gameObject.transform.parent.SetParent(this.transform);
+            heldWeapon.transform.SetParent(this.gameObject.transform);
             //! if the weapon isn't a 2 handed weapon, mount it to the 1 handed location
             if (!hitCollider.transform.parent.gameObject.GetComponent<Weapon>().m_b2Handed)
             {
@@ -520,13 +548,16 @@ public class Move : MonoBehaviour
                 hitCollider.gameObject.transform.parent.position = weapon2HandedMount.position; //set position to the weapon mount spot
                 hitCollider.gameObject.transform.parent.rotation = weapon2HandedMount.rotation; //set its rotation
             }
-            Rigidbody2D weaponRigidBody = hitCollider.transform.parent.GetComponent<Rigidbody2D>(); //find its rigidbody in its parent
-                                                                                                    //weaponRigidBody.simulated = false; //turn off any of its simulation
+            Rigidbody2D weaponRigidBody = hitCollider.GetComponentInParent<Rigidbody2D>(); //find its rigidbody in its 
+            Debug.Log(hitCollider.GetComponentInParent<Rigidbody2D>());
+            //weaponRigidBody.simulated = false; 
+            //turn off any of its simulation
             weaponRigidBody.bodyType = RigidbodyType2D.Kinematic;
             weaponRigidBody.transform.Find("Sprite").GetComponent<Collider2D>().enabled = false;
             //weaponRigidBody.simulated = false;
             weaponRigidBody.velocity = Vector2.zero; //set any velocity to nothing
             weaponRigidBody.angularVelocity = 0.0f; //set any angular velocity to nothing
+            weaponRigidBody.transform.Find("Sprite").GetComponent<Collider2D>().enabled = false;
             previousWeapon = heldWeapon;
             m_bHoldingWeapon = true;
             SetHoldingGun(0); //? Probably un-necessary
@@ -614,7 +645,7 @@ public class Move : MonoBehaviour
             //transform.Find("Colliders").GetComponent<PolygonCollider2D>().enabled = false;
             if (heldWeapon)
             {
-                ThrowMyWeapon(Vector2.zero , this.transform.up , false);
+                ThrowWeapon(Vector2.zero , this.transform.up , false);
             }
     }
 

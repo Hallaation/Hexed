@@ -54,10 +54,9 @@ GameObject:
   - component: {fileID: 4793291003472360}
   - component: {fileID: 50834520094082260}
   - component: {fileID: 114373167812934092}
-  - component: {fileID: 70937298623239238}
   m_Layer: 12
   m_Name: Weapon_Melee_BaseballBat
-  m_TagString: 2hMelee
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -111,7 +110,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1796801244791532}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10.06, y: 5.475558, z: 0}
+  m_LocalPosition: {x: 0.64, y: 0.56, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4602986510283002}
@@ -181,20 +180,6 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 1
---- !u!70 &70937298623239238
-CapsuleCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1796801244791532}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_Offset: {x: 0.55, y: 0}
-  m_Size: {x: 1, y: 0.2}
-  m_Direction: 1
 --- !u!114 &114373167812934092
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -221,14 +206,20 @@ MonoBehaviour:
   previousOwner: {fileID: 0}
   m_bMoveWeaponSpriteUp: 1
   m_AudioClip: {fileID: 0}
+  m_bRandomizePitch: 0
   clipVolume: 0
-  PickupAudio: {fileID: 0}
+  PickupAudio: {fileID: 8300000, guid: a5b6f4312b2748b4291f4dd7310d2271, type: 3}
   pickupVolume: 1
-  DropAudioClip: {fileID: 0}
+  DropAudioClip: {fileID: 8300000, guid: 97081f0c745f5554cbff5c7a1c0fca98, type: 3}
   DropAudioVolume: 1
+  ThrowAudioClip: {fileID: 0}
+  ThrowAudioVolume: 1
   ThrowHitAudio: {fileID: 0}
+  m_bRandomizeThrowHitPitch: 0
   ThrowHitAudioVolume: 1
-  punchEffect: {fileID: 0}
+  hitAudioClip: {fileID: 0}
+  m_bRandomizeHitAudio: 0
+  hitAudioVolume: 1
   OnHitFlinchTime: 0.3
 --- !u!212 &212360479176060652
 SpriteRenderer:

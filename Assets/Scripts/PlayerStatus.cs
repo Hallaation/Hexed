@@ -48,11 +48,16 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
     public SpriteRenderer stunBar;
     public SpriteRenderer stunMask;
     private GameObject stunBarContainer;
+    private AudioSource m_MeleeHitAudioSource;
     [Range(0, 0.22f)]
     public float fill;
     //if the player is dead, the renderer will change their Color to gray, and all physics simulation of the player's rigidbody will be turned off.
     void Start()
     {
+        m_MeleeHitAudioSource = this.gameObject.AddComponent<AudioSource>();
+        m_MeleeHitAudioSource.playOnAwake = false;
+        m_MeleeHitAudioSource.spatialBlend = 1;
+
         stunBarContainer = new GameObject("StunBarContainer");
 
         stunBar = transform.Find("Sprites").Find("Stunbar").GetComponent<SpriteRenderer>();
@@ -169,7 +174,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             this.GetComponent<Rigidbody2D>().simulated = false;
             killMePrompt.SetActive(false);
             killMeArea.SetActive(false);
-
+            stunBarContainer.SetActive(false);
             return;
         }
 
@@ -246,11 +251,11 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
     }
     public IEnumerator MiniStun(float StunTime)
     {
-        Debug.Log(StunTime);
+        //Debug.Log(StunTime);
         yield return new WaitForSeconds(StunTime);
         m_bMiniStun = false;
         yield return null;
-        Debug.Log("Done");
+        //Debug.Log("Done");
     }
     /// <summary>
     /// Used for combining a stun effect with a knock back. If no stun required use "Knockback()"
@@ -286,7 +291,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         this.GetComponent<Rigidbody2D>().simulated = true;
 
         this.transform.position = ControllerManager.Instance.spawnPoints[spawnIndex].position;
-        GetComponent<Move>().ThrowMyWeapon(Vector2.zero, Vector2.up, false);
+        GetComponent<Move>().ThrowWeapon(Vector2.zero, Vector2.up, false);
 
        // this.GetComponent<Collider2D>().isTrigger = true;
         m_bInvincible = true;
@@ -409,9 +414,13 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         }
     }
 
-    public void HitByMelee(Weapon meleeWeapon , AudioClip soundEffect , float Volume = 1)
+    public void HitByMelee(Weapon meleeWeapon , AudioClip soundEffect , float Volume = 1, float Pitch = 1)
     {
-        GetComponent<AudioSource>().PlayOneShot(soundEffect , Volume);
+        m_MeleeHitAudioSource.clip = soundEffect;
+        m_MeleeHitAudioSource.volume = Volume;
+        m_MeleeHitAudioSource.pitch = Pitch;
+        m_MeleeHitAudioSource.Play();
+        //GetComponent<AudioSource>().PlayOneShot(soundEffect , Volume); 
     }
 }
 

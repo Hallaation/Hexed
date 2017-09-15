@@ -30,7 +30,7 @@ public class UINavigation : MonoBehaviour
         }
     }
 
-   
+
     // Use this for initialization
     void Awake()
     {
@@ -39,13 +39,15 @@ public class UINavigation : MonoBehaviour
         //_EventSystem = FindObjectOfType<EventSystem>();
 
     }
-    void OnSceneLoad(Scene scene, LoadSceneMode mode)
+    void OnSceneLoad(Scene scene , LoadSceneMode mode)
     {
         _EventSystem = FindObjectOfType<EventSystem>();
     }
     // Update is called once per frame
     void Update()
     {
+        #region Update
+        /*
         //only look for objects if the event system is selecting something
         //if (_EventSystem.currentSelectedGameObject)
         //{
@@ -109,6 +111,8 @@ public class UINavigation : MonoBehaviour
                 }
             }
         }
-        
+
+    */
+        #endregion
     }
 }
