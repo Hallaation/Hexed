@@ -290,7 +290,10 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         m_iTimesPunched = 0;
         this.GetComponent<Rigidbody2D>().simulated = true;
 
-        this.transform.position = ControllerManager.Instance.spawnPoints[spawnIndex].position;
+        float xOffset = m_iHealth * -0.0791f;
+        _HealthMask.GetComponent<Image>().material.SetTextureOffset("_MainTex", new Vector2(0 + xOffset, 0));
+        //this.transform.position = ControllerManager.Instance.spawnPoints[spawnIndex].position;
+        this.transform.position = Vector3.zero;
         GetComponent<Move>().ThrowWeapon(Vector2.zero, Vector2.up, false);
 
        // this.GetComponent<Collider2D>().isTrigger = true;
