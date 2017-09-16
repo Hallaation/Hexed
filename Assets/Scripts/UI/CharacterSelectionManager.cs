@@ -89,16 +89,28 @@ public class CharacterSelectionManager : MonoBehaviour
 
     public void LoadPlayers() //! SpawnPlayers, Spawn Players,
     {
+
+        XboxController[] JoinedXboxControllers = new XboxController[playerSelectedCharacter.Count];
+        int nextIndex = 0;
+        for (int i = 0; i < XCI.GetNumPluggedCtrlrs(); i++)
+        { 
+            if (playerSelectedCharacter.ContainsKey(XboxController.First + i))
+            { 
+                JoinedXboxControllers[nextIndex] = XboxController.First + i;
+                nextIndex++;
+            }
+        }
+
         if (!m_bMovedToMainScene)
         {
-            for (int i = 0; i < playerSelectedCharacter.Count; ++i)
+            for (int i = 0; i < 4 - JoinedPlayers; ++i)
             {
                 ControllerManager.Instance.FindSpawns();
-                Debug.Log(ControllerManager.Instance.spawnPoints.Length);
-                Debug.Log(ControllerManager.Instance.spawnPoints[i]);
+
                 Vector3 spawnPosition = ControllerManager.Instance.spawnPoints[i].position; //Get the spawn position
                 //Make the gameojbect and keep a reference scoped to the single loop
-                GameObject go = Instantiate(playerSelectedCharacter[XboxController.First + i], spawnPosition, Quaternion.identity, null);
+
+                GameObject go = Instantiate(playerSelectedCharacter[JoinedXboxControllers[i]], spawnPosition, Quaternion.identity, null);
                 //Set anything required for the player to work.
                 go.GetComponent<ControllerSetter>().SetController(PlayerIndex.One + i);
                 go.GetComponent<ControllerSetter>().m_playerNumber = i;

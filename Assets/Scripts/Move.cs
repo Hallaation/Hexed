@@ -404,6 +404,10 @@ public class Move : MonoBehaviour
                     heldWeapon.transform.position = hit.point + (hit.normal * 0.4f);
                 }
                 Debug.DrawRay(this.transform.position , throwDirection * (this.transform.position - GunMountPosition).magnitude , Color.yellow , 5);
+                if(heldWeapon.GetComponent<Weapon>().m_bMeleeWeapon == true)
+                {
+                    heldWeapon.GetComponent<Melee>().Attacking = false;
+                }
                 heldWeapon.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
                 heldWeapon.transform.Find("Sprite").GetComponent<Collider2D>().enabled = true;
                 //drop the weapon. magic number 2.
@@ -436,7 +440,7 @@ public class Move : MonoBehaviour
                     SetHoldingGun(0);
 
             }
-
+            StartCoroutine(WeaponPickUpDelay(.3f));
         }
     }
     void CheckForPickup()
@@ -470,10 +474,22 @@ public class Move : MonoBehaviour
         foreach (Collider2D WeaponCollider in hitCollider)
         {
 
-            if (WeaponCollider.GetComponentInParent<Weapon>().gameObject != previousWeapon)
+            if (WeaponCollider.GetComponentInParent<Weapon>())                                       //! Null Check
             {
-                weaponToPickUp = WeaponCollider;
-                break;
+                if (WeaponCollider.GetComponentInParent<Weapon>().gameObject != previousWeapon)
+                {
+                    weaponToPickUp = WeaponCollider;
+                    break;
+                }
+            }
+            else if (WeaponCollider.GetComponentInChildren<Weapon>())//! Null Check
+            {
+                if (WeaponCollider.GetComponentInChildren<Weapon>().gameObject != previousWeapon)
+
+                {
+                    weaponToPickUp = WeaponCollider;
+                    break;
+                }
             }
             else if (hitCollider.Length == 1)
             {
@@ -549,7 +565,7 @@ public class Move : MonoBehaviour
                 hitCollider.gameObject.transform.parent.rotation = weapon2HandedMount.rotation; //set its rotation
             }
             Rigidbody2D weaponRigidBody = hitCollider.GetComponentInParent<Rigidbody2D>(); //find its rigidbody in its 
-            Debug.Log(hitCollider.GetComponentInParent<Rigidbody2D>());
+
             //weaponRigidBody.simulated = false; 
             //turn off any of its simulation
             weaponRigidBody.bodyType = RigidbodyType2D.Kinematic;
@@ -850,4 +866,10 @@ public class Move : MonoBehaviour
         //_AmmoText = PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_AmmoText.GetComponent<Text>();
     }
 
+    IEnumerator WeaponPickUpDelay(float WaitTime)
+    {
+       yield return new WaitForSeconds(WaitTime);
+        previousWeapon = null;
+        yield return null;
+    }
 }

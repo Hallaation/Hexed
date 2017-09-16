@@ -125,7 +125,7 @@ public class SettingsManager : MonoBehaviour
             //textureQualityDropdown.value = textureQualityDropdown.options.Count + gameSettings.textureQuality;
             resolutionDropdwon.value = gameSettings.resolutionIndex;
             fullscreenToggle.isOn = gameSettings.Fullscreen;
-            Debug.Log("Settinsg loaded");
+
 
             resolutionDropdwon.RefreshShownValue();
 
