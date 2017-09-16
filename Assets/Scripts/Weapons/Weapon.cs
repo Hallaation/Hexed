@@ -11,6 +11,7 @@ public class Weapon : MonoBehaviour
     public float m_iDamage;
     public bool m_bAutomaticGun;
     public bool m_bBurstFire;
+    public bool m_bMeleeWeapon;
     public bool m_bGivePlayersIFrames = false;
     public bool m_b2Handed = false;
     public float KnockBack;
