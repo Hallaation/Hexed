@@ -13,7 +13,7 @@ public class Melee : Weapon
 
     [Space]
     public float OnHitFlinchTime = .3f;
-    bool Attacking;
+   public bool Attacking;
     public override void StartUp()
     {
 
@@ -27,7 +27,7 @@ public class Melee : Weapon
 
         if (Attacking && other.tag == "Player")
         {
-            other.transform.parent.GetComponentInParent<PlayerStatus>().StunPlayer(transform.up * KnockBack);
+            other.transform.parent.GetComponentInParent<PlayerStatus>().StunPlayer(transform.right * KnockBack);        //! Uses transform right instead of transform up due to using the bats right rather then players up
             Debug.Log("BatEnterStun");
         }
     }
@@ -35,63 +35,69 @@ public class Melee : Weapon
     {
         if (Attacking && other.tag == "Player")
         {
-            other.transform.parent.GetComponentInParent<PlayerStatus>().StunPlayer(transform.up * KnockBack);
+            other.transform.parent.GetComponentInParent<PlayerStatus>().StunPlayer(transform.right * KnockBack);        //! Uses transform right instead of transform up due to using the bats right rather then players up
             Debug.Log("BatStayStun");
         }
     }
 
     public override bool Attack(bool trigger)
     {
-        /*
+
         if (shotReady)
         {
-            
-            BoxCollider2D MeleeHitBox = transform.parent.Find("Punch").GetComponent<BoxCollider2D>();
+
+            //BoxCollider2D MeleeHitBox = transform.parent.Find("Punch").GetComponent<BoxCollider2D>();
             if (m_bActive && trigger == true)
                 Attacking = true; //? needs work
 
 
 
-            if (MeleeHitBox.IsTouchingLayers(1 << 8)) // If Punch Hitbox is touching PLayer layer.
-            {
-                
-                StartCoroutine(AttackDuration());
+            //if (MeleeHitBox.IsTouchingLayers(1 << 8)) // If Punch Hitbox is touching PLayer layer.
+            //{
 
-                //Debug.Log("Punch");
+            //    StartCoroutine(AttackDuration());
 
-                Collider2D[] Overlap = Physics2D.OverlapBoxAll(MeleeHitBox.transform.position, MeleeHitBox.size, MeleeHitBox.transform.eulerAngles.z, 1 << 8); //An Overlap collider with the punch hitbox. There is probably a better way. 
+            //    //Debug.Log("Punch");
 
-                //int TotalCollisions = Overlap.Length;
-                //for (int i = 0; i < TotalCollisions; ++i)
-                //{
-                //    if (Overlap[i].transform.tag == "Player" && Overlap[i].transform != this.transform) // If hit another player
-                //    {
+            //    Collider2D[] Overlap = Physics2D.OverlapBoxAll(MeleeHitBox.transform.position, MeleeHitBox.size, MeleeHitBox.transform.eulerAngles.z, 1 << 8); //An Overlap collider with the punch hitbox. There is probably a better way. 
 
-                //        bool HitPlayerFirst = true;
-                //        RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up, (MeleeHitBox.transform.position.y + MeleeHitBox.size.y), 1 << LayerMask.NameToLayer("Wall"));
-                //        if (hit.collider != null) // If hit a wall, check to see it hits the wall before the player if it does, stop the check here.
-                //        {
-                //            float DistanceToPlayer = Vector3.Distance(transform.position, Overlap[i].transform.position);
-                //            float DistanceToWall = Vector3.Distance(transform.position, hit.point);
-                //            if (DistanceToWall < DistanceToPlayer) // If Hit wall first.
-                //            {
-                //                HitPlayerFirst = false;
-                //                //Debug.Log("HitWallFirst");
-                //            }
-                //            //Debug.Log("HitPlayerFirst");
-                //        }
-                //        if (HitPlayerFirst && Overlap[i].transform.parent)// If wall check returns player first. Punch as normal.
-                //        {
-                //            if (Overlap[i].transform.parent.GetComponentInParent<PlayerStatus>().IsStunned == false)
-                //            {
-                //                PlayerStatus hitPlayer = Overlap[i].transform.parent.GetComponentInParent<PlayerStatus>();
-                //                hitPlayer.StunPlayer(transform.up * KnockBack);
-                //            }
-                //        }
-                //        }
-                //    }
-            }
-                shotReady = false;
+            //int TotalCollisions = Overlap.Length;
+            //for (int i = 0; i < TotalCollisions; ++i)
+            //{
+            //    if (Overlap[i].transform.tag == "Player" && Overlap[i].transform != this.transform) // If hit another player
+            //    {
+
+            //        bool HitPlayerFirst = true;
+            //        RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up, (MeleeHitBox.transform.position.y + MeleeHitBox.size.y), 1 << LayerMask.NameToLayer("Wall"));
+            //        if (hit.collider != null) // If hit a wall, check to see it hits the wall before the player if it does, stop the check here.
+            //        {
+            //            float DistanceToPlayer = Vector3.Distance(transform.position, Overlap[i].transform.position);
+            //            float DistanceToWall = Vector3.Distance(transform.position, hit.point);
+            //            if (DistanceToWall < DistanceToPlayer) // If Hit wall first.
+            //            {
+            //                HitPlayerFirst = false;
+            //                //Debug.Log("HitWallFirst");
+            //            }
+            //            //Debug.Log("HitPlayerFirst");
+            //        }
+            //        if (HitPlayerFirst && Overlap[i].transform.parent)// If wall check returns player first. Punch as normal.
+            //        {
+            //            if (Overlap[i].transform.parent.GetComponentInParent<PlayerStatus>().IsStunned == false)
+            //            {
+            //                PlayerStatus hitPlayer = Overlap[i].transform.parent.GetComponentInParent<PlayerStatus>();
+            //                hitPlayer.StunPlayer(transform.up * KnockBack);
+            //            }
+            //        }
+            //        }
+            //    }
+            StartCoroutine( AttackDuration());
+            shotReady = false;
+            return true;
+           }
+        
+        return false;
+    }
+
             //  RaycastHit2D[] results;
 
 
@@ -123,12 +129,11 @@ public class Melee : Weapon
             //}
 
             //Debug.DrawRay(ray.origin , ray.direction);
-            return true;
-            }
-      */
-        return false;
-      
-        }
+           
+  
+
+        
+     
     IEnumerator AttackDuration()
     {
         yield return new WaitForSeconds(1);
