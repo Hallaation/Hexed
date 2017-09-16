@@ -57,7 +57,7 @@ public class EmptyHand : Weapon
                             PlayerStatus hitPlayer = Overlap[i].GetComponentInParent<PlayerStatus>();
                             if (hitPlayer != this.GetComponent<PlayerStatus>())
                             {
-                              //  hitPlayer.TimesPunched++;
+                                hitPlayer.TimesPunched++;
                                 hitPlayer.MiniStun(this.transform.up * (KnockBack * 1.5f) , PunchFlinchTime);
                                 float tempPitch = (m_bRandomizeHitPitch) ? Random.Range(0.9f , 1.1f) : 1;
                                 hitPlayer.GetComponent<IHitByMelee>().HitByMelee(this , audioClip , m_clipVolume, tempPitch);
