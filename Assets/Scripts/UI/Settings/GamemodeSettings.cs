@@ -25,6 +25,7 @@ public class GamemodeSettings : MonoBehaviour
         _SettingsValue = GetComponentInChildren<Text>();
         StickMovement = new bool[2] { false , false };
         m_ManagerInstance = GameManagerc.Instance;
+
     }
 
     // Update is called once per frame

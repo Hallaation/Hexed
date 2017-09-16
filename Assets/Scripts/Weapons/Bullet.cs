@@ -219,7 +219,7 @@ public class Bullet : MonoBehaviour
     /// <returns></returns>
     IEnumerator PlayParticle(Vector2 HitPoint)
     {
-        Debug.Log("RaySpark");
+
         // if (ParticleSparks != null)
         // {
         //     transform.GetChild(0).localEulerAngles = new Vector3(VChildPrevRotation.x, VChildPrevRotation.y, VChildPrevRotation.z); // parent - 90z

@@ -67,7 +67,7 @@ public class ControllerManager : MonoBehaviour
     void Awake()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
-        mInstance = Instance;
+        //smInstance = Instance;
         //GameObject spawnParent = GameObject.FindGameObjectWithTag("SpawnPoints");
         ////Find the spawn points
         ////Debug.LogError(spawnParent.transform.childCount);
@@ -211,10 +211,10 @@ public class ControllerManager : MonoBehaviour
             }
         }
 
-        if (scene.buildIndex != 0)
-        {
-            FindSpawns();
-        }
+        //if (scene.buildIndex != 0)
+        //{
+        //    FindSpawns();
+        //}
 
         //look for the spawn points
     }

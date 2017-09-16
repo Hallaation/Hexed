@@ -549,7 +549,7 @@ public class Move : MonoBehaviour
                 hitCollider.gameObject.transform.parent.rotation = weapon2HandedMount.rotation; //set its rotation
             }
             Rigidbody2D weaponRigidBody = hitCollider.GetComponentInParent<Rigidbody2D>(); //find its rigidbody in its 
-            Debug.Log(hitCollider.GetComponentInParent<Rigidbody2D>());
+
             //weaponRigidBody.simulated = false; 
             //turn off any of its simulation
             weaponRigidBody.bodyType = RigidbodyType2D.Kinematic;

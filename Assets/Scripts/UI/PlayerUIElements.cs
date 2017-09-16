@@ -87,7 +87,7 @@ public class PlayerUIArray : MonoBehaviour
     }
     void Awake()
     {
-        mInstance = Instance;
+       // mInstance = Instance;
         playerElements = this.GetComponentsInChildren<PlayerUIElements>();
         //Debug.Log(Instance);
 

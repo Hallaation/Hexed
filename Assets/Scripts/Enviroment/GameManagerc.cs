@@ -79,14 +79,14 @@ public class GameManagerc : MonoBehaviour
     private GameObject FinishUIPanel;
     private bool m_bRoundOver;
     public GameObject MapToLoad;
-
+    public bool InstanceCreated;
     public Sprite PointSprite;
-    public GameObject[] PointOrigins;
+    public GameObject[] PointContainers;
     private GameObject PointsPanel;
-
+    private Animator InGameScreenAnimator;
     private bool mbFinishedShowingScores = false;
     private bool mbLoadedIntoGame = false;
-    private bool mbInstanceIsMe = false;
+    public bool mbInstanceIsMe = false;
     private bool mbFinishedPanelShown = false;
     public bool mbMapLoaded = false;
     //Lazy singleton
@@ -107,15 +107,17 @@ public class GameManagerc : MonoBehaviour
                 //set to dont destroy on load
                 DontDestroyOnLoad(mInstance.gameObject);
             }
+
             return mInstance;
         }
     }
     // Use this for initialization
-    void Start()
+    void Awake()
     {
         SingletonTester.Instance.AddSingleton(this);
+        InstanceCreated = true;
         //Find the 
-
+        DontDestroyOnLoad(this.gameObject);
         //DeathmatchTimer = new Timer(m_fTimedDeathMatchTime);
         waitForRoundEnd = new Timer(3);
         mInstance = GameManagerc.Instance;
@@ -127,7 +129,6 @@ public class GameManagerc : MonoBehaviour
         {
             mbInstanceIsMe = true;
             SceneManager.sceneLoaded += OnSceneLoaded;
-
         }
         //Debug.Log(mInstance.gameObject);
         m_bRoundOver = false;
@@ -274,9 +275,11 @@ public class GameManagerc : MonoBehaviour
                 UIManager.Instance.OpenUIElement(FinishUIPanel, true);
                 UIManager.Instance.RemoveLastPanel = false;
                 //Reset the event managers current selected object to the rematch button
-                FindObjectOfType<EventSystem>().SetSelectedGameObject(null);
-                FindObjectOfType<EventSystem>().SetSelectedGameObject(FinishUIPanel.transform.Find("Rematch").gameObject);
-                
+                if (FindObjectOfType<EventSystem>().currentSelectedGameObject == null)
+                {
+                    FindObjectOfType<EventSystem>().SetSelectedGameObject(null);
+                    FindObjectOfType<EventSystem>().SetSelectedGameObject(FinishUIPanel.transform.Find("Rematch").gameObject);
+                }
                 //TODO Load Character select / win screen;
                 //TODO Sort players by score?
             }
@@ -307,9 +310,12 @@ public class GameManagerc : MonoBehaviour
                     UIManager.Instance.OpenUIElement(FinishUIPanel, true);
                     UIManager.Instance.RemoveLastPanel = false;
                     //Reset the event managers current selected object to the rematch button
-                    FindObjectOfType<EventSystem>().SetSelectedGameObject(null);
-                    FindObjectOfType<EventSystem>().SetSelectedGameObject(FinishUIPanel.transform.Find("Main Menu").gameObject);
-                    mbFinishedPanelShown = true;
+                    if (FindObjectOfType<EventSystem>().currentSelectedGameObject == null)
+                    {
+                        FindObjectOfType<EventSystem>().SetSelectedGameObject(null);
+                        FindObjectOfType<EventSystem>().SetSelectedGameObject(FinishUIPanel.transform.Find("Main Menu").gameObject);
+                        mbFinishedPanelShown = true;
+                    }
                     //TODO Load Character select / win screen;
                     //TODO Sort players by score?
                 }
@@ -331,80 +337,68 @@ public class GameManagerc : MonoBehaviour
     {
         //oh fukc
         //check if the instance is this game object
-        if (mbInstanceIsMe)
+
+        //If the map to load isnt null, load it
+        if (scene.buildIndex == 1)
         {
-            //If the map to load isnt null, load it
-            if (scene.buildIndex == 1)
+            UINavigation LoadInstance = UINavigation.Instance;
+            if (MapToLoad)
             {
-                UINavigation LoadInstance = UINavigation.Instance;
-                if (MapToLoad)
-                {
-                    GameObject go = Instantiate(MapToLoad);
-                    go.transform.position = Vector3.zero;
-                    go.transform.DetachChildren();
-                    mbMapLoaded = true;
-                    ControllerManager.Instance.FindSpawns();
-                    CharacterSelectionManager.Instance.LoadPlayers();
-                    //Debug.Log("Loaded map and players");
-                }
-                //If I found the finished game panel
-                if (GameObject.Find("FinishedGamePanel"))
-                {
-                    //Set the UI panel reference to that object
-                    FinishUIPanel = GameObject.Find("FinishedGamePanel");
-                    //set the object buttons delegates
-                    FinishUIPanel.transform.Find("Rematch").GetComponent<Button>().onClick.AddListener(delegate { Rematch(); });
-                    FinishUIPanel.transform.Find("Main Menu").GetComponent<Button>().onClick.AddListener(delegate { GoToStart(); });
-
-                    //turn the children off (so this object can still be found if needed be);
-                    for (int i = 0; i < FinishUIPanel.transform.childCount; ++i)
-                    {
-                        FinishUIPanel.transform.GetChild(i).gameObject.SetActive(false);
-                    }
-
-                }
-                //Find the points panel and populate the array.
-                PointsPanel = GameObject.Find("PointsPanel");
-
-                GameObject temp = GameObject.Find("PointsPanel");
-
-                PointOrigins = new GameObject[temp.transform.childCount];
-
-                for (int i = 0; i < temp.transform.childCount; i++)
-                {
-                    PointOrigins[i] = temp.transform.GetChild(i).transform.Find("PointsOrigin").gameObject;
-                    PointSprite = temp.transform.GetChild(i).transform.Find("PointsOrigin").GetComponent<Image>().sprite;
-                }
-                //  PointsPanel.SetActive(false);
-                //The point UI should now be populated
-                //For every player that is in the game should have a bool for this
-                if (mbLoadedIntoGame)
-                {
-                    //For every player in the game
-                    for (int i = 0; i < InGamePlayers.Count; i++)
-                    {
-                        //Obtain the amount of points they own. For every point they own, make a point sprite to visualize their points.
-                        for (int j = 0; j < PlayerWins[InGamePlayers[i]]; ++j)
-                        {
-                            GameObject go = new GameObject("Point", typeof(RectTransform));
-                            go.AddComponent<CanvasRenderer>();
-                            go.AddComponent<Image>().sprite = PointSprite;
-                            //Get the specific player's point origin and set the newly made point's parent to this
-                            go.transform.SetParent(PointOrigins[XboxControllerPlayerNumbers[InGamePlayers[i].GetComponent<ControllerSetter>().mXboxController]].transform);
-                            //Get the position of the point origin
-                            Vector3 AddPointSpot = PointOrigins[XboxControllerPlayerNumbers[InGamePlayers[i].GetComponent<ControllerSetter>().mXboxController]].transform.position;
-                            //depending on score (j) move the point to an offset based on how many points they have
-                            go.transform.position += new Vector3(AddPointSpot.x + 40 * j, AddPointSpot.y);
-
-                        }
-
-                    }
-
-                }
-                PointsPanel.SetActive(false);
-                mbLoadedIntoGame = true;
+                GameObject go = Instantiate(MapToLoad);
+                go.transform.position = Vector3.zero;
+                go.transform.DetachChildren();
+                mInstance.mbMapLoaded = true;
+                ControllerManager.Instance.FindSpawns();
+                CharacterSelectionManager.Instance.LoadPlayers();
+                //Debug.Log("Loaded map and players");
             }
+            //If I found the finished game panel
+            if (GameObject.Find("FinishedGamePanel"))
+            {
+                //Set the UI panel reference to that object
+                FinishUIPanel = GameObject.Find("FinishedGamePanel");
+                //set the object buttons delegates
+                FinishUIPanel.transform.Find("Rematch").GetComponent<Button>().onClick.AddListener(delegate { Rematch(); });
+                FinishUIPanel.transform.Find("Main Menu").GetComponent<Button>().onClick.AddListener(delegate { GoToStart(); });
+
+                //turn the children off (so this object can still be found if needed be);
+                for (int i = 0; i < FinishUIPanel.transform.childCount; ++i)
+                {
+                    FinishUIPanel.transform.GetChild(i).gameObject.SetActive(false);
+                }
+
+            }
+            //Find the points panel and populate the array.
+            PointsPanel = GameObject.Find("PointsPanel");
+            InGameScreenAnimator = PointsPanel.GetComponentInParent<Animator>();
+
+            //Populate the array
+            PointContainers = new GameObject[PointsPanel.transform.childCount];
+
+            for (int i = 0; i < PointsPanel.transform.childCount; i++)
+            {
+                PointContainers[i] = PointsPanel.transform.GetChild(i).gameObject;
+            }
+
+            //TODO repopulate the point panel.
+
+            foreach (var Player in InGamePlayers) //For every player in the game.
+            {
+                int iPlayerIndex = XboxControllerPlayerNumbers[Player.GetComponent<ControllerSetter>().mXboxController];
+                for (int j = 0; j < PlayerWins[Player]; j++) //For every point the player has.
+                {
+                    if (PlayerWins[Player] > 0)
+                    {
+                        Image temp = PointContainers[iPlayerIndex].transform.GetChild(0 + j).GetComponent<Image>();
+                        PointContainers[iPlayerIndex].transform.GetChild(1 + j).GetComponent<Image>().color = Color.blue;
+                    }
+                }
+            }
+            //PointsPanel.SetActive(false);
+            mInstance.mbLoadedIntoGame = true;
         }
+
+
     }
     /// <summary>
     /// Adds a player to the game, used to check if they're dead or not to determine if the round is over or not.
@@ -419,6 +413,7 @@ public class GameManagerc : MonoBehaviour
 
     public void Rematch()
     {
+        Debug.Log("Start of rematch");
         //reset the time scale
         Time.timeScale = 1;
         //The round is not over
@@ -436,10 +431,10 @@ public class GameManagerc : MonoBehaviour
         // WinningPlayer = null; // still unsued
         m_bRoundOver = false;
         mbFinishedShowingScores = false;
-
         mbFinishedPanelShown = false;
         //reload the current scene
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        Debug.Log("End of rematch after button");
     }
 
     /// <summary>
@@ -457,12 +452,32 @@ public class GameManagerc : MonoBehaviour
         }
         InGamePlayers = new List<PlayerStatus>();
 
-        //turn off all the singletons
+        //Quite literally a deconstrucotr
+        PlayerWins.Clear();
+        PlayerWins = new Dictionary<PlayerStatus, int>();
+        InGamePlayers.Clear();
+        InGamePlayers = new List<PlayerStatus>();
+        m_gameMode = Gamemode_type.LAST_MAN_STANDING_DEATHMATCH;
+        m_iPointsNeeded = 5;
+        mInstance = null;
+        FinishUIPanel = null;
+        m_bRoundOver = false;
+        MapToLoad = null;
+        PointSprite = null;
+        PointContainers = null;
+        PointsPanel = null;
+        InGameScreenAnimator = null;
+        mbFinishedShowingScores = false;
+        mbLoadedIntoGame = false;
+        mbInstanceIsMe = false;
+        mbFinishedPanelShown = false;
+        mbMapLoaded = false;
+
         UIManager.Instance.gameObject.SetActive(false);
         ControllerManager.Instance.gameObject.SetActive(false);
         CharacterSelectionManager.Instance.gameObject.SetActive(false);
         PlayerUIArray.Instance.gameObject.SetActive(false);
-        //GameManagerc.Instance.gameObject.SetActive(false);
+
         UINavigation.Instance.gameObject.SetActive(false);
         //Destroy the singleton objects
 
@@ -470,40 +485,40 @@ public class GameManagerc : MonoBehaviour
         Destroy(UIManager.Instance.gameObject);
         Destroy(ControllerManager.Instance.gameObject);
         Destroy(CharacterSelectionManager.Instance.gameObject);
-        // Destroy(GameManagerc.Instance.gameObject);
         Destroy(UINavigation.Instance.gameObject);
-        //reset the time scale
-        //? Don't know why but the scene loads before all the logic even happens
-        //WTF Scene isn't clearing itself, 
-        StartCoroutine(WaitForSeconds(0.2f));
+        Destroy(this.gameObject);
+        SceneManager.LoadScene(0);
+        //StartCoroutine(WaitForSeconds(0.2f));
     }
 
     IEnumerator WaitForSeconds(float time)
     {
-        yield return new WaitForSecondsRealtime(time);
+        yield return new WaitForEndOfFrame();
         SceneManager.LoadScene(0);
-        GameManagerc.Instance.gameObject.SetActive(false);
-        Destroy(GameManagerc.Instance.gameObject);
     }
 
     IEnumerator AddPointsToPanel(PlayerStatus player)
     {
-        PointsPanel.SetActive(true);
+        //PointsPanel.SetActive(true);
+        InGameScreenAnimator.SetTrigger("ShowScreen");
         mbFinishedShowingScores = false;
-        //now this for loop is not necassary. only need to add new points, hmm. 
 
         GameObject go = new GameObject("Point", typeof(RectTransform));
         go.AddComponent<CanvasRenderer>();
         go.AddComponent<Image>().sprite = PointSprite;
+
         yield return new WaitForSeconds(1);
-        go.transform.SetParent(PointOrigins[XboxControllerPlayerNumbers[player.GetComponent<ControllerSetter>().mXboxController]].transform);
-        //go.transform.position += new Vector3(AddPointSpot.transform.position.x + 40 * tempPoint , AddPointSpot.transform.position.y);
-        Vector3 AddPointSpot = PointOrigins[XboxControllerPlayerNumbers[player.GetComponent<ControllerSetter>().mXboxController]].transform.position;
-        go.transform.position += new Vector3(AddPointSpot.x + 40 * PlayerWins[player], AddPointSpot.y);
+
+        int PlayerIndex = XboxControllerPlayerNumbers[player.GetComponent<ControllerSetter>().mXboxController];
+        PointContainers[PlayerIndex].transform.GetChild(0 + PlayerWins[player]).GetComponent<Image>().color = Color.blue;
+
         yield return new WaitForSeconds(2);
         mbFinishedShowingScores = true;
-        PointsPanel.SetActive(false);
+        InGameScreenAnimator.SetTrigger("RemoveScreen");
+        //PointsPanel.SetActive(false);
 
     }
+
+
 }
 

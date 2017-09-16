@@ -132,7 +132,7 @@ public class Glass : MonoBehaviour, IHitByBullet
     public void HitByBullet(Vector3 a_Vecocity , Vector3 HitPoint)
     {
         Shatter();
-        Debug.Log("Does this ever get called");
+
         //make a temporary array to hold all the shard objects
         GameObject[] shardObjects = new GameObject[Shards.Length];
         //for every shard, instantiate them and set their rotation and velocity.
