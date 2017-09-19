@@ -47,10 +47,13 @@ public class Melee : Weapon
         {
 
             //BoxCollider2D MeleeHitBox = transform.parent.Find("Punch").GetComponent<BoxCollider2D>();
-            if (m_bActive && trigger == true)
+            if (m_bActive && trigger == true && Attacking != true)
+            {
                 Attacking = true; //? needs work
-
-
+                StartCoroutine(AttackDuration());
+                shotReady = false;
+                return true;
+            }
 
             //if (MeleeHitBox.IsTouchingLayers(1 << 8)) // If Punch Hitbox is touching PLayer layer.
             //{
@@ -90,10 +93,8 @@ public class Melee : Weapon
             //        }
             //        }
             //    }
-            StartCoroutine( AttackDuration());
-            shotReady = false;
-            return true;
-           }
+
+        }
         
         return false;
     }
@@ -136,6 +137,7 @@ public class Melee : Weapon
      
     IEnumerator AttackDuration()
     {
+
         yield return new WaitForSeconds(1);
         Attacking = false;
         yield return null;

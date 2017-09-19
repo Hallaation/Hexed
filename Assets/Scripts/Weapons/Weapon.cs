@@ -206,7 +206,7 @@ public class Weapon : MonoBehaviour
     {
         //dropping the weapon will turn the physics back on
         GetComponent<Rigidbody2D>().simulated = true;
-        this.transform.SetParent(null);
+        this.transform.SetParent(null);                                                 //? May be the reason shit fucks up
         GetComponent<Rigidbody2D>().angularVelocity = 50.0f;
         m_AudioSource.PlayOneShot(DropAudioClip , DropAudioVolume);
     }
