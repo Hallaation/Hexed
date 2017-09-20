@@ -36,7 +36,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4602986510283002}
   - component: {fileID: 212669147791985504}
-  - component: {fileID: 58368238400226156}
+  - component: {fileID: 70716801615352004}
   m_Layer: 19
   m_Name: Sprite
   m_TagString: Untagged
@@ -56,7 +56,7 @@ GameObject:
   - component: {fileID: 114373167812934092}
   m_Layer: 12
   m_Name: Weapon_Melee_BaseballBat
-  m_TagString: Untagged
+  m_TagString: 2hMelee
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -69,7 +69,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4801001984860374}
-  - component: {fileID: 58371885467927020}
+  - component: {fileID: 70859122536560076}
   m_Layer: 12
   m_Name: Collider
   m_TagString: Untagged
@@ -152,8 +152,8 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!58 &58368238400226156
-CircleCollider2D:
+--- !u!70 &70716801615352004
+CapsuleCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -163,12 +163,11 @@ CircleCollider2D:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0.43999946, y: -0.0038116276}
-  serializedVersion: 2
-  m_Radius: 0.3
---- !u!58 &58371885467927020
-CircleCollider2D:
+  m_Offset: {x: 0.37, y: -0.0038116276}
+  m_Size: {x: 1.53, y: 0.37}
+  m_Direction: 1
+--- !u!70 &70859122536560076
+CapsuleCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -178,10 +177,9 @@ CircleCollider2D:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 1
+  m_Offset: {x: 0.5, y: 0}
+  m_Size: {x: 1.41, y: 0.44}
+  m_Direction: 1
 --- !u!114 &114373167812934092
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -196,7 +194,7 @@ MonoBehaviour:
   m_HeldSprite: {fileID: 0}
   m_fTimeBetweenShots: 0.01
   m_iDamage: 0
-  m_bAutomaticGun: 0
+  m_bAutomaticGun: 1
   m_bBurstFire: 0
   m_bMeleeWeapon: 1
   m_bGivePlayersIFrames: 0
@@ -255,16 +253,11 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1268030465
-  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300066, guid: b063c0329a4c3ad42a58400a56d129ae, type: 3}
   m_Color: {r: 0.16911763, g: 0.16911763, b: 0.16911763, a: 1}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
 --- !u!212 &212669147791985504
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -295,13 +288,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1853133351
-  m_SortingLayer: 3
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300066, guid: b063c0329a4c3ad42a58400a56d129ae, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
