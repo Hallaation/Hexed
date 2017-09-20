@@ -101,7 +101,7 @@ public class Move : MonoBehaviour
 
         if (transform.Find("Sprites"))
         {
-            Melee2HandedMount = transform.Find("Sprites").Find("2HandedMeleeSpot");
+            Melee2HandedMount = transform.Find("Sprites").GetChild(0).Find("2HandedMeleeSpot");
             if (transform.Find("Sprites").transform.Find("Character001_Feet"))
             {
                 FeetAnimator = transform.Find("Sprites").transform.Find("Character001_Feet").GetComponent<Animator>();
@@ -585,7 +585,7 @@ public class Move : MonoBehaviour
                 heldWeapon.transform.Find("Sprite").GetComponent<SpriteRenderer>().sortingOrder = 4; //? Puts gun layer infront of player layer when picked up. 
                 heldWeapon.transform.Find("Shadow").transform.localPosition = new Vector3(0, 0, 0); //! Resets Shadow on pickup.
                 heldWeapon.GetComponent<Weapon>().PlayPickup();
-                heldWeapon.transform.SetParent(this.gameObject.transform.Find("Sprites").Find("2HandedMeleeSpot"));
+                heldWeapon.transform.SetParent(this.gameObject.transform.Find("Sprites").GetChild(0).Find("2HandedMeleeSpot"));
                 //! if the weapon isn't a 2 handed weapon, mount it to the 1 handed location
                 if (!hitCollider.transform.parent.gameObject.GetComponent<Weapon>().m_b2Handed)
                 {
