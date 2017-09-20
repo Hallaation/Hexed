@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: b063c0329a4c3ad42a58400a56d129ae
-timeCreated: 1505347471
-licenseType: Pro
+timeCreated: 1505908681
+licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
     21300000: Weapon_Sprites_Pistol_01_Side_01
@@ -40,6 +40,10 @@ TextureImporter:
     21300066: Weapon_Sprites_BaseballBat_Side_001
     21300068: Weapon_Sprites_ElectricBat_Side_001
     21300070: Weapon_Sprites_Knife_Side_001
+    21300072: Weapon_Sprites_Pistol_01_Bullet
+    21300074: Weapon_Sprites_AssaultAutomatic_01_Bullet
+    21300076: Weapon_Sprites_AssaultBurst_01_Bullet
+    21300078: Weapon_Sprites_Shotgun_01_Bullet
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -202,8 +206,8 @@ TextureImporter:
         y: 3600
         width: 200
         height: 200
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.45960662, y: 0.5011536}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -211,12 +215,12 @@ TextureImporter:
       name: Weapon_Sprites_AutomaticBurst_01_Top_01
       rect:
         serializedVersion: 2
-        x: 401
-        y: 3601
+        x: 400
+        y: 3600
         width: 200
         height: 200
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.4815216, y: 0.49445802}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -228,8 +232,8 @@ TextureImporter:
         y: 3600
         width: 200
         height: 200
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5240219, y: 0.5000012}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -269,6 +273,58 @@ TextureImporter:
         height: 200
       alignment: 9
       pivot: {x: 0.4, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Weapon_Sprites_Pistol_01_Bullet
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 3401
+        width: 200
+        height: 200
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Weapon_Sprites_AssaultAutomatic_01_Bullet
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 3400
+        width: 200
+        height: 200
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Weapon_Sprites_AssaultBurst_01_Bullet
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 3400
+        width: 200
+        height: 200
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Weapon_Sprites_Shotgun_01_Bullet
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 3400
+        width: 200
+        height: 200
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
