@@ -770,6 +770,7 @@ MonoBehaviour:
   m_iDamage: 0
   m_bAutomaticGun: 0
   m_bBurstFire: 0
+  m_bMeleeWeapon: 0
   m_bGivePlayersIFrames: 0
   m_b2Handed: 0
   KnockBack: 5
@@ -780,14 +781,19 @@ MonoBehaviour:
   previousOwner: {fileID: 0}
   m_bMoveWeaponSpriteUp: 0
   m_AudioClip: {fileID: 8300000, guid: bacff683bb48a44458156a524c965eb9, type: 3}
+  m_bRandomizePitch: 1
   clipVolume: 0.6
   PickupAudio: {fileID: 0}
   pickupVolume: 1
   DropAudioClip: {fileID: 0}
   DropAudioVolume: 1
+  ThrowAudioClip: {fileID: 0}
+  ThrowAudioVolume: 1
   ThrowHitAudio: {fileID: 0}
+  m_bRandomizeThrowHitPitch: 1
   ThrowHitAudioVolume: 1
   audioClip: {fileID: 8300000, guid: 15751d19a0e4c2441ab8cbfbb21c4348, type: 3}
+  m_bRandomizeHitPitch: 1
   m_clipVolume: 0.6
   PunchFlinchTime: 0.3
 --- !u!114 &114504531806896794
@@ -831,6 +837,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_audioClip: {fileID: 8300000, guid: 4b888a7f968ac134c8739ec4a23a7eee, type: 3}
+  m_bRandomizePitch: 0
   clipVolume: 1
 --- !u!114 &114790615142462568
 MonoBehaviour:
@@ -1077,7 +1084,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
-  m_SortingOrder: 3
+  m_SortingOrder: 4
   m_Sprite: {fileID: 21300000, guid: 41d3dad8bba4e174e8b80cce222ff08e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
