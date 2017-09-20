@@ -60,8 +60,8 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
 
         stunBarContainer = new GameObject("StunBarContainer");
 
-        stunBar = transform.Find("Sprites").Find("Stunbar").GetComponent<SpriteRenderer>();
-        stunMask = transform.Find("Sprites").Find("StunbarMask").GetComponent<SpriteRenderer>();
+        stunBar = transform.Find("Sprites").Find("StunBarContainer").Find("StunBar").GetComponent<SpriteRenderer>();
+        stunMask = transform.Find("Sprites").Find("StunBarContainer").Find("StunBarMask").GetComponent<SpriteRenderer>();
 
         stunBarContainer.transform.SetParent(transform.Find("Sprites"));
 

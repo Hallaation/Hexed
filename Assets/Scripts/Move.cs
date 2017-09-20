@@ -35,6 +35,7 @@ public class Move : MonoBehaviour
     protected Animator BodyAnimator; public Animator GetBodyAnimator() { return BodyAnimator; }
     public Transform weapon1HandedMount;
     public Transform weapon2HandedMount;
+    public Transform Melee2HandedMount;
     public GameObject fistObject;
     public float movementSpeed = 10.0f;
     public float throwingForce = 100.0f;
@@ -96,9 +97,11 @@ public class Move : MonoBehaviour
 
         weapon1HandedMount = transform.Find("1HandedSpot");
         weapon2HandedMount = transform.Find("2HandedSpot");
+      
 
         if (transform.Find("Sprites"))
         {
+            Melee2HandedMount = transform.Find("Sprites").GetChild(0).Find("2HandedMeleeSpot");
             if (transform.Find("Sprites").transform.Find("Character001_Feet"))
             {
                 FeetAnimator = transform.Find("Sprites").transform.Find("Character001_Feet").GetComponent<Animator>();
@@ -582,17 +585,17 @@ public class Move : MonoBehaviour
                 heldWeapon.transform.Find("Sprite").GetComponent<SpriteRenderer>().sortingOrder = 4; //? Puts gun layer infront of player layer when picked up. 
                 heldWeapon.transform.Find("Shadow").transform.localPosition = new Vector3(0, 0, 0); //! Resets Shadow on pickup.
                 heldWeapon.GetComponent<Weapon>().PlayPickup();
-                heldWeapon.transform.parent.SetParent(this.gameObject.transform);
+                heldWeapon.transform.SetParent(this.gameObject.transform.Find("Sprites").GetChild(0).Find("2HandedMeleeSpot"));
                 //! if the weapon isn't a 2 handed weapon, mount it to the 1 handed location
                 if (!hitCollider.transform.parent.gameObject.GetComponent<Weapon>().m_b2Handed)
-                {   
-                    hitCollider.gameObject.transform.parent.parent.position = weapon1HandedMount.position; //set position to the weapon mount spot
-                    hitCollider.gameObject.transform.parent.parent.rotation = weapon1HandedMount.rotation; //set its rotation
+                {
+                    hitCollider.gameObject.transform.parent.position = Melee2HandedMount.position; //set position to the weapon mount spot
+                    hitCollider.gameObject.transform.parent.rotation = Melee2HandedMount.rotation; //set its rotation
                 }
                 else //! mount it to the 2handed mounting position
                 {
-                    hitCollider.gameObject.transform.parent.parent.position = weapon2HandedMount.position; //set position to the weapon mount spot
-                    hitCollider.gameObject.transform.parent.parent.rotation = weapon2HandedMount.rotation; //set its rotation
+                    hitCollider.gameObject.transform.parent.position = Melee2HandedMount.position; //set position to the weapon mount spot
+                    hitCollider.gameObject.transform.parent.rotation = Melee2HandedMount.rotation; //set its rotation
                 }
                 Rigidbody2D weaponRigidBody = hitCollider.GetComponentInParent<Rigidbody2D>(); //find its rigidbody in its 
 
@@ -627,6 +630,7 @@ public class Move : MonoBehaviour
                 }
                 vibrationValue.y = 0.5f; //vibrate controller for haptic feedback
             }
+        
         }
       else  if (hitCollider.GetComponentInParent<Weapon>())
         {
