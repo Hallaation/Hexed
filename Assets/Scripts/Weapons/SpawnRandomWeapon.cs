@@ -14,13 +14,14 @@ public class SpawnRandomWeapon : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        weaponSpawnTimer = new Timer(SpawnTime);
+        weaponSpawnTimer = new Timer(0);
         SpawnARandomWepaon();
     }
 
     // Update is called once per frame
     void Update()
     {
+        Debug.Log(m_bCanSpawnGun);
         //If i want to spawn more guns
         if (ContinuallySpawnWeapons && m_bCanSpawnGun)
         {
@@ -41,20 +42,27 @@ public class SpawnRandomWeapon : MonoBehaviour
         {
             Collider2D[] Colliders = Physics2D.OverlapCircleAll(this.transform.position , 1.0f);
             //Loop through all the colliders, if any of them are a weapon, I cannot spawn a gun, break out of the loop .
-            foreach (Collider2D item in Colliders)
+            if (Colliders.Length > 0)
             {
-                if (item.GetComponentInParent<Weapon>())
+                foreach (Collider2D item in Colliders)
                 {
-                    m_bCanSpawnGun = false;
-                    break;
-                }
-                else
-                {
-                    m_bCanSpawnGun = true;
-                    break;
+                    Debug.Log(item);
+                    if (item.GetComponentInParent<Weapon>())
+                    {
+                        m_bCanSpawnGun = false;
+                        break;
+                    }
+                    else
+                    {
+                        m_bCanSpawnGun = true;
+                        break;
+                    }
                 }
             }
-
+            else
+            {
+                m_bCanSpawnGun = true;
+            }
         }
     }
 

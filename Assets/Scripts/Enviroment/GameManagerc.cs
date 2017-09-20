@@ -87,8 +87,11 @@ public class GameManagerc : MonoBehaviour
     private bool mbFinishedShowingScores = false;
     private bool mbLoadedIntoGame = false;
     public bool mbInstanceIsMe = false;
-    private bool mbFinishedPanelShown = false;
     public bool mbMapLoaded = false;
+    private bool mbFinishedPanelShown = false;
+
+    public int m_iPointsIndex = 0;
+    GameObject[] PointXPositions;
     //Lazy singleton
     public static GameManagerc Instance
     {
@@ -342,6 +345,7 @@ public class GameManagerc : MonoBehaviour
         if (scene.buildIndex == 1)
         {
             UINavigation LoadInstance = UINavigation.Instance;
+
             if (MapToLoad)
             {
                 GameObject go = Instantiate(MapToLoad);
@@ -350,6 +354,7 @@ public class GameManagerc : MonoBehaviour
                 mInstance.mbMapLoaded = true;
                 ControllerManager.Instance.FindSpawns();
                 CharacterSelectionManager.Instance.LoadPlayers();
+                
                 //Debug.Log("Loaded map and players");
             }
             //If I found the finished game panel
@@ -372,16 +377,51 @@ public class GameManagerc : MonoBehaviour
             PointsPanel = GameObject.Find("PointsPanel");
             InGameScreenAnimator = PointsPanel.GetComponentInParent<Animator>();
 
+            PointXPositions = new GameObject[GameObject.Find("PointXPositions").transform.childCount];
+            for (int i = 0; i < PointXPositions.Length; i++)
+            {
+                PointXPositions[i] = GameObject.Find("PointXPositions").transform.GetChild(i).gameObject;
+            }
+
             //Populate the array
             PointContainers = new GameObject[PointsPanel.transform.childCount];
 
+            //Move the point containers depending on how many points are required.
             for (int i = 0; i < PointsPanel.transform.childCount; i++)
             {
                 PointContainers[i] = PointsPanel.transform.GetChild(i).gameObject;
+                Vector3 temp = PointContainers[i].transform.position;
+                //Get the last object in container (portrait)
+                PointContainers[i].transform.position = new Vector3(PointXPositions[m_iPointsIndex].transform.position.x , temp.y , temp.z);
+
+                //For every object after the points neeeded, turn them off since their not required.
+                for (int j = m_iPointsNeeded; j < PointContainers[i].transform.childCount - 1; j++)
+                {
+                    PointContainers[i].transform.GetChild(j).gameObject.SetActive(false);
+                }
+
+                PointContainers[i].SetActive(false);
             }
 
-            //TODO repopulate the point panel.
+            //can also be used for the amount of players in the scene.
+            XboxController[] JoinedXboxControllers = new XboxController[CharacterSelectionManager.Instance.playerSelectedCharacter.Count];
+            int nextIndex = 0;
+            for (int i = 0; i < XCI.GetNumPluggedCtrlrs(); i++)
+            {
+                if (CharacterSelectionManager.Instance.playerSelectedCharacter.ContainsKey(XboxController.First + i))
+                {
+                    JoinedXboxControllers[nextIndex] = XboxController.First + i;
+                    nextIndex++;
+                }
+            }
+            //Turn every player's UI on.
+            foreach (var item in JoinedXboxControllers)
+            {
+                PointContainers[(int)item - 1].SetActive(true);
+            }
 
+
+            //TODO Do some y offset math for different number of players
             foreach (var Player in InGamePlayers) //For every player in the game.
             {
                 int iPlayerIndex = XboxControllerPlayerNumbers[Player.GetComponent<ControllerSetter>().mXboxController];
@@ -389,8 +429,8 @@ public class GameManagerc : MonoBehaviour
                 {
                     if (PlayerWins[Player] > 0)
                     {
-                        Image temp = PointContainers[iPlayerIndex].transform.GetChild(0 + j).GetComponent<Image>();
-                        PointContainers[iPlayerIndex].transform.GetChild(1 + j).GetComponent<Image>().color = Color.blue;
+                        Image temp = PointContainers[iPlayerIndex].transform.GetChild(j).GetComponent<Image>();
+                        PointContainers[iPlayerIndex].transform.GetChild(j).GetComponent<Image>().color = Color.blue;
                     }
                 }
             }
@@ -510,7 +550,7 @@ public class GameManagerc : MonoBehaviour
         yield return new WaitForSeconds(1);
 
         int PlayerIndex = XboxControllerPlayerNumbers[player.GetComponent<ControllerSetter>().mXboxController];
-        PointContainers[PlayerIndex].transform.GetChild(0 + PlayerWins[player]).GetComponent<Image>().color = Color.blue;
+        PointContainers[PlayerIndex].transform.GetChild(PlayerWins[player] - 1).GetComponent<Image>().color = Color.blue;
 
         yield return new WaitForSeconds(2);
         mbFinishedShowingScores = true;

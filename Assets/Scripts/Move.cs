@@ -17,7 +17,7 @@ using UnityEngine.SceneManagement;
 public class Move : MonoBehaviour
 {
     ControllerSetter m_controller;
-    CharacterController _characterController;
+   // CharacterController _characterController;
     bool PlayerIsActive = true; public bool getActive() { return PlayerIsActive; }
     public void SetActive(bool a_PlayerActive) { PlayerIsActive = a_PlayerActive; }
     PlayerStatus m_status;
@@ -73,6 +73,7 @@ public class Move : MonoBehaviour
         m_audioSource = new AudioSource[16];
         AudioSourcePool = new GameObject("AudioSources");
         AudioSourcePool.transform.SetParent(this.transform);
+        AudioSourcePool.transform.localPosition = Vector3.zero;
 
         for (int i = 0; i < m_audioSource.Length; ++i)
         {
@@ -260,11 +261,11 @@ public class Move : MonoBehaviour
             vibrationValue = Vector2.zero;
         }
 
-        if (_characterController)
-        {
-            Vector3 gravity = new Vector3(0 , -9.8f , 0);
-            _characterController.Move(gravity * (1 - Time.fixedDeltaTime * 0.5f));
-        }
+        //if (_characterController)
+        //{
+        //    Vector3 gravity = new Vector3(0 , -9.8f , 0);
+        //    _characterController.Move(gravity * (1 - Time.fixedDeltaTime * 0.5f));
+        //}
     }
 
     void Special()
@@ -367,7 +368,7 @@ public class Move : MonoBehaviour
             }
         }
 
-        if (!_characterController && !m_status.IsStunned)
+        if (!m_status.IsStunned)
         {
             //this.transform.position += movement * movementSpeed * Time.deltaTime;
             //_rigidBody.AddForce(movement * movementSpeed * Time.deltaTime , ForceMode2D.Impulse);
