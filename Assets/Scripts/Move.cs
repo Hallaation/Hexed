@@ -396,8 +396,11 @@ public class Move : MonoBehaviour
             //drop the weapon 
             heldWeapon.transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = 0; //? Puts gun layer behinde player layer when it's dropped. 
             //Determine what type of gun im holding
-            Vector3 GunMountPosition = (!heldWeapon.GetComponent<Weapon>().m_b2Handed) ?/*True*/ weapon1HandedMount.position : /*False*/weapon2HandedMount.position; 
-
+            Vector3 GunMountPosition = (!heldWeapon.GetComponent<Weapon>().m_b2Handed) ?/*True*/ weapon1HandedMount.position : /*False*/weapon2HandedMount.position;
+            if (heldWeapon.GetComponent<Weapon>().m_bMeleeWeapon == true)
+            {
+                heldWeapon.GetComponent<Melee>().Attacking = false;
+            }
             if (/*movement.magnitude == 0 ||*/ !tossWeapon)
             {
                 //Raycast from me to the gun mount position + an arbitrary number. IF I hit something, snap the gun to behind the wall
@@ -407,10 +410,7 @@ public class Move : MonoBehaviour
                     heldWeapon.transform.position = hit.point + (hit.normal * 0.4f);
                 }
                 Debug.DrawRay(this.transform.position , throwDirection * (this.transform.position - GunMountPosition).magnitude , Color.yellow , 5);
-                if(heldWeapon.GetComponent<Weapon>().m_bMeleeWeapon == true)
-                {
-                    heldWeapon.GetComponent<Melee>().Attacking = false;
-                }
+
                 heldWeapon.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
                 heldWeapon.transform.Find("Sprite").GetComponent<Collider2D>().enabled = true;
                 //drop the weapon. magic number 2.
@@ -418,7 +418,7 @@ public class Move : MonoBehaviour
                 heldWeapon.GetComponent<Weapon>().previousOwner = this.gameObject;
                 //heldWeapon.transform.Find("Sprite").GetComponent<Collider2D>().enabled = false;
                 m_bHoldingWeapon = false;
-
+               
                 heldWeapon = null;
                 if (BodyAnimator != null)
                     SetHoldingGun(0);

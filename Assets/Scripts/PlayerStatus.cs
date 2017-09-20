@@ -271,6 +271,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         _rigidbody.velocity = ThrownItemVelocity;
         m_bStunned = true;
         m_iTimesPunched = 0;
+
     }
     /// <summary>
     /// Used for knocking a player back without stunning them.

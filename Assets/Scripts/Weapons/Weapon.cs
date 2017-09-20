@@ -128,7 +128,7 @@ public class Weapon : MonoBehaviour
 
 
                     //move the weapon sprite up by the amount specified by ShadowGrowthSpeed
-                    weaponSpriteTransform.localPosition += new Vector3(0, Time.deltaTime * ShadowGrowthSpeed, 0);
+                    weaponSpriteTransform.localPosition += new Vector3(0, 0, Time.deltaTime * ShadowGrowthSpeed);
                     //once I have reached the maximum allowed
                     if (weaponSpriteTransform.localPosition.y >= MaxShadow)
                     {

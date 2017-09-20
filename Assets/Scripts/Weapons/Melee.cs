@@ -25,17 +25,19 @@ public class Melee : Weapon
    void OnTriggerEnter2D(Collider2D other)
     {
 
-        if (Attacking && other.tag == "Player")
+        if (Attacking && other.tag == "Player" && other.transform.root != this.transform.root)
         {
             other.transform.parent.GetComponentInParent<PlayerStatus>().StunPlayer(transform.right * KnockBack);        //! Uses transform right instead of transform up due to using the bats right rather then players up
+
             Debug.Log("BatEnterStun");
         }
     }
     void OnTriggerStay2D(Collider2D other)
     {
-        if (Attacking && other.tag == "Player")
+        if (Attacking && other.tag == "Player" && other.transform.root != this.transform.root)
         {
             other.transform.parent.GetComponentInParent<PlayerStatus>().StunPlayer(transform.right * KnockBack);        //! Uses transform right instead of transform up due to using the bats right rather then players up
+            other.transform.parent.GetComponentInParent<Move>().StatusApplied();
             Debug.Log("BatStayStun");
         }
     }
