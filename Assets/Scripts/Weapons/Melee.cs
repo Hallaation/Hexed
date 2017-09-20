@@ -25,17 +25,19 @@ public class Melee : Weapon
    void OnTriggerEnter2D(Collider2D other)
     {
 
-        if (Attacking && other.tag == "Player")
+        if (Attacking && other.tag == "Player" && other.transform.root != this.transform.root)
         {
             other.transform.parent.GetComponentInParent<PlayerStatus>().StunPlayer(transform.right * KnockBack);        //! Uses transform right instead of transform up due to using the bats right rather then players up
+
             Debug.Log("BatEnterStun");
         }
     }
     void OnTriggerStay2D(Collider2D other)
     {
-        if (Attacking && other.tag == "Player")
+        if (Attacking && other.tag == "Player" && other.transform.root != this.transform.root)
         {
             other.transform.parent.GetComponentInParent<PlayerStatus>().StunPlayer(transform.right * KnockBack);        //! Uses transform right instead of transform up due to using the bats right rather then players up
+            other.transform.parent.GetComponentInParent<Move>().StatusApplied();
             Debug.Log("BatStayStun");
         }
     }
@@ -47,10 +49,13 @@ public class Melee : Weapon
         {
 
             //BoxCollider2D MeleeHitBox = transform.parent.Find("Punch").GetComponent<BoxCollider2D>();
-            if (m_bActive && trigger == true)
+            if (m_bActive && trigger == true && Attacking != true)
+            {
                 Attacking = true; //? needs work
-
-
+                StartCoroutine(AttackDuration());
+                shotReady = false;
+                return true;
+            }
 
             //if (MeleeHitBox.IsTouchingLayers(1 << 8)) // If Punch Hitbox is touching PLayer layer.
             //{
@@ -90,10 +95,8 @@ public class Melee : Weapon
             //        }
             //        }
             //    }
-            StartCoroutine( AttackDuration());
-            shotReady = false;
-            return true;
-           }
+
+        }
         
         return false;
     }
@@ -136,6 +139,7 @@ public class Melee : Weapon
      
     IEnumerator AttackDuration()
     {
+
         yield return new WaitForSeconds(1);
         Attacking = false;
         yield return null;

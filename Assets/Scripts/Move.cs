@@ -17,7 +17,7 @@ using UnityEngine.SceneManagement;
 public class Move : MonoBehaviour
 {
     ControllerSetter m_controller;
-    CharacterController _characterController;
+   // CharacterController _characterController;
     bool PlayerIsActive = true; public bool getActive() { return PlayerIsActive; }
     public void SetActive(bool a_PlayerActive) { PlayerIsActive = a_PlayerActive; }
     PlayerStatus m_status;
@@ -35,6 +35,7 @@ public class Move : MonoBehaviour
     protected Animator BodyAnimator; public Animator GetBodyAnimator() { return BodyAnimator; }
     public Transform weapon1HandedMount;
     public Transform weapon2HandedMount;
+    public Transform Melee2HandedMount;
     public GameObject fistObject;
     public float movementSpeed = 10.0f;
     public float throwingForce = 100.0f;
@@ -72,6 +73,7 @@ public class Move : MonoBehaviour
         m_audioSource = new AudioSource[16];
         AudioSourcePool = new GameObject("AudioSources");
         AudioSourcePool.transform.SetParent(this.transform);
+        AudioSourcePool.transform.localPosition = Vector3.zero;
 
         for (int i = 0; i < m_audioSource.Length; ++i)
         {
@@ -96,9 +98,11 @@ public class Move : MonoBehaviour
 
         weapon1HandedMount = transform.Find("1HandedSpot");
         weapon2HandedMount = transform.Find("2HandedSpot");
+      
 
         if (transform.Find("Sprites"))
         {
+            Melee2HandedMount = transform.Find("Sprites").GetChild(0).Find("2HandedMeleeSpot");
             if (transform.Find("Sprites").transform.Find("Character001_Feet"))
             {
                 FeetAnimator = transform.Find("Sprites").transform.Find("Character001_Feet").GetComponent<Animator>();
@@ -257,11 +261,11 @@ public class Move : MonoBehaviour
             vibrationValue = Vector2.zero;
         }
 
-        if (_characterController)
-        {
-            Vector3 gravity = new Vector3(0 , -9.8f , 0);
-            _characterController.Move(gravity * (1 - Time.fixedDeltaTime * 0.5f));
-        }
+        //if (_characterController)
+        //{
+        //    Vector3 gravity = new Vector3(0 , -9.8f , 0);
+        //    _characterController.Move(gravity * (1 - Time.fixedDeltaTime * 0.5f));
+        //}
     }
 
     void Special()
@@ -364,7 +368,7 @@ public class Move : MonoBehaviour
             }
         }
 
-        if (!_characterController && !m_status.IsStunned)
+        if (!m_status.IsStunned)
         {
             //this.transform.position += movement * movementSpeed * Time.deltaTime;
             //_rigidBody.AddForce(movement * movementSpeed * Time.deltaTime , ForceMode2D.Impulse);
@@ -393,8 +397,11 @@ public class Move : MonoBehaviour
             //drop the weapon 
             heldWeapon.transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = 0; //? Puts gun layer behinde player layer when it's dropped. 
             //Determine what type of gun im holding
-            Vector3 GunMountPosition = (!heldWeapon.GetComponent<Weapon>().m_b2Handed) ?/*True*/ weapon1HandedMount.position : /*False*/weapon2HandedMount.position; 
-
+            Vector3 GunMountPosition = (!heldWeapon.GetComponent<Weapon>().m_b2Handed) ?/*True*/ weapon1HandedMount.position : /*False*/weapon2HandedMount.position;
+            if (heldWeapon.GetComponent<Weapon>().m_bMeleeWeapon == true)
+            {
+                heldWeapon.GetComponent<Melee>().Attacking = false;
+            }
             if (/*movement.magnitude == 0 ||*/ !tossWeapon)
             {
                 //Raycast from me to the gun mount position + an arbitrary number. IF I hit something, snap the gun to behind the wall
@@ -404,10 +411,7 @@ public class Move : MonoBehaviour
                     heldWeapon.transform.position = hit.point + (hit.normal * 0.4f);
                 }
                 Debug.DrawRay(this.transform.position , throwDirection * (this.transform.position - GunMountPosition).magnitude , Color.yellow , 5);
-                if(heldWeapon.GetComponent<Weapon>().m_bMeleeWeapon == true)
-                {
-                    heldWeapon.GetComponent<Melee>().Attacking = false;
-                }
+
                 heldWeapon.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
                 heldWeapon.transform.Find("Sprite").GetComponent<Collider2D>().enabled = true;
                 //drop the weapon. magic number 2.
@@ -415,7 +419,7 @@ public class Move : MonoBehaviour
                 heldWeapon.GetComponent<Weapon>().previousOwner = this.gameObject;
                 //heldWeapon.transform.Find("Sprite").GetComponent<Collider2D>().enabled = false;
                 m_bHoldingWeapon = false;
-
+               
                 heldWeapon = null;
                 if (BodyAnimator != null)
                     SetHoldingGun(0);
@@ -478,10 +482,28 @@ public class Move : MonoBehaviour
             {
                 if (WeaponCollider.GetComponentInParent<Weapon>().gameObject != previousWeapon)
                 {
-                    weaponToPickUp = WeaponCollider;
-                    break;
+                    //if (WeaponCollider.transform.parent.tag == "2hMelee")
+                    //{
+                    //    weaponToPickUp = WeaponCollider;
+                    //    break;
+                    //}
+                  
+                 
+                        weaponToPickUp = WeaponCollider;
+                        break;
+                    
                 }
             }
+            else if (WeaponCollider.transform.parent.GetComponentInParent<Weapon>())
+            {
+                if (WeaponCollider.transform.parent.GetComponentInParent<Weapon>().gameObject != previousWeapon)
+                {
+                    weaponToPickUp = WeaponCollider;
+                    break;
+
+                }
+            }
+           
             else if (WeaponCollider.GetComponentInChildren<Weapon>())//! Null Check
             {
                 if (WeaponCollider.GetComponentInChildren<Weapon>().gameObject != previousWeapon)
@@ -501,7 +523,7 @@ public class Move : MonoBehaviour
         if (heldWeapon)
         {
 
-            ThrowWeapon(stickMovement , throwingDirection , tossWeapon);
+            ThrowWeapon(stickMovement , throwingDirection , tossWeapon);                                                 //? ??????????????????
 
         }
 
@@ -522,6 +544,11 @@ public class Move : MonoBehaviour
             {
                 if (weaponToPickUp.GetComponentInParent<Weapon>().transform.parent == null)
                 {
+                    PickupWeapon(weaponToPickUp);                                                                        //? ???????????????????
+                    return true;
+                }
+                else if(weaponToPickUp.transform.parent.GetComponentInParent<Weapon>().transform.parent.parent == null)
+                {
                     PickupWeapon(weaponToPickUp);
                     return true;
                 }
@@ -529,6 +556,11 @@ public class Move : MonoBehaviour
             else if (hitPoint.transform.GetComponentInParent<Weapon>())
             {
                 if (weaponToPickUp.GetComponentInParent<Weapon>().transform.parent == null)
+                {
+                    PickupWeapon(weaponToPickUp);
+                    return true;
+                }
+                else if (weaponToPickUp.transform.parent.GetComponentInParent<Weapon>().transform.parent.parent == null)
                 {
                     PickupWeapon(weaponToPickUp);
                     return true;
@@ -546,58 +578,115 @@ public class Move : MonoBehaviour
 
     void PickupWeapon(Collider2D hitCollider)
     {
-        if (hitCollider.GetComponentInParent<Weapon>().previousOwner != this.gameObject)
+        if(hitCollider.GetComponentInParent<Weapon>() && hitCollider.transform.parent.tag == "2hMelee")
         {
-            heldWeapon = hitCollider.GetComponentInParent<Weapon>().gameObject;
-            heldWeapon.transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = 4; //? Puts gun layer infront of player layer when picked up. 
-            heldWeapon.transform.GetChild(0).transform.localPosition = new Vector3(0 , 0 , 0); //! Resets Shadow on pickup.
-            heldWeapon.GetComponent<Weapon>().PlayPickup();
-            heldWeapon.transform.SetParent(this.gameObject.transform);
-            //! if the weapon isn't a 2 handed weapon, mount it to the 1 handed location
-            if (!hitCollider.transform.parent.gameObject.GetComponent<Weapon>().m_b2Handed)
+            if (hitCollider.GetComponentInParent<Weapon>().previousOwner != this.gameObject)
             {
-                hitCollider.gameObject.transform.parent.position = weapon1HandedMount.position; //set position to the weapon mount spot
-                hitCollider.gameObject.transform.parent.rotation = weapon1HandedMount.rotation; //set its rotation
-            }
-            else //! mount it to the 2handed mounting position
-            {
-                hitCollider.gameObject.transform.parent.position = weapon2HandedMount.position; //set position to the weapon mount spot
-                hitCollider.gameObject.transform.parent.rotation = weapon2HandedMount.rotation; //set its rotation
-            }
-            Rigidbody2D weaponRigidBody = hitCollider.GetComponentInParent<Rigidbody2D>(); //find its rigidbody in its 
-
-            //weaponRigidBody.simulated = false; 
-            //turn off any of its simulation
-            weaponRigidBody.bodyType = RigidbodyType2D.Kinematic;
-            weaponRigidBody.transform.Find("Sprite").GetComponent<Collider2D>().enabled = false;
-            //weaponRigidBody.simulated = false;
-            weaponRigidBody.velocity = Vector2.zero; //set any velocity to nothing
-            weaponRigidBody.angularVelocity = 0.0f; //set any angular velocity to nothing
-            weaponRigidBody.transform.Find("Sprite").GetComponent<Collider2D>().enabled = false;
-            previousWeapon = heldWeapon;
-            m_bHoldingWeapon = true;
-            SetHoldingGun(0); //? Probably un-necessary
-            if (BodyAnimator != null)
-            {
-                switch (heldWeapon.tag)
+                heldWeapon = hitCollider.transform.parent.GetComponentInParent<Weapon>().gameObject;
+                heldWeapon.transform.Find("Sprite").GetComponent<SpriteRenderer>().sortingOrder = 4; //? Puts gun layer infront of player layer when picked up. 
+                heldWeapon.transform.Find("Sprite").transform.localPosition = new Vector3(0, 0, 0); //! Resets Shadow on pickup.
+                heldWeapon.GetComponent<Weapon>().PlayPickup();
+                heldWeapon.transform.SetParent(this.gameObject.transform.Find("Sprites").GetChild(0).Find("2HandedMeleeSpot"));
+                //! if the weapon isn't a 2 handed weapon, mount it to the 1 handed location
+                if (!hitCollider.transform.parent.gameObject.GetComponent<Weapon>().m_b2Handed)
                 {
-                    case "1hMelee":
-                        SetHoldingMelee(1);
-                        break;
-                    case "2hMelee":
-                        SetHoldingMelee(2);
-                        break;
-                    case "OneHanded":
-                        SetHoldingGun(1);
-                        break;
-                    default:
-                        SetHoldingGun(2);
-                        break;
+                    hitCollider.gameObject.transform.parent.position = Melee2HandedMount.position; //set position to the weapon mount spot
+                    hitCollider.gameObject.transform.parent.rotation = Melee2HandedMount.rotation; //set its rotation
                 }
-            }
-            vibrationValue.y = 0.5f; //vibrate controller for haptic feedback
-        }
+                else //! mount it to the 2handed mounting position
+                {
+                    hitCollider.gameObject.transform.parent.position = Melee2HandedMount.position; //set position to the weapon mount spot
+                    hitCollider.gameObject.transform.parent.rotation = Melee2HandedMount.rotation; //set its rotation
+                }
+                Rigidbody2D weaponRigidBody = hitCollider.GetComponentInParent<Rigidbody2D>(); //find its rigidbody in its 
 
+                //weaponRigidBody.simulated = false; 
+                //turn off any of its simulation
+                weaponRigidBody.bodyType = RigidbodyType2D.Kinematic;
+                weaponRigidBody.transform.Find("Sprite").GetComponent<Collider2D>().enabled = false;
+                //weaponRigidBody.simulated = false;
+                weaponRigidBody.velocity = Vector2.zero; //set any velocity to nothing
+                weaponRigidBody.angularVelocity = 0.0f; //set any angular velocity to nothing
+                weaponRigidBody.transform.Find("Sprite").GetComponent<Collider2D>().enabled = false;
+                previousWeapon = heldWeapon;
+                m_bHoldingWeapon = true;
+                SetHoldingGun(0); //? Probably un-necessary
+                if (BodyAnimator != null)
+                {
+                    switch (heldWeapon.tag)
+                    {
+                        case "1hMelee":
+                            SetHoldingMelee(1);
+                            break;
+                        case "2hMelee":
+                            SetHoldingMelee(2);
+                            break;
+                        case "OneHanded":
+                            SetHoldingGun(1);
+                            break;
+                        default:
+                            SetHoldingGun(2);
+                            break;
+                    }
+                }
+                vibrationValue.y = 0.5f; //vibrate controller for haptic feedback
+            }
+        
+        }
+      else  if (hitCollider.GetComponentInParent<Weapon>())
+        {
+            if (hitCollider.GetComponentInParent<Weapon>().previousOwner != this.gameObject)
+            {
+                heldWeapon = hitCollider.GetComponentInParent<Weapon>().gameObject;
+                heldWeapon.transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = 4; //? Puts gun layer infront of player layer when picked up. 
+                heldWeapon.transform.GetChild(0).transform.localPosition = new Vector3(0, 0, 0); //! Resets Shadow on pickup.
+                heldWeapon.GetComponent<Weapon>().PlayPickup();
+                heldWeapon.transform.SetParent(this.gameObject.transform);
+                //! if the weapon isn't a 2 handed weapon, mount it to the 1 handed location
+                if (!hitCollider.transform.parent.gameObject.GetComponent<Weapon>().m_b2Handed)
+                {
+                    hitCollider.gameObject.transform.parent.position = weapon1HandedMount.position; //set position to the weapon mount spot
+                    hitCollider.gameObject.transform.parent.rotation = weapon1HandedMount.rotation; //set its rotation
+                }
+                else //! mount it to the 2handed mounting position
+                {
+                    hitCollider.gameObject.transform.parent.position = weapon2HandedMount.position; //set position to the weapon mount spot
+                    hitCollider.gameObject.transform.parent.rotation = weapon2HandedMount.rotation; //set its rotation
+                }
+                Rigidbody2D weaponRigidBody = hitCollider.GetComponentInParent<Rigidbody2D>(); //find its rigidbody in its 
+
+                //weaponRigidBody.simulated = false; 
+                //turn off any of its simulation
+                weaponRigidBody.bodyType = RigidbodyType2D.Kinematic;
+                weaponRigidBody.transform.Find("Sprite").GetComponent<Collider2D>().enabled = false;
+                //weaponRigidBody.simulated = false;
+                weaponRigidBody.velocity = Vector2.zero; //set any velocity to nothing
+                weaponRigidBody.angularVelocity = 0.0f; //set any angular velocity to nothing
+                weaponRigidBody.transform.Find("Sprite").GetComponent<Collider2D>().enabled = false;
+                previousWeapon = heldWeapon;
+                m_bHoldingWeapon = true;
+                SetHoldingGun(0); //? Probably un-necessary
+                if (BodyAnimator != null)
+                {
+                    switch (heldWeapon.tag)
+                    {
+                        case "1hMelee":
+                            SetHoldingMelee(1);
+                            break;
+                        case "2hMelee":
+                            SetHoldingMelee(2);
+                            break;
+                        case "OneHanded":
+                            SetHoldingGun(1);
+                            break;
+                        default:
+                            SetHoldingGun(2);
+                            break;
+                    }
+                }
+                vibrationValue.y = 0.5f; //vibrate controller for haptic feedback
+            }
+        }
     }
     void Attack(bool TriggerCheck)
     {
@@ -778,7 +867,7 @@ public class Move : MonoBehaviour
                     BodyAnimator.SetBool("HoldingOneHandedMelee" , false);
                     BodyAnimator.SetBool("HoldingTwoHandedMelee" , false);
                     m_NoHandsCollider.enabled = true;
-                    m_OneHandCollider.enabled = false;                                          //TODO Update Accordingly MELEE
+                    m_OneHandCollider.enabled = false;                                       
                     m_TwoHandedCollider.enabled = false;
                     break;
                 case 1:
@@ -786,8 +875,8 @@ public class Move : MonoBehaviour
                     BodyAnimator.SetBool("HoldingTwoHandedGun" , false);
                     BodyAnimator.SetBool("HoldingOneHandedMelee" , false);
                     BodyAnimator.SetBool("HoldingTwoHandedMelee" , false);
-                    m_NoHandsCollider.enabled = true;                                           //TODO Update Accordingly MELEE
-                    m_OneHandCollider.enabled = false;
+                    m_NoHandsCollider.enabled = false;                                           
+                    m_OneHandCollider.enabled = true;
                     m_TwoHandedCollider.enabled = false;
                     break;
                 case 2:
@@ -795,9 +884,9 @@ public class Move : MonoBehaviour
                     BodyAnimator.SetBool("HoldingTwoHandedGun" , true);
                     BodyAnimator.SetBool("HoldingOneHandedMelee" , false);
                     BodyAnimator.SetBool("HoldingTwoHandedMelee" , false);
-                    m_NoHandsCollider.enabled = true;
-                    m_OneHandCollider.enabled = false;                                          //TODO Update Accordingly MELEE
-                    m_TwoHandedCollider.enabled = false;
+                    m_NoHandsCollider.enabled = false;
+                    m_OneHandCollider.enabled = false;                                          
+                    m_TwoHandedCollider.enabled = true;
                     break;
                 default:
                     break;

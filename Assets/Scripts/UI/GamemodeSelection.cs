@@ -31,7 +31,7 @@ public class GamemodeSelection : MonoBehaviour
     Image _mapSprite;
     public int[] mPointsToWin =
     {
-        5, 10, 15, 20
+        1, 3, 5, 10
     };
 
 
@@ -240,6 +240,7 @@ public class GamemodeSelection : MonoBehaviour
                         }
                         _SettingsValue.text = mPointsToWin[m_iPointWinIndex].ToString("0");
                         m_ManagerInstance.m_iPointsNeeded = (int)mPointsToWin[m_iPointWinIndex];
+                        m_ManagerInstance.m_iPointsIndex = m_iPointWinIndex;
                         #endregion
                         break;
                 }

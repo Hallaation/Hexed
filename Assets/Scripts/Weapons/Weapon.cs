@@ -72,7 +72,6 @@ public class Weapon : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        hitPlayerAudioSource = 
         m_AudioSource = this.gameObject.AddComponent<AudioSource>();
         m_AudioSource.playOnAwake = false;
         m_AudioSource.clip = m_AudioClip;
@@ -128,7 +127,7 @@ public class Weapon : MonoBehaviour
 
 
                     //move the weapon sprite up by the amount specified by ShadowGrowthSpeed
-                    weaponSpriteTransform.localPosition += new Vector3(0, Time.deltaTime * ShadowGrowthSpeed, 0);
+                    weaponSpriteTransform.localPosition += new Vector3(0, 0, Time.deltaTime * ShadowGrowthSpeed);
                     //once I have reached the maximum allowed
                     if (weaponSpriteTransform.localPosition.y >= MaxShadow)
                     {
@@ -206,7 +205,7 @@ public class Weapon : MonoBehaviour
     {
         //dropping the weapon will turn the physics back on
         GetComponent<Rigidbody2D>().simulated = true;
-        this.transform.SetParent(null);
+        this.transform.SetParent(null);                                                 //? May be the reason shit fucks up
         GetComponent<Rigidbody2D>().angularVelocity = 50.0f;
         m_AudioSource.PlayOneShot(DropAudioClip , DropAudioVolume);
     }

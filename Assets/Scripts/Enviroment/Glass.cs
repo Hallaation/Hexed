@@ -20,9 +20,9 @@ public class Glass : MonoBehaviour, IHitByBullet
     //public AudioClip m_BreakingClip;
     //public float clipAudio;
 
-    [Space]
+    //[Space]
     private GameObject[] Shards;
-    private AudioSource m_audioSource;
+    //private AudioSource m_audioSource;
 
     public Sprite BrokenGlass;
     SpriteRenderer GlassSpriteRenderer;

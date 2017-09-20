@@ -112,8 +112,8 @@ public class CharacterSelectionManager : MonoBehaviour
 
                 GameObject go = Instantiate(playerSelectedCharacter[JoinedXboxControllers[i]], spawnPosition, Quaternion.identity, null);
                 //Set anything required for the player to work.
-                go.GetComponent<ControllerSetter>().SetController(PlayerIndex.One + i);
-                go.GetComponent<ControllerSetter>().m_playerNumber = i;
+                go.GetComponent<ControllerSetter>().SetController(JoinedXboxControllers[i]);
+                go.GetComponent<ControllerSetter>().m_playerNumber = (int)JoinedXboxControllers[i] - 1;
                 go.GetComponent<PlayerStatus>().spawnIndex = i;
                 //Find the Array for players
                 PlayerUIArray.Instance.playerElements[i].gameObject.SetActive(true);
