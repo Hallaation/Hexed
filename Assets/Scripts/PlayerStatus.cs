@@ -58,9 +58,10 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         m_MeleeHitAudioSource.playOnAwake = false;
         m_MeleeHitAudioSource.spatialBlend = 1;
 
+        //This is used to snap the stunbar to 0,0,0
         stunBarContainer = new GameObject("StunBarContainer");
 
-        stunBar = transform.Find("Sprites").Find("StunBarContainer").Find("StunBar").GetComponent<SpriteRenderer>();
+        stunBar = transform.Find("Sprites").Find("StunBarContainer") .Find("StunBar").GetComponent<SpriteRenderer>();
         stunMask = transform.Find("Sprites").Find("StunBarContainer").Find("StunBarMask").GetComponent<SpriteRenderer>();
 
         stunBarContainer.transform.SetParent(transform.Find("Sprites"));
@@ -312,7 +313,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         this.GetComponent<BaseAbility>().GetUIElements();
 
         _HealthMask = PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_HealthBarMask;
-        _ScoreText = PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_ScoreText.GetComponent<Text>();
+
         PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_healthScrolllingIcon.GetComponent<Image>().material.SetColor("_Color", _playerColor);
         PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_StaticObjectMaterial.SetColor("_Color", _playerColor);
 

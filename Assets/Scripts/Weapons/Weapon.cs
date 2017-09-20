@@ -72,7 +72,6 @@ public class Weapon : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        hitPlayerAudioSource = 
         m_AudioSource = this.gameObject.AddComponent<AudioSource>();
         m_AudioSource.playOnAwake = false;
         m_AudioSource.clip = m_AudioClip;

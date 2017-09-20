@@ -8,7 +8,7 @@ public class SmokeAbility : BaseAbility
     private bool ButtonReset = true;
 
     [Header("Smoke varaibles")]
-    private float m_fMinimumRadius;
+    //private float m_fMinimumRadius;
     public float m_fMaximumRadius;
 
     public GameObject SmokeBombPrefab;
