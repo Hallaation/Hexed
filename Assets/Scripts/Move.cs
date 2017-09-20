@@ -583,7 +583,7 @@ public class Move : MonoBehaviour
             {
                 heldWeapon = hitCollider.transform.parent.GetComponentInParent<Weapon>().gameObject;
                 heldWeapon.transform.Find("Sprite").GetComponent<SpriteRenderer>().sortingOrder = 4; //? Puts gun layer infront of player layer when picked up. 
-                heldWeapon.transform.Find("Shadow").transform.localPosition = new Vector3(0, 0, 0); //! Resets Shadow on pickup.
+                heldWeapon.transform.Find("Sprite").transform.localPosition = new Vector3(0, 0, 0); //! Resets Shadow on pickup.
                 heldWeapon.GetComponent<Weapon>().PlayPickup();
                 heldWeapon.transform.SetParent(this.gameObject.transform.Find("Sprites").GetChild(0).Find("2HandedMeleeSpot"));
                 //! if the weapon isn't a 2 handed weapon, mount it to the 1 handed location
