@@ -9,11 +9,9 @@ public class Weapon : MonoBehaviour
     public Sprite m_HeldSprite = null;
     public float m_fTimeBetweenShots = 0.01f;
     public float m_iDamage;
-    public bool m_bAutomaticGun;
-    public bool m_bBurstFire;
+
     public bool m_bMeleeWeapon;
     public bool m_bGivePlayersIFrames = false;
-    public bool m_b2Handed = false;
     public float KnockBack;
     [Space]
     [Header("ShadowRelated")]
@@ -132,18 +130,18 @@ public class Weapon : MonoBehaviour
                     if (weaponSpriteTransform.localPosition.y >= MaxShadow)
                     {
                         //Snap the weapon's sprite transform to the max location
-                        weaponSpriteTransform.localPosition = new Vector3(weaponSpriteTransform.localPosition.x, MaxShadow, weaponSpriteTransform.localPosition.z);
-                        m_bMoveWeaponSpriteUp = false;
+                        weaponSpriteTransform.localPosition = new Vector3(weaponSpriteTransform.localPosition.x, weaponSpriteTransform.localPosition.y, MaxShadow); 
+                         m_bMoveWeaponSpriteUp = false;
                         //set the bool to false so the weapon will move down instead
                     }
                 }
                 else
                 {
                     //! everything above but the opposite
-                    weaponSpriteTransform.localPosition -= new Vector3(0, Time.deltaTime * ShadowGrowthSpeed, 0);
-                    if (weaponSpriteTransform.localPosition.y <= MinShadow)
+                    weaponSpriteTransform.localPosition -= new Vector3(0, 0, Time.deltaTime * ShadowGrowthSpeed);
+                    if (weaponSpriteTransform.localPosition.z <= MinShadow)
                     {
-                        weaponSpriteTransform.localPosition = new Vector3(weaponSpriteTransform.localPosition.x, MinShadow, weaponSpriteTransform.localPosition.z);
+                        weaponSpriteTransform.localPosition = new Vector3(weaponSpriteTransform.localPosition.x, weaponSpriteTransform.localPosition.y, MinShadow);
                         m_bMoveWeaponSpriteUp = true;
                     }
                 }

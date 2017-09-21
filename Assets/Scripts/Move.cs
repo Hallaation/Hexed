@@ -394,11 +394,19 @@ public class Move : MonoBehaviour
     {
         if (heldWeapon && heldWeapon.GetComponent<Weapon>().m_bActive)
         {
+            Vector3 GunMountPosition = Vector3.one;
             //drop the weapon 
             heldWeapon.transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = 0; //? Puts gun layer behinde player layer when it's dropped. 
             //Determine what type of gun im holding
-            Vector3 GunMountPosition = (!heldWeapon.GetComponent<Weapon>().m_b2Handed) ?/*True*/ weapon1HandedMount.position : /*False*/weapon2HandedMount.position;
-            if (heldWeapon.GetComponent<Weapon>().m_bMeleeWeapon == true)
+            if (heldWeapon.GetComponent<Gun>())
+            {
+                GunMountPosition = (!heldWeapon.GetComponent<Gun>().m_b2Handed) ?/*True*/ weapon1HandedMount.position : /*False*/weapon2HandedMount.position;
+            }
+            else if(heldWeapon.GetComponent<Melee>())
+            {
+                GunMountPosition = (!heldWeapon.GetComponent<Melee>().m_b2Handed) ?/*True*/ weapon1HandedMount.position : /*False*/weapon2HandedMount.position;
+            }
+                if (heldWeapon.GetComponent<Weapon>().m_bMeleeWeapon == true)
             {
                 heldWeapon.GetComponent<Melee>().Attacking = false;
             }
@@ -588,16 +596,12 @@ public class Move : MonoBehaviour
                 heldWeapon.GetComponent<Weapon>().PlayPickup();
                 heldWeapon.transform.SetParent(this.gameObject.transform.Find("Sprites").GetChild(0).Find("2HandedMeleeSpot"));
                 //! if the weapon isn't a 2 handed weapon, mount it to the 1 handed location
-                if (!hitCollider.transform.parent.gameObject.GetComponent<Weapon>().m_b2Handed)
-                {
+      
+                
                     hitCollider.gameObject.transform.parent.position = Melee2HandedMount.position; //set position to the weapon mount spot
                     hitCollider.gameObject.transform.parent.rotation = Melee2HandedMount.rotation; //set its rotation
-                }
-                else //! mount it to the 2handed mounting position
-                {
-                    hitCollider.gameObject.transform.parent.position = Melee2HandedMount.position; //set position to the weapon mount spot
-                    hitCollider.gameObject.transform.parent.rotation = Melee2HandedMount.rotation; //set its rotation
-                }
+                
+
                 Rigidbody2D weaponRigidBody = hitCollider.GetComponentInParent<Rigidbody2D>(); //find its rigidbody in its 
 
                 //weaponRigidBody.simulated = false; 
@@ -643,7 +647,7 @@ public class Move : MonoBehaviour
                 heldWeapon.GetComponent<Weapon>().PlayPickup();
                 heldWeapon.transform.SetParent(this.gameObject.transform);
                 //! if the weapon isn't a 2 handed weapon, mount it to the 1 handed location
-                if (!hitCollider.transform.parent.gameObject.GetComponent<Weapon>().m_b2Handed)
+                if (!hitCollider.transform.parent.gameObject.GetComponent<Gun>().m_b2Handed)
                 {
                     hitCollider.gameObject.transform.parent.position = weapon1HandedMount.position; //set position to the weapon mount spot
                     hitCollider.gameObject.transform.parent.rotation = weapon1HandedMount.rotation; //set its rotation
