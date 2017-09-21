@@ -73,14 +73,14 @@ public class Teleport : BaseAbility
             {
                 
                 Vector2 V2rotation = new Vector2(rotation.x , rotation.y);
-                RaycastHit2D hitLeftStick = Physics2D.Raycast(transform.position , V2rotation , m_TeleportForce , 1 << LayerMask.NameToLayer("Wall"));
+                RaycastHit2D hitLeftStick = Physics2D.Raycast(transform.position , V2rotation , m_TeleportForce , LayerMask.GetMask("Wall", "Glass"));
                 Debug.DrawRay(transform.position , V2rotation * m_TeleportForce, Color.blue, 5);
                 if (hitLeftStick.collider != null)   //! If a raycast sent along the direction of the left stick collides with a wall. Put the player at the collision
                 {
                     //float Xdistance = ((hitLeftStick.point.x) - (transform.position.x));
                     //float Ydistance = ((hitLeftStick.point.y) - (transform.position.y));
                     //Debug.Log(this.transform.position - new Vector3(hitLeftStick.point.x, hitLeftStick.point.y));
-                    _rigidBody.position = hitLeftStick.point;
+                    _rigidBody.position = hitLeftStick.point + hitLeftStick.normal * 0.5f;
                     //_rigidBody.position = new Vector2(_rigidBody.position.x + Xdistance , _rigidBody.position.y + Ydistance);
                     Debug.Log("WallPrevention");
                 }
@@ -89,7 +89,7 @@ public class Teleport : BaseAbility
             }
             else
             {
-                RaycastHit2D hit = Physics2D.Raycast(transform.position , transform.up , m_TeleportForce , 1 << LayerMask.NameToLayer("Wall"));
+                RaycastHit2D hit = Physics2D.Raycast(transform.position , transform.up , m_TeleportForce , LayerMask.GetMask("Wall" , "Glass"));
 
                 //Doe sa raycast to see if it has hit a wall, if it has, dont teleport.
                 if (hit.collider != null) //! If a raycast sent along the direction the player is facing collides with a wall. Put the player at the collision
@@ -97,7 +97,7 @@ public class Teleport : BaseAbility
                     //float Xdistance = ((hit.point.x) - (transform.position.x));
                     //float Ydistance = ((hit.point.y) - (transform.position.y));
                     //_rigidBody.position = new Vector2(_rigidBody.position.x + Xdistance , _rigidBody.position.y + Ydistance);
-                    _rigidBody.position = hit.point;
+                    _rigidBody.position = hit.point + hit.normal * 0.5f;
                     Debug.Log("WallPrevention");
                 }
                 else

@@ -105,7 +105,7 @@ public class Bullet : MonoBehaviour
             {  
 
                 //If I hit a wall, glass or door, snap me to their location and turn me off
-                if (RayHit.transform.gameObject.layer == LayerMask.NameToLayer("Wall"))
+                if (RayHit.transform.gameObject.layer == LayerMask.NameToLayer("Wall") || RayHit.transform.gameObject.layer == LayerMask.NameToLayer("Door")|| RayHit.transform.gameObject.layer == LayerMask.NameToLayer("Glass"))
                 {
                     //If I find any hitbybullet interface, find all, then call its function
                     if (RayHit.transform.gameObject.GetComponent<IHitByBullet>() != null)
