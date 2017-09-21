@@ -194,16 +194,15 @@ MonoBehaviour:
   m_HeldSprite: {fileID: 21300018, guid: b063c0329a4c3ad42a58400a56d129ae, type: 3}
   m_fTimeBetweenShots: 0.35
   m_iDamage: 1
-  m_bAutomaticGun: 1
-  m_bBurstFire: 1
+  m_bMeleeWeapon: 0
   m_bGivePlayersIFrames: 0
-  m_b2Handed: 0
   KnockBack: 0
   MaxShadow: 0.2
   MinShadow: 0
   ShadowGrowthSpeed: 0.2
   m_bActive: 1
   previousOwner: {fileID: 0}
+  weaponThrower: {fileID: 0}
   m_bMoveWeaponSpriteUp: 1
   m_AudioClip: {fileID: 8300000, guid: 0dcce2520a25e2f4389272884a6b0266, type: 3}
   m_bRandomizePitch: 1
@@ -219,7 +218,10 @@ MonoBehaviour:
   ThrowHitAudioVolume: 1
   m_EmptyClipAudio: {fileID: 0}
   EmptyVolume: 1
-  m_iAmmo: 9745
+  m_bAutomaticGun: 1
+  m_bBurstFire: 1
+  m_b2Handed: 0
+  m_iAmmo: 18
   bullet: {fileID: 1338585375657914, guid: c5fe8249f92a6734b98e136039611604, type: 2}
   m_fSpreadJitter: 0
   m_fSpreadIncrease: 500
