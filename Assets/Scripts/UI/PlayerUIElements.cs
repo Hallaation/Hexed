@@ -28,7 +28,7 @@ public class PlayerUIElements : MonoBehaviour
     // Use this for initialization
     void Awake()
     {
-        m_AmmoText = transform.Find("StatusUI").Find("Ammo").gameObject;
+        //m_AmmoText = transform.Find("StatusUI").Find("Ammo").gameObject;
 
         //m_manaBarMask = transform.Find("OldObjects").Find("ManaBar").Find("BarMask").gameObject;
         m_manaBarMask = transform.Find("StatusUI").Find("SpecialBar").Find("BarMask").gameObject;

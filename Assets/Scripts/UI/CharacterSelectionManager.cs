@@ -92,21 +92,25 @@ public class CharacterSelectionManager : MonoBehaviour
 
         XboxController[] JoinedXboxControllers = new XboxController[playerSelectedCharacter.Count];
         int nextIndex = 0;
-        for (int i = 0; i < XCI.GetNumPluggedCtrlrs(); i++)
+        for (int i = 0; i < 4; i++)
         { 
             if (playerSelectedCharacter.ContainsKey(XboxController.First + i))
-            { 
+            {
                 JoinedXboxControllers[nextIndex] = XboxController.First + i;
                 nextIndex++;
             }
         }
-
+        foreach (var item in playerSelectedCharacter)
+        {
+            Debug.Log(item.Key);
+        }
         if (!m_bMovedToMainScene)
         {
             for (int i = 0; i < 4 - JoinedPlayers; ++i)
             {
                 ControllerManager.Instance.FindSpawns();
-
+                //Debug.Log(JoinedXboxControllers[i]);
+                
                 Vector3 spawnPosition = ControllerManager.Instance.spawnPoints[i].position; //Get the spawn position
                 //Make the gameojbect and keep a reference scoped to the single loop
 
@@ -123,8 +127,10 @@ public class CharacterSelectionManager : MonoBehaviour
                 go.SetActive(true);   
                 CameraControl.mInstance.m_Targets.Add(go.transform); //make a reference in camera control
                 m_bMovedToMainScene = true;
+                
             }
         }
+
     }
     void OnSceneLoaded(Scene scene , LoadSceneMode mode)
     {
