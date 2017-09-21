@@ -5,10 +5,11 @@ using UnityEngine;
 public class Melee : Weapon
 {
     [Space]
- 
+    [Header("MeleeVariables")]
     public float OnHitFlinchTime = .3f;
     public bool Attacking;
     public bool m_b2Handed;
+    public float DurationOfAttack;
     [Space]
 
     [Header("Melee Hit Audio")]
@@ -16,7 +17,7 @@ public class Melee : Weapon
     public bool m_bRandomizeHitAudio = true;
     [Range(0 , 1)]
     public float hitAudioVolume = 1;
-
+    Vector3 PreviousVelocity = Vector3.one; public Vector3 GetPreviousVelocity() { return PreviousVelocity; }
 
     public override void StartUp()
     {
@@ -35,6 +36,16 @@ public class Melee : Weapon
 
             Debug.Log("BatEnterStun");
         }
+        if (Attacking && other.transform.root != this.transform.root)
+        {
+            if (other.GetComponent<IHitByMelee>() != null)
+            {
+                foreach (IHitByMelee item in other.GetComponents<IHitByMelee>())
+                {
+                    item.HitByMelee(this, null);
+                }
+            }
+        }
     }
     void OnTriggerStay2D(Collider2D other)
     {
@@ -42,7 +53,18 @@ public class Melee : Weapon
         {
             other.transform.parent.GetComponentInParent<PlayerStatus>().StunPlayer(transform.right * KnockBack);        //! Uses transform right instead of transform up due to using the bats right rather then players up
             other.transform.parent.GetComponentInParent<Move>().StatusApplied();
+
             Debug.Log("BatStayStun");
+        }
+        if (Attacking && other.transform.root != this.transform.root)
+        {
+            if (other.GetComponent<IHitByMelee>() != null)
+            {
+                foreach (IHitByMelee item in other.GetComponents<IHitByMelee>())
+                {
+                    item.HitByMelee(this, null);
+                }
+            }
         }
     }
 
@@ -105,46 +127,50 @@ public class Melee : Weapon
         return false;
     }
 
-            //  RaycastHit2D[] results;
+    //  RaycastHit2D[] results;
 
 
-            //Vector3 center = PunchHitBox.transform.postion + item.center;
-            //Vector3 radius = Item.radius;
+    //Vector3 center = PunchHitBox.transform.postion + item.center;
+    //Vector3 radius = Item.radius;
 
-            //Collider[] allOverlappingColliders = Physics.OverlapSphere(center, radius);
+    //Collider[] allOverlappingColliders = Physics.OverlapSphere(center, radius);
 
 
-            //Ray2D ray = new Ray2D(this.transform.position, this.transform.up);
-            //RaycastHit2D hit = Physics2D.Raycast(ray.origin , ray.direction,  1.5f, 1 << 8);
-            //if (hit)
-            //{
-            //    if (hit.transform != this.transform)
-            //    {
-            //        Debug.Log("Test");
-            //        temp.Play();
+    //Ray2D ray = new Ray2D(this.transform.position, this.transform.up);
+    //RaycastHit2D hit = Physics2D.Raycast(ray.origin , ray.direction,  1.5f, 1 << 8);
+    //if (hit)
+    //{
+    //    if (hit.transform != this.transform)
+    //    {
+    //        Debug.Log("Test");
+    //        temp.Play();
 
-            //        hit.transform.GetComponent<PlayerStatus>().TimesPunched++;
-            //        Debug.Log(hit.transform.GetComponent<PlayerStatus>().TimesPunched);
-            //        if (hit.transform.GetComponent<PlayerStatus>().TimesPunched >= 3)
-            //        {
-            //            hit.transform.GetComponent<PlayerStatus>().StunPlayer(this.transform.up * KnockBack * 10);
-            //            hit.transform.GetComponent<Move>().StatusApplied();
-            //        }
+    //        hit.transform.GetComponent<PlayerStatus>().TimesPunched++;
+    //        Debug.Log(hit.transform.GetComponent<PlayerStatus>().TimesPunched);
+    //        if (hit.transform.GetComponent<PlayerStatus>().TimesPunched >= 3)
+    //        {
+    //            hit.transform.GetComponent<PlayerStatus>().StunPlayer(this.transform.up * KnockBack * 10);
+    //            hit.transform.GetComponent<Move>().StatusApplied();
+    //        }
 
-            //        return true;
-            //    }
-            //}
+    //        return true;
+    //    }
+    //}
 
-            //Debug.DrawRay(ray.origin , ray.direction);
-           
-  
+    //Debug.DrawRay(ray.origin , ray.direction);
 
-        
-     
+
+
+    public override void DoWeaponThings()
+    {
+        PreviousVelocity = GetComponent<Rigidbody2D>().velocity;
+    }
+
+
     IEnumerator AttackDuration()
     {
 
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(DurationOfAttack);
         Attacking = false;
         yield return null;
     }

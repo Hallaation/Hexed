@@ -164,7 +164,7 @@ CapsuleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1.89, y: 0.72}
+  m_Size: {x: 2.2, y: 1}
   m_Direction: 1
 --- !u!70 &70844147995389652
 CapsuleCollider2D:
@@ -178,7 +178,7 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1.85, y: 0.77}
+  m_Size: {x: 1.62, y: 0.57}
   m_Direction: 1
 --- !u!114 &114052191430425340
 MonoBehaviour:
@@ -221,7 +221,7 @@ MonoBehaviour:
   m_bAutomaticGun: 1
   m_bBurstFire: 1
   m_b2Handed: 1
-  m_iAmmo: 10000
+  m_iAmmo: 25
   bullet: {fileID: 1693009727198110, guid: dd9ebb944ddbbbc4ba0f2fbb8e278610, type: 2}
   m_fSpreadJitter: 0
   m_fSpreadIncrease: 300
@@ -229,7 +229,7 @@ MonoBehaviour:
   m_fBulletSpawnOffSet: 1.75
   m_fFiringForce: 0.2
   m_iBurstFire: 5
-  m_fTimeBetweenBurstShots: 0
+  m_fTimeBetweenBurstShots: -0.1
 --- !u!212 &212377377192078294
 SpriteRenderer:
   m_ObjectHideFlags: 1
