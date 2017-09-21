@@ -164,7 +164,7 @@ CapsuleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1.89, y: 0.72}
+  m_Size: {x: 2.2, y: 1}
   m_Direction: 1
 --- !u!70 &70844147995389652
 CapsuleCollider2D:
@@ -178,7 +178,7 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1.85, y: 0.77}
+  m_Size: {x: 1.62, y: 0.57}
   m_Direction: 1
 --- !u!114 &114052191430425340
 MonoBehaviour:
@@ -194,16 +194,15 @@ MonoBehaviour:
   m_HeldSprite: {fileID: 21300020, guid: b063c0329a4c3ad42a58400a56d129ae, type: 3}
   m_fTimeBetweenShots: 0.8
   m_iDamage: 1
-  m_bAutomaticGun: 1
-  m_bBurstFire: 1
+  m_bMeleeWeapon: 0
   m_bGivePlayersIFrames: 0
-  m_b2Handed: 1
   KnockBack: 0
   MaxShadow: 0.2
   MinShadow: 0
   ShadowGrowthSpeed: 0.2
   m_bActive: 1
   previousOwner: {fileID: 0}
+  weaponThrower: {fileID: 0}
   m_bMoveWeaponSpriteUp: 0
   m_AudioClip: {fileID: 8300000, guid: 56d153ae7c4f7774e9d6674c961e7876, type: 3}
   m_bRandomizePitch: 1
@@ -219,7 +218,10 @@ MonoBehaviour:
   ThrowHitAudioVolume: 1
   m_EmptyClipAudio: {fileID: 0}
   EmptyVolume: 1
-  m_iAmmo: 10000
+  m_bAutomaticGun: 1
+  m_bBurstFire: 1
+  m_b2Handed: 1
+  m_iAmmo: 25
   bullet: {fileID: 1693009727198110, guid: dd9ebb944ddbbbc4ba0f2fbb8e278610, type: 2}
   m_fSpreadJitter: 0
   m_fSpreadIncrease: 300
