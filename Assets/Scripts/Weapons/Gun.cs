@@ -15,6 +15,9 @@ public class Gun : Weapon
     [Space]
     [Header("Gun Specific")]
 
+    public bool m_bAutomaticGun;
+    public bool m_bBurstFire;
+    public bool m_b2Handed = false;
     public int m_iAmmo = 30;
     public GameObject bullet;
     [SerializeField]

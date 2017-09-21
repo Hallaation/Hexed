@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 10a630f0a37b46c4e9c1246135ad631a
-timeCreated: 1505889454
+timeCreated: 1505951129
 licenseType: Pro
 TextureImporter:
   fileIDToRecycleName:
@@ -110,7 +110,7 @@ TextureImporter:
     21300206: EA_Slums_CounterTop_003
     21300208: EA_Slums_CounterTop_004
     21300210: EA_Slums_CounterTop_005
-    21300212: EA_Slums_CashRegister_001
+    21300212: EA_Slums_Object_CashRegister_001
     21300214: EA_Slums_Shelf_Ends_001
     21300216: EA_Slums_Shelf_Wall_Top_001
     21300218: EA_Slums_Shelf_Wall_Bottom_001
@@ -133,9 +133,9 @@ TextureImporter:
     21300252: EA_Slums_Object_BreadRoll_001
     21300254: EA_Slums_Stalls_Bottom_001
     21300256: EA_Slums_Stalls_Roof_001
-    21300258: EA_Slums_SpriteSheet_002
+    21300258: EA_Slums_Stalls_Bottom_002
     21300260: EA_Slums_Stalls_Roof_002
-    21300262: EA_Slums_SpriteSheet_003
+    21300262: EA_Slums_Stalls_Bottom_003
     21300264: EA_Slums_Stalls_Roof_003
     21300266: EA_Slums_Stalls_Bottom_004
     21300268: EA_Slums_Stalls_Roof_004
@@ -145,6 +145,7 @@ TextureImporter:
     21300276: EA_Slums_Object_Bombs_001
     21300278: EA_Slums_Object_Barrels_001
     21300280: EA_Slums_Object_TubeGreen_001
+    21300282: EA_Slums_Bar_Bench_02
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -1054,7 +1055,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: EA_Slums_CashRegister_001
+      name: EA_Slums_Object_CashRegister_001
       rect:
         serializedVersion: 2
         x: 823
@@ -1405,7 +1406,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: EA_Slums_SpriteSheet_002
+      name: EA_Slums_Stalls_Bottom_002
       rect:
         serializedVersion: 2
         x: 876
@@ -1431,7 +1432,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: EA_Slums_SpriteSheet_003
+      name: EA_Slums_Stalls_Bottom_003
       rect:
         serializedVersion: 2
         x: 839
@@ -1594,6 +1595,19 @@ TextureImporter:
         y: 287
         width: 59
         height: 37
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: EA_Slums_Bar_Bench_02
+      rect:
+        serializedVersion: 2
+        x: 1401
+        y: 1601
+        width: 200
+        height: 395
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

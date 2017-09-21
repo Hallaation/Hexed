@@ -23,7 +23,7 @@ public class Bullet : MonoBehaviour
     public bool m_bGiveIFrames = false;
 
     public TrailRenderer trail;
-
+    public float m_fMaximumTime = 60;
     //public GameObject HitParticle;
 
 
@@ -42,7 +42,7 @@ public class Bullet : MonoBehaviour
             trail.sortingLayerName = "Defult";
             trail.sortingOrder = 8;
         }
-        // Destroy(this.gameObject , 5);
+         Destroy(this.gameObject , m_fMaximumTime);
     }
     // Update is called once per frame
     void Update()

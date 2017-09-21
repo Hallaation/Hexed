@@ -9,11 +9,9 @@ public class Weapon : MonoBehaviour
     public Sprite m_HeldSprite = null;
     public float m_fTimeBetweenShots = 0.01f;
     public float m_iDamage;
-    public bool m_bAutomaticGun;
-    public bool m_bBurstFire;
+
     public bool m_bMeleeWeapon;
     public bool m_bGivePlayersIFrames = false;
-    public bool m_b2Handed = false;
     public float KnockBack;
     [Space]
     [Header("ShadowRelated")]
@@ -28,6 +26,7 @@ public class Weapon : MonoBehaviour
     public bool m_bActive = true;
     //[HideInInspector]
     public GameObject previousOwner; //previous owner used to make sure when the weapon is thrown, it doesnt stun the thrower.
+    public GameObject weaponThrower; //Used to store the thrower;
     private SpriteRenderer WeaponSpriteRenderer; //The sprite rendere of the weapon sprite
     private Transform weaponSpriteTransform; //The transform of the weapon's sprite 
     public bool m_bMoveWeaponSpriteUp; //A bool used to determine if the weapon sprite will move up or down
@@ -127,23 +126,23 @@ public class Weapon : MonoBehaviour
 
 
                     //move the weapon sprite up by the amount specified by ShadowGrowthSpeed
-                    weaponSpriteTransform.localPosition += new Vector3(0, 0, Time.deltaTime * ShadowGrowthSpeed);
+                    //weaponSpriteTransform.localPosition += new Vector3(0, 0, Time.deltaTime * ShadowGrowthSpeed);
                     //once I have reached the maximum allowed
                     if (weaponSpriteTransform.localPosition.y >= MaxShadow)
                     {
                         //Snap the weapon's sprite transform to the max location
-                        weaponSpriteTransform.localPosition = new Vector3(weaponSpriteTransform.localPosition.x, MaxShadow, weaponSpriteTransform.localPosition.z);
-                        m_bMoveWeaponSpriteUp = false;
+                        weaponSpriteTransform.localPosition = new Vector3(weaponSpriteTransform.localPosition.x, weaponSpriteTransform.localPosition.y, MaxShadow); 
+                         m_bMoveWeaponSpriteUp = false;
                         //set the bool to false so the weapon will move down instead
                     }
                 }
                 else
                 {
                     //! everything above but the opposite
-                    weaponSpriteTransform.localPosition -= new Vector3(0, Time.deltaTime * ShadowGrowthSpeed, 0);
-                    if (weaponSpriteTransform.localPosition.y <= MinShadow)
+                    weaponSpriteTransform.localPosition -= new Vector3(0, 0, Time.deltaTime * ShadowGrowthSpeed);
+                    if (weaponSpriteTransform.localPosition.z <= MinShadow)
                     {
-                        weaponSpriteTransform.localPosition = new Vector3(weaponSpriteTransform.localPosition.x, MinShadow, weaponSpriteTransform.localPosition.z);
+                        weaponSpriteTransform.localPosition = new Vector3(weaponSpriteTransform.localPosition.x, weaponSpriteTransform.localPosition.y, MinShadow);
                         m_bMoveWeaponSpriteUp = true;
                     }
                 }
@@ -249,7 +248,7 @@ public class Weapon : MonoBehaviour
         if (stunPlayer)
         {
             //if it enters a trigger (another player in this case") the hit player gets stunned. calls the status applied to drop their weapon.
-            if (GetComponent<Rigidbody2D>().velocity.magnitude >= 10 && a_collider.tag == "Player" && a_collider.GetComponentInParent<PlayerStatus>().gameObject != previousOwner)
+            if (GetComponent<Rigidbody2D>().velocity.magnitude >= 10 && a_collider.tag == "Player" && a_collider.GetComponentInParent<PlayerStatus>().gameObject != weaponThrower)
             {
 
                 if (a_collider.GetComponentInParent<PlayerStatus>().IsStunned == false)

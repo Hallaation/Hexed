@@ -5,15 +5,19 @@ using UnityEngine;
 public class Melee : Weapon
 {
     [Space]
+ 
+    public float OnHitFlinchTime = .3f;
+    public bool Attacking;
+    public bool m_b2Handed;
+    [Space]
+
     [Header("Melee Hit Audio")]
     public AudioClip hitAudioClip;
     public bool m_bRandomizeHitAudio = true;
     [Range(0 , 1)]
     public float hitAudioVolume = 1;
 
-    [Space]
-    public float OnHitFlinchTime = .3f;
-   public bool Attacking;
+
     public override void StartUp()
     {
 
@@ -25,7 +29,7 @@ public class Melee : Weapon
    void OnTriggerEnter2D(Collider2D other)
     {
 
-        if (Attacking && other.tag == "Player" && other.transform.root != this.transform.root)
+        if (Attacking && other.tag == "Player" && other.transform.root != this.transform.root && other.transform.root.GetComponent<PlayerStatus>().m_bStunned == false)
         {
             other.transform.parent.GetComponentInParent<PlayerStatus>().StunPlayer(transform.right * KnockBack);        //! Uses transform right instead of transform up due to using the bats right rather then players up
 
@@ -34,7 +38,7 @@ public class Melee : Weapon
     }
     void OnTriggerStay2D(Collider2D other)
     {
-        if (Attacking && other.tag == "Player" && other.transform.root != this.transform.root)
+        if (Attacking && other.tag == "Player" && other.transform.root != this.transform.root && other.transform.root.GetComponent<PlayerStatus>().m_bStunned == false)
         {
             other.transform.parent.GetComponentInParent<PlayerStatus>().StunPlayer(transform.right * KnockBack);        //! Uses transform right instead of transform up due to using the bats right rather then players up
             other.transform.parent.GetComponentInParent<Move>().StatusApplied();
