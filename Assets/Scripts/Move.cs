@@ -425,6 +425,7 @@ public class Move : MonoBehaviour
                 //drop the weapon. magic number 2.
                 heldWeapon.GetComponent<Weapon>().ThrowWeapon(throwDirection * 2);
                 heldWeapon.GetComponent<Weapon>().previousOwner = this.gameObject;
+                heldWeapon.GetComponent<Weapon>().weaponThrower = this.gameObject;
                 //heldWeapon.transform.Find("Sprite").GetComponent<Collider2D>().enabled = false;
                 m_bHoldingWeapon = false;
                
@@ -445,6 +446,7 @@ public class Move : MonoBehaviour
                 heldWeapon.transform.Find("Sprite").GetComponent<Collider2D>().enabled = true;
                 heldWeapon.GetComponent<Weapon>().ThrowWeapon(throwDirection * throwingForce);
                 heldWeapon.GetComponent<Weapon>().previousOwner = this.gameObject;
+                heldWeapon.GetComponent<Weapon>().weaponThrower = this.gameObject;
                 //heldWeapon.transform.Find("Sprite").GetComponent<Collider2D>().enabled = false;
                 m_bHoldingWeapon = false;
                 heldWeapon = null;
@@ -485,10 +487,9 @@ public class Move : MonoBehaviour
         Collider2D[] hitCollider = Physics2D.OverlapCircleAll(this.transform.position , 1.0f , /*Pickup layer*/(1 << 12));
         foreach (Collider2D WeaponCollider in hitCollider)
         {
-
-            if (WeaponCollider.GetComponentInParent<Weapon>())                                       //! Null Check
+            if (WeaponCollider.GetComponentInParent<Weapon>())//If I find a weapon in the parent
             {
-                if (WeaponCollider.GetComponentInParent<Weapon>().gameObject != previousWeapon)
+                if (WeaponCollider.GetComponentInParent<Weapon>().gameObject != previousWeapon) //If the wepaon found isn't the previous weapon
                 {
                     //if (WeaponCollider.transform.parent.tag == "2hMelee")
                     //{
@@ -547,15 +548,15 @@ public class Move : MonoBehaviour
 
             RaycastHit2D hitPoint = Physics2D.Raycast(pos , Dir , 1 , (1 << LayerMask.NameToLayer("Wall") | 1 << LayerMask.NameToLayer("FloorGun")));
             //Debug.DrawRay(this.transform.position , Dir , Color.magenta , 5);
-
+            Debug.Log(weaponToPickUp.GetComponentInParent<Weapon>().transform.root.parent);
             if (hitPoint.transform == null)
             {
-                if (weaponToPickUp.GetComponentInParent<Weapon>().transform.parent == null)
+                if (weaponToPickUp.GetComponentInParent<Weapon>().transform.root.GetComponent<PlayerStatus>() == null)
                 {
                     PickupWeapon(weaponToPickUp);                                                                        //? ???????????????????
                     return true;
                 }
-                else if(weaponToPickUp.transform.parent.GetComponentInParent<Weapon>().transform.parent.parent == null)
+                else if(weaponToPickUp.transform.parent.GetComponentInParent<Weapon>().transform.root.GetComponent<PlayerStatus>() == null)
                 {
                     PickupWeapon(weaponToPickUp);
                     return true;
@@ -563,12 +564,12 @@ public class Move : MonoBehaviour
             }
             else if (hitPoint.transform.GetComponentInParent<Weapon>())
             {
-                if (weaponToPickUp.GetComponentInParent<Weapon>().transform.parent == null)
+                if (weaponToPickUp.GetComponentInParent<Weapon>().transform.root.GetComponent<PlayerStatus>() == null)
                 {
                     PickupWeapon(weaponToPickUp);
                     return true;
                 }
-                else if (weaponToPickUp.transform.parent.GetComponentInParent<Weapon>().transform.parent.parent == null)
+                else if (weaponToPickUp.transform.parent.GetComponentInParent<Weapon>().transform.root.GetComponent<PlayerStatus>() == null)
                 {
                     PickupWeapon(weaponToPickUp);
                     return true;
