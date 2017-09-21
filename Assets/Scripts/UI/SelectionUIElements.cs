@@ -135,6 +135,7 @@ public class SelectionUIElements : MonoBehaviour
                             //this is where the character is selected
                             m_bSelectedCharacter = true;
                             selectionManager.playerSelectedCharacter.Add(m_controller , selectionManager.CharacterArray[m_iSelectedIndex]);
+
                             selectionManager.CharacterSelectionStatus[selectionManager.CharacterArray[m_iSelectedIndex]] = true; //set the status selected to true
                             m_Animator.SetBool("IsSelected" , true);
                         }

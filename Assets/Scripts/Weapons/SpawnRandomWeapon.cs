@@ -21,7 +21,7 @@ public class SpawnRandomWeapon : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(m_bCanSpawnGun);
+
         //If i want to spawn more guns
         if (ContinuallySpawnWeapons && m_bCanSpawnGun)
         {
