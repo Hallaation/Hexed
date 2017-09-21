@@ -54,7 +54,7 @@ public class CameraShake : MonoBehaviour
     {
         if (m_bShakeCamera)
         {
-           //? for (int i = 0; i < XCI.GetNumPluggedCtrlrs(); i++)
+           //? for (int i = 0; i < 4; i++)
            //?  {
            //?      GamePad.SetVibration(PlayerIndex.One + i, m_fShakeAmount * 0.01f, m_fShakeAmount * 0.01f);
            //?  }

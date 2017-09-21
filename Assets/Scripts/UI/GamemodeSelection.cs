@@ -299,7 +299,7 @@ public class GamemodeSelection : MonoBehaviour
     int DpadHorizontalTest()
     {
 
-        for (int i = 0; i < (int)PlayerIndex.Four; ++i)
+        for (int i = 0; i < 4; ++i)
         {
             if (XCI.GetButtonDown(XboxButton.DPadRight, XboxController.First + i))
             {

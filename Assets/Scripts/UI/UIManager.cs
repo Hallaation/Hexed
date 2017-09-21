@@ -121,7 +121,7 @@ public class UIManager : MonoBehaviour
             }
 
         }
-        for (int i = 0; i < XCI.GetNumPluggedCtrlrs(); ++i)
+        for (int i = 0; i < 4; ++i)
         {
             if (XCI.GetButtonDown(XboxButton.B , XboxController.First + i))
             {
@@ -249,7 +249,7 @@ public class UIManager : MonoBehaviour
             }
         }
         //If I press B return to the previous UI thing.
-        for (int i = 0; i < XCI.GetNumPluggedCtrlrs(); ++i)
+        for (int i = 0; i < 4; ++i)
         {
             if (XCI.GetButtonDown(XboxButton.B , XboxController.First + i))
             {
