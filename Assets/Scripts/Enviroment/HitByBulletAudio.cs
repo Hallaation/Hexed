@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
-public class HitByBulletAudio : MonoBehaviour, IHitByBullet
+public class HitByBulletAudio : MonoBehaviour, IHitByBullet, IHitByMelee
 {
     private AudioSource m_audioSource;
     public AudioClip m_audioClip;
@@ -25,8 +26,14 @@ public class HitByBulletAudio : MonoBehaviour, IHitByBullet
             m_audioSource.playOnAwake = false;
             m_audioSource.spatialBlend =  1;
             m_audioSource.clip = m_audioClip;
-            m_audioSource.pitch = (m_bRandomizePitch) ? Random.Range(0.9f , 1.1f) : 1;
+            m_audioSource.pitch = (m_bRandomizePitch) ? UnityEngine.Random.Range(0.9f , 1.1f) : 1;
 
         }
+    }
+
+    public void HitByMelee(Weapon meleeWeapon, AudioClip soundEffect, float Volume = 1, float Pitch = 1)
+    {
+        Debug.Log("send help");
+        m_audioSource.Play();
     }
 }

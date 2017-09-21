@@ -57,9 +57,9 @@ public class Move : MonoBehaviour
     //  private Text _AmmoText;
 
     private GameObject previousWeapon = null;
-    private PolygonCollider2D m_NoHandsCollider;
-    private PolygonCollider2D m_OneHandCollider;
-    private PolygonCollider2D m_TwoHandedCollider;
+    private Collider2D m_NoHandsCollider;
+    private Collider2D m_OneHandCollider;
+    private Collider2D m_TwoHandedCollider;
 
     private AudioSource[] m_audioSource;
     private GameObject AudioSourcePool;
@@ -117,9 +117,9 @@ public class Move : MonoBehaviour
 
         vibrationValue = Vector2.zero;
         //setting up any references to other classes needed.
-        m_NoHandsCollider = transform.Find("Colliders").Find("NoHands").GetComponent<PolygonCollider2D>();
-        m_OneHandCollider = transform.Find("Colliders").Find("1Hand").GetComponent<PolygonCollider2D>();
-        m_TwoHandedCollider = transform.Find("Colliders").Find("2Hands").GetComponent<PolygonCollider2D>();
+        m_NoHandsCollider = transform.Find("Colliders").Find("NoHands").GetComponent<Collider2D>();
+        m_OneHandCollider = transform.Find("Colliders").Find("1Hand").GetComponent<Collider2D>();
+        m_TwoHandedCollider = transform.Find("Colliders").Find("2Hands").GetComponent<Collider2D>();
         m_NoHandsCollider.enabled = true;
         m_controller = GetComponent<ControllerSetter>();
         m_status = GetComponent<PlayerStatus>();
@@ -548,7 +548,7 @@ public class Move : MonoBehaviour
 
             RaycastHit2D hitPoint = Physics2D.Raycast(pos , Dir , 1 , (1 << LayerMask.NameToLayer("Wall") | 1 << LayerMask.NameToLayer("FloorGun")));
             //Debug.DrawRay(this.transform.position , Dir , Color.magenta , 5);
-            Debug.Log(weaponToPickUp.GetComponentInParent<Weapon>().transform.root.parent);
+       
             if (hitPoint.transform == null)
             {
                 if (weaponToPickUp.GetComponentInParent<Weapon>().transform.root.GetComponent<PlayerStatus>() == null)
