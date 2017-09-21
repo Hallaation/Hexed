@@ -92,6 +92,7 @@ public class GameManagerc : MonoBehaviour
 
     public int m_iPointsIndex = 0;
     GameObject[] PointXPositions;
+    GameObject[] PointYPositions;
     //Lazy singleton
     public static GameManagerc Instance
     {
@@ -382,9 +383,17 @@ public class GameManagerc : MonoBehaviour
             {
                 PointXPositions[i] = GameObject.Find("PointXPositions").transform.GetChild(i).gameObject;
             }
+            //Populate the Y positions 
+            PointYPositions = new GameObject[GameObject.Find("PointYPositions").transform.childCount];
+            for (int i = 0; i < PointYPositions.Length; i++)
+            {
+                PointYPositions[i] = GameObject.Find("PointYPositions").transform.GetChild(i).gameObject;
+            }
 
             //Populate the array
             PointContainers = new GameObject[PointsPanel.transform.childCount];
+
+     
 
             //Move the point containers depending on how many points are required.
             for (int i = 0; i < PointsPanel.transform.childCount; i++)
@@ -403,6 +412,11 @@ public class GameManagerc : MonoBehaviour
                 PointContainers[i].SetActive(false);
             }
 
+            for (int i = 0; i < PointYPositions[m_iPointsIndex].transform.childCount; ++i)
+            {
+                Vector3 temp = PointContainers[i].transform.position;
+                PointContainers[i].transform.position = new Vector3(temp.x , PointYPositions[m_iPointsIndex].transform.GetChild(i).position.y , temp.z);
+            }
             //can also be used for the amount of players in the scene.
             XboxController[] JoinedXboxControllers = new XboxController[CharacterSelectionManager.Instance.playerSelectedCharacter.Count];
             int nextIndex = 0;
@@ -419,7 +433,6 @@ public class GameManagerc : MonoBehaviour
             {
                 PointContainers[(int)item - 1].SetActive(true);
             }
-
 
             //TODO Do some y offset math for different number of players
             foreach (var Player in InGamePlayers) //For every player in the game.
