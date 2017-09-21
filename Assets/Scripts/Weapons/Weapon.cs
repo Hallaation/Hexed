@@ -28,6 +28,7 @@ public class Weapon : MonoBehaviour
     public bool m_bActive = true;
     //[HideInInspector]
     public GameObject previousOwner; //previous owner used to make sure when the weapon is thrown, it doesnt stun the thrower.
+    public GameObject weaponThrower; //Used to store the thrower;
     private SpriteRenderer WeaponSpriteRenderer; //The sprite rendere of the weapon sprite
     private Transform weaponSpriteTransform; //The transform of the weapon's sprite 
     public bool m_bMoveWeaponSpriteUp; //A bool used to determine if the weapon sprite will move up or down
@@ -127,7 +128,7 @@ public class Weapon : MonoBehaviour
 
 
                     //move the weapon sprite up by the amount specified by ShadowGrowthSpeed
-                    weaponSpriteTransform.localPosition += new Vector3(0, 0, Time.deltaTime * ShadowGrowthSpeed);
+                    //weaponSpriteTransform.localPosition += new Vector3(0, 0, Time.deltaTime * ShadowGrowthSpeed);
                     //once I have reached the maximum allowed
                     if (weaponSpriteTransform.localPosition.y >= MaxShadow)
                     {
@@ -249,7 +250,7 @@ public class Weapon : MonoBehaviour
         if (stunPlayer)
         {
             //if it enters a trigger (another player in this case") the hit player gets stunned. calls the status applied to drop their weapon.
-            if (GetComponent<Rigidbody2D>().velocity.magnitude >= 10 && a_collider.tag == "Player" && a_collider.GetComponentInParent<PlayerStatus>().gameObject != previousOwner)
+            if (GetComponent<Rigidbody2D>().velocity.magnitude >= 10 && a_collider.tag == "Player" && a_collider.GetComponentInParent<PlayerStatus>().gameObject != weaponThrower)
             {
 
                 if (a_collider.GetComponentInParent<PlayerStatus>().IsStunned == false)
