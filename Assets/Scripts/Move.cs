@@ -17,7 +17,7 @@ using UnityEngine.SceneManagement;
 public class Move : MonoBehaviour
 {
     ControllerSetter m_controller;
-   // CharacterController _characterController;
+    // CharacterController _characterController;
     bool PlayerIsActive = true; public bool getActive() { return PlayerIsActive; }
     public void SetActive(bool a_PlayerActive) { PlayerIsActive = a_PlayerActive; }
     PlayerStatus m_status;
@@ -80,7 +80,7 @@ public class Move : MonoBehaviour
             m_audioSource[i] = AudioSourcePool.AddComponent<AudioSource>();
             m_audioSource[i].playOnAwake = false;
             m_audioSource[i].clip = quack;
-            m_audioSource[i].spatialBlend =  1;
+            m_audioSource[i].spatialBlend = 1;
         }
 
         if (!ColorDatabase)
@@ -98,7 +98,7 @@ public class Move : MonoBehaviour
 
         weapon1HandedMount = transform.Find("1HandedSpot");
         weapon2HandedMount = transform.Find("2HandedSpot");
-      
+
 
         if (transform.Find("Sprites"))
         {
@@ -394,10 +394,18 @@ public class Move : MonoBehaviour
     {
         if (heldWeapon && heldWeapon.GetComponent<Weapon>().m_bActive)
         {
+            Vector3 GunMountPosition = Vector3.one;
             //drop the weapon 
             heldWeapon.transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = 0; //? Puts gun layer behinde player layer when it's dropped. 
             //Determine what type of gun im holding
-            Vector3 GunMountPosition = (!heldWeapon.GetComponent<Weapon>().m_b2Handed) ?/*True*/ weapon1HandedMount.position : /*False*/weapon2HandedMount.position;
+            if (heldWeapon.GetComponent<Gun>())
+            {
+                GunMountPosition = (!heldWeapon.GetComponent<Gun>().m_b2Handed) ?/*True*/ weapon1HandedMount.position : /*False*/weapon2HandedMount.position;
+            }
+            else if (heldWeapon.GetComponent<Melee>())
+            {
+                GunMountPosition = (!heldWeapon.GetComponent<Melee>().m_b2Handed) ?/*True*/ weapon1HandedMount.position : /*False*/weapon2HandedMount.position;
+            }
             if (heldWeapon.GetComponent<Weapon>().m_bMeleeWeapon == true)
             {
                 heldWeapon.GetComponent<Melee>().Attacking = false;
@@ -405,7 +413,9 @@ public class Move : MonoBehaviour
             if (/*movement.magnitude == 0 ||*/ !tossWeapon)
             {
                 //Raycast from me to the gun mount position + an arbitrary number. IF I hit something, snap the gun to behind the wall
-                RaycastHit2D hit = Physics2D.Raycast(this.transform.position , throwDirection , (this.transform.position - GunMountPosition).magnitude + 0.3f, 1 << LayerMask.NameToLayer("Wall"));
+                RaycastHit2D hit = Physics2D.Raycast(this.transform.position , throwDirection , (this.transform.position - GunMountPosition).magnitude + 0.3f , (
+                    1 << LayerMask.NameToLayer("Wall") |
+                    1 << LayerMask.NameToLayer("Glass")));
                 if (hit)
                 {
                     heldWeapon.transform.position = hit.point + (hit.normal * 0.4f);
@@ -417,9 +427,10 @@ public class Move : MonoBehaviour
                 //drop the weapon. magic number 2.
                 heldWeapon.GetComponent<Weapon>().ThrowWeapon(throwDirection * 2);
                 heldWeapon.GetComponent<Weapon>().previousOwner = this.gameObject;
+                heldWeapon.GetComponent<Weapon>().weaponThrower = this.gameObject;
                 //heldWeapon.transform.Find("Sprite").GetComponent<Collider2D>().enabled = false;
                 m_bHoldingWeapon = false;
-               
+
                 heldWeapon = null;
                 if (BodyAnimator != null)
                     SetHoldingGun(0);
@@ -428,7 +439,9 @@ public class Move : MonoBehaviour
             else
             {
                 //toss it away with force
-                RaycastHit2D hit = Physics2D.Raycast(this.transform.position , throwDirection , (this.transform.position - GunMountPosition).magnitude , 1 << LayerMask.NameToLayer("Wall"));
+                RaycastHit2D hit = Physics2D.Raycast(this.transform.position , throwDirection , (this.transform.position - GunMountPosition).magnitude , (
+                    1 << LayerMask.NameToLayer("Wall") |
+                    1 << LayerMask.NameToLayer("Glass")));
                 if (hit)
                 {
                     heldWeapon.transform.localPosition = -this.transform.up * 0.2f;
@@ -437,6 +450,7 @@ public class Move : MonoBehaviour
                 heldWeapon.transform.Find("Sprite").GetComponent<Collider2D>().enabled = true;
                 heldWeapon.GetComponent<Weapon>().ThrowWeapon(throwDirection * throwingForce);
                 heldWeapon.GetComponent<Weapon>().previousOwner = this.gameObject;
+                heldWeapon.GetComponent<Weapon>().weaponThrower = this.gameObject;
                 //heldWeapon.transform.Find("Sprite").GetComponent<Collider2D>().enabled = false;
                 m_bHoldingWeapon = false;
                 heldWeapon = null;
@@ -477,21 +491,18 @@ public class Move : MonoBehaviour
         Collider2D[] hitCollider = Physics2D.OverlapCircleAll(this.transform.position , 1.0f , /*Pickup layer*/(1 << 12));
         foreach (Collider2D WeaponCollider in hitCollider)
         {
-
-            if (WeaponCollider.GetComponentInParent<Weapon>())                                       //! Null Check
+            if (WeaponCollider.GetComponentInParent<Weapon>())//If I find a weapon in the parent
             {
-                if (WeaponCollider.GetComponentInParent<Weapon>().gameObject != previousWeapon)
+                if (WeaponCollider.GetComponentInParent<Weapon>().gameObject != previousWeapon) //If the wepaon found isn't the previous weapon
                 {
                     //if (WeaponCollider.transform.parent.tag == "2hMelee")
                     //{
                     //    weaponToPickUp = WeaponCollider;
                     //    break;
                     //}
-                  
-                 
-                        weaponToPickUp = WeaponCollider;
-                        break;
-                    
+                    weaponToPickUp = WeaponCollider;
+                    break;
+
                 }
             }
             else if (WeaponCollider.transform.parent.GetComponentInParent<Weapon>())
@@ -503,7 +514,7 @@ public class Move : MonoBehaviour
 
                 }
             }
-           
+
             else if (WeaponCollider.GetComponentInChildren<Weapon>())//! Null Check
             {
                 if (WeaponCollider.GetComponentInChildren<Weapon>().gameObject != previousWeapon)
@@ -536,37 +547,41 @@ public class Move : MonoBehaviour
 
             //Quaternion temp = Quaternion.Euler(0,0,Vector3.Angle(transform.position , weaponToPickUp.transform.position));
             //Dir = temp * transform.up;
+            RaycastHit2D hitPoint = Physics2D.Raycast(pos , Dir , 1 , (
+                1 << LayerMask.NameToLayer("Wall") | //Raycast against wall
+                1 << LayerMask.NameToLayer("FloorGun") | //Raycast Against the gun
+                1 << LayerMask.NameToLayer("Glass")));  //Raycast against the Glass
 
-            RaycastHit2D hitPoint = Physics2D.Raycast(pos , Dir , 1 , (1 << LayerMask.NameToLayer("Wall") | 1 << LayerMask.NameToLayer("FloorGun")));
             //Debug.DrawRay(this.transform.position , Dir , Color.magenta , 5);
+            //Debug.Log(weaponToPickUp.GetComponentInParent<Weapon>().transform.root.parent);
 
-            if (hitPoint.transform == null)
+            if (hitPoint.transform == null) //If the raycast hit nothing
             {
-                if (weaponToPickUp.GetComponentInParent<Weapon>().transform.parent == null)
+                if (weaponToPickUp.GetComponentInParent<Weapon>().transform.root.GetComponent<PlayerStatus>() == null)
                 {
-                    PickupWeapon(weaponToPickUp);                                                                        //? ???????????????????
+                    PickupWeapon(weaponToPickUp);                                                                        //? ???????????????????????????
                     return true;
                 }
-                else if(weaponToPickUp.transform.parent.GetComponentInParent<Weapon>().transform.parent.parent == null)
+                else if (weaponToPickUp.transform.parent.GetComponentInParent<Weapon>().transform.root.GetComponent<PlayerStatus>() == null)
                 {
                     PickupWeapon(weaponToPickUp);
                     return true;
                 }
             }
-            else if (hitPoint.transform.GetComponentInParent<Weapon>())
+            else if (hitPoint.transform.GetComponentInParent<Weapon>()) //If the raycast hit a weapon
             {
-                if (weaponToPickUp.GetComponentInParent<Weapon>().transform.parent == null)
+                if (weaponToPickUp.GetComponentInParent<Weapon>().transform.root.GetComponent<PlayerStatus>() == null)
                 {
                     PickupWeapon(weaponToPickUp);
                     return true;
                 }
-                else if (weaponToPickUp.transform.parent.GetComponentInParent<Weapon>().transform.parent.parent == null)
+                else if (weaponToPickUp.transform.parent.GetComponentInParent<Weapon>().transform.root.GetComponent<PlayerStatus>() == null)
                 {
                     PickupWeapon(weaponToPickUp);
                     return true;
                 }
             }
-            else
+            else //If it hit something else (the wall)
             {
                 Debug.Log("WallBlock");
                 //Debug.DrawLine(pos , pos + Dir , Color.red , Mathf.Infinity);
@@ -578,26 +593,22 @@ public class Move : MonoBehaviour
 
     void PickupWeapon(Collider2D hitCollider)
     {
-        if(hitCollider.GetComponentInParent<Weapon>() && hitCollider.transform.parent.tag == "2hMelee")
+        if (hitCollider.GetComponentInParent<Weapon>() && hitCollider.transform.parent.tag == "2hMelee")
         {
             if (hitCollider.GetComponentInParent<Weapon>().previousOwner != this.gameObject)
             {
                 heldWeapon = hitCollider.transform.parent.GetComponentInParent<Weapon>().gameObject;
                 heldWeapon.transform.Find("Sprite").GetComponent<SpriteRenderer>().sortingOrder = 4; //? Puts gun layer infront of player layer when picked up. 
-                heldWeapon.transform.Find("Sprite").transform.localPosition = new Vector3(0, 0, 0); //! Resets Shadow on pickup.
+                heldWeapon.transform.Find("Sprite").transform.localPosition = new Vector3(0 , 0 , 0); //! Resets Shadow on pickup.
                 heldWeapon.GetComponent<Weapon>().PlayPickup();
                 heldWeapon.transform.SetParent(this.gameObject.transform.Find("Sprites").GetChild(0).Find("2HandedMeleeSpot"));
                 //! if the weapon isn't a 2 handed weapon, mount it to the 1 handed location
-                if (!hitCollider.transform.parent.gameObject.GetComponent<Weapon>().m_b2Handed)
-                {
-                    hitCollider.gameObject.transform.parent.position = Melee2HandedMount.position; //set position to the weapon mount spot
-                    hitCollider.gameObject.transform.parent.rotation = Melee2HandedMount.rotation; //set its rotation
-                }
-                else //! mount it to the 2handed mounting position
-                {
-                    hitCollider.gameObject.transform.parent.position = Melee2HandedMount.position; //set position to the weapon mount spot
-                    hitCollider.gameObject.transform.parent.rotation = Melee2HandedMount.rotation; //set its rotation
-                }
+
+
+                hitCollider.gameObject.transform.parent.position = Melee2HandedMount.position; //set position to the weapon mount spot
+                hitCollider.gameObject.transform.parent.rotation = Melee2HandedMount.rotation; //set its rotation
+
+
                 Rigidbody2D weaponRigidBody = hitCollider.GetComponentInParent<Rigidbody2D>(); //find its rigidbody in its 
 
                 //weaponRigidBody.simulated = false; 
@@ -631,19 +642,19 @@ public class Move : MonoBehaviour
                 }
                 vibrationValue.y = 0.5f; //vibrate controller for haptic feedback
             }
-        
+
         }
-      else  if (hitCollider.GetComponentInParent<Weapon>())
+        else if (hitCollider.GetComponentInParent<Weapon>())
         {
             if (hitCollider.GetComponentInParent<Weapon>().previousOwner != this.gameObject)
             {
                 heldWeapon = hitCollider.GetComponentInParent<Weapon>().gameObject;
                 heldWeapon.transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = 4; //? Puts gun layer infront of player layer when picked up. 
-                heldWeapon.transform.GetChild(0).transform.localPosition = new Vector3(0, 0, 0); //! Resets Shadow on pickup.
+                heldWeapon.transform.GetChild(0).transform.localPosition = new Vector3(0 , 0 , 0); //! Resets Shadow on pickup.
                 heldWeapon.GetComponent<Weapon>().PlayPickup();
                 heldWeapon.transform.SetParent(this.gameObject.transform);
                 //! if the weapon isn't a 2 handed weapon, mount it to the 1 handed location
-                if (!hitCollider.transform.parent.gameObject.GetComponent<Weapon>().m_b2Handed)
+                if (!hitCollider.transform.parent.gameObject.GetComponent<Gun>().m_b2Handed)
                 {
                     hitCollider.gameObject.transform.parent.position = weapon1HandedMount.position; //set position to the weapon mount spot
                     hitCollider.gameObject.transform.parent.rotation = weapon1HandedMount.rotation; //set its rotation
@@ -867,7 +878,7 @@ public class Move : MonoBehaviour
                     BodyAnimator.SetBool("HoldingOneHandedMelee" , false);
                     BodyAnimator.SetBool("HoldingTwoHandedMelee" , false);
                     m_NoHandsCollider.enabled = true;
-                    m_OneHandCollider.enabled = false;                                       
+                    m_OneHandCollider.enabled = false;
                     m_TwoHandedCollider.enabled = false;
                     break;
                 case 1:
@@ -875,7 +886,7 @@ public class Move : MonoBehaviour
                     BodyAnimator.SetBool("HoldingTwoHandedGun" , false);
                     BodyAnimator.SetBool("HoldingOneHandedMelee" , false);
                     BodyAnimator.SetBool("HoldingTwoHandedMelee" , false);
-                    m_NoHandsCollider.enabled = false;                                           
+                    m_NoHandsCollider.enabled = false;
                     m_OneHandCollider.enabled = true;
                     m_TwoHandedCollider.enabled = false;
                     break;
@@ -885,7 +896,7 @@ public class Move : MonoBehaviour
                     BodyAnimator.SetBool("HoldingOneHandedMelee" , false);
                     BodyAnimator.SetBool("HoldingTwoHandedMelee" , false);
                     m_NoHandsCollider.enabled = false;
-                    m_OneHandCollider.enabled = false;                                          
+                    m_OneHandCollider.enabled = false;
                     m_TwoHandedCollider.enabled = true;
                     break;
                 default:
@@ -957,7 +968,7 @@ public class Move : MonoBehaviour
 
     IEnumerator WeaponPickUpDelay(float WaitTime)
     {
-       yield return new WaitForSeconds(WaitTime);
+        yield return new WaitForSeconds(WaitTime);
         previousWeapon = null;
         yield return null;
     }
