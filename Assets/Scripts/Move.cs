@@ -35,6 +35,7 @@ public class Move : MonoBehaviour
     protected Animator BodyAnimator; public Animator GetBodyAnimator() { return BodyAnimator; }
     public Transform weapon1HandedMount;
     public Transform weapon2HandedMount;
+    public Transform Melee1HandedMount;
     public Transform Melee2HandedMount;
     public GameObject fistObject;
     public float movementSpeed = 10.0f;
@@ -102,6 +103,7 @@ public class Move : MonoBehaviour
 
         if (transform.Find("Sprites"))
         {
+            Melee1HandedMount = transform.Find("Sprites").GetChild(0).Find("1HandedMeleeSpot");
             Melee2HandedMount = transform.Find("Sprites").GetChild(0).Find("2HandedMeleeSpot");
             if (transform.Find("Sprites").transform.Find("Character001_Feet"))
             {
@@ -587,7 +589,7 @@ public class Move : MonoBehaviour
 
     void PickupWeapon(Collider2D hitCollider)
     {
-        if(hitCollider.GetComponentInParent<Weapon>() && hitCollider.transform.parent.tag == "2hMelee")
+        if(hitCollider.GetComponentInParent<Weapon>() && (hitCollider.transform.parent.tag == "2hMelee" || hitCollider.transform.parent.tag == "1hMelee"))
         {
             if (hitCollider.GetComponentInParent<Weapon>().previousOwner != this.gameObject)
             {
@@ -595,12 +597,20 @@ public class Move : MonoBehaviour
                 heldWeapon.transform.Find("Sprite").GetComponent<SpriteRenderer>().sortingOrder = 4; //? Puts gun layer infront of player layer when picked up. 
                 heldWeapon.transform.Find("Sprite").transform.localPosition = new Vector3(0, 0, 0); //! Resets Shadow on pickup.
                 heldWeapon.GetComponent<Weapon>().PlayPickup();
-                heldWeapon.transform.SetParent(this.gameObject.transform.Find("Sprites").GetChild(0).Find("2HandedMeleeSpot"));
-                //! if the weapon isn't a 2 handed weapon, mount it to the 1 handed location
-      
-                
+                if (heldWeapon.tag == "2hMelee")
+                { //! Sets weapon to spot based on tag.
+                    heldWeapon.transform.SetParent(this.gameObject.transform.Find("Sprites").GetChild(0).Find("2HandedMeleeSpot"));
                     hitCollider.gameObject.transform.parent.position = Melee2HandedMount.position; //set position to the weapon mount spot
                     hitCollider.gameObject.transform.parent.rotation = Melee2HandedMount.rotation; //set its rotation
+                }
+                else
+                {       //! if the weapon isn't a 2 handed weapon, mount it to the 1 handed location
+                    heldWeapon.transform.SetParent(this.gameObject.transform.Find("Sprites").GetChild(0).Find("1HandedMeleeSpot"));
+                    hitCollider.gameObject.transform.parent.position = Melee1HandedMount.position; //set position to the weapon mount spot
+                    hitCollider.gameObject.transform.parent.rotation = Melee1HandedMount.rotation; //set its rotation
+                }
+                
+                   
                 
 
                 Rigidbody2D weaponRigidBody = hitCollider.GetComponentInParent<Rigidbody2D>(); //find its rigidbody in its 
@@ -616,7 +626,7 @@ public class Move : MonoBehaviour
                 previousWeapon = heldWeapon;
                 m_bHoldingWeapon = true;
                 SetHoldingGun(0); //? Probably un-necessary
-                if (BodyAnimator != null)
+                if (BodyAnimator != null)  //! Could make this a function
                 {
                     switch (heldWeapon.tag)
                     {
