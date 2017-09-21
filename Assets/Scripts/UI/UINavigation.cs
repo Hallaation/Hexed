@@ -58,8 +58,9 @@ public class UINavigation : MonoBehaviour
         {
             if (_EventSystem.currentSelectedGameObject)
             {
-                for (int i = 0; i < XCI.GetNumPluggedCtrlrs(); i++)
+                for (int i = 0; i < 4; i++)
                 {
+                    
                     if (XCI.GetButtonDown(XboxButton.DPadDown, XboxController.First + i))
                     {
                         if (_EventSystem.currentSelectedGameObject.GetComponent<Selectable>().navigation.selectOnDown != null)
