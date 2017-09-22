@@ -67,7 +67,7 @@ public class CharacterSelectionManager : MonoBehaviour
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
-        if (playerSelectedCharacter.Count > 1 || Application.isEditor)
+        if (playerSelectedCharacter.Count > 1 /*|| Application.isEditor*/)
         {
             //only load the scene if I still havnt moved to arena scene
             if (Input.GetButtonDown("Start") && !m_bMovedToMainScene)
@@ -75,6 +75,12 @@ public class CharacterSelectionManager : MonoBehaviour
                 UIManager.Instance.MainMenuChangePanel(GameObject.Find("Third_Panel"));
                 //SceneManager.LoadScene(2); //oh fuck.
             }
+#if UNITY_EDITOR
+            if (Input.GetKeyDown(KeyCode.Return))
+            {
+                UIManager.Instance.MainMenuChangePanel(GameObject.Find("Third_Panel"));
+            }
+#endif
         }
 
         if (Application.isEditor && Input.GetKeyDown(KeyCode.R))
@@ -93,7 +99,7 @@ public class CharacterSelectionManager : MonoBehaviour
         XboxController[] JoinedXboxControllers = new XboxController[playerSelectedCharacter.Count];
         int nextIndex = 0;
         for (int i = 0; i < 4; i++)
-        { 
+        {
             if (playerSelectedCharacter.ContainsKey(XboxController.First + i))
             {
                 JoinedXboxControllers[nextIndex] = XboxController.First + i;
@@ -110,11 +116,11 @@ public class CharacterSelectionManager : MonoBehaviour
             {
                 ControllerManager.Instance.FindSpawns();
                 //Debug.Log(JoinedXboxControllers[i]);
-                
+
                 Vector3 spawnPosition = ControllerManager.Instance.spawnPoints[i].position; //Get the spawn position
                 //Make the gameojbect and keep a reference scoped to the single loop
 
-                GameObject go = Instantiate(playerSelectedCharacter[JoinedXboxControllers[i]], spawnPosition, Quaternion.identity, null);
+                GameObject go = Instantiate(playerSelectedCharacter[JoinedXboxControllers[i]] , spawnPosition , Quaternion.identity , null);
                 //Set anything required for the player to work.
                 go.GetComponent<ControllerSetter>().SetController(JoinedXboxControllers[i]);
                 go.GetComponent<ControllerSetter>().m_playerNumber = (int)JoinedXboxControllers[i] - 1;
@@ -124,10 +130,10 @@ public class CharacterSelectionManager : MonoBehaviour
                 //Make a reference in game manager
                 GameManagerc.Instance.AddPlayer(go.GetComponent<PlayerStatus>());
                 DontDestroyOnLoad(go);//turn it on
-                go.SetActive(true);   
+                go.SetActive(true);
                 CameraControl.mInstance.m_Targets.Add(go.transform); //make a reference in camera control
                 m_bMovedToMainScene = true;
-                
+
             }
         }
 
