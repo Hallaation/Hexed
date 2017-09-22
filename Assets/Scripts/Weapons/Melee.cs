@@ -41,7 +41,7 @@ public class Melee : Weapon
                     {
 
                     }
-
+                    //other.transform.parent.GetComponentInParent<PlayerStatus>().HitPlayer(this, false);
                     other.transform.parent.GetComponentInParent<PlayerStatus>().StunPlayer(transform.right * KnockBack);        //! Uses transform right instead of transform up due to using the bats right rather then players up
 
                     Debug.Log("BatEnterStun");
@@ -58,23 +58,44 @@ public class Melee : Weapon
                 }
             }
         }
+        //
+
+        else if (GetComponent<Rigidbody2D>().velocity.magnitude > 20)
+        {
+            other.transform.parent.GetComponentInParent<PlayerStatus>().StunPlayer(transform.right * KnockBack);        //! Uses transform right instead of transform up due to using the bats right rather then players up
+            foreach (IHitByMelee item in other.GetComponents<IHitByMelee>())
+            {
+                item.HitByMelee(this, null);
+            }
+        }
     }
     void OnTriggerStay2D(Collider2D other)
     {
-        if (Attacking && other.tag == "Player" && other.transform.root != this.transform.root && other.transform.root.GetComponent<PlayerStatus>().m_bStunned == false)
+        if (this.transform.root.tag == "Player" && other.transform.root != this.transform.root)
         {
-            other.transform.parent.GetComponentInParent<PlayerStatus>().StunPlayer(transform.right * KnockBack);        //! Uses transform right instead of transform up due to using the bats right rather then players up
-            other.transform.parent.GetComponentInParent<Move>().StatusApplied();
-            Debug.Log("BatStayStun");
-        }
-
-        if (Attacking && other.transform.root != this.transform.root)
-        {
-            if (other.GetComponent<IHitByMelee>() != null)
+            if (Attacking == true && other.tag == "Player" && other.transform.root != this.transform.root && other.transform.root.GetComponent<PlayerStatus>().m_bStunned == false)
             {
-                foreach (IHitByMelee item in other.GetComponents<IHitByMelee>())
+                if (BodyAnimator != null)
                 {
-                    item.HitByMelee(this, null);
+                    RaycastHit2D hit = Physics2D.Raycast(this.transform.position, other.transform.position - transform.position.normalized, (this.transform.position - transform.parent.position).magnitude + 0.3f, 1 << LayerMask.NameToLayer("Wall"));
+                    if (hit)
+                    {
+
+                    }
+                    other.transform.parent.GetComponentInParent<PlayerStatus>().HitPlayer(this, false);
+                    // other.transform.parent.GetComponentInParent<PlayerStatus>().StunPlayer(transform.right * KnockBack);        //! Uses transform right instead of transform up due to using the bats right rather then players up
+
+                    Debug.Log("BatEnterStun");
+                }
+
+
+
+                if (other.GetComponent<IHitByMelee>() != null)
+                {
+                    foreach (IHitByMelee item in other.GetComponents<IHitByMelee>())
+                    {
+                        item.HitByMelee(this, null);
+                    }
                 }
             }
         }

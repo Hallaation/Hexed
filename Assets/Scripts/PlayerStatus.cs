@@ -365,6 +365,23 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             m_bInvincible = true;
         }
     }
+    public void HitPlayer(Weapon a_weapon, bool abGiveIFrames = false)
+    {
+        if (!m_bInvincible)
+        {
+            m_iHealth -= a_weapon.m_iDamage;
+            //If the game mode is either the timed deathmatch or scores appointed on kills deathmatch, then give them points
+            if (m_iHealth <= 0 && (GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_POINTS /*|| GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_TIMED*/))
+            {
+                //update the bullet owner's score
+                GameManagerc.Instance.PlayerWins[a_weapon.transform.root.GetComponent<PlayerStatus>()]++;
+            }
+        }
+        if (abGiveIFrames)
+        {
+            m_bInvincible = true;
+        }
+    }
 
     IEnumerator InvinciblityTime()
     {
