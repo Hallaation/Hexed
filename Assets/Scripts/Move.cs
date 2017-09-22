@@ -77,8 +77,9 @@ public class Move : MonoBehaviour
         AudioSourcePool.transform.localPosition = Vector3.zero;
 
         for (int i = 0; i < m_audioSource.Length; ++i)
-        {
+        { 
             m_audioSource[i] = AudioSourcePool.AddComponent<AudioSource>();
+            m_audioSource[i].outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as GameObject).GetComponent<AudioSource>().outputAudioMixerGroup;
             m_audioSource[i].playOnAwake = false;
             m_audioSource[i].clip = quack;
             m_audioSource[i].spatialBlend =  1;
@@ -316,8 +317,9 @@ public class Move : MonoBehaviour
     }
     void CalculateMovement()
     {
+        
         //Quack.
-
+        
         Vector3 movement = Vector3.zero;
 
         //Gets the input from the left stick to determine the movement

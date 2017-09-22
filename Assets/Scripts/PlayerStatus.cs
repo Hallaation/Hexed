@@ -49,12 +49,20 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
     public SpriteRenderer stunMask;
     private GameObject stunBarContainer;
     private AudioSource m_MeleeHitAudioSource;
+
+    [Header("Death")]
+    public float DeathWaitTime = 3;
+    Timer deathTimer;
+    
     [Range(0, 0.22f)]
     public float fill;
     //if the player is dead, the renderer will change their Color to gray, and all physics simulation of the player's rigidbody will be turned off.
     void Start()
     {
+        deathTimer = new Timer(DeathWaitTime);
         m_MeleeHitAudioSource = this.gameObject.AddComponent<AudioSource>();
+        m_MeleeHitAudioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as GameObject).GetComponent<AudioSource>().outputAudioMixerGroup;
+        //m_MeleeHitAudioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as  AudioSource).outputAudioMixerGroup;
         m_MeleeHitAudioSource.playOnAwake = false;
         m_MeleeHitAudioSource.spatialBlend = 1;
 
@@ -170,6 +178,10 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         if (m_bDead)
         {
             //this.GetComponent<Renderer>().material.color = Color.grey;
+            if (deathTimer.Tick(Time.deltaTime))
+            {
+                CameraControl.mInstance.m_Targets.Remove(this.gameObject.transform);
+            }
             SetAllAnimatorsFalse();
             PlayerSprite.material.color = Color.grey;
             this.GetComponent<Rigidbody2D>().simulated = false;
@@ -294,8 +306,8 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
 
         float xOffset = m_iHealth * -0.0791f;
         _HealthMask.GetComponent<Image>().material.SetTextureOffset("_MainTex", new Vector2(0 + xOffset, 0));
-        //this.transform.position = ControllerManager.Instance.spawnPoints[spawnIndex].position;
-        this.transform.position = Vector3.zero;
+        this.transform.position = ControllerManager.Instance.spawnPoints[spawnIndex].position;
+        //this.transform.position = Vector3.zero;
         GetComponent<Move>().ThrowWeapon(Vector2.zero, Vector2.up, false);
 
        // this.GetComponent<Collider2D>().isTrigger = true;

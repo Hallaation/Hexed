@@ -285,11 +285,8 @@ public class GameManagerc : MonoBehaviour
                 UIManager.Instance.OpenUIElement(FinishUIPanel , true);
                 UIManager.Instance.RemoveLastPanel = false;
                 //Reset the event managers current selected object to the rematch button
-                if (FindObjectOfType<EventSystem>().currentSelectedGameObject == null)
-                {
-                    FindObjectOfType<EventSystem>().SetSelectedGameObject(null);
-                    FindObjectOfType<EventSystem>().SetSelectedGameObject(FinishUIPanel.transform.Find("Rematch").gameObject);
-                }
+                //FindObjectOfType<EventSystem>().SetSelectedGameObject(FinishUIPanel.transform.Find("Rematch").gameObject);
+
                 //TODO Load Character select / win screen;
                 //TODO Sort players by score?
             }
@@ -423,7 +420,7 @@ public class GameManagerc : MonoBehaviour
             XboxController[] JoinedXboxControllers = new XboxController[CharacterSelectionManager.Instance.playerSelectedCharacter.Count];
             int nextIndex = 0;
 
-            for (int i = 0; i < 4 ; i++)
+            for (int i = 0; i < 4; i++)
             {
                 if (CharacterSelectionManager.Instance.playerSelectedCharacter.ContainsKey(XboxController.First + i))
                 {
