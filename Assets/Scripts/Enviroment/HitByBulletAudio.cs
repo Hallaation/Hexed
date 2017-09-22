@@ -36,7 +36,7 @@ public class HitByBulletAudio : MonoBehaviour, IHitByBullet, IHitByMelee
 
     public void HitByMelee(Weapon meleeWeapon, AudioClip soundEffect, float Volume = 1, float Pitch = 1)
     {
-        Debug.Log("send help");
+       
         m_audioSource.Play();
     }
 }

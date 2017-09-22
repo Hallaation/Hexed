@@ -114,7 +114,7 @@ public class Weapon : MonoBehaviour
             }
             //If my weapon has more than 2 (the shadow object is the third)
 
-            if (this.transform.childCount > 2 && tag != "Player" && _rigidbody.velocity.magnitude < .1)
+            if (this.transform.childCount > 2 && tag != "Player" && _rigidbody.velocity.magnitude < .1f)
             {
 
                 //turn the sprite renderer on
@@ -125,14 +125,14 @@ public class Weapon : MonoBehaviour
                     m_bMoveWeaponSpriteUp = true;
                 }
                 //If i want to move the weapon sprite up.
-                if (m_bMoveWeaponSpriteUp && _rigidbody.velocity.magnitude < .3)
+                if (m_bMoveWeaponSpriteUp && _rigidbody.velocity.magnitude < .3f)
                 {
 
 
                     //move the weapon sprite up by the amount specified by ShadowGrowthSpeed
-                    //weaponSpriteTransform.localPosition += new Vector3(0, 0, Time.deltaTime * ShadowGrowthSpeed);
+                    weaponSpriteTransform.localPosition += new Vector3(0, 0, Time.deltaTime * ShadowGrowthSpeed);
                     //once I have reached the maximum allowed
-                    if (weaponSpriteTransform.localPosition.y >= MaxShadow)
+                    if (weaponSpriteTransform.localPosition.z >= MaxShadow)
                     {
                         //Snap the weapon's sprite transform to the max location
                         weaponSpriteTransform.localPosition = new Vector3(weaponSpriteTransform.localPosition.x, weaponSpriteTransform.localPosition.y, MaxShadow); 
@@ -208,7 +208,7 @@ public class Weapon : MonoBehaviour
     {
         //dropping the weapon will turn the physics back on
         GetComponent<Rigidbody2D>().simulated = true;
-        this.transform.SetParent(null);                                                 //? May be the reason shit fucks up
+        this.transform.SetParent(null);                                                
         GetComponent<Rigidbody2D>().angularVelocity = 50.0f;
         m_AudioSource.PlayOneShot(DropAudioClip , DropAudioVolume);
     }

@@ -10,6 +10,7 @@ public class Melee : Weapon
     public bool Attacking;
     public bool m_b2Handed;
     public float DurationOfAttack;
+    private Animator BodyAnimator; public void SetAnimator(Animator AnimatorToSet) { BodyAnimator = AnimatorToSet; }
     [Space]
 
     [Header("Melee Hit Audio")]
@@ -29,15 +30,21 @@ public class Melee : Weapon
     // Update is called once per frame
    void OnTriggerEnter2D(Collider2D other)
     {
-
-        if (Attacking && other.tag == "Player" && other.transform.root != this.transform.root && other.transform.root.GetComponent<PlayerStatus>().m_bStunned == false)
+        if (this.transform.root.tag == "Player" && other.transform.root != this.transform.root)
         {
-            other.transform.parent.GetComponentInParent<PlayerStatus>().StunPlayer(transform.right * KnockBack);        //! Uses transform right instead of transform up due to using the bats right rather then players up
+            if ( other.tag == "Player" && other.transform.root != this.transform.root && other.transform.root.GetComponent<PlayerStatus>().m_bStunned == false)
+            {
+                if (BodyAnimator != null)
+                {
 
-            Debug.Log("BatEnterStun");
-        }
-        if (Attacking && other.transform.root != this.transform.root)
-        {
+
+                    other.transform.parent.GetComponentInParent<PlayerStatus>().StunPlayer(transform.right * KnockBack);        //! Uses transform right instead of transform up due to using the bats right rather then players up
+
+                    Debug.Log("BatEnterStun");
+                }
+            }
+
+
             if (other.GetComponent<IHitByMelee>() != null)
             {
                 foreach (IHitByMelee item in other.GetComponents<IHitByMelee>())
@@ -53,9 +60,9 @@ public class Melee : Weapon
         {
             other.transform.parent.GetComponentInParent<PlayerStatus>().StunPlayer(transform.right * KnockBack);        //! Uses transform right instead of transform up due to using the bats right rather then players up
             other.transform.parent.GetComponentInParent<Move>().StatusApplied();
-
             Debug.Log("BatStayStun");
         }
+
         if (Attacking && other.transform.root != this.transform.root)
         {
             if (other.GetComponent<IHitByMelee>() != null)
@@ -73,12 +80,11 @@ public class Melee : Weapon
 
         if (shotReady)
         {
-
+            
             //BoxCollider2D MeleeHitBox = transform.parent.Find("Punch").GetComponent<BoxCollider2D>();
-            if (m_bActive && trigger == true && Attacking != true)
+            if (m_bActive)
             {
-                Attacking = true; //? needs work
-                StartCoroutine(AttackDuration());
+                
                 shotReady = false;
                 return true;
             }
@@ -164,8 +170,19 @@ public class Melee : Weapon
     public override void DoWeaponThings()
     {
         PreviousVelocity = GetComponent<Rigidbody2D>().velocity;
+        if (BodyAnimator)
+            if (BodyAnimator.GetCurrentAnimatorStateInfo(0).IsName("TwoHandedMeleeRightAttack")
+                || BodyAnimator.GetCurrentAnimatorStateInfo(0).IsName("TwoHandedMeleeLeftAttack")
+                || BodyAnimator.GetCurrentAnimatorStateInfo(0).IsName("OneHandedMeleeAttack"))
+            {
+                Attacking = true;
+            }
+        else
+            {
+                Attacking = false;
+            }
     }
-
+   
 
     IEnumerator AttackDuration()
     {
