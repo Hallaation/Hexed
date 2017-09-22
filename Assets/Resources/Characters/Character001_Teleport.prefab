@@ -433,8 +433,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1568182744093302}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -15.101, y: 9.921815, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -8.1, y: 5.42, z: 0}
+  m_LocalScale: {x: 1.2, y: 1.2, z: 1}
   m_Children:
   - {fileID: 4834453555101378}
   - {fileID: 4985821799328362}
@@ -574,13 +574,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1527501559085286}
-  m_LocalRotation: {x: -0, y: -0, z: -0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 1.0600003, y: -1.7730012, z: 0}
-  m_LocalScale: {x: 1.0000002, y: 1.0000002, z: 1}
+  m_LocalRotation: {x: 0, y: 0, z: -0.68793267, w: 0.72577447}
+  m_LocalPosition: {x: 0.324, y: -0.045, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4203875953447844}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -105.716}
 --- !u!4 &4834453555101378
 Transform:
   m_ObjectHideFlags: 1
@@ -1523,6 +1523,7 @@ MonoBehaviour:
   spawnIndex: 0
   stunBar: {fileID: 212168385520398088}
   stunMask: {fileID: 212638414856348564}
+  DeathWaitTime: 3
   fill: 0
 --- !u!114 &114675045598426420
 MonoBehaviour:
