@@ -140,6 +140,15 @@ public class SelectionUIElements : MonoBehaviour
                             m_Animator.SetBool("IsSelected" , true);
                         }
                     }
+#if UNITY_EDITOR
+                    else if (Input.GetKeyDown(KeyCode.X))
+                    {
+                        m_bSelectedCharacter = true;
+                        selectionManager.playerSelectedCharacter.Add(m_controller , selectionManager.CharacterArray[m_iSelectedIndex]);
+                        selectionManager.CharacterSelectionStatus[selectionManager.CharacterArray[m_iSelectedIndex]] = true; //set the status selected to true
+                        m_Animator.SetBool("IsSelected" , true);
+                    }
+#endif
                     #endregion
                 }
                 //If I pressed B and I have selected a character 
@@ -161,6 +170,15 @@ public class SelectionUIElements : MonoBehaviour
             }
             else //! if the player hasn't joined the game yet
             {
+#if UNITY_EDITOR
+                if (Input.GetKeyDown(KeyCode.Z))
+                {
+                    m_bPlayerJoined = true;
+                    m_PressAToJoinGO.SetActive(false);
+                    m_bBackedOut = false;
+                    m_bNotJoined = true;
+                }
+#endif
                 //! scan for A input
                 if (XCI.GetButton(XboxButton.A , m_controller))
                 {

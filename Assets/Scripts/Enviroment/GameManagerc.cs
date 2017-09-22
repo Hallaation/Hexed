@@ -44,7 +44,7 @@ using XInputDotNetPure;
 public enum Gamemode_type
 {
     LAST_MAN_STANDING_DEATHMATCH, //last person to stand earns a point, probably the default
-    DEATHMATCH_POINTS, //killing a player will earn them a point, up to a certain point
+    DEATHMATCH_POINTS, //killing a player will earn them a point, up to a certain point Currently broken and only semi implemented.
 
 }
 
@@ -143,6 +143,7 @@ public class GameManagerc : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+#if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.G))
         {
             GoToStart();
@@ -158,7 +159,7 @@ public class GameManagerc : MonoBehaviour
         {
             KillPlayer1();
         }
-
+#endif
         if (InGamePlayers.Count > 1)
         {
             StartCoroutine(CheckForRoundEnd());
@@ -218,7 +219,12 @@ public class GameManagerc : MonoBehaviour
 
     void KillPlayer1()
     {
-        InGamePlayers[0].KillPlayer(InGamePlayers[1]);
+        int MaxPlayers = InGamePlayers.Count;
+        for (int i = 0; i < MaxPlayers - 1; i++)
+        {
+            InGamePlayers[i].KillPlayer(InGamePlayers[InGamePlayers.Count - 1]);
+        }
+        //InGamePlayers[0].KillPlayer(InGamePlayers[1]);
     }
     /// <summary>
     /// Points are awarded if a player is the last man standing
