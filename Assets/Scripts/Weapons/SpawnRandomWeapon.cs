@@ -68,7 +68,7 @@ public class SpawnRandomWeapon : MonoBehaviour
 
     void SpawnARandomWepaon()
     {
-        int randomIndex = Random.Range(0 , Weapons.Length);
+        int randomIndex = Random.Range(0 , Weapons.Length - 1);
         GameObject spawnedWeapon = Instantiate(Weapons[randomIndex]);
         spawnedWeapon.transform.position = this.transform.position;
         spawnedWeapon.transform.rotation = this.transform.rotation;
