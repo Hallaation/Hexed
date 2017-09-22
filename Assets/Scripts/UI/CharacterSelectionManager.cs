@@ -127,7 +127,7 @@ public class CharacterSelectionManager : MonoBehaviour
                 GameManagerc.Instance.AddPlayer(go.GetComponent<PlayerStatus>());
                 DontDestroyOnLoad(go);//turn it on
                 go.SetActive(true);
-                CameraControl.mInstance.m_Targets.Add(go.transform); //make a reference in camera control
+                CameraControl.mInstance.AddTarget(go.transform); //make a reference in camera control
                 m_bMovedToMainScene = true;
 
             }

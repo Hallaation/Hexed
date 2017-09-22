@@ -50,9 +50,6 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
     private GameObject stunBarContainer;
     private AudioSource m_MeleeHitAudioSource;
 
-    [Header("Death")]
-    public float DeathWaitTime = 3;
-    Timer deathTimer;
     public Sprite[] DeadSprites;
     public Sprite[] StunnedSprites;
     private bool DeathSpriteChanged = false;
@@ -65,8 +62,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
     void Start()
     {
         m_SpriteRenderer = this.transform.Find("Sprites").GetChild(0).GetComponent<SpriteRenderer>();
-
-        deathTimer = new Timer(DeathWaitTime);
+        
         m_MeleeHitAudioSource = this.gameObject.AddComponent<AudioSource>();
         m_MeleeHitAudioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as GameObject).GetComponent<AudioSource>().outputAudioMixerGroup;
         //m_MeleeHitAudioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as  AudioSource).outputAudioMixerGroup;
@@ -183,13 +179,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
 
         //if im dead, set my Color to gray, turn of all physics simulations and exit the function
         if (m_bDead)
-        {
-
-            //this.GetComponent<Renderer>().material.color = Color.grey;
-            if (deathTimer.Tick(Time.deltaTime))
-            {
-                CameraControl.mInstance.m_Targets.Remove(this.gameObject.transform);
-            }
+        { 
             SetAllAnimatorsFalse();
 
             PlayerSprite.material.color = Color.grey;
