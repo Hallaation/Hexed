@@ -121,6 +121,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1461360850370188
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4866358222128262}
+  m_Layer: 8
+  m_Name: 2HandedMeleeSpot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1478209969541300
 GameObject:
   m_ObjectHideFlags: 1
@@ -163,7 +178,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4824551304350034}
   m_Layer: 8
-  m_Name: 1HandedMeleeSpot (1)
+  m_Name: 1HandedMeleeSpot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -306,7 +321,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4037834042101908}
-  - component: {fileID: 60646951674123218}
+  - component: {fileID: 58677544255220976}
   m_Layer: 8
   m_Name: NoHands
   m_TagString: Player
@@ -418,7 +433,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1568182744093302}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.1, y: 5.42, z: 0}
+  m_LocalPosition: {x: -15.101, y: 9.921815, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4834453555101378}
@@ -430,6 +445,7 @@ Transform:
   - {fileID: 4350440211359944}
   - {fileID: 4000198835020106}
   - {fileID: 4513932534797672}
+  - {fileID: 4866358222128262}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -494,7 +510,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1421915867450752}
   m_LocalRotation: {x: -0, y: -0, z: -0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 1.0600003, y: -1.7730006, z: 0}
+  m_LocalPosition: {x: 0.18, y: -0.56, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4203875953447844}
@@ -580,6 +596,19 @@ Transform:
   - {fileID: 4511116892527620}
   m_Father: {fileID: 4141461237438614}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4866358222128262
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1461360850370188}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.773, y: 1.06, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4141461237438614}
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4920624073694488
 Transform:
@@ -672,6 +701,20 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!58 &58677544255220976
+CircleCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1927457295582512}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.5
 --- !u!58 &58800828093289776
 CircleCollider2D:
   m_ObjectHideFlags: 1
@@ -709,26 +752,6 @@ PolygonCollider2D:
       - {x: -0.3369442, y: -0.4974426}
       - {x: -0.40034536, y: -0.2246926}
       - {x: -0.33294, y: 0.20550786}
---- !u!60 &60646951674123218
-PolygonCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1927457295582512}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_Offset: {x: 0, y: 0}
-  m_Points:
-    m_Paths:
-    - - {x: -0.01236248, y: 0.28914523}
-      - {x: 0.45963955, y: 0.20393395}
-      - {x: 0.5414252, y: -0.2001543}
-      - {x: 0.045802593, y: -0.27742124}
-      - {x: -0.5585413, y: -0.20094395}
-      - {x: -0.55236006, y: 0.1699369}
 --- !u!60 &60731912299679658
 PolygonCollider2D:
   m_ObjectHideFlags: 1
@@ -1531,6 +1554,7 @@ MonoBehaviour:
   crosshair: {fileID: 1878821153811888}
   weapon1HandedMount: {fileID: 4000198835020106}
   weapon2HandedMount: {fileID: 4513932534797672}
+  Melee1HandedMount: {fileID: 0}
   Melee2HandedMount: {fileID: 0}
   fistObject: {fileID: 0}
   movementSpeed: 10
