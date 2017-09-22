@@ -2,22 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Audio;
 using System.IO;
 
 public class SettingsManager : MonoBehaviour
 {
-
     public Toggle fullscreenToggle;
     public Dropdown resolutionDropdwon;
     public Dropdown textureQualityDropdown;
     public Dropdown AAdropdown;
     public Dropdown vSyncDrop;
     public Slider masterVolumeSlider;
+    public Slider sfxVolumeSlider;
+    public Slider musicVolumeSlider;
     public Button applyButton;
     public Resolution[] resolutions;
     public Settings gameSettings;
 
     private bool m_bUnsavedChanges = false;
+    public AudioMixer masterMixer;
+
     public bool UnsavedChanges { get { return m_bUnsavedChanges; } }
 
     private static SettingsManager mInstance;
@@ -36,9 +40,13 @@ public class SettingsManager : MonoBehaviour
         }
     }
 
+
     // Use this for initialization
     void OnEnable()
     {
+
+        masterMixer = (Resources.Load("AudioMixer/MasterAudio") as GameObject).GetComponent<AudioSource>().outputAudioMixerGroup.audioMixer;
+
         gameSettings = new Settings();
         resolutions = Screen.resolutions;
 
@@ -49,6 +57,8 @@ public class SettingsManager : MonoBehaviour
         //AAdropdown.onValueChanged.AddListener(delegate { onAntialiasingChange(); });
         vSyncDrop.onValueChanged.AddListener(delegate { onVsyncChange(); });
         masterVolumeSlider.onValueChanged.AddListener(delegate { OnMasterVolumeChange(); });
+        sfxVolumeSlider.onValueChanged.AddListener(delegate { OnSFXVolumeChange(); });
+        musicVolumeSlider.onValueChanged.AddListener(delegate { OnMusicVolumeChange(); });
         applyButton.onClick.AddListener(delegate { OnApplyButtonClick(); });
         foreach (Resolution reso in resolutions)
         {
@@ -89,22 +99,37 @@ public class SettingsManager : MonoBehaviour
     {
         /*QualitySettings.vSyncCount = */
         gameSettings.vSync = vSyncDrop.value;
+       
         m_bUnsavedChanges = true;
     }
 
     public void OnMasterVolumeChange()
     {
         /*AudioListener.volume = */
-        gameSettings.musicVolume = masterVolumeSlider.value;
+        gameSettings.masterVolume = masterVolumeSlider.value;
+        masterMixer.SetFloat("Master" , masterVolumeSlider.value);
         m_bUnsavedChanges = true;
     }
 
+    public void OnSFXVolumeChange()
+    {
+        gameSettings.sfxVolume = sfxVolumeSlider.value;
+        masterMixer.SetFloat("SFX" , masterVolumeSlider.value);
+        m_bUnsavedChanges = true;
+    }
+
+    public void OnMusicVolumeChange()
+    {
+        gameSettings.musicVolume = musicVolumeSlider.value;
+        masterMixer.SetFloat("Music" , masterVolumeSlider.value);
+        m_bUnsavedChanges = true;
+    }
     public void OnApplyButtonClick()
     {
         Screen.fullScreen = gameSettings.Fullscreen;
         Screen.SetResolution(resolutions[gameSettings.resolutionIndex].width, resolutions[gameSettings.resolutionIndex].height, gameSettings.Fullscreen);
         QualitySettings.vSyncCount = gameSettings.vSync;
-        AudioListener.volume = gameSettings.musicVolume;
+        //AudioListener.volume = gameSettings.masterVolume; Change to the master volume mixer
         SaveSettings();
     }
     public void SaveSettings()
@@ -120,7 +145,7 @@ public class SettingsManager : MonoBehaviour
         if (File.Exists(Application.persistentDataPath + "/gameSettings.json"))
         {
             gameSettings = JsonUtility.FromJson<Settings>(File.ReadAllText(Application.persistentDataPath + "/gameSettings.json"));
-            masterVolumeSlider.value = gameSettings.musicVolume;
+            masterVolumeSlider.value = gameSettings.masterVolume;
             //AAdropdown.value = (int)Mathf.Sqrt(gameSettings.antiAliasing);
             //textureQualityDropdown.value = textureQualityDropdown.options.Count + gameSettings.textureQuality;
             resolutionDropdwon.value = gameSettings.resolutionIndex;

@@ -67,7 +67,7 @@ public class CharacterSelectionManager : MonoBehaviour
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
-        if (playerSelectedCharacter.Count > 1 /*|| Application.isEditor*/)
+        if (playerSelectedCharacter.Count > 1 && UIManager.Instance.m_bInMainMenu /*|| Application.isEditor*/)
         {
             //only load the scene if I still havnt moved to arena scene
             if (Input.GetButtonDown("Start") && !m_bMovedToMainScene)

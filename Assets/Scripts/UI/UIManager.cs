@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using XboxCtrlrInput;
+using UnityEngine.Audio;
 using System;
 
 public class UIManager : MonoBehaviour
@@ -66,7 +67,6 @@ public class UIManager : MonoBehaviour
 
     void Awake()
     {
-
         uiNavigationInstance = UINavigation.Instance;
         m_bMenuAnimator = FindObjectOfType<Canvas>().GetComponent<Animator>();
         //Add me to the singleton tester
@@ -134,9 +134,17 @@ public class UIManager : MonoBehaviour
 
     public void MainMenuBack()
     {
-        //If the menu status only has 1 object in it, dont do anything
+        //GetComponent<AudioSource>().outputAudioMixerGroup;
+        //If the menu status only has 1 object in it, 
         if (menuStatus.Count == 1 || CharacterSelectionManager.Instance.JoinedPlayers < 4)
         {
+            //If there are joined players and the peek of the stack is the third panel, go back
+            if (CharacterSelectionManager.Instance.JoinedPlayers < 4 && menuStatus.Peek().name == "Third_Panel")
+            {
+                menuStatus.Pop();
+                m_bMenuAnimator.SetTrigger(MenuTransitionBoolParameters[menuStatus.Peek().name]);
+                SetCurrentSelected(null);
+            }
             return;
         }
         else if (m_bOpenedPanel) //only will run If a panel was open (Credits or Settings)
@@ -386,7 +394,7 @@ public class UIManager : MonoBehaviour
             {
                 _eventSystem.SetSelectedGameObject(null);
                 _eventSystem.SetSelectedGameObject(menuStatus.Peek().GetComponentInChildren<Button>().gameObject);
-                defaultToReturnTo = menuStatus.Peek().GetComponentInChildren<Button>().gameObject;
+                //defaultToReturnTo = menuStatus.Peek().GetComponentInChildren<Button>().gameObject;
             }
         }
 

@@ -72,12 +72,16 @@ public class Weapon : MonoBehaviour
     void Start()
     {
         m_AudioSource = this.gameObject.AddComponent<AudioSource>();
+        m_AudioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as GameObject).GetComponent<AudioSource>().outputAudioMixerGroup;
+        //m_AudioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as  AudioSource).outputAudioMixerGroup;
         m_AudioSource.playOnAwake = false;
         m_AudioSource.clip = m_AudioClip;
         m_AudioSource.volume = clipVolume;
         m_AudioSource.spatialBlend =  1;
 
         hitPlayerAudioSource = this.gameObject.AddComponent<AudioSource>();
+        hitPlayerAudioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as GameObject).GetComponent<AudioSource>().outputAudioMixerGroup;
+        //hitPlayerAudioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as  AudioSource).outputAudioMixerGroup;
         hitPlayerAudioSource.playOnAwake = false;
         hitPlayerAudioSource.spatialBlend =  1;
         //m_AudioSource = AudioManager.RequestAudioSource(m_AudioClip, clipVolume, clipPitch);
