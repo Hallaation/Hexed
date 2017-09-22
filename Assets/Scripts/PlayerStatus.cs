@@ -50,16 +50,19 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
     private GameObject stunBarContainer;
     private AudioSource m_MeleeHitAudioSource;
 
-    [Header("Death")]
-    public float DeathWaitTime = 3;
-    Timer deathTimer;
-    
+    public Sprite[] DeadSprites;
+    public Sprite[] StunnedSprites;
+    private bool DeathSpriteChanged = false;
+    private bool StunSpriteChanged = false;
+    private SpriteRenderer m_SpriteRenderer;
+    private Sprite SpriteToReturnTo;
     [Range(0, 0.22f)]
     public float fill;
     //if the player is dead, the renderer will change their Color to gray, and all physics simulation of the player's rigidbody will be turned off.
     void Start()
     {
-        deathTimer = new Timer(DeathWaitTime);
+        m_SpriteRenderer = this.transform.Find("Sprites").GetChild(0).GetComponent<SpriteRenderer>();
+        
         m_MeleeHitAudioSource = this.gameObject.AddComponent<AudioSource>();
         m_MeleeHitAudioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as GameObject).GetComponent<AudioSource>().outputAudioMixerGroup;
         //m_MeleeHitAudioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as  AudioSource).outputAudioMixerGroup;
@@ -176,28 +179,39 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
 
         //if im dead, set my Color to gray, turn of all physics simulations and exit the function
         if (m_bDead)
-        {
-            //this.GetComponent<Renderer>().material.color = Color.grey;
-            if (deathTimer.Tick(Time.deltaTime))
-            {
-                CameraControl.mInstance.m_Targets.Remove(this.gameObject.transform);
-            }
+        { 
             SetAllAnimatorsFalse();
+
             PlayerSprite.material.color = Color.grey;
             this.GetComponent<Rigidbody2D>().simulated = false;
             killMePrompt.SetActive(false);
             killMeArea.SetActive(false);
             stunBarContainer.SetActive(false);
+            GetComponent<Move>().GetBodyAnimator().enabled = false;
+            GetComponent<Move>().GetFeetAnimator().enabled = false;
+            if (DeadSprites.Length > 0 && !DeathSpriteChanged)
+            {
+                DeathSpriteChanged = true;
+                m_SpriteRenderer.sprite = DeadSprites[Random.Range(0 , DeadSprites.Length - 1)];
+            }
+
             return;
         }
 
         //if im stunned, make me cyan and show any kill prompts (X button and kill radius);
         if (m_bStunned)
         {
+            GetComponent<Move>().GetBodyAnimator().enabled = false;
+            GetComponent<Move>().GetFeetAnimator().enabled = false;
+            if (StunnedSprites.Length > 0 && !StunSpriteChanged)
+            {
+                StunSpriteChanged = true;
+                m_SpriteRenderer.sprite = StunnedSprites[Random.Range(0 , StunnedSprites.Length - 1)];
+            }
+
             SetAllAnimatorsFalse();
             killMeArea.SetActive(true);
             PlayerSprite.material.color = Color.cyan;
-
             //set the stun bar location
             stunBarContainer.transform.localPosition = Vector3.zero;
             stunBarContainer.transform.position += Vector3.up * 1.2f;
@@ -223,6 +237,9 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         //if not stunned dont kill me
         else
         {
+            GetComponent<Move>().GetBodyAnimator().enabled = true;
+            GetComponent<Move>().GetFeetAnimator().enabled = true;
+            StunSpriteChanged = false;
             this.GetComponent<Move>().MakeCollidersTriggers(false);
             stunBarContainer.SetActive(false);
             if (this.transform.GetChild(1).tag == "Stunned")
@@ -302,6 +319,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         m_bDead = false;
         m_bStunned = false;
         m_iTimesPunched = 0;
+        stunTimer.CurrentTime = 0;
         this.GetComponent<Rigidbody2D>().simulated = true;
 
         float xOffset = m_iHealth * -0.0791f;
@@ -358,6 +376,23 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             {
                 //update the bullet owner's score
                 GameManagerc.Instance.PlayerWins[aBullet.bulletOwner]++;
+            }
+        }
+        if (abGiveIFrames)
+        {
+            m_bInvincible = true;
+        }
+    }
+    public void HitPlayer(Weapon a_weapon, bool abGiveIFrames = false)
+    {
+        if (!m_bInvincible)
+        {
+            m_iHealth -= a_weapon.m_iDamage;
+            //If the game mode is either the timed deathmatch or scores appointed on kills deathmatch, then give them points
+            if (m_iHealth <= 0 && (GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_POINTS /*|| GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_TIMED*/))
+            {
+                //update the bullet owner's score
+                GameManagerc.Instance.PlayerWins[a_weapon.transform.root.GetComponent<PlayerStatus>()]++;
             }
         }
         if (abGiveIFrames)
