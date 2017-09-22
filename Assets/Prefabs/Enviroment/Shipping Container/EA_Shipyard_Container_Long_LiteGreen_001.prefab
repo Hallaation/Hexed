@@ -36,6 +36,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4855527763959800}
   - component: {fileID: 61140849249815566}
+  - component: {fileID: 114729121281440750}
   m_Layer: 10
   m_Name: Collider
   m_TagString: Wall
@@ -84,6 +85,20 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 4, y: 12}
+--- !u!114 &114729121281440750
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1396824069017756}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1470fd1c36da2d04486d17adb0c656c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_audioClip: {fileID: 0}
+  m_bRandomizePitch: 0
+  clipVolume: 1
 --- !u!212 &212076163676420030
 SpriteRenderer:
   m_ObjectHideFlags: 1

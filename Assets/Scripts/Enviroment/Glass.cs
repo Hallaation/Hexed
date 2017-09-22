@@ -63,6 +63,7 @@ public class Glass : MonoBehaviour, IHitByBullet, IHitByMelee
             Debug.Log("hhhhhhhhhhhhhh");
             Shatter();
             SpawnShards(hit);
+            
             this.GetComponent<HitByBulletAudio>().HitByMelee(null, null);
         }
         else if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Bullet") && IsShattered == false)
