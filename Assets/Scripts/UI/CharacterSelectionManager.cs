@@ -106,10 +106,6 @@ public class CharacterSelectionManager : MonoBehaviour
                 nextIndex++;
             }
         }
-        foreach (var item in playerSelectedCharacter)
-        {
-            Debug.Log(item.Key);
-        }
         if (!m_bMovedToMainScene)
         {
             for (int i = 0; i < 4 - JoinedPlayers; ++i)

@@ -159,6 +159,16 @@ public class GameManagerc : MonoBehaviour
         {
             KillPlayer1();
         }
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            //Stun all players
+            int MaxPlayers = InGamePlayers.Count;
+            for (int i = 0; i < MaxPlayers; i++)
+            {
+                //InGamePlayers[i].KillPlayer(InGamePlayers[InGamePlayers.Count - 1]);
+                InGamePlayers[i].StunPlayer(Vector3.zero);
+            }
+        }
 #endif
         if (InGamePlayers.Count > 1)
         {
@@ -220,7 +230,7 @@ public class GameManagerc : MonoBehaviour
     void KillPlayer1()
     {
         int MaxPlayers = InGamePlayers.Count;
-        for (int i = 0; i < MaxPlayers - 1; i++)
+        for (int i = 0; i < MaxPlayers - 2; i++)
         {
             InGamePlayers[i].KillPlayer(InGamePlayers[InGamePlayers.Count - 1]);
         }
