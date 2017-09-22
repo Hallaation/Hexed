@@ -32,24 +32,29 @@ public class Melee : Weapon
     {
         if (this.transform.root.tag == "Player" && other.transform.root != this.transform.root)
         {
-            if ( other.tag == "Player" && other.transform.root != this.transform.root && other.transform.root.GetComponent<PlayerStatus>().m_bStunned == false)
+            if (Attacking == true && other.tag == "Player" && other.transform.root != this.transform.root && other.transform.root.GetComponent<PlayerStatus>().m_bStunned == false)
             {
                 if (BodyAnimator != null)
                 {
+                    RaycastHit2D hit = Physics2D.Raycast(this.transform.position, other.transform.position - transform.position.normalized, (this.transform.position - transform.parent.position).magnitude + 0.3f, 1 << LayerMask.NameToLayer("Wall"));
+                    if (hit)
+                    {
 
+                    }
 
                     other.transform.parent.GetComponentInParent<PlayerStatus>().StunPlayer(transform.right * KnockBack);        //! Uses transform right instead of transform up due to using the bats right rather then players up
 
                     Debug.Log("BatEnterStun");
                 }
-            }
 
 
-            if (other.GetComponent<IHitByMelee>() != null)
-            {
-                foreach (IHitByMelee item in other.GetComponents<IHitByMelee>())
+
+                if (other.GetComponent<IHitByMelee>() != null)
                 {
-                    item.HitByMelee(this, null);
+                    foreach (IHitByMelee item in other.GetComponents<IHitByMelee>())
+                    {
+                        item.HitByMelee(this, null);
+                    }
                 }
             }
         }
