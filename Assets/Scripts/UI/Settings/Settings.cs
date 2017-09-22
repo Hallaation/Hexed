@@ -9,5 +9,8 @@ public class Settings
     public int antiAliasing;
     public int vSync;
     public int resolutionIndex;
+    public float masterVolume;
+    public float sfxVolume;
     public float musicVolume;
+    
 }
