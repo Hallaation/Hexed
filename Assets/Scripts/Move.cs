@@ -407,11 +407,10 @@ public class Move : MonoBehaviour
             else if(heldWeapon.GetComponent<Melee>())
             {
                 GunMountPosition = (!heldWeapon.GetComponent<Melee>().m_b2Handed) ?/*True*/ weapon1HandedMount.position : /*False*/weapon2HandedMount.position;
+                heldWeapon.GetComponent<Melee>().Attacking = false;                             //TODO Update this for melee to stop throw through walls
+                heldWeapon.GetComponent<Melee>().SetAnimator(null);
             }
-                if (heldWeapon.GetComponent<Weapon>().m_bMeleeWeapon == true)
-            {
-                heldWeapon.GetComponent<Melee>().Attacking = false;
-            }
+
             if (/*movement.magnitude == 0 ||*/ !tossWeapon)
             {
                 //Raycast from me to the gun mount position + an arbitrary number. IF I hit something, snap the gun to behind the wall
@@ -602,6 +601,7 @@ public class Move : MonoBehaviour
                     heldWeapon.transform.SetParent(this.gameObject.transform.Find("Sprites").GetChild(0).Find("2HandedMeleeSpot"));
                     hitCollider.gameObject.transform.parent.position = Melee2HandedMount.position; //set position to the weapon mount spot
                     hitCollider.gameObject.transform.parent.rotation = Melee2HandedMount.rotation; //set its rotation
+                  
                 }
                 else
                 {       //! if the weapon isn't a 2 handed weapon, mount it to the 1 handed location
@@ -609,9 +609,9 @@ public class Move : MonoBehaviour
                     hitCollider.gameObject.transform.parent.position = Melee1HandedMount.position; //set position to the weapon mount spot
                     hitCollider.gameObject.transform.parent.rotation = Melee1HandedMount.rotation; //set its rotation
                 }
-                
-                   
-                
+                heldWeapon.GetComponent<Melee>().SetAnimator(BodyAnimator); // Sets animator for bat to know when swinging.
+
+
 
                 Rigidbody2D weaponRigidBody = hitCollider.GetComponentInParent<Rigidbody2D>(); //find its rigidbody in its 
 
