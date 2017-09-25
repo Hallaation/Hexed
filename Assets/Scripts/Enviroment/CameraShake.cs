@@ -40,6 +40,7 @@ public class CameraShake : MonoBehaviour
 
     public void ShakeCamera()
     {
+        m_fTimer = 0;
         m_bShakeCamera = true;
     }
     void Awake()

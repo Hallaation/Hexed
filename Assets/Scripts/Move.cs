@@ -315,22 +315,46 @@ public class Move : MonoBehaviour
         }
 
     }
+
+    Vector3 CheckKeyboardInput()
+    {
+        Vector3 temp = Vector3.zero;
+
+        if (Input.GetKey(KeyCode.W))
+        {
+            temp.y = 1;
+        }
+        if (Input.GetKey(KeyCode.S))
+        {
+            temp.y = -1;
+        }
+        if (Input.GetKey(KeyCode.A))
+        {
+            temp.x = -1;
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            temp.x = 1;
+        }
+        return temp;
+    }
     void CalculateMovement()
     {
         
         //Quack.
         
         Vector3 movement = Vector3.zero;
-
+        Vector3 KeyboardMovement = Vector3.zero;
         //Gets the input from the left stick to determine the movement
         movement = new Vector3(XCI.GetAxis(XboxAxis.LeftStickX , m_controller.mXboxController) , XCI.GetAxis(XboxAxis.LeftStickY , m_controller.mXboxController));
+        KeyboardMovement = CheckKeyboardInput();
         //Vrotation used to determine what way the character to rotate
         Vector3 vrotation = Vector3.zero;
         Vector3 LeftStickRotation = Vector3.zero; // consistently left stick rotation
         m_LeftStickRotation = new Vector2(-GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Left.X , GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Left.Y);
 
         // FeetAnimator.transform.rotation = new Quaternion(0, 0, temp.z, temp.w);
-        if (!m_bStopStickRotation)
+        if (!m_bStopStickRotation) //IF dont stop the stick rotation
         {
             //vrotation = new Vector2(-GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Right.X, GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Right.Y);
 
@@ -340,13 +364,13 @@ public class Move : MonoBehaviour
         }
         //if im not getting any input from the right stick, make my rotation from the left stick instead
         //if rotation is none and stick rotation is allowed
-        if (vrotation == Vector3.zero && !m_bStopStickRotation)
+        if (vrotation == Vector3.zero && !m_bStopStickRotation) //If stopping the stick rotation and normal rotation (right stick) is zeroed;
         {
             //turn off the crosshair
             crosshair.SetActive(false);
             //vrotation = new Vector2(-GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Left.X, GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Left.Y);
 
-            vrotation = new Vector2(-XCI.GetAxisRaw(XboxAxis.LeftStickX , m_controller.mXboxController) , XCI.GetAxisRaw(XboxAxis.LeftStickY , m_controller.mXboxController));
+            vrotation = new Vector2(-XCI.GetAxisRaw(XboxAxis.LeftStickX, m_controller.mXboxController), XCI.GetAxisRaw(XboxAxis.LeftStickY, m_controller.mXboxController));
 
         }
         else
@@ -371,13 +395,17 @@ public class Move : MonoBehaviour
                 transform.Find("Sprites").transform.Find("Character001_Feet").transform.rotation *= Quaternion.Euler(0 , 0 , 90);
             }
         }
+        else if (KeyboardMovement != Vector3.zero)
+        {
+            this.transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(-KeyboardMovement.x, KeyboardMovement.y) * Mathf.Rad2Deg);
+        }
 
         if (!m_status.IsStunned)
         {
             //this.transform.position += movement * movementSpeed * Time.deltaTime;
             //_rigidBody.AddForce(movement * movementSpeed * Time.deltaTime , ForceMode2D.Impulse);
             //_rigidBody.AddForce( movement * movementSpeed, ForceMode2D.Impulse);
-            _rigidBody.velocity = movement * movementSpeed;
+            _rigidBody.velocity = (movement + KeyboardMovement) * movementSpeed;
         }
 
         //animation checks go here
@@ -409,7 +437,7 @@ public class Move : MonoBehaviour
             else if(heldWeapon.GetComponent<Melee>())
             {
                 GunMountPosition = (!heldWeapon.GetComponent<Melee>().m_b2Handed) ?/*True*/ weapon1HandedMount.position : /*False*/weapon2HandedMount.position;
-                heldWeapon.GetComponent<Melee>().Attacking = false;                             //TODO Update this for melee to stop throw through walls
+                heldWeapon.GetComponent<Melee>().m_bAttacking = false;                             //TODO Update this for melee to stop throw through walls
                 heldWeapon.GetComponent<Melee>().SetAnimator(null);
             }
 
@@ -464,7 +492,7 @@ public class Move : MonoBehaviour
     {
         //both the LB and B button will be used to pickup weapons, pressing these again will determine how the weapon being held will be thrown away.
         //Pressing B button will do a small throw and land just in front of where the player threw it away.
-        if (XCI.GetButtonDown(XboxButton.B , m_controller.mXboxController))
+        if (XCI.GetButtonDown(XboxButton.B , m_controller.mXboxController) || Input.GetMouseButtonDown(1))
         {
             Vector2 movement = new Vector3(XCI.GetAxis(XboxAxis.LeftStickX , m_controller.mXboxController) , XCI.GetAxis(XboxAxis.LeftStickY , m_controller.mXboxController));
             Vector2 throwDirection = new Vector2(this.transform.up.x , this.transform.up.y);
@@ -708,11 +736,11 @@ public class Move : MonoBehaviour
     void Attack(bool TriggerCheck)
     {
         //attacks with weapon in hand, if no weapon, they do a melee punch instead.
-        if (XCI.GetAxis(XboxAxis.RightTrigger , m_controller.mXboxController) > 0)
+        if (XCI.GetAxis(XboxAxis.RightTrigger, m_controller.mXboxController) > 0 || Input.GetMouseButton(0))
         {
             if (m_bHoldingWeapon)
             {
-                if (BodyAnimator != null)
+                if (BodyAnimator != null) //This check is only if there is a melee weapon.
                 {
                     BodyAnimator.SetBool("UnarmedAttack" , false);
                     BodyAnimator.SetBool("Attack" , true);

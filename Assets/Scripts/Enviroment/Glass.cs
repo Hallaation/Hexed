@@ -64,7 +64,7 @@ public class Glass : MonoBehaviour, IHitByBullet, IHitByMelee
             Shatter();
             SpawnShards(hit);
             
-            this.GetComponent<HitByBulletAudio>().HitByMelee(null, null);
+            this.GetComponent<HitByMeleeAction>().HitByMelee(null, null);
         }
         else if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Bullet") && IsShattered == false)
         {
@@ -75,27 +75,28 @@ public class Glass : MonoBehaviour, IHitByBullet, IHitByMelee
         }
     }
 
-
+    //For Melee weapon collisions
     private void OnTriggerEnter2D(Collider2D hit)
     {
         if ((hit.transform.parent.tag == "2hMelee" || hit.transform.parent.tag == "1hMelee" || hit.transform.gameObject.layer == LayerMask.NameToLayer("Bullet")) && IsShattered == false)
         {
-            if (hit.transform.parent.GetComponent<Melee>().Attacking == true)
+            if (hit.transform.parent.GetComponent<Melee>().m_bAttacking == true)
             {
                 Shatter();
                 SpawnShards(hit);
-                this.GetComponent<HitByBulletAudio>().HitByMelee(null, null);
+                this.GetComponent<HitByMeleeAction>().HitByMelee(null, null);
             }
         }
         if ((hit.transform.root.tag == "2hMelee" || hit.transform.root.tag == "1hMelee") && IsShattered == false)
             if (hit.transform.root.GetComponent<Melee>()) // Null Check
-                if (hit.transform.root.GetComponent<Melee>().Attacking == true)
+                if (hit.transform.root.GetComponent<Melee>().m_bAttacking == true)
                 {
                     Shatter();
                     SpawnShards(hit);
-                    this.GetComponent<HitByBulletAudio>().HitByMelee(null, null);
+                    this.GetComponent<HitByMeleeAction>().HitByMelee(null, null);
                 }
     }
+
     void Shatter()
     {
         GlassSpriteRenderer.sprite = BrokenGlass;

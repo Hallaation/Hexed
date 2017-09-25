@@ -7,11 +7,10 @@ public class Weapon : MonoBehaviour
     //base weapon class
     private Sprite m_DefaultSprite;
     public Sprite m_HeldSprite = null;
-    public float m_fTimeBetweenShots = 0.01f;
+    public float m_fTimeBetweenShots = 0.01f; 
     public float m_iDamage;
 
-    public bool m_bMeleeWeapon;
-    public bool m_bGivePlayersIFrames = false;
+    public bool m_bGivePlayersIFrames = false; 
     public float KnockBack;
     [Space]
     [Header("ShadowRelated")]
@@ -63,7 +62,7 @@ public class Weapon : MonoBehaviour
     [Range(0 , 1)]
     public float ThrowHitAudioVolume = 1;
     private AudioSource hitPlayerAudioSource;
-
+    protected bool m_bPlayedAudio = false; //A fallback incase audio doesn't work, mostly a major fallback for the melee guns.
     //[Range(-2, 2)]
     //public float clipPitch;
     protected AudioSource m_AudioSource;
@@ -275,6 +274,7 @@ public class Weapon : MonoBehaviour
         previousOwner = null;
 
     }
+
     public void PlayPickup()
     {
         m_AudioSource.PlayOneShot(PickupAudio , pickupVolume);

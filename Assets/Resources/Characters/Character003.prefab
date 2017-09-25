@@ -129,9 +129,9 @@ GameObject:
   - component: {fileID: 4928709252180866}
   - component: {fileID: 114710113000103220}
   - component: {fileID: 114573171792716912}
+  - component: {fileID: 114575896584523890}
   - component: {fileID: 212255850679691074}
   - component: {fileID: 50324413735201458}
-  - component: {fileID: 114575896584523890}
   - component: {fileID: 114115526854407360}
   - component: {fileID: 114204110763119908}
   - component: {fileID: 114677098931939778}
@@ -854,6 +854,9 @@ MonoBehaviour:
   m_audioClip: {fileID: 8300000, guid: 4b888a7f968ac134c8739ec4a23a7eee, type: 3}
   m_bRandomizePitch: 0
   clipVolume: 1
+  m_bShakeCamera: 1
+  PlayParticles: 0
+  ParticlePrefab: {fileID: 0}
 --- !u!114 &114129193142877148
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -972,7 +975,6 @@ MonoBehaviour:
   spawnIndex: 0
   stunBar: {fileID: 212906996554297888}
   stunMask: {fileID: 212199790125459178}
-  DeathWaitTime: 3
   DeadSprites:
   - {fileID: 21300098, guid: 41d3dad8bba4e174e8b80cce222ff08e, type: 3}
   - {fileID: 21300100, guid: 41d3dad8bba4e174e8b80cce222ff08e, type: 3}
