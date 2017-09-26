@@ -11,7 +11,8 @@ public class Weapon : MonoBehaviour
     public float m_iDamage;
 
     public bool m_bGivePlayersIFrames = false; 
-    public float KnockBack;
+    public float ThrowHitKnockBack;
+
     [Space]
     [Header("ShadowRelated")]
     public float MaxShadow; //How high the weapon sprite will move up
@@ -100,7 +101,7 @@ public class Weapon : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!transform.parent) // If gun is not held, Grow and shrink shadow.
+        if (!transform.parent) // If weapon is not held, Grow and shrink shadow.
         {
             #region
             m_bActive = true;
@@ -256,7 +257,7 @@ public class Weapon : MonoBehaviour
 
                 if (a_collider.GetComponentInParent<PlayerStatus>().IsStunned == false)
                 {
-                    a_collider.GetComponentInParent<PlayerStatus>().StunPlayer(_rigidbody.velocity * KnockBack);
+                    a_collider.GetComponentInParent<PlayerStatus>().StunPlayer(_rigidbody.velocity * ThrowHitKnockBack);
                     a_collider.GetComponentInParent<Move>().StatusApplied();
                     hitPlayerAudioSource.clip = ThrowHitAudio;
                     hitPlayerAudioSource.volume = ThrowHitAudioVolume;

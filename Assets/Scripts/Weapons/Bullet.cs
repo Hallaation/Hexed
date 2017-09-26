@@ -21,7 +21,7 @@ public class Bullet : MonoBehaviour
     [HideInInspector]
     public float m_iDamage;
     public bool m_bGiveIFrames = false;
-
+    public float m_fBulletImpactKnockBack = 5;
     public TrailRenderer trail;
     public float m_fMaximumTime = 60;
     //public GameObject HitParticle;
@@ -166,7 +166,7 @@ public class Bullet : MonoBehaviour
                         //Debug.Log("Hit player");
                         //Debug.Log("Raycast hit player");
                         m_rigidBody.position = RayHit.point; //Snap the bullet to the collided object
-
+                        RayHit.transform.GetComponent<Rigidbody2D>().position +=  (Vector2)this.transform.right * m_fBulletImpactKnockBack;
                         PlayerStatus PlayerIHit = RayHit.transform.GetComponent<PlayerStatus>(); //Store the player I hit temporarily
                         PlayerIHit.HitPlayer(this , m_bGiveIFrames);
                         if (PlayerIHit.m_iHealth <= 0)

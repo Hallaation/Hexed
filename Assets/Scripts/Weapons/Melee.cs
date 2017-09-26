@@ -45,7 +45,7 @@ public class Melee : Weapon
                     }
                     m_AudioSource.Play();
                     //other.transform.parent.GetComponentInParent<PlayerStatus>().HitPlayer(this, false);
-                    other.transform.parent.GetComponentInParent<PlayerStatus>().StunPlayer(transform.right * KnockBack);        //! Uses transform right instead of transform up due to using the bats right rather then players up
+                    other.transform.parent.GetComponentInParent<PlayerStatus>().StunPlayer(transform.right * ThrowHitKnockBack);        //! Uses transform right instead of transform up due to using the bats right rather then players up
 
                     Debug.Log("BatEnterStun");
                 }
@@ -65,7 +65,7 @@ public class Melee : Weapon
 
         else if (GetComponent<Rigidbody2D>().velocity.magnitude > 20)
         {
-            other.transform.parent.GetComponentInParent<PlayerStatus>().StunPlayer(transform.right * KnockBack);        //! Uses transform right instead of transform up due to using the bats right rather then players up
+            other.transform.parent.GetComponentInParent<PlayerStatus>().StunPlayer(transform.right * ThrowHitKnockBack);        //! Uses transform right instead of transform up due to using the bats right rather then players up
             foreach (IHitByMelee item in other.GetComponents<IHitByMelee>())
             {
                 item.HitByMelee(this, null);

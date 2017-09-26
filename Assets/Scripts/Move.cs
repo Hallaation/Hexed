@@ -319,22 +319,24 @@ public class Move : MonoBehaviour
     Vector3 CheckKeyboardInput()
     {
         Vector3 temp = Vector3.zero;
-
-        if (Input.GetKey(KeyCode.W))
+        if (m_controller.mXboxController == XboxController.First)
         {
-            temp.y = 1;
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            temp.y = -1;
-        }
-        if (Input.GetKey(KeyCode.A))
-        {
-            temp.x = -1;
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            temp.x = 1;
+            if (Input.GetKey(KeyCode.W))
+            {
+                temp.y = 1;
+            }
+            if (Input.GetKey(KeyCode.S))
+            {
+                temp.y = -1;
+            }
+            if (Input.GetKey(KeyCode.A))
+            {
+                temp.x = -1;
+            }
+            if (Input.GetKey(KeyCode.D))
+            {
+                temp.x = 1;
+            }
         }
         return temp;
     }
@@ -382,7 +384,6 @@ public class Move : MonoBehaviour
         //Do deadzone calculations
         vrotation = CheckDeadZone(vrotation , StickDeadZone);
         LeftStickRotation = CheckDeadZone(LeftStickRotation , StickDeadZone);
-
         if (vrotation != Vector3.zero)
         {
             //Set the rotation to the Stick rotation
@@ -736,7 +737,7 @@ public class Move : MonoBehaviour
     void Attack(bool TriggerCheck)
     {
         //attacks with weapon in hand, if no weapon, they do a melee punch instead.
-        if (XCI.GetAxis(XboxAxis.RightTrigger, m_controller.mXboxController) > 0 || Input.GetMouseButton(0))
+        if (XCI.GetAxis(XboxAxis.RightTrigger, m_controller.mXboxController) > 0 || (Input.GetMouseButton(0) && m_controller.mXboxController == XboxController.First))
         {
             if (m_bHoldingWeapon)
             {

@@ -19,6 +19,7 @@ public class Gun : Weapon
     public bool m_bBurstFire;
     public bool m_b2Handed = false;
     public int m_iAmmo = 30;
+    public float m_fBulletImpactKnockback = 0.1f;
     public GameObject bullet;
     [SerializeField]
     private float m_fSpreadJitter = 1.0f;
@@ -117,9 +118,10 @@ public class Gun : Weapon
 
         GameObject FiredBullet = Instantiate(bullet , this.transform.parent.position + this.transform.parent.up * m_fBulletSpawnOffSet , this.transform.rotation);
         Bullet bulletComponent = FiredBullet.GetComponent<Bullet>();
-        bulletComponent.bulletOwner = GetComponentInParent<PlayerStatus>();
+        bulletComponent.bulletOwner = GetComponentInParent<PlayerStatus>(); //copy stuff over
         bulletComponent.m_iDamage = this.m_iDamage;
         bulletComponent.m_bGiveIFrames = m_bGivePlayersIFrames;
+        bulletComponent.m_fBulletImpactKnockBack = m_fBulletImpactKnockback;
         //Make a quaternion on the forward vector to determine the bullet spread jitter and set the bullet's rotation to the jitter
         FiredBullet.transform.rotation = this.transform.parent.rotation * Quaternion.Euler(Vector3.forward * m_fSpreadJitter * Random.Range(-1.0f , 1.0f));
         //apply an initial force to the bullet's rigidbody based on what direction the bullet is facing,
