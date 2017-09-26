@@ -17,14 +17,19 @@ public class EmptyHand : Weapon
 
     private int previousAnimatorState;
     private int InitialState;
+    private Move _moveClass;
     public Animator BodyAnimator { get { return m_BodyAnimator; } set { m_BodyAnimator = value; } }
+
     public override void StartUp()
     {
         //this.gameObject.name = "Player + " + GetComponent<ControllerSetter>().m_playerNumber;
         BodyAnimator = this.transform.Find("Sprites").GetChild(0).GetComponent<Animator>();
         previousAnimatorState = BodyAnimator.GetCurrentAnimatorStateInfo(0).fullPathHash;
         InitialState = previousAnimatorState;
+        BodyAnimator.SetBool("Moving", true);
+        //Debug.Log(BodyAnimator.GetCurrentAnimatorStateInfo(0));
         stunPlayer = false;
+        _moveClass = this.GetComponent<Move>();
     }
 
     public override bool Attack(bool trigger)
@@ -74,64 +79,68 @@ public class EmptyHand : Weapon
 
     public override void DoWeaponThings()
     {
-        if (BodyAnimator)
+        if (!_moveClass.heldWeapon)
         {
-            if (BodyAnimator.GetCurrentAnimatorStateInfo(0).fullPathHash != previousAnimatorState && BodyAnimator.GetCurrentAnimatorStateInfo(0).fullPathHash != InitialState)
+            if (BodyAnimator) //null check
             {
-                m_AudioSource.Play();
-                BoxCollider2D PunchHitBox = transform.Find("Punch").GetComponent<BoxCollider2D>();
-                //m_AudioSource.Play();
-                if (PunchHitBox.IsTouchingLayers(1 << 8)) // If Punch Hitbox is touching PLayer layer.
+                //Compare the 2 animations hashes, if they aren't the same, do the punch thing, also check if the hash isn't the initial state's hash
+                if (BodyAnimator.GetCurrentAnimatorStateInfo(0).fullPathHash != previousAnimatorState && BodyAnimator.GetCurrentAnimatorStateInfo(0).fullPathHash != InitialState && !BodyAnimator.GetCurrentAnimatorStateInfo(0).IsName("BodyWalking"))
                 {
-                    //Debug.Log("Punch");
-
-                    Collider2D[] Overlap = Physics2D.OverlapBoxAll(PunchHitBox.transform.position, PunchHitBox.size, 0, 1 << 8); //An Overlap collider with the punch hitbox. There is probably a better way. 
-
-                    int TotalCollisions = Overlap.Length;
-                    for (int i = 0; i < TotalCollisions; ++i)
+                    m_AudioSource.Play();
+                    BoxCollider2D PunchHitBox = transform.Find("Punch").GetComponent<BoxCollider2D>();
+                    //m_AudioSource.Play();
+                    if (PunchHitBox.IsTouchingLayers(1 << 8)) // If Punch Hitbox is touching PLayer layer.
                     {
-                        if (Overlap[i].transform.tag == "Player" && Overlap[i].transform != this.transform) // If hit another player
+                        //Debug.Log("Punch");
+
+                        Collider2D[] Overlap = Physics2D.OverlapBoxAll(PunchHitBox.transform.position, PunchHitBox.size, 0, 1 << 8); //An Overlap collider with the punch hitbox. There is probably a better way. 
+
+                        int TotalCollisions = Overlap.Length;
+                        for (int i = 0; i < TotalCollisions; ++i)
                         {
-
-                            bool HitPlayerFirst = true;
-                            RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up, (PunchHitBox.transform.position.y + PunchHitBox.size.y), 1 << LayerMask.NameToLayer("Wall"));
-                            if (hit.collider != null) // If hit a wall, check to see it hits the wall before the player if it does, stop the check here.
+                            if (Overlap[i].transform.tag == "Player" && Overlap[i].transform != this.transform) // If hit another player
                             {
-                                float DistanceToPlayer = Vector3.Distance(transform.position, Overlap[i].transform.position);
-                                float DistanceToWall = Vector3.Distance(transform.position, hit.point);
-                                if (DistanceToWall < DistanceToPlayer) // If Hit wall first.
-                                {
-                                    HitPlayerFirst = false;
-                                    //Debug.Log("HitWallFirst");
-                                }
-                                //Debug.Log("HitPlayerFirst");
-                            }
-                            if (HitPlayerFirst && Overlap[i].GetComponentInParent<PlayerStatus>().IsStunned == false)// If wall check returns player first. Punch as normal.
-                            {
-                                PlayerStatus hitPlayer = Overlap[i].GetComponentInParent<PlayerStatus>();
-                                if (hitPlayer != this.GetComponent<PlayerStatus>())
-                                {
-                                    hitPlayer.TimesPunched++;
-                                    hitPlayer.MiniStun(this.transform.up * (ThrowHitKnockBack * 1.5f), PunchFlinchTime);
-                                    float tempPitch = (m_bRandomizeHitPitch) ? Random.Range(0.9f, 1.1f) : 1;
-                                    hitPlayer.GetComponent<IHitByMelee>().HitByMelee(this, audioClip, m_clipVolume, tempPitch);
 
-                                    //Debug.Log("PunchedEnemy");
-                                    if (hitPlayer.TimesPunched >= 3)
+                                bool HitPlayerFirst = true;
+                                RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up, (PunchHitBox.transform.position.y + PunchHitBox.size.y), 1 << LayerMask.NameToLayer("Wall"));
+                                if (hit.collider != null) // If hit a wall, check to see it hits the wall before the player if it does, stop the check here.
+                                {
+                                    float DistanceToPlayer = Vector3.Distance(transform.position, Overlap[i].transform.position);
+                                    float DistanceToWall = Vector3.Distance(transform.position, hit.point);
+                                    if (DistanceToWall < DistanceToPlayer) // If Hit wall first.
                                     {
-                                        hitPlayer.StunPlayer(transform.up * ThrowHitKnockBack);
-                                        hitPlayer.TimesPunched = 0;
-                                        hitPlayer.GetComponent<Move>().StatusApplied();//GetComponent<Move>().StatusApplied();
-                                                                                       //Debug.Log("StunnedEnemy");
+                                        HitPlayerFirst = false;
+                                        //Debug.Log("HitWallFirst");
+                                    }
+                                    //Debug.Log("HitPlayerFirst");
+                                }
+                                if (HitPlayerFirst && Overlap[i].GetComponentInParent<PlayerStatus>().IsStunned == false)// If wall check returns player first. Punch as normal.
+                                {
+                                    PlayerStatus hitPlayer = Overlap[i].GetComponentInParent<PlayerStatus>();
+                                    if (hitPlayer != this.GetComponent<PlayerStatus>())
+                                    {
+                                        hitPlayer.TimesPunched++;
+                                        hitPlayer.MiniStun(this.transform.up * (ThrowHitKnockBack * 1.5f), PunchFlinchTime);
+                                        float tempPitch = (m_bRandomizeHitPitch) ? Random.Range(0.9f, 1.1f) : 1;
+                                        hitPlayer.GetComponent<IHitByMelee>().HitByMelee(this, audioClip, m_clipVolume, tempPitch);
+
+                                        //Debug.Log("PunchedEnemy");
+                                        if (hitPlayer.TimesPunched >= 3)
+                                        {
+                                            hitPlayer.StunPlayer(transform.up * ThrowHitKnockBack);
+                                            hitPlayer.TimesPunched = 0;
+                                            hitPlayer.GetComponent<Move>().StatusApplied();//GetComponent<Move>().StatusApplied();
+                                                                                           //Debug.Log("StunnedEnemy");
+                                        }
                                     }
                                 }
                             }
                         }
                     }
                 }
+                previousAnimatorState = BodyAnimator.GetCurrentAnimatorStateInfo(0).fullPathHash; //Store this frames new animation state's hash
             }
-            previousAnimatorState = BodyAnimator.GetCurrentAnimatorStateInfo(0).fullPathHash;
         }
-    }
 
+    }
 }
