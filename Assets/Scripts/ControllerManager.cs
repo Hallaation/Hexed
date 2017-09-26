@@ -264,7 +264,7 @@ public class ControllerManager : MonoBehaviour
             for (int j = 0; j < spawnPoints.Length; j++)
             {
                 int randomIndex = Random.Range(0, spawnPoints.Length);
-                while (randomIndex == i)
+                while (randomIndex == j)
                 {
                     randomIndex = Random.Range(0, spawnPoints.Length);
                 }
