@@ -263,7 +263,6 @@ public class Weapon : MonoBehaviour
                     hitPlayerAudioSource.volume = ThrowHitAudioVolume;
                     hitPlayerAudioSource.pitch = (m_bRandomizeThrowHitPitch) ? Random.Range(0.9f , 1.1f) : 1;
                     hitPlayerAudioSource.Play();
-                    
                 }
             }
         }

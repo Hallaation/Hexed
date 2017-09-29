@@ -63,9 +63,15 @@ public class Melee : Weapon
         }
         //
 
-        else if (GetComponent<Rigidbody2D>().velocity.magnitude > 20)
+        else if (GetComponent<Rigidbody2D>().velocity.magnitude > 10)
         {
-            other.transform.parent.GetComponentInParent<PlayerStatus>().StunPlayer(transform.right * ThrowHitKnockBack);        //! Uses transform right instead of transform up due to using the bats right rather then players up
+            if (other.transform.root.GetComponentInParent<PlayerStatus>())
+            {
+                if (GetComponent<Rigidbody2D>().velocity.magnitude >= 10 && other.tag == "Player" && other.GetComponentInParent<PlayerStatus>().gameObject != weaponThrower)
+                {
+                    other.transform.root.GetComponentInParent<PlayerStatus>().StunPlayer(transform.right * ThrowHitKnockBack);        //! Uses transform right instead of transform up due to using the bats right rather then players up
+                }
+            }
             foreach (IHitByMelee item in other.GetComponents<IHitByMelee>())
             {
                 item.HitByMelee(this, null);
@@ -101,6 +107,20 @@ public class Melee : Weapon
                         item.HitByMelee(this, null);
                     }
                 }
+            }
+        }
+        else if (GetComponent<Rigidbody2D>().velocity.magnitude > 10)
+        {
+            if (other.transform.root.GetComponentInParent<PlayerStatus>())
+            {
+                if (GetComponent<Rigidbody2D>().velocity.magnitude >= 10 && other.tag == "Player" && other.GetComponentInParent<PlayerStatus>().gameObject != weaponThrower)
+                {
+                    other.transform.root.GetComponentInParent<PlayerStatus>().StunPlayer(transform.right * ThrowHitKnockBack);        //! Uses transform right instead of transform up due to using the bats right rather then players up
+                }
+            }
+            foreach (IHitByMelee item in other.GetComponents<IHitByMelee>())
+            {
+                item.HitByMelee(this, null);
             }
         }
     }
