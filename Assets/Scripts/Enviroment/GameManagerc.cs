@@ -159,7 +159,7 @@ public class GameManagerc : MonoBehaviour
         {
             KillPlayer1();
         }
-        if (Input.GetKeyDown(KeyCode.D))
+        if (Input.GetKeyDown(KeyCode.E))
         {
             //Stun all players
             int MaxPlayers = InGamePlayers.Count;
