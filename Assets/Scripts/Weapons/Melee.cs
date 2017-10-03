@@ -49,9 +49,8 @@ public class Melee : Weapon
 
                     Debug.Log("BatEnterStun");
                 }
-
-
-
+                
+                //Find every hitbymelee interface and call its function
                 if (other.GetComponent<IHitByMelee>() != null)
                 {
                     foreach (IHitByMelee item in other.GetComponents<IHitByMelee>())
@@ -61,17 +60,21 @@ public class Melee : Weapon
                 }
             }
         }
-        //
 
+        //Velocity check
         else if (GetComponent<Rigidbody2D>().velocity.magnitude > 10)
         {
+            //Check if the other has a playerstatus to ensure it is a player
             if (other.transform.root.GetComponentInParent<PlayerStatus>())
             {
+                //Check my RB velocity's magnitude, if hit another player and the other player isn't the weapon thrower
                 if (GetComponent<Rigidbody2D>().velocity.magnitude >= 10 && other.tag == "Player" && other.GetComponentInParent<PlayerStatus>().gameObject != weaponThrower)
                 {
+                    //stun the player
                     other.transform.root.GetComponentInParent<PlayerStatus>().StunPlayer(transform.right * ThrowHitKnockBack);        //! Uses transform right instead of transform up due to using the bats right rather then players up
                 }
             }
+            //Find every hit by melee interface and call its function
             foreach (IHitByMelee item in other.GetComponents<IHitByMelee>())
             {
                 item.HitByMelee(this, null);
@@ -81,25 +84,26 @@ public class Melee : Weapon
 
     void OnTriggerStay2D(Collider2D other)
     {
+        //If this transform's root is the player and the collided root isn't this weapon's root
         if (this.transform.root.tag == "Player" && other.transform.root != this.transform.root)
         {
+            //check if attacking and check if its a valid hit (on another player and the other player isn't stunned)
             if (m_bAttacking == true && other.tag == "Player" && other.transform.root != this.transform.root && other.transform.root.GetComponent<PlayerStatus>().m_bStunned == false)
             {
-                if (BodyAnimator != null)
+                if (BodyAnimator != null) //Null check on body animator
                 {
+                    //Do raycast that does nothing else
                     RaycastHit2D hit = Physics2D.Raycast(this.transform.position, other.transform.position - transform.position.normalized, (this.transform.position - transform.parent.position).magnitude + 0.3f, 1 << LayerMask.NameToLayer("Wall"));
                     if (hit)
                     {
 
                     }
-                    other.transform.parent.GetComponentInParent<PlayerStatus>().HitPlayer(this, false);
+                    other.transform.parent.GetComponentInParent<PlayerStatus>().HitPlayer(this, false); //hit player
                     // other.transform.parent.GetComponentInParent<PlayerStatus>().StunPlayer(transform.right * KnockBack);        //! Uses transform right instead of transform up due to using the bats right rather then players up
 
                     Debug.Log("BatEnterStun");
                 }
-
-
-
+                //Find every hitbymelee interface and call its function.
                 if (other.GetComponent<IHitByMelee>() != null)
                 {
                     foreach (IHitByMelee item in other.GetComponents<IHitByMelee>())
@@ -109,15 +113,18 @@ public class Melee : Weapon
                 }
             }
         }
-        else if (GetComponent<Rigidbody2D>().velocity.magnitude > 10)
+        else if (GetComponent<Rigidbody2D>().velocity.magnitude > 10) //Velocity check on my RigidBody
         {
-            if (other.transform.root.GetComponentInParent<PlayerStatus>())
+            if (other.transform.root.GetComponentInParent<PlayerStatus>()) //If the other(hit object) has a playerstatus
             {
-                if (GetComponent<Rigidbody2D>().velocity.magnitude >= 10 && other.tag == "Player" && other.GetComponentInParent<PlayerStatus>().gameObject != weaponThrower)
+                if (GetComponent<Rigidbody2D>().velocity.magnitude >= 10 && other.tag == "Player" && other.GetComponentInParent<PlayerStatus>().gameObject != weaponThrower) 
+                    //check to see if the velocity is still valid and the collided object isn't the thower
                 {
+                    //Stun the player
                     other.transform.root.GetComponentInParent<PlayerStatus>().StunPlayer(transform.right * ThrowHitKnockBack);        //! Uses transform right instead of transform up due to using the bats right rather then players up
                 }
             }
+            //Find every hitbymelee interface and call its function.
             foreach (IHitByMelee item in other.GetComponents<IHitByMelee>())
             {
                 item.HitByMelee(this, null);
