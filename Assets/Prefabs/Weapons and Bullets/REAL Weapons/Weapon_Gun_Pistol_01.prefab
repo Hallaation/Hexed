@@ -98,7 +98,7 @@ Transform:
   m_GameObject: {fileID: 1088063092901144}
   m_LocalRotation: {x: -0, y: -0, z: 0.13052596, w: 0.99144495}
   m_LocalPosition: {x: 0.5, y: 6, z: 0}
-  m_LocalScale: {x: 0.6, y: 0.6, z: 1}
+  m_LocalScale: {x: 0.8, y: 0.8, z: 1}
   m_Children:
   - {fileID: 4777184916552946}
   - {fileID: 4147487305101980}
@@ -194,9 +194,8 @@ MonoBehaviour:
   m_HeldSprite: {fileID: 21300014, guid: b063c0329a4c3ad42a58400a56d129ae, type: 3}
   m_fTimeBetweenShots: 0
   m_iDamage: 1
-  m_bMeleeWeapon: 0
   m_bGivePlayersIFrames: 0
-  KnockBack: 0
+  ThrowHitKnockBack: 0
   MaxShadow: 0.3
   MinShadow: 0
   ShadowGrowthSpeed: 0.5
@@ -222,6 +221,7 @@ MonoBehaviour:
   m_bBurstFire: 0
   m_b2Handed: 0
   m_iAmmo: 15
+  m_fBulletImpactKnockback: 0.1
   bullet: {fileID: 1437250725696512, guid: ae282802df4203244a5688279aa33e5d, type: 2}
   m_fSpreadJitter: 1
   m_fSpreadIncrease: 10
