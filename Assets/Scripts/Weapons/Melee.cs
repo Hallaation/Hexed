@@ -41,12 +41,21 @@ public class Melee : Weapon
                     RaycastHit2D hit = Physics2D.Raycast(this.transform.position, other.transform.position - transform.position.normalized, (this.transform.position - transform.parent.position).magnitude + 0.3f, 1 << LayerMask.NameToLayer("Wall"));
                     if (hit)
                     {
+                        float AnimationTime = BodyAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime;
+                        BodyAnimator.SetFloat("Speed", -.5f);
+                        if ( BodyAnimator.GetCurrentAnimatorStateInfo(0).IsName("TwoHandedMeleeLeftAttack"))
+                        {
+                            BodyAnimator.Play("TwoHandedMeleeLeftAttack",0,AnimationTime);
+                        }
+                        else
+                        {
 
+                        }
                     }
                     m_AudioSource.Play();
                     //other.transform.parent.GetComponentInParent<PlayerStatus>().HitPlayer(this, false);
                     other.transform.parent.GetComponentInParent<PlayerStatus>().StunPlayer(transform.right * ThrowHitKnockBack);        //! Uses transform right instead of transform up due to using the bats right rather then players up
-
+                    
                     Debug.Log("BatEnterStun");
                 }
                 
