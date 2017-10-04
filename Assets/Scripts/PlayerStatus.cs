@@ -453,6 +453,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         {
             foreach (AnimatorControllerParameter parameter in Body.parameters)
             {
+                
                 Body.SetBool(parameter.name, false);
             }
         }
