@@ -2731,6 +2731,7 @@ MonoBehaviour:
   bulletOwner: {fileID: 0}
   m_iDamage: 0
   m_bGiveIFrames: 0
+  m_fBulletImpactKnockBack: 5
   trail: {fileID: 0}
   m_fMaximumTime: 60
 --- !u!58 &992462820
@@ -3881,6 +3882,10 @@ Prefab:
         type: 2}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4866358222128262, guid: f6cf4d33fa55bcd4aa96592631dfad82, type: 2}
+      propertyPath: m_RootOrder
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 60646951674123218, guid: f6cf4d33fa55bcd4aa96592631dfad82, type: 2}
@@ -5081,6 +5086,7 @@ MonoBehaviour:
   m_MinSize: 6.5
   yOffset: 0.5
   m_Targets: []
+  DeathWaitTime: 3
 --- !u!1001 &1779775103
 Prefab:
   m_ObjectHideFlags: 0
@@ -5177,6 +5183,22 @@ Transform:
   m_Father: {fileID: 1459460610}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1819458039 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1707724565590912, guid: f6cf4d33fa55bcd4aa96592631dfad82,
+    type: 2}
+  m_PrefabInternal: {fileID: 1332106191}
+--- !u!114 &1819458040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1819458039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a03d3a00ad09404ab318a9f78ef6498, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1825262619
 Prefab:
   m_ObjectHideFlags: 0
