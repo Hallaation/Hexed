@@ -82,7 +82,10 @@ public class BaseAbility : MonoBehaviour
         //    if (currentMana >= m_fMaximumMana)
         //        currentMana = m_fMaximumMana;
         //}
-
+        if (m_CoolDownTimer.mfTimeToWait != m_fAbilityCoolDown)
+        {
+            m_CoolDownTimer = new Timer(m_fAbilityCoolDown);
+        }
         if (m_iCurrentCharges != m_iMaxCharges)
         {
             if (m_CoolDownTimer.Tick(Time.deltaTime))
