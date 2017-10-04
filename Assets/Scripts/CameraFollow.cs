@@ -17,7 +17,7 @@ public class CameraFollow : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
         if (Input.GetMouseButtonDown(0))
         {

@@ -7,8 +7,6 @@ using XboxCtrlrInput;
 
 public class ControllerManager : MonoBehaviour
 {
-    public int AbilityToAdd = 0;
-    bool addedAbility = false;
     static ControllerManager mInstance = null;
 
     public bool DebugMode = false;
@@ -67,6 +65,7 @@ public class ControllerManager : MonoBehaviour
     void Awake()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
+        ref_cameraController = GameObject.FindObjectOfType<CameraControl>();
         //smInstance = Instance;
         //GameObject spawnParent = GameObject.FindGameObjectWithTag("SpawnPoints");
         ////Find the spawn points
@@ -87,7 +86,6 @@ public class ControllerManager : MonoBehaviour
     void Update()
     {
         StartCoroutine(LookForPlayers());
-        ref_cameraController = GameObject.FindObjectOfType<CameraControl>();
     }
 
     IEnumerator LookForPlayers()
@@ -115,11 +113,9 @@ public class ControllerManager : MonoBehaviour
                     go2.GetComponent<ControllerSetter>().SetController(testIndex);
                     go2.GetComponent<ControllerSetter>().m_playerNumber = i;
                     go2.GetComponent<PlayerStatus>().spawnIndex = nextPlayer;
-                    PlayerUIArray.Instance.playerElements[i].gameObject.SetActive(true);
+                    //PlayerUIArray.Instance.playerElements[i].gameObject.SetActive(true);
                     GameManagerc.Instance.AddPlayer(go2.GetComponent<PlayerStatus>());
                     DontDestroyOnLoad(go2);
-                    // AddAbility(AbilityToAdd, go);
-                    addedAbility = true;
                     go2.SetActive(true);
                     if (ref_cameraController)
                     {
@@ -136,8 +132,6 @@ public class ControllerManager : MonoBehaviour
                     go.GetComponent<PlayerStatus>().spawnIndex = nextPlayer;
                     GameManagerc.Instance.AddPlayer(go.GetComponent<PlayerStatus>());
                     DontDestroyOnLoad(go);
-                    // AddAbility(AbilityToAdd, go);
-                    addedAbility = true;
                     go.SetActive(true);
                     if (ref_cameraController)
                     {
@@ -155,15 +149,6 @@ public class ControllerManager : MonoBehaviour
     }
     void AddAbility(int abilityIndex, GameObject playerToAddAbility)
     {
-        if (addedAbility)
-        {
-            abilityIndex = 1;
-        }
-        else
-        {
-            abilityIndex = 0;
-        }
-
         if (playerToAddAbility.GetComponent<BaseAbility>())
         {
             Destroy(playerToAddAbility.GetComponent<BaseAbility>());

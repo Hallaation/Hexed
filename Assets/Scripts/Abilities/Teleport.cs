@@ -35,30 +35,12 @@ public class Teleport : BaseAbility
     }
 
     // Update is called once per frame
-
-    public override void AdditionalLogic()
-    {
-
-        //if (XCI.GetButtonDown(XboxButton.DPadUp, m_controller.mXboxController) && currentMana >= ManaCost && ButtonHasBeenUp == true)
-        //{
-        //    _rigidBody.position += new Vector2(transform.up.x * m_TeleportForce, transform.up.y * m_TeleportForce);
-        //    ButtonHasBeenUp = false;
-        //    currentMana -= ManaCost;
-        //}
-        //if (XCI.GetButtonUp(XboxButton.DPadUp, m_controller.mXboxController))
-        //    ButtonHasBeenUp = true;
-        if (_AbilityTypeText)
-        {
-            _AbilityTypeText.text = "Ability : Teleport";
-        }
-    }
-
     public override void UseSpecialAbility(bool UsedAbility)
     {
-        ////XCI.GetButtonDown(XboxButton.DPadUp, m_controller.mXboxController)
-        if (currentMana >= ManaCost && ButtonHasBeenUp == true && UsedAbility == true)
+        ////if (currentMana >= ManaCost && ButtonHasBeenUp == true && UsedAbility == true)
+        //{
+        if (m_iCurrentCharges != 0 && ButtonHasBeenUp == true && UsedAbility == true)
         {
-
             //otherwise if it is clear, allow the player to teleport
 
             //makes a quaternion
@@ -105,7 +87,8 @@ public class Teleport : BaseAbility
             }
 
             ButtonHasBeenUp = false;
-            currentMana -= ManaCost;
+            m_iCurrentCharges--; //deduct from available charges.
+            //currentMana -= ManaCost;
 
         }
         if (XCI.GetAxis(XboxAxis.LeftTrigger , m_controller.mXboxController) < 0.1)
