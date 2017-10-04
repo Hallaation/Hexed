@@ -18,6 +18,8 @@ public class PlayerUIElements : MonoBehaviour
     [HideInInspector]
     public GameObject m_HealthBarMask;
     [HideInInspector]
+    public GameObject m_HealthBarContainer;
+    [HideInInspector]
     public GameObject m_healthScrolllingIcon;
     [HideInInspector]
     public GameObject m_SpecialScrollingIcon;
