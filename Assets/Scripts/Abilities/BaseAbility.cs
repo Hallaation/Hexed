@@ -10,17 +10,32 @@ public class BaseAbility : MonoBehaviour
 
     [Space]
     //abilities are going to cost mana.
+    [HideInInspector]
     public float currentMana = 0.0f; //TODO change back to protectd
     protected bool RegenMana;
+
+    [HideInInspector]
     public float m_fMaximumMana = 100;
+    [HideInInspector]
     public float PassiveManaRegeneration = 10.0f;
 
+    [HideInInspector]
     public float ManaCost = 10.0f;
+    [HideInInspector]
     public bool RepeatedUsage = false;
+    [HideInInspector]
     public float repeatedManaCost = 0.5f;
+    [HideInInspector]
     public float m_fMinimumManaRequired = 40;
+    [HideInInspector]
     public float m_fMovementSpeedSlowDown = 2.0f;
 
+
+    public float m_fAbilityCoolDown = 12;
+    public int m_iMaxCharges = 2;
+    [SerializeField]
+    protected int m_iCurrentCharges;
+    protected Timer m_CoolDownTimer;
     public bool findUI = true;
 
     //TODO if the shield is charged up to 100% of mana, the shield can deflect bullets, knock over players when run over with it
@@ -32,7 +47,10 @@ public class BaseAbility : MonoBehaviour
 
     void Start()
     {
+        m_CoolDownTimer = new Timer(m_fAbilityCoolDown);
+
         m_MoveOwner = this.GetComponent<Move>();
+
         // mana = GameObject.Find("Mana").GetComponent<UnityEngine.UI.Text>();
         Initialise();
 
@@ -42,28 +60,40 @@ public class BaseAbility : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (manaBar == null)
-        {
-            //GetUIElements();
-        }
+        //! Fuck the mana shit, time to go to cooldowns.
+        //if (manaBar == null)
+        //{
+        //    //GetUIElements();
+        //}
+        //
+        //if (manaBar)
+        //{
+        //    //figure out the x offset
+        //    //- .25 to 0
+        //    float xOffset = -0.25f;
+        //    xOffset = currentMana / m_fMaximumMana * -0.25f;
+        //    // B1 - A1 / abs (A1)
+        //    manaBar.GetComponent<Image>().material.SetTextureOffset("_MainTex" , new Vector2(xOffset , 0));
+        //}
+        //
+        //if (RegenMana)
+        //{
+        //    currentMana += PassiveManaRegeneration * Time.deltaTime;
+        //    if (currentMana >= m_fMaximumMana)
+        //        currentMana = m_fMaximumMana;
+        //}
 
-        if (manaBar)
+        if (m_iCurrentCharges != m_iMaxCharges)
         {
-            //figure out the x offset
-            //- .25 to 0
-            float xOffset = -0.25f;
-            xOffset = currentMana / m_fMaximumMana * -0.25f;
-            // B1 - A1 / abs (A1)
-            manaBar.GetComponent<Image>().material.SetTextureOffset("_MainTex" , new Vector2(xOffset , 0));
+            if (m_CoolDownTimer.Tick(Time.deltaTime))
+            {
+                m_iCurrentCharges++;
+            }
         }
-
-        if (RegenMana)
+        else
         {
-            currentMana += PassiveManaRegeneration * Time.deltaTime;
-            if (currentMana >= m_fMaximumMana)
-                currentMana = m_fMaximumMana;
+            m_CoolDownTimer.CurrentTime = 0;
         }
-
         AdditionalLogic();
     }
 
@@ -73,13 +103,13 @@ public class BaseAbility : MonoBehaviour
 
     public void GetUIElements()
     {
-        if (findUI)
-        {
-            PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].gameObject.SetActive(true);
-            manaBar = PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_manaBarMask;
-            PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_SpecialScrollingIcon.GetComponent<Image>().sprite = AbilityIcon;
-            PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_SpecialScrollingIcon.GetComponent<Image>().material.SetColor("_Color" , GetComponent<PlayerStatus>()._playerColor);
-        }
+        //if (findUI)
+        //{
+        //    PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].gameObject.SetActive(true);
+        //    manaBar = PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_manaBarMask;
+        //    PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_SpecialScrollingIcon.GetComponent<Image>().sprite = AbilityIcon;
+        //    PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_SpecialScrollingIcon.GetComponent<Image>().material.SetColor("_Color" , //GetComponent<PlayerStatus>()._playerColor);
+        //}
     }
 }
 
