@@ -110,7 +110,6 @@ public class CharacterSelectionManager : MonoBehaviour
         {
             for (int i = 0; i < 4 - JoinedPlayers; ++i)
             {
-                ControllerManager.Instance.FindSpawns();
                 //Debug.Log(JoinedXboxControllers[i]);
 
                 Vector3 spawnPosition = ControllerManager.Instance.spawnPoints[i].position; //Get the spawn position
@@ -118,11 +117,11 @@ public class CharacterSelectionManager : MonoBehaviour
 
                 GameObject go = Instantiate(playerSelectedCharacter[JoinedXboxControllers[i]] , spawnPosition , Quaternion.identity , null);
                 //Set anything required for the player to work.
+                go.transform.position = spawnPosition;
                 go.GetComponent<ControllerSetter>().SetController(JoinedXboxControllers[i]);
                 go.GetComponent<ControllerSetter>().m_playerNumber = (int)JoinedXboxControllers[i] - 1;
                 go.GetComponent<PlayerStatus>().spawnIndex = i;
                 //Find the Array for players
-                PlayerUIArray.Instance.playerElements[i].gameObject.SetActive(true);
                 //Make a reference in game manager
                 GameManagerc.Instance.AddPlayer(go.GetComponent<PlayerStatus>());
                 DontDestroyOnLoad(go);//turn it on

@@ -88,13 +88,13 @@ public class EmptyHand : Weapon
                 {
                     m_AudioSource.Play();
                     BoxCollider2D PunchHitBox = transform.Find("Punch").GetComponent<BoxCollider2D>();
+                    Debug.DrawRay(PunchHitBox.transform.position, PunchHitBox.transform.up * PunchHitBox.size.magnitude, Colors.Azure, 4);
                     //m_AudioSource.Play();
                     if (PunchHitBox.IsTouchingLayers(1 << 8)) // If Punch Hitbox is touching PLayer layer.
                     {
                         //Debug.Log("Punch");
 
                         Collider2D[] Overlap = Physics2D.OverlapBoxAll(PunchHitBox.transform.position, PunchHitBox.size, 0, 1 << 8); //An Overlap collider with the punch hitbox. There is probably a better way. 
-
                         int TotalCollisions = Overlap.Length;
                         for (int i = 0; i < TotalCollisions; ++i)
                         {

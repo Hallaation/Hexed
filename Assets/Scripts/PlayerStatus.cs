@@ -34,17 +34,20 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
     public Color _playerColor;
     private Renderer PlayerSprite;
 
+    private BaseAbility m_Ability;
 
     public GameObject killMePrompt = null;
-
     public GameObject killMeArea = null;
 
     private GameObject _PlayerCanvas;
     private GameObject _HealthMask;
     private GameObject HealthContainer;
+    [SerializeField]
     private Image HealthLost;
     private Timer healthLossTimer;
-    private bool ShowHealthLoss = false;
+    private Timer ShowHealthChangeTimer; 
+    private bool m_bShowHealthLoss = false;
+    private bool m_bShowHealthChange = false;
     Rigidbody2D _rigidbody;
     [HideInInspector]
     public int spawnIndex;
@@ -65,7 +68,8 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
     //if the player is dead, the renderer will change their Color to gray, and all physics simulation of the player's rigidbody will be turned off.
     void Start()
     {
-        healthLossTimer = new Timer(0.5f);
+        ShowHealthChangeTimer = new Timer(1.5f);
+        healthLossTimer = new Timer(0.9f);
 
         _cameraControlInstance = CameraControl.mInstance;
         m_SpriteRenderer = this.transform.Find("Sprites").GetChild(0).GetComponent<SpriteRenderer>();
@@ -75,7 +79,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         //m_MeleeHitAudioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as  AudioSource).outputAudioMixerGroup;
         m_MeleeHitAudioSource.playOnAwake = false;
         m_MeleeHitAudioSource.spatialBlend = 1;
-
+        m_Ability = this.GetComponent<BaseAbility>();
         m_InvincibilityTimer = new Timer(m_fInvincibleTime);
         _rigidbody = GetComponent<Rigidbody2D>();
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -97,41 +101,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         }
         killMePrompt.SetActive(false);
 
-        //Player bars and shit
-        stunBarContainer = this.transform.Find("Sprites").Find("PlayerCanvas").GetChild(1).gameObject;
-        stunMask = stunBarContainer.transform.GetChild(0).GetComponent<Image>();
-
-        _HealthMask = this.transform.Find("Sprites").Find("PlayerCanvas").GetChild(0).GetChild(0).gameObject;
-        _PlayerCanvas = this.transform.Find("Sprites").Find("PlayerCanvas").gameObject;
-        Material temp = new Material(_HealthMask.GetComponent<Image>().material.shader);
-        _HealthMask.GetComponent<Image>().material = temp;
-        HealthContainer = this.transform.Find("Sprites").Find("PlayerCanvas").GetChild(0).gameObject;
-        HealthLost = this.transform.Find("Sprites").Find("PlayerCanvas").GetChild(0).GetChild(1).GetComponent<Image>();
-        
-        //Set health bar colours
-        foreach (var item in HealthContainer.GetComponentsInChildren<Image>())
-        {
-            Material oldMat = item.GetComponent<Image>().material;
-
-            Material tempMaterial = new Material(item.GetComponent<Image>().material.shader);
-            item.GetComponent<Image>().material = tempMaterial;
-            if (item.GetComponent<Image>().material.HasProperty("_Color"))
-                item.GetComponent<Image>().material.color = _playerColor;
-        }
-        //Set the stun bar container colours
-        foreach (var item in stunBarContainer.GetComponentsInChildren<Image>())
-        {
-            Material oldMat = item.GetComponent<Image>().material;
-
-            Material tempMaterial = new Material(item.GetComponent<Image>().material.shader);
-            item.GetComponent<Image>().material = tempMaterial;
-            if (item.GetComponent<Image>().material.HasProperty("_Color"))
-                item.GetComponent<Image>().material.color = _playerColor;
-        }
-        //HealthLost.GetComponent<Image>().material.color = Colors.LimeGreen;
-        _PlayerCanvas.transform.SetParent(null);
-        HealthContainer.SetActive(false);
-
+        LoadUIBars();
         //foreach (var item in PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_objects)
         //{
         //    item.SetActive(true);
@@ -181,12 +151,12 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             float xOffset = m_iHealth * -0.0791f;
             _HealthMask.GetComponent<Image>().material.SetTextureOffset("_MainTex", new Vector2(0 + xOffset, 0));
 
-            if (ShowHealthLoss)
+            if (m_bShowHealthLoss)
             {
                 if (healthLossTimer.Tick(Time.deltaTime))
                 {
                     HealthLost.fillAmount = m_iHealth / 3;
-                    ShowHealthLoss = false;
+                    m_bShowHealthLoss = false;
                 }
             }
         }
@@ -215,8 +185,11 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         //if im stunned, make me cyan and show any kill prompts (X button and kill radius);
         if (m_bStunned)
         {
+            stunTimer.mfTimeToWait = m_fStunTime;
             GetComponent<Move>().GetBodyAnimator().enabled = false;
             GetComponent<Move>().GetFeetAnimator().enabled = false;
+            m_Ability.m_ChargeIndicator.SetActive(false);
+            m_Ability.ChargeCoolDown = false;
             if (StunnedSprites.Length > 0 && !StunSpriteChanged)
             {
                 StunSpriteChanged = true;
@@ -255,6 +228,8 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         {
             GetComponent<Move>().GetBodyAnimator().enabled = true;
             GetComponent<Move>().GetFeetAnimator().enabled = true;
+            m_Ability.m_ChargeIndicator.SetActive(true);
+            m_Ability.ChargeCoolDown = true;
             StunSpriteChanged = false;
             this.GetComponent<Move>().MakeCollidersTriggers(false);
             stunBarContainer.SetActive(false);
@@ -289,15 +264,20 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         //_PlayerCanvas.transform.position = this.transform.position + Vector3.up;
         HealthContainer.transform.position = this.transform.position + Vector3.up;
         stunBarContainer.transform.position = this.transform.position + Vector3.up;
+
+        if (m_bShowHealthChange)
+        {
+            HealthContainer.SetActive(true);
+            //HealthContainer.transform.position = -this.transform.up * 0.5f;
+
+            if (ShowHealthChangeTimer.Tick(Time.deltaTime))
+            {
+                HealthContainer.SetActive(false);
+                m_bShowHealthChange = false;
+            }
+        }
     }
 
-    IEnumerator ShowChangedHealth()
-    {
-        HealthContainer.SetActive(true);
-        HealthContainer.transform.position = -this.transform.up * 0.5f;
-        yield return new WaitForSeconds(1);
-        HealthContainer.SetActive(false);
-    }
 
     public void MiniStun(Vector3 ForceApplied, float StunTime)
     {
@@ -310,6 +290,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         StartCoroutine(MiniStun(StunTime));
 
     }
+
     public IEnumerator MiniStun(float StunTime)
     {
         //Debug.Log(StunTime);
@@ -318,6 +299,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         yield return null;
         //Debug.Log("Done");
     }
+
     /// <summary>
     /// Used for combining a stun effect with a knock back. If no stun required use "Knockback()"
     /// </summary>
@@ -352,13 +334,13 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         m_iTimesPunched = 0;
         stunTimer.CurrentTime = 0;
         this.GetComponent<Rigidbody2D>().simulated = true;
-
+        m_Ability.m_iMaxCharges = 0;
         float xOffset = m_iHealth * -0.0791f;
         _HealthMask.GetComponent<Image>().material.SetTextureOffset("_MainTex", new Vector2(0 + xOffset, 0));
         this.transform.position = ControllerManager.Instance.spawnPoints[spawnIndex].position;
         //this.transform.position = Vector3.zero;
         GetComponent<Move>().ThrowWeapon(Vector2.zero, Vector2.up, false);
-
+        _PlayerCanvas.transform.SetParent(this.transform.Find("Sprites"));
         // this.GetComponent<Collider2D>().isTrigger = true;
         m_bInvincible = true;
     }
@@ -366,40 +348,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         //Load UI stuff.
-        stunBarContainer = this.transform.Find("Sprites").Find("PlayerCanvas").GetChild(1).gameObject;
-        stunMask = stunBarContainer.transform.GetChild(0).GetComponent<Image>();
-
-        _HealthMask = this.transform.Find("Sprites").Find("PlayerCanvas").GetChild(0).GetChild(0).gameObject;
-        _PlayerCanvas = this.transform.Find("Sprites").Find("PlayerCanvas").gameObject;
-        Material temp = new Material(_HealthMask.GetComponent<Image>().material.shader);
-        _HealthMask.GetComponent<Image>().material = temp;
-        HealthContainer = this.transform.Find("Sprites").Find("PlayerCanvas").GetChild(0).gameObject;
-        HealthLost = this.transform.Find("Sprites").Find("PlayerCanvas").GetChild(0).GetChild(1).GetComponent<Image>();
-
-        //Set health bar colours
-        foreach (var item in HealthContainer.GetComponentsInChildren<Image>())
-        {
-            Material oldMat = item.GetComponent<Image>().material;
-
-            Material tempMaterial = new Material(item.GetComponent<Image>().material.shader);
-            item.GetComponent<Image>().material = tempMaterial;
-            if (item.GetComponent<Image>().material.HasProperty("_Color"))
-                item.GetComponent<Image>().material.color = _playerColor;
-        }
-        //Set the stun bar container colours
-        foreach (var item in stunBarContainer.GetComponentsInChildren<Image>())
-        {
-            Material oldMat = item.GetComponent<Image>().material;
-
-            Material tempMaterial = new Material(item.GetComponent<Image>().material.shader);
-            item.GetComponent<Image>().material = tempMaterial;
-            if (item.GetComponent<Image>().material.HasProperty("_Color"))
-                item.GetComponent<Image>().material.color = _playerColor;
-        }
-        //HealthLost.GetComponent<Image>().material.color = Colors.LimeGreen;
-        _PlayerCanvas.transform.SetParent(null);
-        HealthContainer.SetActive(false);
-
+        LoadUIBars();
 
         if (scene.buildIndex == 0)
         {
@@ -409,10 +358,10 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         //time to re activate all the UI stuff
         this.GetComponent<BaseAbility>().GetUIElements();
 
-        foreach (var item in PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_objects)
-        {
-            item.SetActive(true);
-        }
+        //foreach (var item in PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_objects)
+        //{
+        //    item.SetActive(true);
+        //}
     }
     public void KillPlayer(PlayerStatus killer)
     {
@@ -433,8 +382,9 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         if (!m_bInvincible)
         {
             healthLossTimer.CurrentTime = 0;
-            ShowHealthLoss = true;
-            StartCoroutine(ShowChangedHealth());
+            m_bShowHealthLoss = true;
+            ShowHealthChangeTimer.CurrentTime = 0;
+            m_bShowHealthChange = true;
             m_iHealth -= aBullet.m_iDamage;
             //If the game mode is either the timed deathmatch or scores appointed on kills deathmatch, then give them points
             if (m_iHealth <= 0 /*&& (GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_POINTS *//*|| GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_TIMED*/)
@@ -453,8 +403,9 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         if (!m_bInvincible)
         {
             healthLossTimer.CurrentTime = 0;
-            ShowHealthLoss = true;
-            StartCoroutine(ShowChangedHealth());
+            m_bShowHealthLoss = true;
+            ShowHealthChangeTimer.CurrentTime = 0;
+            m_bShowHealthChange = true;
             m_iHealth -= a_weapon.m_iDamage;
             //If the game mode is either the timed deathmatch or scores appointed on kills deathmatch, then give them points
             if (m_iHealth <= 0 /*&& (GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_POINTS*/ /*|| GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_TIMED*/)
@@ -521,8 +472,8 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         {
             foreach (AnimatorControllerParameter parameter in Body.parameters)
             {
-
-                Body.SetBool(parameter.name, false);
+                if (parameter.type == AnimatorControllerParameterType.Bool)
+                    Body.SetBool(parameter.name, false);
             }
         }
         //same with feet
@@ -530,7 +481,8 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         {
             foreach (AnimatorControllerParameter parameter in Feet.parameters)
             {
-                Feet.SetBool(parameter.name, false);
+                if (parameter.type == AnimatorControllerParameterType.Bool)
+                    Feet.SetBool(parameter.name, false);
             }
         }
     }
@@ -542,6 +494,47 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         m_MeleeHitAudioSource.pitch = Pitch;
         m_MeleeHitAudioSource.Play();
         //GetComponent<AudioSource>().PlayOneShot(soundEffect , Volume); 
+    }
+
+
+    void LoadUIBars()
+    {
+
+        //Player bars and shit
+        stunBarContainer = this.transform.Find("Sprites").Find("PlayerCanvas").GetChild(1).gameObject;
+        stunMask = stunBarContainer.transform.GetChild(0).GetComponent<Image>();
+
+        _HealthMask = this.transform.Find("Sprites").Find("PlayerCanvas").GetChild(0).GetChild(0).gameObject;
+        _PlayerCanvas = this.transform.Find("Sprites").Find("PlayerCanvas").gameObject;
+        Material temp = new Material(_HealthMask.GetComponent<Image>().material.shader);
+        _HealthMask.GetComponent<Image>().material = temp;
+        HealthContainer = this.transform.Find("Sprites").Find("PlayerCanvas").GetChild(0).gameObject;
+        HealthLost = this.transform.Find("Sprites").Find("PlayerCanvas").GetChild(0).GetChild(1).GetComponent<Image>();
+
+        //Set health bar colours
+        foreach (var item in HealthContainer.GetComponentsInChildren<Image>())
+        {
+            Material oldMat = item.GetComponent<Image>().material;
+
+            Material tempMaterial = new Material(item.GetComponent<Image>().material.shader);
+            item.GetComponent<Image>().material = tempMaterial;
+            if (item.GetComponent<Image>().material.HasProperty("_Color"))
+                item.GetComponent<Image>().material.color = _playerColor;
+        }
+        //Set the stun bar container colours
+        foreach (var item in stunBarContainer.GetComponentsInChildren<Image>())
+        {
+            Material oldMat = item.GetComponent<Image>().material;
+
+            Material tempMaterial = new Material(item.GetComponent<Image>().material.shader);
+            item.GetComponent<Image>().material = tempMaterial;
+            if (item.GetComponent<Image>().material.HasProperty("_Color"))
+                item.GetComponent<Image>().material.color = _playerColor;
+        }
+        HealthLost.color = Colors.Yellow;
+        _PlayerCanvas.transform.SetParent(null);
+        HealthContainer.SetActive(false);
+
     }
 }
 

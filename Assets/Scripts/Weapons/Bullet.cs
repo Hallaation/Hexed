@@ -32,7 +32,8 @@ public class Bullet : MonoBehaviour
 
         BulletSprite = GetComponent<SpriteRenderer>();
         ParticleSparks = GetComponentInChildren<ParticleSystem>();
-        WallCollidedParticles = GetComponentsInChildren<ParticleSystem>();
+        WallCollidedParticles = transform.GetChild(0).GetComponentsInChildren<ParticleSystem>();
+        
         m_CircleCollider = GetComponent<CircleCollider2D>();
         m_rigidBody = GetComponent<Rigidbody2D>();
         PreviousRotation = GetComponent<Rigidbody2D>().rotation;
@@ -236,6 +237,7 @@ public class Bullet : MonoBehaviour
             transform.GetChild(0).localEulerAngles = new Vector3(VChildPrevRotation.x , VChildPrevRotation.y , VChildPrevRotation.z);
             foreach (ParticleSystem particle in WallCollidedParticles)
             {
+
                 if (particle.main.duration > longestParticleDuration)
                     longestParticleDuration = particle.main.duration;
                 particle.Play();

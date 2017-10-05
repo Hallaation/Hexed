@@ -91,60 +91,61 @@ public class ControllerManager : MonoBehaviour
     IEnumerator LookForPlayers()
     {
         // Debug.Log(nextPlayer);
-        for (int i = 0; i < maxPlayers; i++)
+        if (DebugMode)
         {
-            //make a player index based off what i is
-            PlayerIndex testIndex = (PlayerIndex)i;
-            //get the gamepad state of the current index set before
-            GamePadState testState = GamePad.GetState(testIndex);
-            if (testState.IsConnected &&
-                !playerIdx[testIndex] &&
-                (XCI.GetButtonDown(XboxButton.Start, xboxControllers[testIndex]) || XCI.GetButtonDown(XboxButton.Back, xboxControllers[testIndex]))
-                && DebugMode)
-            //if the player of index i has pressed Start, and their controller is connected, and their controller has yet to be assgined
+            for (int i = 0; i < maxPlayers; i++)
             {
-
-                //assign a controller and spawn the player
-                playerIdx[testIndex] = true;
-                if (XCI.GetButtonDown(XboxButton.Start, xboxControllers[testIndex]))
+                //make a player index based off what i is
+                PlayerIndex testIndex = (PlayerIndex)i;
+                //get the gamepad state of the current index set before
+                GamePadState testState = GamePad.GetState(testIndex);
+                if (testState.IsConnected &&
+                    !playerIdx[testIndex] &&
+                    (XCI.GetButtonDown(XboxButton.Start, xboxControllers[testIndex]) || XCI.GetButtonDown(XboxButton.Back, xboxControllers[testIndex])))
+                //if the player of index i has pressed Start, and their controller is connected, and their controller has yet to be assgined
                 {
-                    GameObject go2 = Instantiate(playerPrefab, spawnPoints[nextPlayer].position, Quaternion.identity, null);
-                    go2.SetActive(true);
-                    go2.GetComponent<ControllerSetter>().SetController(testIndex);
-                    go2.GetComponent<ControllerSetter>().m_playerNumber = i;
-                    go2.GetComponent<PlayerStatus>().spawnIndex = nextPlayer;
-                    //PlayerUIArray.Instance.playerElements[i].gameObject.SetActive(true);
-                    GameManagerc.Instance.AddPlayer(go2.GetComponent<PlayerStatus>());
-                    DontDestroyOnLoad(go2);
-                    go2.SetActive(true);
-                    if (ref_cameraController)
-                    {
-                        //if the cameracontrol exists, add the instantiated player to a camera targets
-                        ref_cameraController.m_Targets.Add(go2.transform);
-                    }
-                }
-                else if (XCI.GetButtonDown(XboxButton.Back, xboxControllers[testIndex]))
-                {
-                    GameObject go = Instantiate(playerPrefab2, spawnPoints[nextPlayer].position, Quaternion.identity, null);
-                    go.SetActive(true);
-                    go.GetComponent<ControllerSetter>().SetController(testIndex);
-                    go.GetComponent<ControllerSetter>().m_playerNumber = i;
-                    go.GetComponent<PlayerStatus>().spawnIndex = nextPlayer;
-                    GameManagerc.Instance.AddPlayer(go.GetComponent<PlayerStatus>());
-                    DontDestroyOnLoad(go);
-                    go.SetActive(true);
-                    if (ref_cameraController)
-                    {
-                        //if the cameracontrol exists, add the instantiated player to a camera targets
-                        ref_cameraController.m_Targets.Add(go.transform);
-                    }
-                }
 
-                nextPlayer++; //increment to determine next spawn point
-                break;
+                    //assign a controller and spawn the player
+                    playerIdx[testIndex] = true;
+                    if (XCI.GetButtonDown(XboxButton.Start, xboxControllers[testIndex]))
+                    {
+                        GameObject go2 = Instantiate(playerPrefab, spawnPoints[nextPlayer].position, Quaternion.identity, null);
+                        go2.SetActive(true);
+                        go2.GetComponent<ControllerSetter>().SetController(testIndex);
+                        go2.GetComponent<ControllerSetter>().m_playerNumber = i;
+                        go2.GetComponent<PlayerStatus>().spawnIndex = nextPlayer;
+                        //PlayerUIArray.Instance.playerElements[i].gameObject.SetActive(true);
+                        GameManagerc.Instance.AddPlayer(go2.GetComponent<PlayerStatus>());
+                        DontDestroyOnLoad(go2);
+                        go2.SetActive(true);
+                        if (ref_cameraController)
+                        {
+                            //if the cameracontrol exists, add the instantiated player to a camera targets
+                            ref_cameraController.m_Targets.Add(go2.transform);
+                        }
+                    }
+                    else if (XCI.GetButtonDown(XboxButton.Back, xboxControllers[testIndex]))
+                    {
+                        GameObject go = Instantiate(playerPrefab2, spawnPoints[nextPlayer].position, Quaternion.identity, null);
+                        go.SetActive(true);
+                        go.GetComponent<ControllerSetter>().SetController(testIndex);
+                        go.GetComponent<ControllerSetter>().m_playerNumber = i;
+                        go.GetComponent<PlayerStatus>().spawnIndex = nextPlayer;
+                        GameManagerc.Instance.AddPlayer(go.GetComponent<PlayerStatus>());
+                        DontDestroyOnLoad(go);
+                        go.SetActive(true);
+                        if (ref_cameraController)
+                        {
+                            //if the cameracontrol exists, add the instantiated player to a camera targets
+                            ref_cameraController.m_Targets.Add(go.transform);
+                        }
+                    }
+
+                    nextPlayer++; //increment to determine next spawn point
+                    break;
+                }
             }
         }
-
         yield return new WaitForEndOfFrame();
     }
     void AddAbility(int abilityIndex, GameObject playerToAddAbility)

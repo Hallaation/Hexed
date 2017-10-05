@@ -13,7 +13,7 @@ public enum PickType
     MAPPICK,
 }
 
-public class GamemodeSelection : MonoBehaviour 
+public class GamemodeSelection : MonoBehaviour
 {
     private Button _button;
     private Text _buttonText;
@@ -169,9 +169,9 @@ public class GamemodeSelection : MonoBehaviour
 
                             m_GamemodeSelected = Gamemode_type.LAST_MAN_STANDING_DEATHMATCH + m_iGamemodeIndex;
                         }
-                        break;
                         
                     */
+                        break;
                     #endregion
                     case PickType.MAPPICK:
                         #region

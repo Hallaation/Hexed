@@ -285,7 +285,7 @@ GameObject:
   - component: {fileID: 168789001}
   m_Layer: 0
   m_Name: EA_Slums_Concrete_Long_02 (1)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -349,7 +349,7 @@ GameObject:
   - component: {fileID: 175988412}
   m_Layer: 0
   m_Name: EA_Slums_Concrete_Long_01 (1)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -454,6 +454,15 @@ Prefab:
     - target: {fileID: 1796801244791532, guid: fb3c2fd87b794ac44b324ccfa1636559, type: 2}
       propertyPath: m_Name
       value: Weapon_Melee_BaseballBat_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 114373167812934092, guid: fb3c2fd87b794ac44b324ccfa1636559,
+        type: 2}
+      propertyPath: ThrowHitKnockBack
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1933810204284880, guid: fb3c2fd87b794ac44b324ccfa1636559, type: 2}
+      propertyPath: m_TagString
+      value: 2hMelee
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: fb3c2fd87b794ac44b324ccfa1636559, type: 2}
@@ -637,7 +646,7 @@ GameObject:
   - component: {fileID: 346791543}
   m_Layer: 10
   m_Name: GameObject (3)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -959,7 +968,7 @@ GameObject:
   - component: {fileID: 436047469}
   m_Layer: 10
   m_Name: GameObject
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1323,7 +1332,7 @@ GameObject:
   - component: {fileID: 821274235}
   m_Layer: 10
   m_Name: GameObject (1)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1695,7 +1704,7 @@ GameObject:
   - component: {fileID: 1044306272}
   m_Layer: 0
   m_Name: EA_Slums_Concrete_Long_01 (2)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1878,7 +1887,7 @@ GameObject:
   - component: {fileID: 1150520791}
   m_Layer: 10
   m_Name: GameObject (5)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2070,7 +2079,7 @@ GameObject:
   - component: {fileID: 1284762800}
   m_Layer: 10
   m_Name: GameObject (6)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2182,7 +2191,7 @@ GameObject:
   - component: {fileID: 1374544664}
   m_Layer: 0
   m_Name: Colliders
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2734,7 +2743,7 @@ GameObject:
   - component: {fileID: 1750492037}
   m_Layer: 10
   m_Name: GameObject (2)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2937,7 +2946,7 @@ GameObject:
   - component: {fileID: 1881878935}
   m_Layer: 10
   m_Name: GameObject (4)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
