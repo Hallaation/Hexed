@@ -60,11 +60,11 @@ public class Glass : MonoBehaviour, IHitByBullet, IHitByMelee
 
         if (hit.transform.tag == "2hMelee")
         {
-            Debug.Log("hhhhhhhhhhhhhh");
+
             Shatter();
             SpawnShards(hit);
             
-            this.GetComponent<HitByMeleeAction>().HitByMelee(null, null);
+          //  this.GetComponent<HitByMeleeAction>().HitByMelee(hit.transform.GetComponentInParent<Melee>(), null);
         }
         else if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Bullet") && IsShattered == false)
         {
@@ -84,7 +84,7 @@ public class Glass : MonoBehaviour, IHitByBullet, IHitByMelee
             {
                 Shatter();
                 SpawnShards(hit);
-                this.GetComponent<HitByMeleeAction>().HitByMelee(null, null);
+              //  this.GetComponent<HitByMeleeAction>().HitByMelee(null, null);
             }
         }
         if ((hit.transform.root.tag == "2hMelee" || hit.transform.root.tag == "1hMelee") && IsShattered == false)
@@ -145,7 +145,14 @@ public class Glass : MonoBehaviour, IHitByBullet, IHitByMelee
             shardObjects[i] = Instantiate(Shard1, this.transform.position + this.transform.up * UnityEngine.Random.Range(-1f, 0f), this.transform.rotation);
             shardObjects[i].transform.rotation = Quaternion.Euler(Vector3.forward * UnityEngine.Random.Range(40, 180));
             //shardObjects[i].GetComponent<Rigidbody2D>().velocity = hit.gameObject.GetComponent<Rigidbody2D>().velocity * UnityEngine.Random.Range(0.03f , .1f);
-            shardObjects[i].GetComponent<Rigidbody2D>().AddForce(hit.transform.root.GetComponent<Rigidbody2D>().velocity * UnityEngine.Random.Range(0.03f, .1f), ForceMode2D.Impulse);
+            if (hit.transform.tag == "2hMelee")
+            {
+                shardObjects[i].GetComponent<Rigidbody2D>().AddForce(hit.GetComponentInParent<Melee>().ThrowHitKnockBack * hit.transform.right * UnityEngine.Random.Range(.3f, 1f), ForceMode2D.Impulse);
+            }
+            else
+            {
+                shardObjects[i].GetComponent<Rigidbody2D>().AddForce(hit.transform.root.GetComponent<Rigidbody2D>().velocity * UnityEngine.Random.Range(0.3f, 1f), ForceMode2D.Impulse);
+            }
             if (i < 4)
             {
                 shardObjects[i].GetComponent<Rigidbody2D>().angularVelocity = hit.transform.root.GetComponent<Rigidbody2D>().velocity.magnitude;
