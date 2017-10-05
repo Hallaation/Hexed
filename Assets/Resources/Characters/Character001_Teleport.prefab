@@ -499,7 +499,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4037834042101908}
   - component: {fileID: 58677544255220976}
-  - component: {fileID: 58643222800352768}
   m_Layer: 8
   m_Name: NoHands
   m_TagString: Player
@@ -679,7 +678,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1568182744093302}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 21.28, y: 9.921815, z: 0}
+  m_LocalPosition: {x: -8.1, y: 5.42, z: 0}
   m_LocalScale: {x: 1.2, y: 1.2, z: 1}
   m_Children:
   - {fileID: 4834453555101378}
@@ -962,20 +961,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!58 &58643222800352768
-CircleCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1927457295582512}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.5
 --- !u!58 &58677544255220976
 CircleCollider2D:
   m_ObjectHideFlags: 1
