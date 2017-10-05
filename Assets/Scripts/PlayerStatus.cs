@@ -39,6 +39,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
 
     public GameObject killMeArea = null;
 
+    private GameObject _PlayerCanvas;
     private GameObject _HealthMask;
     private GameObject HealthContainer;
     private Image HealthLost;
@@ -48,8 +49,8 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
     [HideInInspector]
     public int spawnIndex;
 
-    public SpriteRenderer stunBar;
-    public SpriteRenderer stunMask;
+    public Image stunBar;
+    public Image stunMask;
     private GameObject stunBarContainer;
     private AudioSource m_MeleeHitAudioSource;
 
@@ -75,34 +76,6 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         m_MeleeHitAudioSource.playOnAwake = false;
         m_MeleeHitAudioSource.spatialBlend = 1;
 
-        //This is used to snap the stunbar to 0,0,0
-        stunBarContainer = new GameObject("StunBarContainer");
-
-        stunBar = transform.Find("Sprites").Find("StunBarContainer").Find("StunBar").GetComponent<SpriteRenderer>();
-        stunMask = transform.Find("Sprites").Find("StunBarContainer").Find("StunBarMask").GetComponent<SpriteRenderer>();
-
-        stunBarContainer.transform.SetParent(transform.Find("Sprites"));
-
-        stunBar.gameObject.transform.SetParent(stunBarContainer.transform);
-        stunMask.gameObject.transform.SetParent(stunBarContainer.transform);
-
-        stunBar.transform.localPosition = Vector3.zero;
-        stunMask.transform.localPosition = Vector3.zero;
-
-        stunBarContainer.transform.localPosition = Vector3.zero;
-        stunBarContainer.transform.position += Vector3.up * 1.2f;
-        stunBarContainer.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, 90));
-
-        stunBarContainer.SetActive(false);
-
-        if (stunBar && stunMask)
-        {
-            stunMask.material.shader = Shader.Find("Custom/MaskTest");
-            stunMask.material.renderQueue = 3000;
-            stunBar.material.shader = Shader.Find("Sprites/Default");
-            stunBar.material.renderQueue = 3002;
-        }
-
         m_InvincibilityTimer = new Timer(m_fInvincibleTime);
         _rigidbody = GetComponent<Rigidbody2D>();
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -111,6 +84,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         stunTimer = new Timer(m_fStunTime);
         resetStunTimer = new Timer(m_fMaximumStunWait);
         //_playerColor = GetComponent<Renderer>().material.color;
+
         if (GetComponent<Renderer>())
         {
             PlayerSprite = GetComponent<Renderer>();
@@ -123,28 +97,39 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         }
         killMePrompt.SetActive(false);
 
-        _HealthMask = this.transform.Find("Sprites").Find("HealthBarCanvas").GetChild(0).GetChild(0).gameObject;
+        //Player bars and shit
+        stunBarContainer = this.transform.Find("Sprites").Find("PlayerCanvas").GetChild(1).gameObject;
+        stunMask = stunBarContainer.transform.GetChild(0).GetComponent<Image>();
 
-        //! I'm fucking retarded for not doing this earlier, ffs I'm stupid.
+        _HealthMask = this.transform.Find("Sprites").Find("PlayerCanvas").GetChild(0).GetChild(0).gameObject;
+        _PlayerCanvas = this.transform.Find("Sprites").Find("PlayerCanvas").gameObject;
         Material temp = new Material(_HealthMask.GetComponent<Image>().material.shader);
         _HealthMask.GetComponent<Image>().material = temp;
-        HealthContainer = this.transform.Find("Sprites").Find("HealthBarCanvas").gameObject;
-        HealthLost = this.transform.Find("Sprites").Find("HealthBarCanvas").GetChild(0).GetChild(1).GetComponent<Image>();
-        //Make a temp material so they can indiviually control their UI stuff. Copy over any colour the material might have.
-        //WTF WHY DIDN'T I DO THIS EARLIER.
+        HealthContainer = this.transform.Find("Sprites").Find("PlayerCanvas").GetChild(0).gameObject;
+        HealthLost = this.transform.Find("Sprites").Find("PlayerCanvas").GetChild(0).GetChild(1).GetComponent<Image>();
+        
+        //Set health bar colours
         foreach (var item in HealthContainer.GetComponentsInChildren<Image>())
         {
             Material oldMat = item.GetComponent<Image>().material;
-            if (oldMat.HasProperty("_Color"))
-                oldMat.color = _playerColor;
 
             Material tempMaterial = new Material(item.GetComponent<Image>().material.shader);
             item.GetComponent<Image>().material = tempMaterial;
             if (item.GetComponent<Image>().material.HasProperty("_Color"))
-                item.GetComponent<Image>().material.color = oldMat.color;
+                item.GetComponent<Image>().material.color = _playerColor;
         }
-        HealthLost.GetComponent<Image>().material.color = Colors.LimeGreen;
-        HealthContainer.transform.SetParent(null);
+        //Set the stun bar container colours
+        foreach (var item in stunBarContainer.GetComponentsInChildren<Image>())
+        {
+            Material oldMat = item.GetComponent<Image>().material;
+
+            Material tempMaterial = new Material(item.GetComponent<Image>().material.shader);
+            item.GetComponent<Image>().material = tempMaterial;
+            if (item.GetComponent<Image>().material.HasProperty("_Color"))
+                item.GetComponent<Image>().material.color = _playerColor;
+        }
+        //HealthLost.GetComponent<Image>().material.color = Colors.LimeGreen;
+        _PlayerCanvas.transform.SetParent(null);
         HealthContainer.SetActive(false);
 
         //foreach (var item in PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_objects)
@@ -161,8 +146,8 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
     {
         if (stunBarContainer.activeSelf)
         {
-            float sunOffset = stunTimer.CurrentTime / stunTimer.mfTimeToWait * 0.25f;
-            stunMask.material.SetTextureOffset("_MainTex", new Vector2(0.25f - sunOffset, 0));
+            float sunOffset = stunTimer.CurrentTime / stunTimer.mfTimeToWait * 0.24f;
+            stunMask.material.SetTextureOffset("_MainTex", new Vector2(-0.24f + sunOffset, 0));
         }
 
         if (m_iHealth <= 0)
@@ -242,11 +227,13 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             killMeArea.SetActive(true);
             PlayerSprite.material.color = Color.cyan;
             //set the stun bar location
-            stunBarContainer.transform.localPosition = Vector3.zero;
-            stunBarContainer.transform.position += Vector3.up * 1.2f;
-            stunBar.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
-            stunMask.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+            //stunBarContainer.transform.localPosition = Vector3.zero;
+            //stunBarContainer.transform.position += Vector3.up * 1.2f;
+            //stunBar.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+            //stunMask.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+            //stunBarContainer.SetActive(true);
             stunBarContainer.SetActive(true);
+
             CheckForButtonMash();
             //this.GetComponent<Renderer>().material.color = Color.cyan;
             if (this.transform.GetChild(1).tag == "Stunned")
@@ -298,8 +285,10 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
     public void LateUpdate()
     {
         //If the previous frames health isnt the current frames health, show the changed health.
+        _PlayerCanvas.transform.localScale = new Vector3(Camera.main.orthographicSize, Camera.main.orthographicSize, Camera.main.orthographicSize) * 0.003f;
+        //_PlayerCanvas.transform.position = this.transform.position + Vector3.up;
         HealthContainer.transform.position = this.transform.position + Vector3.up;
-        HealthContainer.transform.localScale = new Vector3(Camera.main.orthographicSize, Camera.main.orthographicSize, Camera.main.orthographicSize) * 0.003f;
+        stunBarContainer.transform.position = this.transform.position + Vector3.up;
     }
 
     IEnumerator ShowChangedHealth()
@@ -376,6 +365,42 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        //Load UI stuff.
+        stunBarContainer = this.transform.Find("Sprites").Find("PlayerCanvas").GetChild(1).gameObject;
+        stunMask = stunBarContainer.transform.GetChild(0).GetComponent<Image>();
+
+        _HealthMask = this.transform.Find("Sprites").Find("PlayerCanvas").GetChild(0).GetChild(0).gameObject;
+        _PlayerCanvas = this.transform.Find("Sprites").Find("PlayerCanvas").gameObject;
+        Material temp = new Material(_HealthMask.GetComponent<Image>().material.shader);
+        _HealthMask.GetComponent<Image>().material = temp;
+        HealthContainer = this.transform.Find("Sprites").Find("PlayerCanvas").GetChild(0).gameObject;
+        HealthLost = this.transform.Find("Sprites").Find("PlayerCanvas").GetChild(0).GetChild(1).GetComponent<Image>();
+
+        //Set health bar colours
+        foreach (var item in HealthContainer.GetComponentsInChildren<Image>())
+        {
+            Material oldMat = item.GetComponent<Image>().material;
+
+            Material tempMaterial = new Material(item.GetComponent<Image>().material.shader);
+            item.GetComponent<Image>().material = tempMaterial;
+            if (item.GetComponent<Image>().material.HasProperty("_Color"))
+                item.GetComponent<Image>().material.color = _playerColor;
+        }
+        //Set the stun bar container colours
+        foreach (var item in stunBarContainer.GetComponentsInChildren<Image>())
+        {
+            Material oldMat = item.GetComponent<Image>().material;
+
+            Material tempMaterial = new Material(item.GetComponent<Image>().material.shader);
+            item.GetComponent<Image>().material = tempMaterial;
+            if (item.GetComponent<Image>().material.HasProperty("_Color"))
+                item.GetComponent<Image>().material.color = _playerColor;
+        }
+        //HealthLost.GetComponent<Image>().material.color = Colors.LimeGreen;
+        _PlayerCanvas.transform.SetParent(null);
+        HealthContainer.SetActive(false);
+
+
         if (scene.buildIndex == 0)
         {
             Destroy(this.gameObject);
@@ -383,30 +408,6 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         }
         //time to re activate all the UI stuff
         this.GetComponent<BaseAbility>().GetUIElements();
-
-        _HealthMask = this.transform.Find("Sprites").Find("HealthBarCanvas").GetChild(0).GetChild(0).gameObject;
-
-        //! I'm fucking retarded for not doing this earlier, ffs I'm stupid.
-        Material temp = new Material(_HealthMask.GetComponent<Image>().material.shader);
-        _HealthMask.GetComponent<Image>().material = temp;
-        HealthContainer = this.transform.Find("Sprites").Find("HealthBarCanvas").gameObject;
-        HealthLost = this.transform.Find("Sprites").Find("HealthBarCanvas").GetChild(0).GetChild(1).GetComponent<Image>();
-        //Make a temp material so they can indiviually control their UI stuff. Copy over any colour the material might have.
-        //WTF WHY DIDN'T I DO THIS EARLIER.
-        foreach (var item in HealthContainer.GetComponentsInChildren<Image>())
-        {
-            Material oldMat = item.GetComponent<Image>().material;
-            if (oldMat.HasProperty("_Color"))
-                oldMat.color = _playerColor;
-
-            Material tempMaterial = new Material(item.GetComponent<Image>().material.shader);
-            item.GetComponent<Image>().material = tempMaterial;
-            if (item.GetComponent<Image>().material.HasProperty("_Color"))
-                item.GetComponent<Image>().material.color = oldMat.color;
-        }
-        HealthLost.GetComponent<Image>().material.color = Colors.LimeGreen;
-        HealthContainer.transform.SetParent(null);
-        HealthContainer.SetActive(false);
 
         foreach (var item in PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_objects)
         {
@@ -421,8 +422,8 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             SetAllAnimatorsFalse();
             m_iHealth = 0;
             m_bDead = true;
-            if (GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_POINTS)
-                GameManagerc.Instance.PlayerWins[killer]++;
+            //if (GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_POINTS)
+            //    GameManagerc.Instance.PlayerWins[killer]++;
         }
 
     }
@@ -436,7 +437,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             StartCoroutine(ShowChangedHealth());
             m_iHealth -= aBullet.m_iDamage;
             //If the game mode is either the timed deathmatch or scores appointed on kills deathmatch, then give them points
-            if (m_iHealth <= 0 && (GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_POINTS /*|| GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_TIMED*/))
+            if (m_iHealth <= 0 /*&& (GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_POINTS *//*|| GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_TIMED*/)
             {
                 //update the bullet owner's score
                 GameManagerc.Instance.PlayerWins[aBullet.bulletOwner]++;
@@ -452,11 +453,11 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         if (!m_bInvincible)
         {
             healthLossTimer.CurrentTime = 0;
-            ShowHealthLoss = true;  
+            ShowHealthLoss = true;
             StartCoroutine(ShowChangedHealth());
             m_iHealth -= a_weapon.m_iDamage;
             //If the game mode is either the timed deathmatch or scores appointed on kills deathmatch, then give them points
-            if (m_iHealth <= 0 && (GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_POINTS /*|| GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_TIMED*/))
+            if (m_iHealth <= 0 /*&& (GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_POINTS*/ /*|| GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_TIMED*/)
             {
                 //update the bullet owner's score
                 GameManagerc.Instance.PlayerWins[a_weapon.transform.root.GetComponent<PlayerStatus>()]++;
@@ -520,7 +521,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         {
             foreach (AnimatorControllerParameter parameter in Body.parameters)
             {
-                
+
                 Body.SetBool(parameter.name, false);
             }
         }
