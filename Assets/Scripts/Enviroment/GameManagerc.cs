@@ -230,7 +230,7 @@ public class GameManagerc : MonoBehaviour
     void KillPlayer1()
     {
         int MaxPlayers = InGamePlayers.Count;
-        for (int i = 0; i < MaxPlayers - 2; i++)
+        for (int i = 0; i < MaxPlayers - 1; i++)
         {
             InGamePlayers[i].KillPlayer(InGamePlayers[InGamePlayers.Count - 1]);
         }
