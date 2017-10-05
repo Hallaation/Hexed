@@ -152,6 +152,7 @@ public class Move : MonoBehaviour
         {
             temp.material.color = Color.red;
         }
+
         //temp.material.color = PlayerColor;
         //switch (m_controller.mPlayerIndex)
         //{
