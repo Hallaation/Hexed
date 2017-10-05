@@ -44,7 +44,7 @@ using XInputDotNetPure;
 public enum Gamemode_type
 {
     LAST_MAN_STANDING_DEATHMATCH, //last person to stand earns a point, probably the default
-    DEATHMATCH_POINTS, //killing a player will earn them a point, up to a certain point Currently broken and only semi implemented.
+    //DEATHMATCH_POINTS, //killing a player will earn them a point, up to a certain point Currently broken and only semi implemented.
 
 }
 
@@ -188,10 +188,10 @@ public class GameManagerc : MonoBehaviour
                     RoundEndLastManStanding();
                     CheckPlayersPoints();
                     break;
-                case Gamemode_type.DEATHMATCH_POINTS:
-                    RoundEndDeathMatchMaxPoints();
-                    CheckPlayersPoints();
-                    break;
+                //case Gamemode_type.DEATHMATCH_POINTS:
+                //    RoundEndDeathMatchMaxPoints();
+                //    CheckPlayersPoints();
+                //    break;
                 //case Gamemode_type.DEATHMATCH_TIMED:
                 //    RoundEndDeathMatchTimed();
                 //    break;
