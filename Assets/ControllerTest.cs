@@ -20,7 +20,7 @@ public class ControllerTest : MonoBehaviour
         {
             if (XCI.GetButtonDown(XboxButton.DPadLeft , XboxController.First + i))
             {
-                Debug.Log("DpadLeft on 4th controller");
+
             }
         }
     }

@@ -13,7 +13,7 @@ public enum PickType
     MAPPICK,
 }
 
-public class GamemodeSelection : MonoBehaviour 
+public class GamemodeSelection : MonoBehaviour
 {
     private Button _button;
     private Text _buttonText;
@@ -169,9 +169,9 @@ public class GamemodeSelection : MonoBehaviour
 
                             m_GamemodeSelected = Gamemode_type.LAST_MAN_STANDING_DEATHMATCH + m_iGamemodeIndex;
                         }
-                        break;
                         
                     */
+                        break;
                     #endregion
                     case PickType.MAPPICK:
                         #region
@@ -321,14 +321,16 @@ public class GamemodeSelection : MonoBehaviour
         //check each controller
         for (int i = 0; i < (int)PlayerIndex.Four; ++i)
         {
+            Vector2 StickInput = new Vector2(XCI.GetAxis(XboxAxis.LeftStickX, XboxController.First + i), 0);
+            StickInput = CheckDeadZone(StickInput, 0.2f);
             if (ResetSticks)
             {
-                if (XCI.GetAxis(XboxAxis.LeftStickX, XboxController.First + i) < 0)
+                if (StickInput.x < 0)
                 {
                     StickMovement[0] = true;
                     ResetSticks = false;
                 }
-                else if (XCI.GetAxis(XboxAxis.LeftStickX, XboxController.First + i) > 0)
+                else if (StickInput.x > 0)
                 {
                     StickMovement[1] = true;
                     ResetSticks = false;
@@ -337,6 +339,22 @@ public class GamemodeSelection : MonoBehaviour
 
         }
     }
+
+
+    Vector3 CheckDeadZone(Vector3 controllerInput, float deadzone)
+    {
+        Vector3 temp = controllerInput;
+        //if any of the numbers are below a certain deadzone, they get zeroed.
+        Debug.Log(Mathf.Abs(temp.x));
+        if (Mathf.Abs(controllerInput.x) < deadzone)
+        {
+            temp.x = 0;
+        }
+        
+        return temp;
+    }
+
+
     public void EnterGame()
     {
         UIManager.Instance.m_bInMainMenu = false;
