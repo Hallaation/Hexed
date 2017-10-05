@@ -143,6 +143,7 @@ public class GamemodeSelection : MonoBehaviour
                 {
                     case PickType.GAMEMODEPICK:
                         #region
+                        /*
                         GameManagerc.Instance.m_gameMode = Gamemode_type.LAST_MAN_STANDING_DEATHMATCH + m_iGamemodeIndex;
                         //check for right input
                         //If Dpad right, increment through the array
@@ -169,11 +170,12 @@ public class GamemodeSelection : MonoBehaviour
                             m_GamemodeSelected = Gamemode_type.LAST_MAN_STANDING_DEATHMATCH + m_iGamemodeIndex;
                         }
                         break;
+                        
+                    */
                     #endregion
                     case PickType.MAPPICK:
                         #region
                         {
-
                             _mapSprite.sprite = mapSprites[m_iMapPickIndex];
                             GameManagerc.Instance.MapToLoad = MapObjects[m_iMapPickIndex];
                             if ((DpadHorizontalTest() > 0) || StickMovement[1])
@@ -255,9 +257,9 @@ public class GamemodeSelection : MonoBehaviour
                         case Gamemode_type.LAST_MAN_STANDING_DEATHMATCH:
                             _buttonText.text = "Gamemode: Last Man Standing DM";
                             break;
-                        case Gamemode_type.DEATHMATCH_POINTS:
-                            _buttonText.text = "Gamemode: MaxKills Deathmatch";
-                            break;
+                        //case Gamemode_type.DEATHMATCH_POINTS:
+                        //    _buttonText.text = "Gamemode: MaxKills Deathmatch";
+                        //    break;
                         //case Gamemode_type.DEATHMATCH_TIMED:
                         //    _button.GetComponentInChildren<Text>().text = "Gamemode: Timed Deathmatch";
                         //    break;
