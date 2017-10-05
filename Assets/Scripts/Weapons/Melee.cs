@@ -44,10 +44,14 @@ public class Melee : Weapon
                     BodyAnimator.Play("TwoHandedMeleeLeftAttack", 0, AnimationTime);
                     ReverseAnimation = true;
                 }
-                else
+                else if(BodyAnimator.GetCurrentAnimatorStateInfo(0).IsName("TwoHandedMeleeRightAttack"))
                 {
                     BodyAnimator.Play("TwoHandedMeleeRightAttack", 0, AnimationTime);
                     ReverseAnimation = true;
+                }
+                else
+                {
+                    BodyAnimator.Play("OneHandedMeleeAttack", 0, AnimationTime);
                 }
             }
            else if (m_bAttacking == true && other.tag == "Player" && other.transform.root != this.transform.root && other.transform.root.GetComponent<PlayerStatus>().m_bStunned == false)
@@ -115,10 +119,14 @@ public class Melee : Weapon
                     BodyAnimator.Play("TwoHandedMeleeLeftAttack", 0, AnimationTime);
                     ReverseAnimation = true;
                 }
-                else
+                else if (BodyAnimator.GetCurrentAnimatorStateInfo(0).IsName("TwoHandedMeleeRightAttack"))
                 {
                     BodyAnimator.Play("TwoHandedMeleeRightAttack", 0, AnimationTime);
                     ReverseAnimation = true;
+                }
+                else
+                {
+                    BodyAnimator.Play("OneHandedMeleeAttack", 0, AnimationTime);
                 }
             }
             //check if attacking and check if its a valid hit (on another player and the other player isn't stunned)
@@ -202,7 +210,7 @@ public class Melee : Weapon
         
         if(ReverseAnimation == true)
         {
-            if(BodyAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < .1f)
+  
             {
                 BodyAnimator.SetBool("ReverseAnimator", true);
                 BodyAnimator.SetFloat("Speed", 1);
