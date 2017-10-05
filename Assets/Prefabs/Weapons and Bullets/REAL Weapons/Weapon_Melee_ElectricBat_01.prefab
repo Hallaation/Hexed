@@ -83,8 +83,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1226134330056524}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6, y: 5.5, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: 0.13052596, w: 0.99144495}
+  m_LocalPosition: {x: -7.5100374, y: -3.0819952, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4957417639830258}
@@ -92,7 +92,7 @@ Transform:
   - {fileID: 4850888224117694}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 15.000001}
 --- !u!4 &4710980807333236
 Transform:
   m_ObjectHideFlags: 1
@@ -210,7 +210,7 @@ MonoBehaviour:
   pickupVolume: 1
   DropAudioClip: {fileID: 8300000, guid: 97081f0c745f5554cbff5c7a1c0fca98, type: 3}
   DropAudioVolume: 1
-  ThrowAudioClip: {fileID: 0}
+  ThrowAudioClip: {fileID: 8300000, guid: f28b17f274e7bce43b95a99f81b90f01, type: 3}
   ThrowAudioVolume: 1
   ThrowHitAudio: {fileID: 0}
   m_bRandomizeThrowHitPitch: 0
@@ -218,6 +218,7 @@ MonoBehaviour:
   m_fHitFlinchTime: 0.3
   m_bAttacking: 0
   m_b2Handed: 0
+  ReverseAnimation: 0
   hitAudioClip: {fileID: 0}
   m_bRandomizeHitAudio: 0
   hitAudioVolume: 1

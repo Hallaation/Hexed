@@ -326,7 +326,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1707724565590912
 GameObject:
   m_ObjectHideFlags: 1
@@ -1116,8 +1116,8 @@ MonoBehaviour:
   manaBar: {fileID: 0}
   m_ChargeIndicator: {fileID: 0}
   ChargeIndicatorSprites: []
-  CoolDownCharges: 1
-  m_TeleportForce: 7.5
+  ChargeCoolDown: 1
+  m_TeleportForce: 3.5
 --- !u!114 &114222127503517894
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1328,6 +1328,7 @@ MonoBehaviour:
   _playerColor: {r: 1, g: 0, b: 0, a: 1}
   killMePrompt: {fileID: 1655951474111372}
   killMeArea: {fileID: 1090191675043262}
+  HealthLost: {fileID: 0}
   spawnIndex: 0
   stunBar: {fileID: 0}
   stunMask: {fileID: 0}
@@ -1391,7 +1392,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_audioClip: {fileID: 8300000, guid: 4b888a7f968ac134c8739ec4a23a7eee, type: 3}
-  m_bRandomizePitch: 0
+  m_bRandomizePitch: 1
   clipVolume: 1
   m_bShakeCamera: 1
   PlayParticles: 0
