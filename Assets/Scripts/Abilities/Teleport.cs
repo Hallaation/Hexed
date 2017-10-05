@@ -15,6 +15,7 @@ public class Teleport : BaseAbility
     Rigidbody2D _rigidBody;
     ControllerSetter m_controller;
 
+
     // Use this for initialization
     //void Start()
     //{
@@ -32,6 +33,7 @@ public class Teleport : BaseAbility
         m_controller = GetComponent<ControllerSetter>();
         _rigidBody = GetComponent<Rigidbody2D>();
         RegenMana = true;
+
     }
 
     // Update is called once per frame
@@ -45,7 +47,7 @@ public class Teleport : BaseAbility
 
             //makes a quaternion
             Quaternion LeftStickRotation = new Quaternion();
-            LeftStickRotation = Quaternion.Euler(0 , 0 , Mathf.Atan2(m_MoveOwner.m_LeftStickRotation.x , m_MoveOwner.m_LeftStickRotation.y) * Mathf.Rad2Deg); // This works
+            LeftStickRotation = Quaternion.Euler(0, 0, Mathf.Atan2(m_MoveOwner.m_LeftStickRotation.x, m_MoveOwner.m_LeftStickRotation.y) * Mathf.Rad2Deg); // This works
             Vector3 rotation = LeftStickRotation * Vector3.up;
 
             //makes a rotation vector from the left stick's rotation
@@ -53,10 +55,10 @@ public class Teleport : BaseAbility
             //if there is any rotation from the left stick, the player will teleport the direction of the left stick, otherwise they will teleport the way they are looking
             if (m_MoveOwner.m_LeftStickRotation.magnitude > 0)
             {
-                
-                Vector2 V2rotation = new Vector2(rotation.x , rotation.y);
-                RaycastHit2D hitLeftStick = Physics2D.Raycast(transform.position , V2rotation , m_TeleportForce , LayerMask.GetMask("Wall", "Glass"));
-                Debug.DrawRay(transform.position , V2rotation * m_TeleportForce, Color.blue, 5);
+
+                Vector2 V2rotation = new Vector2(rotation.x, rotation.y);
+                RaycastHit2D hitLeftStick = Physics2D.Raycast(transform.position, V2rotation, m_TeleportForce, LayerMask.GetMask("Wall", "Glass"));
+                Debug.DrawRay(transform.position, V2rotation * m_TeleportForce, Color.blue, 5);
                 if (hitLeftStick.collider != null)   //! If a raycast sent along the direction of the left stick collides with a wall. Put the player at the collision
                 {
                     //float Xdistance = ((hitLeftStick.point.x) - (transform.position.x));
@@ -67,11 +69,11 @@ public class Teleport : BaseAbility
                     Debug.Log("WallPrevention");
                 }
                 else
-                    _rigidBody.position += new Vector2(rotation.x * m_TeleportForce , rotation.y * m_TeleportForce);
+                    _rigidBody.position += new Vector2(rotation.x * m_TeleportForce, rotation.y * m_TeleportForce);
             }
             else
             {
-                RaycastHit2D hit = Physics2D.Raycast(transform.position , transform.up , m_TeleportForce , LayerMask.GetMask("Wall" , "Glass"));
+                RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up, m_TeleportForce, LayerMask.GetMask("Wall", "Glass"));
 
                 //Doe sa raycast to see if it has hit a wall, if it has, dont teleport.
                 if (hit.collider != null) //! If a raycast sent along the direction the player is facing collides with a wall. Put the player at the collision
@@ -83,7 +85,7 @@ public class Teleport : BaseAbility
                     Debug.Log("WallPrevention");
                 }
                 else
-                    _rigidBody.position += new Vector2(this.transform.up.x * m_TeleportForce , this.transform.up.y * m_TeleportForce);  // Teleport full distance
+                    _rigidBody.position += new Vector2(this.transform.up.x * m_TeleportForce, this.transform.up.y * m_TeleportForce);  // Teleport full distance
             }
 
             ButtonHasBeenUp = false;
@@ -91,10 +93,12 @@ public class Teleport : BaseAbility
             //currentMana -= ManaCost;
 
         }
-        if (XCI.GetAxis(XboxAxis.LeftTrigger , m_controller.mXboxController) < 0.1)
+        if (XCI.GetAxis(XboxAxis.LeftTrigger, m_controller.mXboxController) < 0.1)
         {
             ButtonHasBeenUp = true;
         }
     }
+
+
 }
 
