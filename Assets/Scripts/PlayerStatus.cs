@@ -102,16 +102,14 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         killMePrompt.SetActive(false);
 
         LoadUIBars();
-        //foreach (var item in PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_objects)
-        //{
-        //    item.SetActive(true);
-        //}
+
     }
 
     void Awake()
     {
-        m_bInvincible = true;
+        m_bInvincible = true; //when awake I am Invincible.
     }
+
     void Update()
     {
         if (stunBarContainer.activeSelf)
@@ -146,21 +144,6 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             }
         }
 
-        if (_HealthMask)
-        {
-            float xOffset = m_iHealth * -0.0791f;
-            _HealthMask.GetComponent<Image>().material.SetTextureOffset("_MainTex", new Vector2(0 + xOffset, 0));
-
-            if (m_bShowHealthLoss)
-            {
-                if (healthLossTimer.Tick(Time.deltaTime))
-                {
-                    HealthLost.fillAmount = m_iHealth / 3;
-                    m_bShowHealthLoss = false;
-                }
-            }
-        }
-
         //if im dead, set my Color to gray, turn of all physics simulations and exit the function
         if (m_bDead)
         {
@@ -190,6 +173,8 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             GetComponent<Move>().GetFeetAnimator().enabled = false;
             m_Ability.m_ChargeIndicator.SetActive(false);
             m_Ability.ChargeCoolDown = false;
+
+            //Changes the sprite if stunned.
             if (StunnedSprites.Length > 0 && !StunSpriteChanged)
             {
                 StunSpriteChanged = true;
@@ -199,12 +184,6 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             SetAllAnimatorsFalse();
             killMeArea.SetActive(true);
             PlayerSprite.material.color = Color.cyan;
-            //set the stun bar location
-            //stunBarContainer.transform.localPosition = Vector3.zero;
-            //stunBarContainer.transform.position += Vector3.up * 1.2f;
-            //stunBar.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
-            //stunMask.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
-            //stunBarContainer.SetActive(true);
             stunBarContainer.SetActive(true);
 
             CheckForButtonMash();
@@ -223,16 +202,17 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
                 m_bStunned = false;
             }
         }
-        //if not stunned dont kill me
+        //When not stunned
         else
         {
-            GetComponent<Move>().GetBodyAnimator().enabled = true;
-            GetComponent<Move>().GetFeetAnimator().enabled = true;
-            m_Ability.m_ChargeIndicator.SetActive(true);
-            m_Ability.ChargeCoolDown = true;
+            GetComponent<Move>().GetBodyAnimator().enabled = true; //Get the animator(s) from the Move script and enable them
+            GetComponent<Move>().GetFeetAnimator().enabled = true; //Get the animator(s) from the Move script and enable them
+            m_Ability.m_ChargeIndicator.SetActive(true); //Turn the ability charge indicator back on
+            m_Ability.ChargeCoolDown = true; //Continue to tick the timer for more Ability charges
             StunSpriteChanged = false;
             this.GetComponent<Move>().MakeCollidersTriggers(false);
             stunBarContainer.SetActive(false);
+
             if (this.transform.GetChild(1).tag == "Stunned")
             {
                 Debug.Log(this.transform.GetChild(0).tag);
@@ -257,14 +237,32 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         }
 
     }
+    //Snap all the health/stun bars to the player's position.
     public void LateUpdate()
     {
+        //Check for a health mask
+        if (_HealthMask)
+        {
+            float xOffset = m_iHealth * -0.0791f;
+            _HealthMask.GetComponent<Image>().material.SetTextureOffset("_MainTex", new Vector2(0 + xOffset, 0));
+
+            if (m_bShowHealthLoss)
+            {
+                if (healthLossTimer.Tick(Time.deltaTime))
+                {
+                    HealthLost.fillAmount = m_iHealth / 3;
+                    m_bShowHealthLoss = false;
+                }
+            }
+        }
+
         //If the previous frames health isnt the current frames health, show the changed health.
         _PlayerCanvas.transform.localScale = new Vector3(Camera.main.orthographicSize, Camera.main.orthographicSize, Camera.main.orthographicSize) * 0.003f;
         //_PlayerCanvas.transform.position = this.transform.position + Vector3.up;
         HealthContainer.transform.position = this.transform.position + Vector3.up;
         stunBarContainer.transform.position = this.transform.position + Vector3.up;
 
+        //Showing health change is when the health bar shows up. health loss is seperate.
         if (m_bShowHealthChange)
         {
             HealthContainer.SetActive(true);
@@ -325,7 +323,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         _rigidbody.velocity = KnockBackVelocity;
     }
 
-
+    //Resets the player, called whenever the map is reset.
     public void ResetPlayer()
     {
         m_iHealth = 3;
@@ -363,6 +361,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         //    item.SetActive(true);
         //}
     }
+    //Kills the player
     public void KillPlayer(PlayerStatus killer)
     {
         //kill the player, called outside of class (mostly used for downed kills)
@@ -376,7 +375,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         }
 
     }
-
+    //handles all logic for a bullet hitting the player
     public void HitPlayer(Bullet aBullet, bool abGiveIFrames = false)
     {
         if (!m_bInvincible)
@@ -398,6 +397,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             m_bInvincible = true;
         }
     }
+    //Does all the logic for when a player is hit by a weapon.
     public void HitPlayer(Weapon a_weapon, bool abGiveIFrames = false)
     {
         if (!m_bInvincible)
@@ -420,6 +420,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         }
     }
 
+    //Give I frames to the player, the flashing is broken but whatever.
     IEnumerator InvinciblityTime()
     {
         if (m_InvincibilityTimer.mfTimeToWait != m_fInvincibleTime)
@@ -445,11 +446,13 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         yield return null;
     }
 
+    //Clear removes the onsceneloaded from the scenelaoded delegate
     public void Clear()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
+    //Checks for a button mash to reduce the stun time.
     void CheckForButtonMash()
     {
         if (!m_bMiniStun)
@@ -462,6 +465,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
 
     }
 
+    //Turn all animations off in the animator;
     void SetAllAnimatorsFalse()
     {
         Animator Body = GetComponent<Move>().GetBodyAnimator();
@@ -472,7 +476,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         {
             foreach (AnimatorControllerParameter parameter in Body.parameters)
             {
-                if (parameter.type == AnimatorControllerParameterType.Bool)
+                if (parameter.type == AnimatorControllerParameterType.Bool) //snaity check
                     Body.SetBool(parameter.name, false);
             }
         }
@@ -481,7 +485,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         {
             foreach (AnimatorControllerParameter parameter in Feet.parameters)
             {
-                if (parameter.type == AnimatorControllerParameterType.Bool)
+                if (parameter.type == AnimatorControllerParameterType.Bool) //sanity check
                     Feet.SetBool(parameter.name, false);
             }
         }
@@ -500,18 +504,22 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
     void LoadUIBars()
     {
 
+        //Find the canvas that holds all the player UI bars
+        _PlayerCanvas = this.transform.Find("Sprites").Find("PlayerCanvas").gameObject;
         //Player bars and shit
+       
+        //Find the container for the stun bar and the stun mask
         stunBarContainer = this.transform.Find("Sprites").Find("PlayerCanvas").GetChild(1).gameObject;
         stunMask = stunBarContainer.transform.GetChild(0).GetComponent<Image>();
 
+        //Find all the bars and containers related to health.
         _HealthMask = this.transform.Find("Sprites").Find("PlayerCanvas").GetChild(0).GetChild(0).gameObject;
-        _PlayerCanvas = this.transform.Find("Sprites").Find("PlayerCanvas").gameObject;
         Material temp = new Material(_HealthMask.GetComponent<Image>().material.shader);
         _HealthMask.GetComponent<Image>().material = temp;
         HealthContainer = this.transform.Find("Sprites").Find("PlayerCanvas").GetChild(0).gameObject;
         HealthLost = this.transform.Find("Sprites").Find("PlayerCanvas").GetChild(0).GetChild(1).GetComponent<Image>();
 
-        //Set health bar colours
+        //Set health bar colours to my player colour
         foreach (var item in HealthContainer.GetComponentsInChildren<Image>())
         {
             Material oldMat = item.GetComponent<Image>().material;
@@ -531,9 +539,10 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             if (item.GetComponent<Image>().material.HasProperty("_Color"))
                 item.GetComponent<Image>().material.color = _playerColor;
         }
+        //Change the health loss colour to yellow so it stands out. (kind of)
         HealthLost.color = Colors.Yellow;
-        _PlayerCanvas.transform.SetParent(null);
-        HealthContainer.SetActive(false);
+        _PlayerCanvas.transform.SetParent(null); //Set its parent to null so it can properly follow the player's positon.
+        HealthContainer.SetActive(false); //turn it off.
 
     }
 }
