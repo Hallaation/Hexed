@@ -103,7 +103,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1338585375657914}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.94, y: 0, z: 0}
+  m_LocalPosition: {x: -3.5942795, y: 0.3097663, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4258001478047360}
@@ -303,7 +303,9 @@ MonoBehaviour:
   bulletOwner: {fileID: 0}
   m_iDamage: 0
   m_bGiveIFrames: 0
+  m_fBulletImpactKnockBack: 5
   trail: {fileID: 96087383453932176}
+  m_fMaximumTime: 60
 --- !u!198 &198177475376446904
 ParticleSystem:
   m_ObjectHideFlags: 1
@@ -5447,7 +5449,7 @@ ParticleSystem:
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: -1012771997
+  randomSeed: -1235447531
   InitialModule:
     serializedVersion: 3
     enabled: 1
