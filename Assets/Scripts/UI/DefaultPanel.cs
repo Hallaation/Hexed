@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DefaultButton : MonoBehaviour
+public class DefaultPanel : MonoBehaviour
 {
-
-    public GameObject defaultButton;
 
 }

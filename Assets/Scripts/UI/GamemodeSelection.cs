@@ -345,7 +345,6 @@ public class GamemodeSelection : MonoBehaviour
     {
         Vector3 temp = controllerInput;
         //if any of the numbers are below a certain deadzone, they get zeroed.
-        Debug.Log(Mathf.Abs(temp.x));
         if (Mathf.Abs(controllerInput.x) < deadzone)
         {
             temp.x = 0;
