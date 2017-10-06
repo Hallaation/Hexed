@@ -68,7 +68,7 @@ public class Melee : Weapon
                     {
                         m_AudioSource.Play();
                         //other.transform.parent.GetComponentInParent<PlayerStatus>().HitPlayer(this, false);
-                        other.transform.parent.GetComponentInParent<PlayerStatus>().StunPlayer(transform.right * ThrowHitKnockBack);        //! Uses transform right instead of transform up due to using the bats right rather then players up
+                        other.transform.parent.GetComponentInParent<PlayerStatus>().StunPlayer(transform.right * ThrowHitKnockbackScale);        //! Uses transform right instead of transform up due to using the bats right rather then players up
 
                         Debug.Log("BatEnterStun");
                     }
@@ -95,7 +95,7 @@ public class Melee : Weapon
                 if (GetComponent<Rigidbody2D>().velocity.magnitude >= 10 && other.tag == "Player" && other.GetComponentInParent<PlayerStatus>().gameObject != weaponThrower)
                 {
                     //stun the player
-                    other.transform.root.GetComponentInParent<PlayerStatus>().StunPlayer(transform.right * ThrowHitKnockBack);        //! Uses transform right instead of transform up due to using the bats right rather then players up
+                    other.transform.root.GetComponentInParent<PlayerStatus>().StunPlayer(transform.right * ThrowHitKnockbackScale);        //! Uses transform right instead of transform up due to using the bats right rather then players up
                 }
             }
             //Find every hit by melee interface and call its function
@@ -166,7 +166,7 @@ public class Melee : Weapon
                     //check to see if the velocity is still valid and the collided object isn't the thower
                 {
                     //Stun the player
-                    other.transform.root.GetComponentInParent<PlayerStatus>().StunPlayer(transform.right * ThrowHitKnockBack);        //! Uses transform right instead of transform up due to using the bats right rather then players up
+                    other.transform.root.GetComponentInParent<PlayerStatus>().StunPlayer(transform.right * ThrowHitKnockbackScale);        //! Uses transform right instead of transform up due to using the bats right rather then players up
                 }
             }
             //Find every hitbymelee interface and call its function.

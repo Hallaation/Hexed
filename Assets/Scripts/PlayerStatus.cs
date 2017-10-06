@@ -169,8 +169,10 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         if (m_bStunned)
         {
             stunTimer.mfTimeToWait = m_fStunTime;
-            GetComponent<Move>().GetBodyAnimator().enabled = false;
-            GetComponent<Move>().GetFeetAnimator().enabled = false;
+
+            GetComponent<Move>().GetBodyAnimator().enabled = false; //enable animators
+            GetComponent<Move>().GetFeetAnimator().enabled = false; //enable animators
+
             m_Ability.m_ChargeIndicator.SetActive(false);
             m_Ability.ChargeCoolDown = false;
 
@@ -188,14 +190,11 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
 
             CheckForButtonMash();
             //this.GetComponent<Renderer>().material.color = Color.cyan;
-            if (this.transform.GetChild(1).tag == "Stunned")
-            {
-                this.transform.GetChild(1).gameObject.GetComponent<Collider2D>().enabled = true;
-            }
-            else
-            {
-                this.transform.GetChild(0).gameObject.GetComponent<Collider2D>().enabled = true;
-            }
+            //Find the collision colliders and turn them on
+            this.transform.Find("Colliders").gameObject.GetComponent<Collider2D>().enabled = true;
+            this.transform.Find("Colliders").gameObject.GetComponent<Collider2D>().isTrigger = true;
+
+
             this.GetComponent<Move>().MakeCollidersTriggers(true);
             if (stunTimer.Tick(Time.deltaTime))
             {
@@ -305,11 +304,13 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
 
     public void StunPlayer(Vector3 ThrownItemVelocity)
     {
+        float angle = Mathf.Atan2(ThrownItemVelocity.normalized.x, -ThrownItemVelocity.normalized.y);
+        this.transform.rotation = Quaternion.AngleAxis(angle * Mathf.Rad2Deg, Vector3.forward);
         //stun the player called outside of class
         //Vector3 a = ThrownItemVelocity.normalized;
         // _rigidbody.velocity = (a * StunedSlide);
         SetAllAnimatorsFalse();
-        _rigidbody.velocity = ThrownItemVelocity;
+        _rigidbody.AddForce(ThrownItemVelocity, ForceMode2D.Impulse);
         m_bStunned = true;
         m_iTimesPunched = 0;
 
@@ -360,6 +361,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         //{
         //    item.SetActive(true);
         //}
+
     }
     //Kills the player
     public void KillPlayer(PlayerStatus killer)
