@@ -120,14 +120,14 @@ public class EmptyHand : Weapon
                                     if (hitPlayer != this.GetComponent<PlayerStatus>())
                                     {
                                         hitPlayer.TimesPunched++;
-                                        hitPlayer.MiniStun(this.transform.up * (ThrowHitKnockbackScale * 1.5f), PunchFlinchTime);
+                                        hitPlayer.MiniStun(this.transform.up * (KnockBack * 1.5f), PunchFlinchTime);
                                         float tempPitch = (m_bRandomizeHitPitch) ? Random.Range(0.9f, 1.1f) : 1;
                                         hitPlayer.GetComponent<IHitByMelee>().HitByMelee(this, audioClip, m_clipVolume, tempPitch);
 
                                         //Debug.Log("PunchedEnemy");
                                         if (hitPlayer.TimesPunched >= 3)
                                         {
-                                            hitPlayer.StunPlayer(transform.up * ThrowHitKnockbackScale);
+                                            hitPlayer.StunPlayer(transform.up * KnockBack);
                                             hitPlayer.TimesPunched = 0;
                                             hitPlayer.GetComponent<Move>().StatusApplied();//GetComponent<Move>().StatusApplied();
                                                                                            //Debug.Log("StunnedEnemy");

@@ -310,7 +310,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         //Vector3 a = ThrownItemVelocity.normalized;
         // _rigidbody.velocity = (a * StunedSlide);
         SetAllAnimatorsFalse();
-        _rigidbody.AddForce(ThrownItemVelocity, ForceMode2D.Impulse);
+        _rigidbody.velocity = ThrownItemVelocity;
         m_bStunned = true;
         m_iTimesPunched = 0;
 
