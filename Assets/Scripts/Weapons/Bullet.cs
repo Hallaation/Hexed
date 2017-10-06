@@ -7,6 +7,7 @@ public class Bullet : MonoBehaviour
     CircleCollider2D m_CircleCollider;
     Vector2 m_vVelocity;
     Vector3 PreviousVelocity;
+    Quaternion StartRotation;
     float PreviousRotation;
     private bool m_bStopRayCasts = false;
     public Vector3 GetPreviousVelocity() { return PreviousVelocity; }
@@ -38,6 +39,12 @@ public class Bullet : MonoBehaviour
         m_rigidBody = GetComponent<Rigidbody2D>();
         PreviousRotation = GetComponent<Rigidbody2D>().rotation;
         PreviousVelocity = GetComponent<Rigidbody2D>().velocity;
+        StartRotation = transform.rotation;
+
+
+        Vector2 dir = m_rigidBody.velocity;
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        transform.GetChild(0).rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         if (trail != null)
         {
             trail.sortingLayerName = "Defult";
@@ -80,11 +87,10 @@ public class Bullet : MonoBehaviour
         //    }
 
         //}
-        PreviousVelocity = this.GetComponent<Rigidbody2D>().velocity;
+       
+       PreviousVelocity = this.GetComponent<Rigidbody2D>().velocity;
         PreviousRotation = m_rigidBody.rotation;
-        Vector2 dir = m_rigidBody.velocity;
-        float angle = Mathf.Atan2(dir.y , dir.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.AngleAxis(angle , Vector3.forward);
+        
 
 
         VChildPrevRotation = transform.localEulerAngles;
@@ -121,6 +127,7 @@ public class Bullet : MonoBehaviour
                     m_rigidBody.simulated = false;
                     BulletSprite.enabled = false;
                     transform.position = RayHit.point;
+                    transform.rotation = StartRotation;
                     //If a wall, play the particle
 
                     //bullet reflection
@@ -148,6 +155,7 @@ public class Bullet : MonoBehaviour
                     m_rigidBody.simulated = false;
                     BulletSprite.enabled = false;
                     transform.position = RayHit.point;
+                    transform.rotation = StartRotation;
                     Destroy(this.gameObject , 1);
 
                 }
@@ -180,6 +188,7 @@ public class Bullet : MonoBehaviour
                         m_rigidBody.simulated = false;
                         BulletSprite.enabled = false;
                         transform.position = RayHit.point;
+                        transform.rotation = StartRotation; 
                         Destroy(this.gameObject, 0.5f); //Destroy me beacuse I have no other purpose, 
                         //? Maybe change the bullets to a pool instead
                     }
@@ -201,7 +210,8 @@ public class Bullet : MonoBehaviour
         Debug.Log("spark");
         if (ParticleSparks != null)
         {
-            transform.GetChild(0).localEulerAngles = new Vector3(VChildPrevRotation.x , VChildPrevRotation.y , VChildPrevRotation.z); // parent - 90z
+            
+            // transform.GetChild(0).localEulerAngles = new Vector3(VChildPrevRotation.x , VChildPrevRotation.y , VChildPrevRotation.z); // parent - 90z
             transform.position = new Vector3(hit.contacts[0].point.x , hit.contacts[0].point.y , 0);
             ParticleSparks.Play();
 
@@ -234,7 +244,9 @@ public class Bullet : MonoBehaviour
         float longestParticleDuration = 0;
         if (WallCollidedParticles.Length > 0)
         {
-            transform.GetChild(0).localEulerAngles = new Vector3(VChildPrevRotation.x , VChildPrevRotation.y , VChildPrevRotation.z);
+
+      
+            // transform.GetChild(0).localEulerAngles = new Vector3(VChildPrevRotation.x , VChildPrevRotation.y , VChildPrevRotation.z);
             foreach (ParticleSystem particle in WallCollidedParticles)
             {
 

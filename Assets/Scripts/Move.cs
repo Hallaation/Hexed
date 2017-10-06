@@ -428,6 +428,8 @@ public class Move : MonoBehaviour
     {
         if (heldWeapon && heldWeapon.GetComponent<Weapon>().m_bActive)
         {
+            BodyAnimator.SetBool("ReverseAnimator", false);
+            BodyAnimator.SetFloat("Speed", 1);
             Vector3 GunMountPosition = Vector3.one;
             //drop the weapon 
             heldWeapon.transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = 0; //? Puts gun layer behinde player layer when it's dropped. 

@@ -52,6 +52,7 @@ public class Melee : Weapon
                 else
                 {
                     BodyAnimator.Play("OneHandedMeleeAttack", 0, AnimationTime);
+                    ReverseAnimation = true;
                 }
             }
            else if (m_bAttacking == true && other.tag == "Player" && other.transform.root != this.transform.root && other.transform.root.GetComponent<PlayerStatus>().m_bStunned == false)
@@ -207,20 +208,26 @@ public class Melee : Weapon
             {
                 m_bAttacking = false;
             }
-        
-        if(ReverseAnimation == true)
+        if (transform.root.tag == "Player")
         {
-  
+            if (ReverseAnimation == true)
             {
-                BodyAnimator.SetBool("ReverseAnimator", true);
-                BodyAnimator.SetFloat("Speed", 1);
-                ReverseAnimation = false;
+                if (BodyAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < .1f)
+                {
+                    BodyAnimator.SetBool("ReverseAnimator", true);
+                    BodyAnimator.SetFloat("Speed", 1);
+                    ReverseAnimation = false;
+                }
+            }
+            else if (BodyAnimator != null)
+            {
+
+                BodyAnimator.SetBool("ReverseAnimator", false);
             }
         }
-        else if (BodyAnimator != null)
+        else
         {
-            
-            BodyAnimator.SetBool("ReverseAnimator", false);
+            ReverseAnimation = false;
         }
         if (m_bAttacking && !m_bPlayedAudio)
         {
