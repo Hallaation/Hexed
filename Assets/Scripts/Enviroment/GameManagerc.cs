@@ -491,7 +491,7 @@ public class GameManagerc : MonoBehaviour
 
     public void Rematch()
     {
-        Debug.Log("Start of rematch");
+       // Debug.Log("Start of rematch");
         //reset the time scale
         Time.timeScale = 1;
         //The round is not over
@@ -512,7 +512,7 @@ public class GameManagerc : MonoBehaviour
         //mbFinishedPanelShown = false;
         //reload the current scene
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        Debug.Log("End of rematch after button");
+        //Debug.Log("End of rematch after button");
     }
 
     /// <summary>
@@ -579,9 +579,9 @@ public class GameManagerc : MonoBehaviour
     IEnumerator AddPointsToPanel(PlayerStatus player)
     {
         PointsPanel.SetActive(true);
+        MenuPanel.SetActive(false);
         InGameScreenAnimator.SetTrigger("ShowScreen");
         mbFinishedShowingScores = false;
-
         GameObject go = new GameObject("Point" , typeof(RectTransform));
         go.AddComponent<CanvasRenderer>();
         go.AddComponent<Image>().sprite = PointSprite;

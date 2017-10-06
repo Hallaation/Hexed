@@ -70,7 +70,7 @@ public class Melee : Weapon
                         //other.transform.parent.GetComponentInParent<PlayerStatus>().HitPlayer(this, false);
                         other.transform.parent.GetComponentInParent<PlayerStatus>().StunPlayer(transform.right * KnockBack);        //! Uses transform right instead of transform up due to using the bats right rather then players up
 
-                        Debug.Log("BatEnterStun");
+                        //Debug.Log("BatEnterStun");
                     }
                 }
                 
@@ -145,7 +145,7 @@ public class Melee : Weapon
                     {
                         other.transform.parent.GetComponentInParent<PlayerStatus>().HitPlayer(this, false); //hit player
                        // other.transform.parent.GetComponentInParent<PlayerStatus>().StunPlayer(transform.right * KnockBack);        //! Uses transform right instead of transform up due to using the bats right rather then players up
-                        Debug.Log("BatEnterStun");
+                        //Debug.Log("BatEnterStun");
                     }
                 }
                 //Find every hitbymelee interface and call its function.
