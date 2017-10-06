@@ -45,7 +45,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
     [SerializeField]
     private Image HealthLost;
     private Timer healthLossTimer;
-    private Timer ShowHealthChangeTimer; 
+    private Timer ShowHealthChangeTimer;
     private bool m_bShowHealthLoss = false;
     private bool m_bShowHealthChange = false;
     Rigidbody2D _rigidbody;
@@ -112,166 +112,172 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
 
     void Update()
     {
-        if (stunBarContainer.activeSelf)
+        if (!GameManagerc.Instance.Paused)
         {
-            float sunOffset = stunTimer.CurrentTime / stunTimer.mfTimeToWait * 0.24f;
-            stunMask.material.SetTextureOffset("_MainTex", new Vector2(-0.24f + sunOffset, 0));
-        }
-
-        if (m_iHealth <= 0)
-            m_iHealth = 0;
-
-        StartCoroutine(InvinciblityTime());
-        //update my score
-        if (GameManagerc.Instance.PlayerWins.ContainsKey(this))
-        {
-            m_iScore = GameManagerc.Instance.PlayerWins[this];
-        }
-
-        //if i've been punched once, start the timer, once the timer has reached the end, reset the amount of times punched.
-        if (m_iTimesPunched >= 1)
-        {
-            if (m_iTimesPunched != m_iPreviousTimesPunched)
+            if (stunBarContainer.activeSelf)
             {
-                resetStunTimer.SetTimer(0);
-                m_iPreviousTimesPunched = m_iTimesPunched;
-            }
-            if (resetStunTimer.Tick(Time.deltaTime))
-            {
-                //  m_iTimesPunched = 0;
-                // m_iPreviousTimesPunched = 0; 
-                //TODO Needs to be readded at some point.
-            }
-        }
-
-        //if im dead, set my Color to gray, turn of all physics simulations and exit the function
-        if (m_bDead)
-        {
-            SetAllAnimatorsFalse();
-
-            PlayerSprite.material.color = Color.grey;
-            this.GetComponent<Rigidbody2D>().simulated = false;
-            killMePrompt.SetActive(false);
-            killMeArea.SetActive(false);
-            stunBarContainer.SetActive(false);
-            GetComponent<Move>().GetBodyAnimator().enabled = false;
-            GetComponent<Move>().GetFeetAnimator().enabled = false;
-            if (DeadSprites.Length > 0 && !DeathSpriteChanged)
-            {
-                DeathSpriteChanged = true;
-                m_SpriteRenderer.sprite = DeadSprites[Random.Range(0, DeadSprites.Length - 1)];
+                float sunOffset = stunTimer.CurrentTime / stunTimer.mfTimeToWait * 0.24f;
+                stunMask.material.SetTextureOffset("_MainTex", new Vector2(-0.24f + sunOffset, 0));
             }
 
-            return;
-        }
+            if (m_iHealth <= 0)
+                m_iHealth = 0;
 
-        //if im stunned, make me cyan and show any kill prompts (X button and kill radius);
-        if (m_bStunned)
-        {
-            stunTimer.mfTimeToWait = m_fStunTime;
-
-            GetComponent<Move>().GetBodyAnimator().enabled = false; //enable animators
-            GetComponent<Move>().GetFeetAnimator().enabled = false; //enable animators
-
-            m_Ability.m_ChargeIndicator.SetActive(false);
-            m_Ability.ChargeCoolDown = false;
-
-            //Changes the sprite if stunned.
-            if (StunnedSprites.Length > 0 && !StunSpriteChanged)
+            StartCoroutine(InvinciblityTime());
+            //update my score
+            if (GameManagerc.Instance.PlayerWins.ContainsKey(this))
             {
-                StunSpriteChanged = true;
-                m_SpriteRenderer.sprite = StunnedSprites[Random.Range(0, StunnedSprites.Length - 1)];
+                m_iScore = GameManagerc.Instance.PlayerWins[this];
             }
 
-            SetAllAnimatorsFalse();
-            killMeArea.SetActive(true);
-            PlayerSprite.material.color = Color.cyan;
-            stunBarContainer.SetActive(true);
-
-            CheckForButtonMash();
-            //this.GetComponent<Renderer>().material.color = Color.cyan;
-            //Find the collision colliders and turn them on
-            this.transform.Find("Colliders").gameObject.GetComponent<Collider2D>().enabled = true;
-            this.transform.Find("Colliders").gameObject.GetComponent<Collider2D>().isTrigger = true;
-
-
-            this.GetComponent<Move>().MakeCollidersTriggers(true);
-            if (stunTimer.Tick(Time.deltaTime))
+            //if i've been punched once, start the timer, once the timer has reached the end, reset the amount of times punched.
+            if (m_iTimesPunched >= 1)
             {
-                m_bStunned = false;
+                if (m_iTimesPunched != m_iPreviousTimesPunched)
+                {
+                    resetStunTimer.SetTimer(0);
+                    m_iPreviousTimesPunched = m_iTimesPunched;
+                }
+                if (resetStunTimer.Tick(Time.deltaTime))
+                {
+                    //  m_iTimesPunched = 0;
+                    // m_iPreviousTimesPunched = 0; 
+                    //TODO Needs to be readded at some point.
+                }
             }
-        }
-        //When not stunned
-        else
-        {
-            GetComponent<Move>().GetBodyAnimator().enabled = true; //Get the animator(s) from the Move script and enable them
-            GetComponent<Move>().GetFeetAnimator().enabled = true; //Get the animator(s) from the Move script and enable them
-            m_Ability.m_ChargeIndicator.SetActive(true); //Turn the ability charge indicator back on
-            m_Ability.ChargeCoolDown = true; //Continue to tick the timer for more Ability charges
-            StunSpriteChanged = false;
-            this.GetComponent<Move>().MakeCollidersTriggers(false);
-            stunBarContainer.SetActive(false);
 
-            if (this.transform.GetChild(1).tag == "Stunned")
+            //if im dead, set my Color to gray, turn of all physics simulations and exit the function
+            if (m_bDead)
             {
-                Debug.Log(this.transform.GetChild(0).tag);
-                this.transform.GetChild(1).gameObject.GetComponent<Collider2D>().enabled = false;        //? child 0 is weaponSpot... 
+                SetAllAnimatorsFalse();
+
+                PlayerSprite.material.color = Color.grey;
+                this.GetComponent<Rigidbody2D>().simulated = false;
+                killMePrompt.SetActive(false);
+                killMeArea.SetActive(false);
+                stunBarContainer.SetActive(false);
+                GetComponent<Move>().GetBodyAnimator().enabled = false;
+                GetComponent<Move>().GetFeetAnimator().enabled = false;
+                if (DeadSprites.Length > 0 && !DeathSpriteChanged)
+                {
+                    DeathSpriteChanged = true;
+                    m_SpriteRenderer.sprite = DeadSprites[Random.Range(0, DeadSprites.Length - 1)];
+                }
+
+                return;
             }
+
+            //if im stunned, make me cyan and show any kill prompts (X button and kill radius);
+            if (m_bStunned)
+            {
+                stunTimer.mfTimeToWait = m_fStunTime;
+
+                GetComponent<Move>().GetBodyAnimator().enabled = false; //enable animators
+                GetComponent<Move>().GetFeetAnimator().enabled = false; //enable animators
+
+                m_Ability.m_ChargeIndicator.SetActive(false);
+                m_Ability.ChargeCoolDown = false;
+
+                //Changes the sprite if stunned.
+                if (StunnedSprites.Length > 0 && !StunSpriteChanged)
+                {
+                    StunSpriteChanged = true;
+                    m_SpriteRenderer.sprite = StunnedSprites[Random.Range(0, StunnedSprites.Length - 1)];
+                }
+
+                SetAllAnimatorsFalse();
+                killMeArea.SetActive(true);
+                PlayerSprite.material.color = Color.cyan;
+                stunBarContainer.SetActive(true);
+
+                CheckForButtonMash();
+                //this.GetComponent<Renderer>().material.color = Color.cyan;
+                //Find the collision colliders and turn them on
+                this.transform.Find("Colliders").gameObject.GetComponent<Collider2D>().enabled = true;
+                //this.transform.Find("Colliders").gameObject.GetComponent<Collider2D>().isTrigger = true;
+
+
+                this.GetComponent<Move>().MakeCollidersTriggers(true);
+                if (stunTimer.Tick(Time.deltaTime))
+                {
+                    m_bStunned = false;
+                }
+            }
+            //When not stunned
             else
             {
-                this.transform.GetChild(0).gameObject.GetComponent<Collider2D>().enabled = false;
-            }
-            killMeArea.SetActive(false);
-            killMePrompt.SetActive(false);
-            //If I find a regular renderer
-            if (GetComponent<Renderer>())
-            {
-                GetComponent<Renderer>().material.color = _playerColor;
-            }
-            else //if no rendere was found
-            {
-                if (!m_bInvincible)
-                    PlayerSprite.GetComponent<Renderer>().material.color = _playerColor;
+                GetComponent<Move>().GetBodyAnimator().enabled = true; //Get the animator(s) from the Move script and enable them
+                GetComponent<Move>().GetFeetAnimator().enabled = true; //Get the animator(s) from the Move script and enable them
+                m_Ability.m_ChargeIndicator.SetActive(true); //Turn the ability charge indicator back on
+                m_Ability.ChargeCoolDown = true; //Continue to tick the timer for more Ability charges
+                StunSpriteChanged = false;
+                this.GetComponent<Move>().MakeCollidersTriggers(false);
+                stunBarContainer.SetActive(false);
+
+                if (this.transform.GetChild(1).tag == "Stunned")
+                {
+                    Debug.Log(this.transform.GetChild(0).tag);
+                    this.transform.GetChild(1).gameObject.GetComponent<Collider2D>().enabled = false;        //? child 0 is weaponSpot... 
+                }
+                else
+                {
+                    this.transform.GetChild(0).gameObject.GetComponent<Collider2D>().enabled = false;
+                }
+                killMeArea.SetActive(false);
+                killMePrompt.SetActive(false);
+                //If I find a regular renderer
+                if (GetComponent<Renderer>())
+                {
+                    GetComponent<Renderer>().material.color = _playerColor;
+                }
+                else //if no rendere was found
+                {
+                    if (!m_bInvincible)
+                        PlayerSprite.GetComponent<Renderer>().material.color = _playerColor;
+                }
             }
         }
-
     }
     //Snap all the health/stun bars to the player's position.
     public void LateUpdate()
     {
-        //Check for a health mask
-        if (_HealthMask)
+        if (GameManagerc.Instance.Paused)
         {
-            float xOffset = m_iHealth * -0.0791f;
-            _HealthMask.GetComponent<Image>().material.SetTextureOffset("_MainTex", new Vector2(0 + xOffset, 0));
-
-            if (m_bShowHealthLoss)
+            //Check for a health mask
+            if (_HealthMask)
             {
-                if (healthLossTimer.Tick(Time.deltaTime))
+                float xOffset = m_iHealth * -0.0791f;
+                _HealthMask.GetComponent<Image>().material.SetTextureOffset("_MainTex", new Vector2(0 + xOffset, 0));
+
+                if (m_bShowHealthLoss)
                 {
-                    HealthLost.fillAmount = m_iHealth / 3;
-                    m_bShowHealthLoss = false;
+                    if (healthLossTimer.Tick(Time.deltaTime))
+                    {
+                        HealthLost.fillAmount = m_iHealth / 3;
+                        m_bShowHealthLoss = false;
+                    }
                 }
             }
-        }
 
-        //If the previous frames health isnt the current frames health, show the changed health.
-        _PlayerCanvas.transform.localScale = new Vector3(Camera.main.orthographicSize, Camera.main.orthographicSize, Camera.main.orthographicSize) * 0.003f;
-        //_PlayerCanvas.transform.position = this.transform.position + Vector3.up;
-        HealthContainer.transform.position = this.transform.position + Vector3.up;
-        stunBarContainer.transform.position = this.transform.position + Vector3.up;
+            //If the previous frames health isnt the current frames health, show the changed health.
+            _PlayerCanvas.transform.localScale = new Vector3(Camera.main.orthographicSize, Camera.main.orthographicSize, Camera.main.orthographicSize) * 0.003f;
+            //_PlayerCanvas.transform.position = this.transform.position + Vector3.up;
+            HealthContainer.transform.position = this.transform.position + Vector3.up;
+            stunBarContainer.transform.position = this.transform.position + Vector3.up;
 
-        //Showing health change is when the health bar shows up. health loss is seperate.
-        if (m_bShowHealthChange)
-        {
-            HealthContainer.SetActive(true);
-            //HealthContainer.transform.position = -this.transform.up * 0.5f;
-
-            if (ShowHealthChangeTimer.Tick(Time.deltaTime))
+            //Showing health change is when the health bar shows up. health loss is seperate.
+            if (m_bShowHealthChange)
             {
-                HealthContainer.SetActive(false);
-                m_bShowHealthChange = false;
+                HealthContainer.SetActive(true);
+                //HealthContainer.transform.position = -this.transform.up * 0.5f;
+
+                if (ShowHealthChangeTimer.Tick(Time.deltaTime))
+                {
+                    HealthContainer.SetActive(false);
+                    m_bShowHealthChange = false;
+                }
             }
+
         }
     }
 
@@ -310,7 +316,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         //Vector3 a = ThrownItemVelocity.normalized;
         // _rigidbody.velocity = (a * StunedSlide);
         SetAllAnimatorsFalse();
-        _rigidbody.AddForce(ThrownItemVelocity, ForceMode2D.Impulse);
+        _rigidbody.velocity = ThrownItemVelocity;
         m_bStunned = true;
         m_iTimesPunched = 0;
 
@@ -332,8 +338,9 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         m_bStunned = false;
         m_iTimesPunched = 0;
         stunTimer.CurrentTime = 0;
+        DeathSpriteChanged = false;
         this.GetComponent<Rigidbody2D>().simulated = true;
-        m_Ability.m_iMaxCharges = 0;
+        m_Ability.AbilityCharges = 0;
         float xOffset = m_iHealth * -0.0791f;
         _HealthMask.GetComponent<Image>().material.SetTextureOffset("_MainTex", new Vector2(0 + xOffset, 0));
         this.transform.position = ControllerManager.Instance.spawnPoints[spawnIndex].position;
@@ -509,7 +516,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         //Find the canvas that holds all the player UI bars
         _PlayerCanvas = this.transform.Find("Sprites").Find("PlayerCanvas").gameObject;
         //Player bars and shit
-       
+
         //Find the container for the stun bar and the stun mask
         stunBarContainer = this.transform.Find("Sprites").Find("PlayerCanvas").GetChild(1).gameObject;
         stunMask = stunBarContainer.transform.GetChild(0).GetComponent<Image>();

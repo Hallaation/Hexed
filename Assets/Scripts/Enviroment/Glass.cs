@@ -147,7 +147,7 @@ public class Glass : MonoBehaviour, IHitByBullet, IHitByMelee
             //shardObjects[i].GetComponent<Rigidbody2D>().velocity = hit.gameObject.GetComponent<Rigidbody2D>().velocity * UnityEngine.Random.Range(0.03f , .1f);
             if (hit.transform.tag == "2hMelee")
             {
-                shardObjects[i].GetComponent<Rigidbody2D>().AddForce(hit.GetComponentInParent<Melee>().ThrowHitKnockbackScale * hit.transform.right * UnityEngine.Random.Range(.3f, 1f), ForceMode2D.Impulse);
+                shardObjects[i].GetComponent<Rigidbody2D>().AddForce(hit.GetComponentInParent<Melee>().KnockBack * hit.transform.right * UnityEngine.Random.Range(.3f, 1f), ForceMode2D.Impulse);
             }
             else
             {

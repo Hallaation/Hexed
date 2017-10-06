@@ -39,7 +39,7 @@ public class UINavigation : MonoBehaviour
         //_EventSystem = FindObjectOfType<EventSystem>();
 
     }
-    void OnSceneLoad(Scene scene , LoadSceneMode mode)
+    void OnSceneLoad(Scene scene, LoadSceneMode mode)
     {
         _EventSystem = FindObjectOfType<EventSystem>();
     }
@@ -60,7 +60,7 @@ public class UINavigation : MonoBehaviour
             {
                 for (int i = 0; i < 4; i++)
                 {
-                    
+
                     if (XCI.GetButtonDown(XboxButton.DPadDown, XboxController.First + i))
                     {
                         if (_EventSystem.currentSelectedGameObject.GetComponent<Selectable>().navigation.selectOnDown != null)
@@ -87,7 +87,16 @@ public class UINavigation : MonoBehaviour
                     {
                         //Slider case
                         if (_EventSystem.currentSelectedGameObject.GetComponent<Slider>())
-                            _EventSystem.currentSelectedGameObject.GetComponent<Slider>().value -= 0.1f;
+                        {
+                            Slider sld = _EventSystem.currentSelectedGameObject.GetComponent<Slider>();
+                            float MaxValue = sld.maxValue;
+                            float MinValue = sld.minValue;
+
+                            float range = MaxValue - MinValue;
+                            float DecrementValue = 8 * (range + (-MinValue)) / 100;
+        
+                            _EventSystem.currentSelectedGameObject.GetComponent<Slider>().value -= DecrementValue;
+                        }
 
                         if (_EventSystem.currentSelectedGameObject.GetComponent<Selectable>().navigation.selectOnLeft != null)
                         //Debug.Log("left is null");
@@ -101,7 +110,16 @@ public class UINavigation : MonoBehaviour
                     {
                         //Slider Case
                         if (_EventSystem.currentSelectedGameObject.GetComponent<Slider>())
-                            _EventSystem.currentSelectedGameObject.GetComponent<Slider>().value += 0.1f;
+                        {
+                            Slider sld = _EventSystem.currentSelectedGameObject.GetComponent<Slider>();
+                            
+                            float MaxValue = sld.maxValue;
+                            float MinValue = sld.minValue;
+                            float range = MaxValue - MinValue;
+                            float IncrementValue = 8 * (range + (-MinValue)) / 100;
+              
+                            _EventSystem.currentSelectedGameObject.GetComponent<Slider>().value += IncrementValue;
+                        }
 
                         if (_EventSystem.currentSelectedGameObject.GetComponent<Selectable>().navigation.selectOnRight != null)
                         //Debug.Log("left is null");
@@ -118,7 +136,7 @@ public class UINavigation : MonoBehaviour
         {
             _EventSystem = GameObject.FindObjectOfType<EventSystem>();
         }
-    
+
         #endregion
     }
 }

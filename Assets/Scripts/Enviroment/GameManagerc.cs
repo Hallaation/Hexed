@@ -82,13 +82,15 @@ public class GameManagerc : MonoBehaviour
     public bool InstanceCreated;
     public Sprite PointSprite;
     public GameObject[] PointContainers;
-    private GameObject PointsPanel;
+    public GameObject PointsPanel;
+    public GameObject MenuPanel;
     private Animator InGameScreenAnimator;
+    public Animator GetScreenAnimator() { return InGameScreenAnimator; }
     private bool mbFinishedShowingScores = false;
-    private bool mbLoadedIntoGame = false;
     public bool mbInstanceIsMe = false;
     public bool mbMapLoaded = false;
-    private bool mbFinishedPanelShown = false;
+    private bool m_bGamePaused = false;
+    public bool Paused { get { return m_bGamePaused; } set { m_bGamePaused = value; } }
 
     public int m_iPointsIndex = 0;
     GameObject[] PointXPositions;
@@ -143,36 +145,40 @@ public class GameManagerc : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!Paused)
+        {
+            Time.timeScale = 1;
 #if UNITY_EDITOR
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            GoToStart();
-            //Rematch();
-            //MapToLoad = null;
-            //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        }
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-            Rematch();
-        }
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            KillPlayer1();
-        }
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            //Stun all players
-            int MaxPlayers = InGamePlayers.Count;
-            for (int i = 0; i < MaxPlayers; i++)
+            if (Input.GetKeyDown(KeyCode.G))
             {
-                //InGamePlayers[i].KillPlayer(InGamePlayers[InGamePlayers.Count - 1]);
-                InGamePlayers[i].StunPlayer(Vector3.zero);
+                GoToStart();
+                //Rematch();
+                //MapToLoad = null;
+                //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
-        }
+            if (Input.GetKeyDown(KeyCode.H))
+            {
+                Rematch();
+            }
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                KillPlayer1();
+            }
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                //Stun all players
+                int MaxPlayers = InGamePlayers.Count;
+                for (int i = 0; i < MaxPlayers; i++)
+                {
+                    //InGamePlayers[i].KillPlayer(InGamePlayers[InGamePlayers.Count - 1]);
+                    InGamePlayers[i].StunPlayer(Vector3.zero);
+                }
+            }
 #endif
-        if (InGamePlayers.Count > 1)
-        {
-            StartCoroutine(CheckForRoundEnd());
+            if (InGamePlayers.Count > 1)
+            {
+                StartCoroutine(CheckForRoundEnd());
+            }
         }
 
     }
@@ -331,7 +337,7 @@ public class GameManagerc : MonoBehaviour
                     {
                         FindObjectOfType<EventSystem>().SetSelectedGameObject(null);
                         FindObjectOfType<EventSystem>().SetSelectedGameObject(FinishUIPanel.transform.Find("Main Menu").gameObject);
-                        mbFinishedPanelShown = true;
+                        //mbFinishedPanelShown = true;
                     }
                     //TODO Load Character select / win screen;
                     //TODO Sort players by score?
@@ -359,7 +365,7 @@ public class GameManagerc : MonoBehaviour
         if (scene.buildIndex == 1)
         {
             UINavigation LoadInstance = UINavigation.Instance;
-
+ 
             if (MapToLoad)
             {
                 GameObject go = Instantiate(MapToLoad);
@@ -387,6 +393,8 @@ public class GameManagerc : MonoBehaviour
                 }
 
             }
+            MenuPanel = GameObject.Find("PausePanel");
+            //MenuPanel.SetActive(true);
             //Find the points panel and populate the array.
             PointsPanel = GameObject.Find("PointsPanel");
             InGameScreenAnimator = PointsPanel.GetComponentInParent<Animator>();
@@ -465,7 +473,7 @@ public class GameManagerc : MonoBehaviour
                 }
             }
             //PointsPanel.SetActive(false);
-            mInstance.mbLoadedIntoGame = true;
+            //mInstance.mbLoadedIntoGame = true;
         }
 
 
@@ -501,7 +509,7 @@ public class GameManagerc : MonoBehaviour
         // WinningPlayer = null; // still unsued
         m_bRoundOver = false;
         mbFinishedShowingScores = false;
-        mbFinishedPanelShown = false;
+        //mbFinishedPanelShown = false;
         //reload the current scene
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         Debug.Log("End of rematch after button");
@@ -538,20 +546,21 @@ public class GameManagerc : MonoBehaviour
         PointsPanel = null;
         InGameScreenAnimator = null;
         mbFinishedShowingScores = false;
-        mbLoadedIntoGame = false;
+        MenuPanel.SetActive(true);
+        //mbLoadedIntoGame = false;
         mbInstanceIsMe = false;
-        mbFinishedPanelShown = false;
+        //mbFinishedPanelShown = false;
         mbMapLoaded = false;
 
         UIManager.Instance.gameObject.SetActive(false);
         ControllerManager.Instance.gameObject.SetActive(false);
         CharacterSelectionManager.Instance.gameObject.SetActive(false);
-        PlayerUIArray.Instance.gameObject.SetActive(false);
+        //PlayerUIArray.Instance.gameObject.SetActive(false);
 
         UINavigation.Instance.gameObject.SetActive(false);
         //Destroy the singleton objects
 
-        Destroy(PlayerUIArray.Instance.gameObject);
+        ///Destroy(PlayerUIArray.Instance.gameObject);
         Destroy(UIManager.Instance.gameObject);
         Destroy(ControllerManager.Instance.gameObject);
         Destroy(CharacterSelectionManager.Instance.gameObject);
@@ -569,7 +578,7 @@ public class GameManagerc : MonoBehaviour
 
     IEnumerator AddPointsToPanel(PlayerStatus player)
     {
-        //PointsPanel.SetActive(true);
+        PointsPanel.SetActive(true);
         InGameScreenAnimator.SetTrigger("ShowScreen");
         mbFinishedShowingScores = false;
 
