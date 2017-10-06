@@ -201,7 +201,7 @@ public class GamemodeSelection : MonoBehaviour
                                 }
                                 else
                                 {
-                                    Debug.Log("Decrement");
+                                 //   Debug.Log("Decrement");
                                     m_iMapPickIndex--;
                                 }
 
@@ -235,7 +235,7 @@ public class GamemodeSelection : MonoBehaviour
                             }
                             else
                             {
-                                Debug.Log("Decrement");
+                               // Debug.Log("Decrement");
                                 m_iPointWinIndex--;
                             }
 
@@ -362,6 +362,6 @@ public class GamemodeSelection : MonoBehaviour
 
     public void ButtonTest()
     {
-        Debug.Log("Test button");
+        //Debug.Log("Test button");
     }
 }

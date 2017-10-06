@@ -44,11 +44,11 @@ public class BaseAbility : MonoBehaviour
 
     protected Text _AbilityTypeText;
     protected Move m_MoveOwner;
-    public GameObject manaBar;
-
 
     public GameObject m_ChargeIndicator;
-    public Sprite[] ChargeIndicatorSprites;
+    public Sprite[] ChargeReadySprites;
+    public Sprite[] EmptyChargeSprites;
+    public GameObject[] ChargeHighlighters;
     protected SpriteRenderer m_IndicatorRenderer;
     protected float m_fIndicatorScale = 0;
     public bool ChargeCoolDown = true;
@@ -59,7 +59,11 @@ public class BaseAbility : MonoBehaviour
 
         m_MoveOwner = this.GetComponent<Move>();
 
-        m_ChargeIndicator = this.transform.Find("Sprites").Find("TeleportIndicator").gameObject;
+        m_ChargeIndicator = this.transform.Find("Sprites").Find("TeleportIndicator").GetChild(0).gameObject;
+        ChargeHighlighters = new GameObject[2];
+
+        ChargeHighlighters[0] = this.transform.Find("Sprites").Find("TeleportIndicator").GetChild(1).gameObject;
+        ChargeHighlighters[1] = this.transform.Find("Sprites").Find("TeleportIndicator").GetChild(2).gameObject;
         m_IndicatorRenderer = m_ChargeIndicator.GetComponentInChildren<SpriteRenderer>();
         // mana = GameObject.Find("Mana").GetComponent<UnityEngine.UI.Text>();
         Initialise();
@@ -75,28 +79,25 @@ public class BaseAbility : MonoBehaviour
             switch (m_iCurrentCharges)
             {
                 case 1: //When there is 1 Charge
-                    if (ChargeIndicatorSprites.Length > 0)
-                        m_IndicatorRenderer.sprite = ChargeIndicatorSprites[1];
-                    else
-                        m_IndicatorRenderer.color = Colors.Violet;
+                    //Turn on highlight for object 0
+                    ChargeHighlighters[0].GetComponent<SpriteRenderer>().sprite = ChargeReadySprites[0];
+                    //turn off highlight for object 1
+                    ChargeHighlighters[1].GetComponent<SpriteRenderer>().sprite = EmptyChargeSprites[1];
                     break;
-
                 case 2: //When there is 2 charges
-                    if (ChargeIndicatorSprites.Length > 1)
-                        m_IndicatorRenderer.sprite = ChargeIndicatorSprites[2];
-                    else
-                        m_IndicatorRenderer.color = Colors.Violet;
+                    
+                    //turn on highlight for obj 0
+                    //turn on highlight for obj 1
+                    ChargeHighlighters[1].GetComponent<SpriteRenderer>().sprite = ChargeReadySprites[1];
                     break;
-
                 default: //When none of the above apply (usually 0)
-                    if (ChargeIndicatorSprites.Length > 2)
-                        m_IndicatorRenderer.sprite = ChargeIndicatorSprites[0];
-                    else
-                        m_IndicatorRenderer.color = Colors.White;
+                    //turn off highlight for obj 0 and 1
+                    ChargeHighlighters[0].GetComponent<SpriteRenderer>().sprite = EmptyChargeSprites[0];
+                    ChargeHighlighters[1].GetComponent<SpriteRenderer>().sprite = EmptyChargeSprites[1];
                     break;
-
             }
-            m_fIndicatorScale = (m_CoolDownTimer.CurrentTime / m_CoolDownTimer.mfTimeToWait + m_iCurrentCharges) * 0.75f;
+           // float GlowScale = 1 ;
+            m_fIndicatorScale = (m_CoolDownTimer.CurrentTime / m_CoolDownTimer.mfTimeToWait + m_iCurrentCharges )  * 0.5f;
             m_ChargeIndicator.transform.localScale = new Vector2(m_fIndicatorScale, m_fIndicatorScale);
             //! Fuck the mana shit, time to go to cooldowns.
             //if (manaBar == null)

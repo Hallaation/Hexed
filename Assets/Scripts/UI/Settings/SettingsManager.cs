@@ -144,7 +144,7 @@ public class SettingsManager : MonoBehaviour
     }
     public void SaveSettings()
     {
-        Debug.Log("settings saved");
+     //   Debug.Log("settings saved");
         string jsonData = JsonUtility.ToJson(gameSettings, true);
         File.WriteAllText(Application.persistentDataPath + "/gameSettings.json", jsonData);
         print(Application.persistentDataPath);
