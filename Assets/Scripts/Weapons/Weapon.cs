@@ -11,7 +11,7 @@ public class Weapon : MonoBehaviour
     public float m_iDamage;
 
     public bool m_bGivePlayersIFrames = false; 
-    public float ThrowHitKnockBack;
+    public float KnockBack;
 
     [Space]
     [Header("ShadowRelated")]
@@ -257,7 +257,7 @@ public class Weapon : MonoBehaviour
 
                 if (a_collider.GetComponentInParent<PlayerStatus>().IsStunned == false)
                 {
-                    a_collider.GetComponentInParent<PlayerStatus>().StunPlayer(_rigidbody.velocity * ThrowHitKnockBack);
+                    a_collider.GetComponentInParent<PlayerStatus>().StunPlayer(_rigidbody.velocity * KnockBack);
                     a_collider.GetComponentInParent<Move>().StatusApplied();
                     hitPlayerAudioSource.clip = ThrowHitAudio;
                     hitPlayerAudioSource.volume = ThrowHitAudioVolume;

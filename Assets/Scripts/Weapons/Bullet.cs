@@ -7,6 +7,7 @@ public class Bullet : MonoBehaviour
     CircleCollider2D m_CircleCollider;
     Vector2 m_vVelocity;
     Vector3 PreviousVelocity;
+    Quaternion StartRotation;
     float PreviousRotation;
     private bool m_bStopRayCasts = false;
     public Vector3 GetPreviousVelocity() { return PreviousVelocity; }
@@ -38,6 +39,12 @@ public class Bullet : MonoBehaviour
         m_rigidBody = GetComponent<Rigidbody2D>();
         PreviousRotation = GetComponent<Rigidbody2D>().rotation;
         PreviousVelocity = GetComponent<Rigidbody2D>().velocity;
+        StartRotation = transform.rotation;
+
+
+        Vector2 dir = m_rigidBody.velocity;
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        transform.GetChild(0).rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         if (trail != null)
         {
             trail.sortingLayerName = "Defult";
@@ -49,42 +56,9 @@ public class Bullet : MonoBehaviour
     void Update()
     {
 
-        //raycasts in front for collision check
-        //Ray2D ray = new Ray2D(this.transform.position, -this.transform.up);
-        //Debug.DrawRay(ray.origin, ray.direction, Color.red);
-
-        //RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, .3f, (1 << 8 | 1 << 9 | 1 << 10 | 1 << 11));
-        //int ColliderCase = 0;
-        ////TODO Maybe make this a switch but that takes effort
-        //if (hit.collider)
-        //{
-        //    if (hit.collider.tag == "Shield")
-        //    {
-        //        hit.collider.GetComponentInParent<ShieldAbility>().TakeBullet(this.gameObject, hit);
-        //        return;
-        //    }
-        //    if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Player"))
-        //    {
-        //        if (!hit.transform.GetComponent<PlayerStatus>().IsStunned && hit.transform.GetComponent<PlayerStatus>() != bulletOwner)
-        //        {
-        //            Debug.Log("Hit player");
-        //            //Debug.Log("Raycast hit player");
-        //            hit.transform.GetComponent<PlayerStatus>().m_iHealth -= m_iDamage; //TODO Get damage from parent which should be the weapon.
-        //            if (hit.transform.GetComponent<PlayerStatus>().m_iHealth <= 0)
-        //            {
-        //                hit.transform.GetComponent<PlayerStatus>().IsDead = true;
-        //            }
-        //            hit.transform.GetComponent<Move>().StatusApplied();
-        //            Destroy(this.gameObject);
-        //        }
-        //    }
-
-        //}
         PreviousVelocity = this.GetComponent<Rigidbody2D>().velocity;
         PreviousRotation = m_rigidBody.rotation;
-        Vector2 dir = m_rigidBody.velocity;
-        float angle = Mathf.Atan2(dir.y , dir.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.AngleAxis(angle , Vector3.forward);
+        
 
 
         VChildPrevRotation = transform.localEulerAngles;
@@ -121,6 +95,7 @@ public class Bullet : MonoBehaviour
                     m_rigidBody.simulated = false;
                     BulletSprite.enabled = false;
                     transform.position = RayHit.point;
+                    transform.rotation = StartRotation;
                     //If a wall, play the particle
 
                     //bullet reflection
@@ -148,6 +123,7 @@ public class Bullet : MonoBehaviour
                     m_rigidBody.simulated = false;
                     BulletSprite.enabled = false;
                     transform.position = RayHit.point;
+                    transform.rotation = StartRotation;
                     Destroy(this.gameObject , 1);
 
                 }
@@ -180,6 +156,7 @@ public class Bullet : MonoBehaviour
                         m_rigidBody.simulated = false;
                         BulletSprite.enabled = false;
                         transform.position = RayHit.point;
+                        transform.rotation = StartRotation; 
                         Destroy(this.gameObject, 0.5f); //Destroy me beacuse I have no other purpose, 
                         //? Maybe change the bullets to a pool instead
                     }
@@ -198,10 +175,11 @@ public class Bullet : MonoBehaviour
 
     IEnumerator PlayParticle(Collision2D hit)
     {
-        Debug.Log("spark");
+       // Debug.Log("spark");
         if (ParticleSparks != null)
         {
-            transform.GetChild(0).localEulerAngles = new Vector3(VChildPrevRotation.x , VChildPrevRotation.y , VChildPrevRotation.z); // parent - 90z
+            
+            // transform.GetChild(0).localEulerAngles = new Vector3(VChildPrevRotation.x , VChildPrevRotation.y , VChildPrevRotation.z); // parent - 90z
             transform.position = new Vector3(hit.contacts[0].point.x , hit.contacts[0].point.y , 0);
             ParticleSparks.Play();
 
@@ -234,7 +212,9 @@ public class Bullet : MonoBehaviour
         float longestParticleDuration = 0;
         if (WallCollidedParticles.Length > 0)
         {
-            transform.GetChild(0).localEulerAngles = new Vector3(VChildPrevRotation.x , VChildPrevRotation.y , VChildPrevRotation.z);
+
+      
+            // transform.GetChild(0).localEulerAngles = new Vector3(VChildPrevRotation.x , VChildPrevRotation.y , VChildPrevRotation.z);
             foreach (ParticleSystem particle in WallCollidedParticles)
             {
 

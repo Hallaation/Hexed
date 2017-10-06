@@ -201,7 +201,7 @@ public class GamemodeSelection : MonoBehaviour
                                 }
                                 else
                                 {
-                                    Debug.Log("Decrement");
+                                 //   Debug.Log("Decrement");
                                     m_iMapPickIndex--;
                                 }
 
@@ -235,7 +235,7 @@ public class GamemodeSelection : MonoBehaviour
                             }
                             else
                             {
-                                Debug.Log("Decrement");
+                               // Debug.Log("Decrement");
                                 m_iPointWinIndex--;
                             }
 
@@ -345,7 +345,6 @@ public class GamemodeSelection : MonoBehaviour
     {
         Vector3 temp = controllerInput;
         //if any of the numbers are below a certain deadzone, they get zeroed.
-        Debug.Log(Mathf.Abs(temp.x));
         if (Mathf.Abs(controllerInput.x) < deadzone)
         {
             temp.x = 0;
@@ -363,6 +362,6 @@ public class GamemodeSelection : MonoBehaviour
 
     public void ButtonTest()
     {
-        Debug.Log("Test button");
+        //Debug.Log("Test button");
     }
 }

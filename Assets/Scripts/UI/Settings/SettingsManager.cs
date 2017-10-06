@@ -35,7 +35,6 @@ public class SettingsManager : MonoBehaviour
                 mInstance = (SettingsManager)FindObjectOfType(typeof(SettingsManager));
 
             }
-
             return mInstance;
         }
     }
@@ -51,18 +50,29 @@ public class SettingsManager : MonoBehaviour
         resolutions = Screen.resolutions;
 
         //subscribe onfullscreentoggle to value changed event;
-        fullscreenToggle.onValueChanged.AddListener(delegate { onFullScreenToggle(); });
-        resolutionDropdwon.onValueChanged.AddListener(delegate { onResolutionChange(); });
+        if (fullscreenToggle)
+            fullscreenToggle.onValueChanged.AddListener(delegate { onFullScreenToggle(); });
+        if (resolutionDropdwon)
+            resolutionDropdwon.onValueChanged.AddListener(delegate { onResolutionChange(); });
         //textureQualityDropdown.onValueChanged.AddListener(delegate { onTextureQualityChange(); });
         //AAdropdown.onValueChanged.AddListener(delegate { onAntialiasingChange(); });
-        vSyncDrop.onValueChanged.AddListener(delegate { onVsyncChange(); });
-        masterVolumeSlider.onValueChanged.AddListener(delegate { OnMasterVolumeChange(); });
-        sfxVolumeSlider.onValueChanged.AddListener(delegate { OnSFXVolumeChange(); });
-        musicVolumeSlider.onValueChanged.AddListener(delegate { OnMusicVolumeChange(); });
-        applyButton.onClick.AddListener(delegate { OnApplyButtonClick(); });
-        foreach (Resolution reso in resolutions)
+        if (vSyncDrop)
+            vSyncDrop.onValueChanged.AddListener(delegate { onVsyncChange(); });
+        if (masterVolumeSlider)
+            masterVolumeSlider.onValueChanged.AddListener(delegate { OnMasterVolumeChange(); });
+        if (sfxVolumeSlider)
+            sfxVolumeSlider.onValueChanged.AddListener(delegate { OnSFXVolumeChange(); });
+        if (musicVolumeSlider)
+            musicVolumeSlider.onValueChanged.AddListener(delegate { OnMusicVolumeChange(); });
+        if (applyButton)
+            applyButton.onClick.AddListener(delegate { OnApplyButtonClick(); });
+
+        if (resolutionDropdwon)
         {
-            resolutionDropdwon.options.Add(new Dropdown.OptionData(reso.ToString()));
+            foreach (Resolution reso in resolutions)
+            {
+                resolutionDropdwon.options.Add(new Dropdown.OptionData(reso.ToString()));
+            }
         }
 
         LoadSettings();
@@ -99,7 +109,7 @@ public class SettingsManager : MonoBehaviour
     {
         /*QualitySettings.vSyncCount = */
         gameSettings.vSync = vSyncDrop.value;
-       
+
         m_bUnsavedChanges = true;
     }
 
@@ -107,21 +117,21 @@ public class SettingsManager : MonoBehaviour
     {
         /*AudioListener.volume = */
         gameSettings.masterVolume = masterVolumeSlider.value;
-        masterMixer.SetFloat("Master" , masterVolumeSlider.value);
+        masterMixer.SetFloat("Master", masterVolumeSlider.value);
         m_bUnsavedChanges = true;
     }
 
     public void OnSFXVolumeChange()
     {
         gameSettings.sfxVolume = sfxVolumeSlider.value;
-        masterMixer.SetFloat("SFX" , masterVolumeSlider.value);
+        masterMixer.SetFloat("SFX", masterVolumeSlider.value);
         m_bUnsavedChanges = true;
     }
 
     public void OnMusicVolumeChange()
     {
         gameSettings.musicVolume = musicVolumeSlider.value;
-        masterMixer.SetFloat("Music" , masterVolumeSlider.value);
+        masterMixer.SetFloat("Music", masterVolumeSlider.value);
         m_bUnsavedChanges = true;
     }
     public void OnApplyButtonClick()
@@ -134,7 +144,7 @@ public class SettingsManager : MonoBehaviour
     }
     public void SaveSettings()
     {
-        Debug.Log("settings saved");
+     //   Debug.Log("settings saved");
         string jsonData = JsonUtility.ToJson(gameSettings, true);
         File.WriteAllText(Application.persistentDataPath + "/gameSettings.json", jsonData);
         print(Application.persistentDataPath);
@@ -145,17 +155,27 @@ public class SettingsManager : MonoBehaviour
         if (File.Exists(Application.persistentDataPath + "/gameSettings.json"))
         {
             gameSettings = JsonUtility.FromJson<Settings>(File.ReadAllText(Application.persistentDataPath + "/gameSettings.json"));
-            masterVolumeSlider.value = gameSettings.masterVolume;
+            if (masterVolumeSlider)
+                masterVolumeSlider.value = gameSettings.masterVolume;
+            if (sfxVolumeSlider)
+                sfxVolumeSlider.value = gameSettings.sfxVolume;
+            if (musicVolumeSlider)
+                musicVolumeSlider.value = gameSettings.musicVolume;
             //AAdropdown.value = (int)Mathf.Sqrt(gameSettings.antiAliasing);
             //textureQualityDropdown.value = textureQualityDropdown.options.Count + gameSettings.textureQuality;
-            resolutionDropdwon.value = gameSettings.resolutionIndex;
-            fullscreenToggle.isOn = gameSettings.Fullscreen;
+            if (resolutionDropdwon)
+                resolutionDropdwon.value = gameSettings.resolutionIndex;
+            if (fullscreenToggle)
+                fullscreenToggle.isOn = gameSettings.Fullscreen;
 
+            if (resolutionDropdwon)
+                resolutionDropdwon.RefreshShownValue();
 
-            resolutionDropdwon.RefreshShownValue();
-
-
+            //Apply the changes
             OnMasterVolumeChange();
+            OnSFXVolumeChange();
+            OnMusicVolumeChange();
+
             onFullScreenToggle();
             onResolutionChange();
             //onAntialiasingChange();

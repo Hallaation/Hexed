@@ -133,7 +133,7 @@ public class Glass : MonoBehaviour, IHitByBullet, IHitByMelee
     }
     void SpawnShards(Collider2D hit)
     {
-        Debug.Log("Does this ever get called");
+      //  Debug.Log("Does this ever get called");
         //make a temporary array to hold all the shard objects
         GameObject[] shardObjects = new GameObject[Shards.Length];
         //for every shard, instantiate them and set their rotation and velocity.
@@ -147,7 +147,7 @@ public class Glass : MonoBehaviour, IHitByBullet, IHitByMelee
             //shardObjects[i].GetComponent<Rigidbody2D>().velocity = hit.gameObject.GetComponent<Rigidbody2D>().velocity * UnityEngine.Random.Range(0.03f , .1f);
             if (hit.transform.tag == "2hMelee")
             {
-                shardObjects[i].GetComponent<Rigidbody2D>().AddForce(hit.GetComponentInParent<Melee>().ThrowHitKnockBack * hit.transform.right * UnityEngine.Random.Range(.3f, 1f), ForceMode2D.Impulse);
+                shardObjects[i].GetComponent<Rigidbody2D>().AddForce(hit.GetComponentInParent<Melee>().KnockBack * hit.transform.right * UnityEngine.Random.Range(.3f, 1f), ForceMode2D.Impulse);
             }
             else
             {

@@ -152,6 +152,7 @@ public class Move : MonoBehaviour
         {
             temp.material.color = Color.red;
         }
+
         //temp.material.color = PlayerColor;
         //switch (m_controller.mPlayerIndex)
         //{
@@ -180,52 +181,57 @@ public class Move : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!m_status.IsDead && !m_status.IsStunned)
+        //If game isn't paused
+        if (!GameManagerc.Instance.Paused)
         {
-            //if the walking animation isnt running, do everything else
-            if (!GetComponentInChildren<Animator>().GetCurrentAnimatorStateInfo(0).IsName("WalkingMan") && !runningAnimation)
+            //If I'm not dead, or stunned
+            if (!m_status.IsDead && !m_status.IsStunned)
             {
-                if (PlayerIsActive)
+                //if the walking animation isnt running, do everything else
+                if (!GetComponentInChildren<Animator>().GetCurrentAnimatorStateInfo(0).IsName("WalkingMan") && !runningAnimation)
                 {
-                    Quack();
-                    CalculateMovement();
-                    CheckForPickup();
-                    Attack(TriggerReleaseCheck());
-
-                    CheckForDownedKill();
-                    Special();
-                }
-
-                //! an ammo text changing for UI, move this to another function then change to sprites/masking later
-                if (heldWeapon)
-                {
-                    if (heldWeapon.GetType() == typeof(Gun))
+                    if (PlayerIsActive)
                     {
-                        Debug.Log("test");
-                        //_AmmoText.text = heldWeapon.GetComponent<Gun>().m_iAmmo.ToString();
+                        Quack();
+                        CalculateMovement();
+                        CheckForPickup();
+                        Attack(TriggerReleaseCheck());
+
+                        CheckForDownedKill();
+                        Special();
+                    }
+
+                    //! an ammo text changing for UI, move this to another function then change to sprites/masking later
+                    if (heldWeapon)
+                    {
+                        if (heldWeapon.GetType() == typeof(Gun))
+                        {
+                            //Debug.Log("test");
+                            //_AmmoText.text = heldWeapon.GetComponent<Gun>().m_iAmmo.ToString();
+                        }
+                        else
+                        {
+                            //_AmmoText.text = "Infinite Ammo";
+                        }
                     }
                     else
                     {
-                        //_AmmoText.text = "Infinite Ammo";
+                        //_AmmoText.text = "you punch";
                     }
+
                 }
-                else
+                else //otherwise set the iskilling to false so it can return the animation to idle
                 {
-                    //_AmmoText.text = "you punch";
+                    runningAnimation = false;
+                    //   _rigidBody.velocity = Vector2.zero;
+                    GetComponentInChildren<Animator>().SetBool("IsKilling", false);
                 }
 
             }
-            else //otherwise set the iskilling to false so it can return the animation to idle
+            else
             {
-                runningAnimation = false;
-                //   _rigidBody.velocity = Vector2.zero;
-                GetComponentInChildren<Animator>().SetBool("IsKilling", false);
+                //  _rigidBody.velocity = Vector2.zero;
             }
-
-        }
-        else
-        {
-            //  _rigidBody.velocity = Vector2.zero;
         }
     }
     IEnumerator DelayMovement()
@@ -250,24 +256,26 @@ public class Move : MonoBehaviour
 
     void FixedUpdate()
     {
-
-        //Buggy with XBone controller with high frame rates.
-        //GamePad.SetVibration(m_controller.mPlayerIndex , XCI.GetAxis(XboxAxis.LeftTrigger , m_controller.mXboxController) , XCI.GetAxis(XboxAxis.RightTrigger , m_controller.mXboxController));
-        //vibrationValue = new Vector2(XCI.GetAxis(XboxAxis.LeftTrigger , m_controller.mXboxController) , XCI.GetAxis(XboxAxis.RightTrigger , m_controller.mXboxController));
-        // GamePad.SetVibration(m_controller.mPlayerIndex , vibrationValue.x , vibrationValue.y);
-
-        //  vibrationValue *= 0.99f; //magic numbers.
-
-        if (vibrationValue.magnitude < 0.4f)
+        if (!GameManagerc.Instance.Paused)
         {
-            vibrationValue = Vector2.zero;
-        }
+            //Buggy with XBone controller with high frame rates.
+            //GamePad.SetVibration(m_controller.mPlayerIndex , XCI.GetAxis(XboxAxis.LeftTrigger , m_controller.mXboxController) , XCI.GetAxis(XboxAxis.RightTrigger , m_controller.mXboxController));
+            //vibrationValue = new Vector2(XCI.GetAxis(XboxAxis.LeftTrigger , m_controller.mXboxController) , XCI.GetAxis(XboxAxis.RightTrigger , m_controller.mXboxController));
+            // GamePad.SetVibration(m_controller.mPlayerIndex , vibrationValue.x , vibrationValue.y);
 
-        //if (_characterController)
-        //{
-        //    Vector3 gravity = new Vector3(0 , -9.8f , 0);
-        //    _characterController.Move(gravity * (1 - Time.fixedDeltaTime * 0.5f));
-        //}
+            //  vibrationValue *= 0.99f; //magic numbers.
+
+            if (vibrationValue.magnitude < 0.4f)
+            {
+                vibrationValue = Vector2.zero;
+            }
+
+            //if (_characterController)
+            //{
+            //    Vector3 gravity = new Vector3(0 , -9.8f , 0);
+            //    _characterController.Move(gravity * (1 - Time.fixedDeltaTime * 0.5f));
+            //}
+        }
     }
 
     void Special()
@@ -428,6 +436,8 @@ public class Move : MonoBehaviour
     {
         if (heldWeapon && heldWeapon.GetComponent<Weapon>().m_bActive)
         {
+            BodyAnimator.SetBool("ReverseAnimator", false);
+            BodyAnimator.SetFloat("Speed", 1);
             Vector3 GunMountPosition = Vector3.one;
             //drop the weapon 
             heldWeapon.transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = 0; //? Puts gun layer behinde player layer when it's dropped. 
@@ -610,7 +620,7 @@ public class Move : MonoBehaviour
             }
             else
             {
-                Debug.Log("WallBlock");
+               // Debug.Log("WallBlock");
                 //Debug.DrawLine(pos , pos + Dir , Color.red , Mathf.Infinity);
             }
 
