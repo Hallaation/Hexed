@@ -287,7 +287,7 @@ public class UIManager : MonoBehaviour
                     GameObject selectable = defaultPanel.GetComponentInChildren<DefaultButton>().gameObject;
                     defaultPanel.transform.GetChild(0).Find("MainMenu").GetChild(0).GetComponent<Button>().onClick.AddListener(delegate { GameManagerc.Instance.GoToStart(); });
                     SetCurrentSelected(selectable);
-                    Debug.Log(_eventSystem.gameObject);
+                    //Debug.Log(_eventSystem.gameObject);
                 }
             }
 

@@ -175,7 +175,7 @@ public class Bullet : MonoBehaviour
 
     IEnumerator PlayParticle(Collision2D hit)
     {
-        Debug.Log("spark");
+       // Debug.Log("spark");
         if (ParticleSparks != null)
         {
             

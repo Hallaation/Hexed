@@ -133,7 +133,7 @@ public class Glass : MonoBehaviour, IHitByBullet, IHitByMelee
     }
     void SpawnShards(Collider2D hit)
     {
-        Debug.Log("Does this ever get called");
+      //  Debug.Log("Does this ever get called");
         //make a temporary array to hold all the shard objects
         GameObject[] shardObjects = new GameObject[Shards.Length];
         //for every shard, instantiate them and set their rotation and velocity.

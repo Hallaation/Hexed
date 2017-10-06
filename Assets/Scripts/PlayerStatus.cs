@@ -216,7 +216,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
 
                 if (this.transform.GetChild(1).tag == "Stunned")
                 {
-                    Debug.Log(this.transform.GetChild(0).tag);
+                   // Debug.Log(this.transform.GetChild(0).tag);
                     this.transform.GetChild(1).gameObject.GetComponent<Collider2D>().enabled = false;        //? child 0 is weaponSpot... 
                 }
                 else
@@ -289,7 +289,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         //SetAllAnimatorsFalse();
         //        GetComponent<Move>().SetActive(false);
         _rigidbody.velocity = ForceApplied;
-        Debug.Log("Corotuine should be here");
+        //Debug.Log("Corotuine should be here");
         StartCoroutine(MiniStun(StunTime));
 
     }

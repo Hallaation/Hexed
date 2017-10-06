@@ -66,7 +66,7 @@ public class Teleport : BaseAbility
                     //Debug.Log(this.transform.position - new Vector3(hitLeftStick.point.x, hitLeftStick.point.y));
                     _rigidBody.position = hitLeftStick.point + hitLeftStick.normal * 0.5f;
                     //_rigidBody.position = new Vector2(_rigidBody.position.x + Xdistance , _rigidBody.position.y + Ydistance);
-                    Debug.Log("WallPrevention");
+                   // Debug.Log("WallPrevention");
                 }
                 else
                     _rigidBody.position += new Vector2(rotation.x * m_TeleportForce, rotation.y * m_TeleportForce);
@@ -82,7 +82,7 @@ public class Teleport : BaseAbility
                     //float Ydistance = ((hit.point.y) - (transform.position.y));
                     //_rigidBody.position = new Vector2(_rigidBody.position.x + Xdistance , _rigidBody.position.y + Ydistance);
                     _rigidBody.position = hit.point + hit.normal * 0.5f;
-                    Debug.Log("WallPrevention");
+                   // Debug.Log("WallPrevention");
                 }
                 else
                     _rigidBody.position += new Vector2(this.transform.up.x * m_TeleportForce, this.transform.up.y * m_TeleportForce);  // Teleport full distance

@@ -206,7 +206,7 @@ public class Move : MonoBehaviour
                     {
                         if (heldWeapon.GetType() == typeof(Gun))
                         {
-                            Debug.Log("test");
+                            //Debug.Log("test");
                             //_AmmoText.text = heldWeapon.GetComponent<Gun>().m_iAmmo.ToString();
                         }
                         else
@@ -620,7 +620,7 @@ public class Move : MonoBehaviour
             }
             else
             {
-                Debug.Log("WallBlock");
+               // Debug.Log("WallBlock");
                 //Debug.DrawLine(pos , pos + Dir , Color.red , Mathf.Infinity);
             }
 
