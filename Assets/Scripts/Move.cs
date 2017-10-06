@@ -41,6 +41,9 @@ public class Move : MonoBehaviour
     public float movementSpeed = 10.0f;
     public float throwingForce = 100.0f;
     float StoredMoveSpeed;
+    private bool m_bInChokeMode = false;
+    GameObject chokingPlayer = null;
+    int OriginalSortingOrder;
     //public bool m_b2DMode = true;
     EmptyHand defaultWeapon;
     [HideInInspector]
@@ -170,8 +173,10 @@ public class Move : MonoBehaviour
         //        break;
         //}
 
+        OriginalSortingOrder = BodyAnimator.GetComponent<SpriteRenderer>().sortingOrder;
         defaultWeapon = GetComponent<EmptyHand>();
         SceneManager.sceneLoaded += OnSceneLoaded;
+        
         // Delay
         // MoveDelayTimer = 0;
         StoredMoveSpeed = movementSpeed;
@@ -192,12 +197,13 @@ public class Move : MonoBehaviour
                 {
                     if (PlayerIsActive)
                     {
+                        if (CheckForDownedKill())
+                            return;
                         Quack();
                         CalculateMovement();
                         CheckForPickup();
                         Attack(TriggerReleaseCheck());
 
-                        CheckForDownedKill();
                         Special();
                     }
 
@@ -406,7 +412,7 @@ public class Move : MonoBehaviour
                 transform.Find("Sprites").transform.Find("Character001_Feet").transform.rotation = transform.Find("Sprites").transform.Find("Character001_Feet").transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(LeftStickRotation.x, LeftStickRotation.y) * Mathf.Rad2Deg);
                 transform.Find("Sprites").transform.Find("Character001_Feet").transform.rotation *= Quaternion.Euler(0, 0, 90);
             }
-        } 
+        }
         else if (KeyboardMovement != Vector3.zero)
         {
             this.transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(-KeyboardMovement.x, KeyboardMovement.y) * Mathf.Rad2Deg);
@@ -620,7 +626,7 @@ public class Move : MonoBehaviour
             }
             else
             {
-               // Debug.Log("WallBlock");
+                // Debug.Log("WallBlock");
                 //Debug.DrawLine(pos , pos + Dir , Color.red , Mathf.Infinity);
             }
 
@@ -819,14 +825,14 @@ public class Move : MonoBehaviour
             PlayerStatus other = a_collider.GetComponentInParent<PlayerStatus>();
             if (other.IsStunned)
             {
-                other.killMePrompt.SetActive(true);
+                //other.killMePrompt.SetActive(true);
+                BodyAnimator.GetComponent<SpriteRenderer>().sortingOrder = 99;
                 GameObject killmeprompt = other.killMePrompt;
                 Transform[] transforms = new Transform[2];
                 transforms[0] = this.transform;
                 transforms[1] = other.transform;
                 killmeprompt.transform.position = GetAveragePos(transforms);
             }
-
         }
     }
     void OnTriggerExit2D(Collider2D a_collider)
@@ -835,14 +841,14 @@ public class Move : MonoBehaviour
         if (a_collider.tag == "Player")
         {
             a_collider.GetComponentInParent<PlayerStatus>().killMePrompt.SetActive(false);
-
+            BodyAnimator.GetComponent<SpriteRenderer>().sortingOrder = OriginalSortingOrder;
         }
 
     }
-    void CheckForDownedKill()
+    bool CheckForDownedKill()
     {
         //look for controller input x
-        if (XCI.GetButtonDown(XboxButton.X, m_controller.mXboxController))
+        if (XCI.GetButtonDown(XboxButton.X, m_controller.mXboxController) && !m_bInChokeMode)
         {
             //look for any colliders around me (will also hit myself)
             Collider2D[] hitCollider = Physics2D.OverlapCircleAll(this.transform.position, 1.0f, 1 << 16); // Layer 16 == stunned.
@@ -859,13 +865,37 @@ public class Move : MonoBehaviour
                         {
                             runningAnimation = true;
                             _rigidBody.velocity = Vector2.zero;
-                            this.GetComponentInChildren<Animator>().SetBool("IsKilling", true);
-                            collidersFound.transform.parent.GetComponent<PlayerStatus>().KillPlayer(this.GetComponent<PlayerStatus>());
+                            BodyAnimator.SetTrigger("HeadSmashPullUp");
+                            m_bInChokeMode = true;
+                            chokingPlayer = collidersFound.gameObject;
+                            //this.GetComponentInChildren<Animator>().SetBool("IsKilling", true);
+                            //collidersFound.transform.parent.GetComponent<PlayerStatus>().KillPlayer(this.GetComponent<PlayerStatus>());
                         }
                     }
                 }
             }
         }
+        else if (m_bInChokeMode)
+        {
+            PlayerStatus chokingPlayerStatus = chokingPlayer.transform.root.GetComponent<PlayerStatus>();
+            if (chokingPlayerStatus.IsStunned)
+            {
+                this.transform.position = chokingPlayer.transform.root.position;
+                
+                if (XCI.GetButtonDown(XboxButton.X, m_controller.mXboxController))
+                {
+                    BodyAnimator.SetTrigger("HeadSmashSmash");
+                }
+            }
+            else
+            {
+                BodyAnimator.SetTrigger("CancelHeadSmash");
+                m_bInChokeMode = false;
+                chokingPlayer = null;
+            }
+            return true;
+        }
+        return false;
     }
 
     Vector2 GetAveragePos(Transform[] transforms)
