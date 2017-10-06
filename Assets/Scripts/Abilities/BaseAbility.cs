@@ -38,6 +38,7 @@ public class BaseAbility : MonoBehaviour
     protected Timer m_CoolDownTimer;
     public bool findUI = true;
 
+    public int AbilityCharges { get { return m_iCurrentCharges; }  set { m_iCurrentCharges = value; } }
     //TODO if the shield is charged up to 100% of mana, the shield can deflect bullets, knock over players when run over with it
     //TODO otherwise all the shield is block bullets and knock over players when run over with it.
 
@@ -69,74 +70,77 @@ public class BaseAbility : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        switch (m_iCurrentCharges)
+        if (!GameManagerc.Instance.Paused)
         {
-            case 1: //When there is 1 Charge
-                if (ChargeIndicatorSprites.Length > 0)
-                    m_IndicatorRenderer.sprite = ChargeIndicatorSprites[1];
-                else
-                    m_IndicatorRenderer.color = Colors.Violet;
-                break;
-
-            case 2: //When there is 2 charges
-                if (ChargeIndicatorSprites.Length > 1)
-                    m_IndicatorRenderer.sprite = ChargeIndicatorSprites[2];
-                else
-                    m_IndicatorRenderer.color = Colors.Violet;
-                break;
-
-            default: //When none of the above apply (usually 0)
-                if (ChargeIndicatorSprites.Length > 2)
-                    m_IndicatorRenderer.sprite = ChargeIndicatorSprites[0];
-                else
-                    m_IndicatorRenderer.color = Colors.White;
-                break;
-
-        }
-        m_fIndicatorScale = (m_CoolDownTimer.CurrentTime / m_CoolDownTimer.mfTimeToWait + m_iCurrentCharges) * 0.75f;
-        m_ChargeIndicator.transform.localScale = new Vector2(m_fIndicatorScale, m_fIndicatorScale);
-        //! Fuck the mana shit, time to go to cooldowns.
-        //if (manaBar == null)
-        //{
-        //    //GetUIElements();
-        //}
-        //
-        //if (manaBar)
-        //{
-        //    //figure out the x offset
-        //    //- .25 to 0
-        //    float xOffset = -0.25f;
-        //    xOffset = currentMana / m_fMaximumMana * -0.25f;
-        //    // B1 - A1 / abs (A1)
-        //    manaBar.GetComponent<Image>().material.SetTextureOffset("_MainTex" , new Vector2(xOffset , 0));
-        //}
-        //
-        //if (RegenMana)
-        //{
-        //    currentMana += PassiveManaRegeneration * Time.deltaTime;
-        //    if (currentMana >= m_fMaximumMana)
-        //        currentMana = m_fMaximumMana;
-        //}
-        if (m_CoolDownTimer.mfTimeToWait != m_fAbilityCoolDown)
-        {
-            m_CoolDownTimer = new Timer(m_fAbilityCoolDown);
-        }
-        if (m_iCurrentCharges != m_iMaxCharges && ChargeCoolDown)
-        {
-            if (m_CoolDownTimer.Tick(Time.deltaTime))
+            switch (m_iCurrentCharges)
             {
-                m_iCurrentCharges++;
-            }
-        }
-        else if (!ChargeCoolDown)
-        {
+                case 1: //When there is 1 Charge
+                    if (ChargeIndicatorSprites.Length > 0)
+                        m_IndicatorRenderer.sprite = ChargeIndicatorSprites[1];
+                    else
+                        m_IndicatorRenderer.color = Colors.Violet;
+                    break;
 
+                case 2: //When there is 2 charges
+                    if (ChargeIndicatorSprites.Length > 1)
+                        m_IndicatorRenderer.sprite = ChargeIndicatorSprites[2];
+                    else
+                        m_IndicatorRenderer.color = Colors.Violet;
+                    break;
+
+                default: //When none of the above apply (usually 0)
+                    if (ChargeIndicatorSprites.Length > 2)
+                        m_IndicatorRenderer.sprite = ChargeIndicatorSprites[0];
+                    else
+                        m_IndicatorRenderer.color = Colors.White;
+                    break;
+
+            }
+            m_fIndicatorScale = (m_CoolDownTimer.CurrentTime / m_CoolDownTimer.mfTimeToWait + m_iCurrentCharges) * 0.75f;
+            m_ChargeIndicator.transform.localScale = new Vector2(m_fIndicatorScale, m_fIndicatorScale);
+            //! Fuck the mana shit, time to go to cooldowns.
+            //if (manaBar == null)
+            //{
+            //    //GetUIElements();
+            //}
+            //
+            //if (manaBar)
+            //{
+            //    //figure out the x offset
+            //    //- .25 to 0
+            //    float xOffset = -0.25f;
+            //    xOffset = currentMana / m_fMaximumMana * -0.25f;
+            //    // B1 - A1 / abs (A1)
+            //    manaBar.GetComponent<Image>().material.SetTextureOffset("_MainTex" , new Vector2(xOffset , 0));
+            //}
+            //
+            //if (RegenMana)
+            //{
+            //    currentMana += PassiveManaRegeneration * Time.deltaTime;
+            //    if (currentMana >= m_fMaximumMana)
+            //        currentMana = m_fMaximumMana;
+            //}
+            if (m_CoolDownTimer.mfTimeToWait != m_fAbilityCoolDown)
+            {
+                m_CoolDownTimer = new Timer(m_fAbilityCoolDown);
+            }
+            if (m_iCurrentCharges != m_iMaxCharges && ChargeCoolDown)
+            {
+                if (m_CoolDownTimer.Tick(Time.deltaTime))
+                {
+                    m_iCurrentCharges++;
+                }
+            }
+            else if (!ChargeCoolDown)
+            {
+
+            }
+            else
+            {
+                m_CoolDownTimer.CurrentTime = 0;
+            }
+            AdditionalLogic();
         }
-        else
-        {
-            m_CoolDownTimer.CurrentTime = 0;
-        }
-        AdditionalLogic();
     }
 
     public virtual void UseSpecialAbility(bool UsingAbility = false) { }

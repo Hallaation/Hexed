@@ -10,7 +10,7 @@ using System;
 
 public class UIManager : MonoBehaviour
 {
-    Dictionary<string , string> MenuTransitionBoolParameters = new Dictionary<string , string>
+    Dictionary<string, string> MenuTransitionBoolParameters = new Dictionary<string, string>
     {
         {"First_Panel", "MoveToFirstPanel" },
         {"Second_Panel", "MoveToSecondPanel" },
@@ -92,7 +92,10 @@ public class UIManager : MonoBehaviour
 
     void MainMenuUpdate()
     {
-        CharacterSelectionManager.Instance.LetPlayersSelectCharacters = m_bMenuAnimator.GetCurrentAnimatorStateInfo(0).IsName("Title_Section_Second_Static");
+        if (CharacterSelectionManager.Instance)
+        {
+            CharacterSelectionManager.Instance.LetPlayersSelectCharacters = m_bMenuAnimator.GetCurrentAnimatorStateInfo(0).IsName("Title_Section_Second_Static");
+        }
         if (menuStatus.Peek().name == "First_Panel")
         {
             //m_bMenuAnimator.SetTrigger(MenuTransitionBoolParameters["First_Panel"]); 
@@ -107,7 +110,7 @@ public class UIManager : MonoBehaviour
                         m_ButtonAnimator.SetTrigger("SelectedCredits");
                         break;
                     case "Settings_Button":
-                        _eventSystem.currentSelectedGameObject.GetComponent<Button>().onClick.AddListener(delegate { MenuOpenPanel(m_SettingsPanel , "IsSettings"); });
+                        _eventSystem.currentSelectedGameObject.GetComponent<Button>().onClick.AddListener(delegate { MenuOpenPanel(m_SettingsPanel, "IsSettings"); });
                         m_ButtonAnimator.SetTrigger("SelectedSettings");
                         break;
                     case "Quit_Button":
@@ -123,7 +126,7 @@ public class UIManager : MonoBehaviour
         }
         for (int i = 0; i < 4; ++i)
         {
-            if (XCI.GetButtonDown(XboxButton.B , XboxController.First + i))
+            if (XCI.GetButtonDown(XboxButton.B, XboxController.First + i))
             {
                 //Scan for every plugged in controller B button
                 MainMenuBack();
@@ -163,12 +166,12 @@ public class UIManager : MonoBehaviour
             switch (menuStatus.Peek().name)
             {
                 case "Options_Panel":
-                    m_ButtonAnimator.SetBool("IsSettings" , false);
+                    m_ButtonAnimator.SetBool("IsSettings", false);
                     m_ButtonAnimator.SetTrigger("SelectedSettings");
                     break;
                 case "Credits_Panel":
                     m_ButtonAnimator.SetTrigger("SelectedCredits");
-                    m_ButtonAnimator.SetBool("IsCredits" , false);
+                    m_ButtonAnimator.SetBool("IsCredits", false);
                     break;
             }
             //Save my changes here
@@ -259,26 +262,48 @@ public class UIManager : MonoBehaviour
         //If I press B return to the previous UI thing.
         for (int i = 0; i < 4; ++i)
         {
-            if (XCI.GetButtonDown(XboxButton.B , XboxController.First + i))
+            if (XCI.GetButtonDown(XboxButton.B, XboxController.First + i))
             {
                 Back();
             }
 
             //If I press start and the menu status (stack of UI elements) is nothing, push the default panel into the stack.
-            if (XCI.GetButton(XboxButton.Start , XboxController.First + i) && menuStatus.Count <= 0)
+            if (XCI.GetButton(XboxButton.Start, XboxController.First + i) && menuStatus.Count <= 0)
             {
                 if (!menuStatus.Contains(defaultPanel))
                 {
                     menuStatus.Push(defaultPanel);
                     defaultPanel.SetActive(true);
-                    _eventSystem.SetSelectedGameObject(null);
-                    _eventSystem.SetSelectedGameObject(defaultPanel.GetComponentInChildren<Button>().gameObject);
+                    if (GameManagerc.Instance.PointsPanel)
+                        GameManagerc.Instance.PointsPanel.SetActive(false);
+
+                    //Debug.Log(defaultPanel.GetComponentInChildren<DefaultButton>().gameObject.transform.parent);
+
+                    GameManagerc.Instance.GetScreenAnimator().SetTrigger("ShowScreen");
+                    GameManagerc.Instance.Paused = true;
+
+                    StartCoroutine(PauseGame()); //Pause the game
+
+                    GameObject selectable = defaultPanel.GetComponentInChildren<DefaultButton>().gameObject;
+                    defaultPanel.transform.GetChild(0).Find("MainMenu").GetChild(0).GetComponent<Button>().onClick.AddListener(delegate { GameManagerc.Instance.GoToStart(); });
+                    SetCurrentSelected(selectable);
+                    Debug.Log(_eventSystem.gameObject);
                 }
             }
 
         }
     }
 
+    IEnumerator PauseGame()
+    {
+        foreach (Rigidbody2D item in FindObjectsOfType<Rigidbody2D>())
+        {
+            item.Sleep();
+        }
+        yield return new WaitForSeconds(1);
+        Time.timeScale = 0;
+
+    }
     public void Back()
     {
         //set the current menu (whatever it is), turn it off then pop it off the stack.
@@ -296,6 +321,7 @@ public class UIManager : MonoBehaviour
         {
             menuStatus.Peek().SetActive(false);
             menuStatus.Pop();
+
             if (menuStatus.Count >= 1)
             {
                 menuStatus.Peek().SetActive(true);
@@ -305,15 +331,16 @@ public class UIManager : MonoBehaviour
                 {
                     _eventSystem.SetSelectedGameObject(null);
                     _eventSystem.SetSelectedGameObject(menuStatus.Peek().GetComponentInChildren<Button>().gameObject);
+
                     defaultToReturnTo = menuStatus.Peek().GetComponentInChildren<Button>().gameObject;
                 }
             }
         }
+
     }
 
 
-
-    public void MenuOpenPanel(GameObject PanelToOpen , string AnimationParameter = "")
+    public void MenuOpenPanel(GameObject PanelToOpen, string AnimationParameter = "")
     {
         if (!menuStatus.Contains(PanelToOpen))
         {
@@ -327,22 +354,22 @@ public class UIManager : MonoBehaviour
                     m_ButtonAnimator.ResetTrigger("SelectedCredits");
                     break;
             }
-            m_ButtonAnimator.SetBool(AnimationParameter , true);
+            m_ButtonAnimator.SetBool(AnimationParameter, true);
             menuStatus.Push(PanelToOpen);
             //Wait for animations here
-            StartCoroutine(WaitForAnimation(PanelToOpen , AnimationParameter));
+            StartCoroutine(WaitForAnimation(PanelToOpen, AnimationParameter));
         }
     }
 
 
-    IEnumerator WaitForAnimation(GameObject PanelToOpen , string AnimationParameter = "")
+    IEnumerator WaitForAnimation(GameObject PanelToOpen, string AnimationParameter = "")
     {
         yield return new WaitForSeconds(m_ButtonAnimator.GetCurrentAnimatorStateInfo(0).length - 1.3f /*+ m_ButtonAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime*/);
-        DoLast(PanelToOpen , AnimationParameter);
+        DoLast(PanelToOpen, AnimationParameter);
     }
+
     void DoLast(GameObject PanelToOpen, string AnimationParameter)
     {
-
         m_CharacterSelectionPanel.SetActive(false);
         m_bMenuAnimator.SetTrigger(MenuTransitionBoolParameters["Second_Panel"]);
         m_bOpenedPanel = true;
@@ -367,7 +394,7 @@ public class UIManager : MonoBehaviour
         }
     }
     //whatever the element is, push it into the stack 
-    public void OpenUIElement(GameObject ElementToOpen , bool openChildren = false)
+    public void OpenUIElement(GameObject ElementToOpen, bool openChildren = false)
     {
 
         //Debug.Log(current);
@@ -390,25 +417,61 @@ public class UIManager : MonoBehaviour
 
             //find defaults if there are any and set it to my selected.
             //Debug.Log();
-            if (menuStatus.Peek().GetComponentInChildren<Button>())
+            if (menuStatus.Peek().GetComponentInChildren<DefaultButton>())
+            {
+                _eventSystem.SetSelectedGameObject(null);
+                _eventSystem.SetSelectedGameObject(menuStatus.Peek().GetComponentInChildren<DefaultButton>().gameObject);
+                print(menuStatus.Peek().GetComponentInChildren<DefaultButton>().gameObject);
+            }
+            else if (menuStatus.Peek().GetComponentInChildren<Button>())
             {
                 _eventSystem.SetSelectedGameObject(null);
                 _eventSystem.SetSelectedGameObject(menuStatus.Peek().GetComponentInChildren<Button>().gameObject);
+                print(menuStatus.Peek().GetComponentInChildren<Button>().gameObject);
                 //defaultToReturnTo = menuStatus.Peek().GetComponentInChildren<Button>().gameObject;
             }
         }
-
     }
 
+    public void UnpauseGame()
+    {
+        if (menuStatus.Count >= 1)
+        {
+            menuStatus.Peek().SetActive(false);
+            menuStatus.Pop();
 
+            if (menuStatus.Count >= 1)
+            {
+                menuStatus.Peek().SetActive(true);
 
-    void OnSceneLoad(Scene scene , LoadSceneMode mode)
+                //find defaults if there are any and set it to my selected.
+                if (menuStatus.Peek().transform.Find("DefaultButton"))
+                {
+                    _eventSystem.SetSelectedGameObject(null);
+                    _eventSystem.SetSelectedGameObject(menuStatus.Peek().GetComponentInChildren<Button>().gameObject);
+                    defaultToReturnTo = menuStatus.Peek().GetComponentInChildren<Button>().gameObject;
+                }
+            }
+        }
+        GameManagerc.Instance.GetScreenAnimator().SetTrigger("RemoveScreen");
+
+        Time.timeScale = 1;
+        GameManagerc.Instance.Paused = false;
+    }
+
+    void OnSceneLoad(Scene scene, LoadSceneMode mode)
     {
         menuStatus.Clear();
+        _eventSystem = FindObjectOfType<EventSystem>();
         //very specific scene, if in this scene, I want to remove the last panel
-        if (scene.buildIndex == 2)
+        if (scene.buildIndex == 1)
         {
-            m_bRemoveLastPanel = true;
+            defaultPanel = FindObjectOfType<DefaultPanel>().gameObject;
+            Button ResumeButton = defaultPanel.transform.GetChild(0).transform.Find("ResumeButton").GetChild(0).GetComponent<Button>();
+            ResumeButton.onClick.AddListener(delegate { UnpauseGame(); });
+            m_bRemoveLastPanel = false;
+            //    defaultPanel.gameObject.SetActive(false);
+
         }
 
         else if (scene.buildIndex != 0) //otherwise don't allow the removal of the last panel;
