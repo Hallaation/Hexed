@@ -241,7 +241,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
     //Snap all the health/stun bars to the player's position.
     public void LateUpdate()
     {
-        if (GameManagerc.Instance.Paused)
+        if (GameManagerc.Instance.Paused || Application.isEditor)
         {
             //Check for a health mask
             if (_HealthMask)

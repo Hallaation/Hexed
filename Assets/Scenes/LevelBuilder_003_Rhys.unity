@@ -1475,8 +1475,10 @@ Transform:
   - {fileID: 1127892100}
   - {fileID: 964214757}
   - {fileID: 1151592105}
+  - {fileID: 1810438746}
+  - {fileID: 88645539}
   m_Father: {fileID: 664938391}
-  m_RootOrder: 80
+  m_RootOrder: 78
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &72815245
 GameObject:
@@ -1585,6 +1587,67 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
+--- !u!1 &88645538
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 88645539}
+  - component: {fileID: 88645541}
+  - component: {fileID: 88645540}
+  m_Layer: 10
+  m_Name: Collider (14)
+  m_TagString: Wall
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &88645539
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 88645538}
+  m_LocalRotation: {x: -0, y: -0, z: 0.9238782, w: 0.3826868}
+  m_LocalPosition: {x: -2.354, y: 4.372, z: 0}
+  m_LocalScale: {x: 1.500001, y: 1.4, z: 1}
+  m_Children: []
+  m_Father: {fileID: 69701679}
+  m_RootOrder: 14
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 135}
+--- !u!114 &88645540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 88645538}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1470fd1c36da2d04486d17adb0c656c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_audioClip: {fileID: 0}
+  m_bRandomizePitch: 0
+  clipVolume: 1
+  m_bShakeCamera: 1
+  PlayParticles: 0
+  ParticlePrefab: {fileID: 0}
+--- !u!61 &88645541
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 88645538}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Size: {x: 0.25, y: 1}
 --- !u!1 &95617036
 GameObject:
   m_ObjectHideFlags: 0
@@ -1969,7 +2032,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4449191571688328, guid: bfb7af45aa304094aa3ff4a6ca53437d, type: 2}
       propertyPath: m_RootOrder
-      value: 63
+      value: 64
       objectReference: {fileID: 0}
     - target: {fileID: 4449191571688328, guid: bfb7af45aa304094aa3ff4a6ca53437d, type: 2}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -5095,9 +5158,10 @@ GameObject:
   m_Component:
   - component: {fileID: 329873640}
   - component: {fileID: 329873641}
-  m_Layer: 0
+  - component: {fileID: 329873642}
+  m_Layer: 10
   m_Name: Collider (4)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5129,6 +5193,23 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.25, y: 1}
+--- !u!114 &329873642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 329873639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1470fd1c36da2d04486d17adb0c656c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_audioClip: {fileID: 0}
+  m_bRandomizePitch: 0
+  clipVolume: 1
+  m_bShakeCamera: 1
+  PlayParticles: 0
+  ParticlePrefab: {fileID: 0}
 --- !u!1 &329880037
 GameObject:
   m_ObjectHideFlags: 0
@@ -8780,9 +8861,10 @@ GameObject:
   m_Component:
   - component: {fileID: 393799143}
   - component: {fileID: 393799144}
-  m_Layer: 0
+  - component: {fileID: 393799145}
+  m_Layer: 10
   m_Name: Collider (9)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8814,6 +8896,23 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.25, y: 1}
+--- !u!114 &393799145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 393799142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1470fd1c36da2d04486d17adb0c656c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_audioClip: {fileID: 0}
+  m_bRandomizePitch: 0
+  clipVolume: 1
+  m_bShakeCamera: 1
+  PlayParticles: 0
+  ParticlePrefab: {fileID: 0}
 --- !u!1 &411446439
 GameObject:
   m_ObjectHideFlags: 0
@@ -8894,7 +8993,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4861282097848506, guid: 72fa1354b3cd21842b053e148ca75c42, type: 2}
       propertyPath: m_RootOrder
-      value: 78
+      value: 79
       objectReference: {fileID: 0}
     - target: {fileID: 233612009401832388, guid: 72fa1354b3cd21842b053e148ca75c42,
         type: 2}
@@ -11163,6 +11262,49 @@ SpriteRenderer:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
+--- !u!1 &548128003
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 548128004}
+  - component: {fileID: 548128005}
+  m_Layer: 0
+  m_Name: Collider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &548128004
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 548128003}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.3344061, y: -0.82803476, z: 0}
+  m_LocalScale: {x: 0.2007511, y: 2.3059645, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1655302865}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &548128005
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 548128003}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
 --- !u!1 &548811162
 GameObject:
   m_ObjectHideFlags: 0
@@ -11431,9 +11573,10 @@ GameObject:
   m_Component:
   - component: {fileID: 557941293}
   - component: {fileID: 557941294}
-  m_Layer: 0
+  - component: {fileID: 557941295}
+  m_Layer: 10
   m_Name: Collider (6)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -11465,6 +11608,23 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.25, y: 1}
+--- !u!114 &557941295
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 557941292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1470fd1c36da2d04486d17adb0c656c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_audioClip: {fileID: 0}
+  m_bRandomizePitch: 0
+  clipVolume: 1
+  m_bShakeCamera: 1
+  PlayParticles: 0
+  ParticlePrefab: {fileID: 0}
 --- !u!1 &559955531
 GameObject:
   m_ObjectHideFlags: 0
@@ -12441,7 +12601,7 @@ Transform:
   m_Children:
   - {fileID: 1774979867}
   m_Father: {fileID: 664938391}
-  m_RootOrder: 69
+  m_RootOrder: 67
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -0.356}
 --- !u!212 &615256442
 SpriteRenderer:
@@ -12740,6 +12900,49 @@ SpriteRenderer:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
+--- !u!1 &630459257
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 630459258}
+  - component: {fileID: 630459259}
+  m_Layer: 0
+  m_Name: Collider (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &630459258
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 630459257}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.439, y: -0.22, z: 0}
+  m_LocalScale: {x: 0.20075022, y: 3.516931, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1655302865}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &630459259
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 630459257}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
 --- !u!1 &633868685
 GameObject:
   m_ObjectHideFlags: 0
@@ -13033,26 +13236,27 @@ Transform:
   - {fileID: 366444593}
   - {fileID: 739815056}
   - {fileID: 1442099910}
+  - {fileID: 1270434094}
   - {fileID: 1322931904}
   - {fileID: 1646362818}
   - {fileID: 757735538}
   - {fileID: 2060662796}
-  - {fileID: 1270434094}
   - {fileID: 961373945}
+  - {fileID: 615256441}
   - {fileID: 1148802703}
   - {fileID: 1852877636}
-  - {fileID: 615256441}
   - {fileID: 1717272061}
   - {fileID: 943628914}
   - {fileID: 208070566}
   - {fileID: 1385447261}
-  - {fileID: 2071548729}
   - {fileID: 878850074}
+  - {fileID: 2071548729}
   - {fileID: 1853050159}
   - {fileID: 2610781}
+  - {fileID: 69701679}
   - {fileID: 728116769}
   - {fileID: 227350004}
-  - {fileID: 69701679}
+  - {fileID: 1655302865}
   m_Father: {fileID: 383156958}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -15708,9 +15912,10 @@ GameObject:
   m_Component:
   - component: {fileID: 818857707}
   - component: {fileID: 818857708}
-  m_Layer: 0
+  - component: {fileID: 818857709}
+  m_Layer: 10
   m_Name: Collider (7)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -15742,6 +15947,23 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.25, y: 1}
+--- !u!114 &818857709
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 818857706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1470fd1c36da2d04486d17adb0c656c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_audioClip: {fileID: 0}
+  m_bRandomizePitch: 0
+  clipVolume: 1
+  m_bShakeCamera: 1
+  PlayParticles: 0
+  ParticlePrefab: {fileID: 0}
 --- !u!1 &819123870
 GameObject:
   m_ObjectHideFlags: 0
@@ -16704,7 +16926,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 664938391}
-  m_RootOrder: 75
+  m_RootOrder: 74
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 5.189}
 --- !u!61 &878850075
 BoxCollider2D:
@@ -17061,7 +17283,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4863635197709490, guid: 4e2e0f5461f0e324f8f21dd4071a095f, type: 2}
       propertyPath: m_RootOrder
-      value: 74
+      value: 75
       objectReference: {fileID: 0}
     - target: {fileID: 4863635197709490, guid: 4e2e0f5461f0e324f8f21dd4071a095f, type: 2}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -18263,9 +18485,10 @@ GameObject:
   m_Component:
   - component: {fileID: 964214757}
   - component: {fileID: 964214758}
-  m_Layer: 0
+  - component: {fileID: 964214759}
+  m_Layer: 10
   m_Name: Collider (11)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -18297,6 +18520,23 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.25, y: 1}
+--- !u!114 &964214759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 964214756}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1470fd1c36da2d04486d17adb0c656c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_audioClip: {fileID: 0}
+  m_bRandomizePitch: 0
+  clipVolume: 1
+  m_bShakeCamera: 1
+  PlayParticles: 0
+  ParticlePrefab: {fileID: 0}
 --- !u!1 &965614791
 GameObject:
   m_ObjectHideFlags: 0
@@ -18370,9 +18610,10 @@ GameObject:
   m_Component:
   - component: {fileID: 969795845}
   - component: {fileID: 969795846}
-  m_Layer: 0
+  - component: {fileID: 969795847}
+  m_Layer: 10
   m_Name: Collider (1)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -18404,6 +18645,23 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.25, y: 1}
+--- !u!114 &969795847
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 969795844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1470fd1c36da2d04486d17adb0c656c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_audioClip: {fileID: 0}
+  m_bRandomizePitch: 0
+  clipVolume: 1
+  m_bShakeCamera: 1
+  PlayParticles: 0
+  ParticlePrefab: {fileID: 0}
 --- !u!1 &969898419
 GameObject:
   m_ObjectHideFlags: 0
@@ -21610,7 +21868,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4449191571688328, guid: bfb7af45aa304094aa3ff4a6ca53437d, type: 2}
       propertyPath: m_RootOrder
-      value: 61
+      value: 62
       objectReference: {fileID: 0}
     - target: {fileID: 4449191571688328, guid: bfb7af45aa304094aa3ff4a6ca53437d, type: 2}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -23944,9 +24202,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1127892100}
   - component: {fileID: 1127892101}
-  m_Layer: 0
+  - component: {fileID: 1127892102}
+  m_Layer: 10
   m_Name: Collider (10)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -23978,6 +24237,23 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.25, y: 1}
+--- !u!114 &1127892102
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1127892099}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1470fd1c36da2d04486d17adb0c656c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_audioClip: {fileID: 0}
+  m_bRandomizePitch: 0
+  clipVolume: 1
+  m_bShakeCamera: 1
+  PlayParticles: 0
+  ParticlePrefab: {fileID: 0}
 --- !u!1 &1128263313
 GameObject:
   m_ObjectHideFlags: 0
@@ -24405,7 +24681,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4449191571688328, guid: bfb7af45aa304094aa3ff4a6ca53437d, type: 2}
       propertyPath: m_RootOrder
-      value: 67
+      value: 68
       objectReference: {fileID: 0}
     - target: {fileID: 4449191571688328, guid: bfb7af45aa304094aa3ff4a6ca53437d, type: 2}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -24528,9 +24804,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1151592105}
   - component: {fileID: 1151592106}
-  m_Layer: 0
+  - component: {fileID: 1151592107}
+  m_Layer: 10
   m_Name: Collider (12)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -24562,6 +24839,23 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.25, y: 1}
+--- !u!114 &1151592107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1151592104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1470fd1c36da2d04486d17adb0c656c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_audioClip: {fileID: 0}
+  m_bRandomizePitch: 0
+  clipVolume: 1
+  m_bShakeCamera: 1
+  PlayParticles: 0
+  ParticlePrefab: {fileID: 0}
 --- !u!4 &1155869212 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4449191571688328, guid: bfb7af45aa304094aa3ff4a6ca53437d,
@@ -25125,7 +25419,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4449191571688328, guid: bfb7af45aa304094aa3ff4a6ca53437d, type: 2}
       propertyPath: m_RootOrder
-      value: 62
+      value: 63
       objectReference: {fileID: 0}
     - target: {fileID: 4449191571688328, guid: bfb7af45aa304094aa3ff4a6ca53437d, type: 2}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -26362,7 +26656,7 @@ Transform:
   m_LocalScale: {x: 1.5, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 664938391}
-  m_RootOrder: 65
+  m_RootOrder: 61
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90.00001}
 --- !u!212 &1270434095
 SpriteRenderer:
@@ -26581,9 +26875,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1286981384}
   - component: {fileID: 1286981385}
-  m_Layer: 0
+  - component: {fileID: 1286981386}
+  m_Layer: 10
   m_Name: Collider (8)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -26615,6 +26910,23 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.25, y: 1}
+--- !u!114 &1286981386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1286981383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1470fd1c36da2d04486d17adb0c656c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_audioClip: {fileID: 0}
+  m_bRandomizePitch: 0
+  clipVolume: 1
+  m_bShakeCamera: 1
+  PlayParticles: 0
+  ParticlePrefab: {fileID: 0}
 --- !u!1 &1287565259
 GameObject:
   m_ObjectHideFlags: 0
@@ -29207,9 +29519,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1427506671}
   - component: {fileID: 1427506672}
-  m_Layer: 0
+  - component: {fileID: 1427506673}
+  m_Layer: 10
   m_Name: Collider (3)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -29241,6 +29554,23 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.25, y: 1}
+--- !u!114 &1427506673
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1427506670}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1470fd1c36da2d04486d17adb0c656c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_audioClip: {fileID: 0}
+  m_bRandomizePitch: 0
+  clipVolume: 1
+  m_bShakeCamera: 1
+  PlayParticles: 0
+  ParticlePrefab: {fileID: 0}
 --- !u!1 &1427635880
 GameObject:
   m_ObjectHideFlags: 0
@@ -32152,7 +32482,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4449191571688328, guid: bfb7af45aa304094aa3ff4a6ca53437d, type: 2}
       propertyPath: m_RootOrder
-      value: 68
+      value: 69
       objectReference: {fileID: 0}
     - target: {fileID: 4449191571688328, guid: bfb7af45aa304094aa3ff4a6ca53437d, type: 2}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -32607,9 +32937,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1635504283}
   - component: {fileID: 1635504284}
-  m_Layer: 0
+  - component: {fileID: 1635504285}
+  m_Layer: 10
   m_Name: Collider
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -32641,6 +32972,23 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.25, y: 1}
+--- !u!114 &1635504285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1635504282}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1470fd1c36da2d04486d17adb0c656c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_audioClip: {fileID: 0}
+  m_bRandomizePitch: 0
+  clipVolume: 1
+  m_bShakeCamera: 1
+  PlayParticles: 0
+  ParticlePrefab: {fileID: 0}
 --- !u!1 &1638362359
 GameObject:
   m_ObjectHideFlags: 0
@@ -32976,6 +33324,37 @@ SpriteRenderer:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
+--- !u!1 &1655302864
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1655302865}
+  m_Layer: 0
+  m_Name: CounterCollider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1655302865
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1655302864}
+  m_LocalRotation: {x: -0, y: -0, z: 0.010711157, w: 0.99994266}
+  m_LocalPosition: {x: -0.96000004, y: 1.1800003, z: 0}
+  m_LocalScale: {x: 3.986596, y: 0.836441, z: 1}
+  m_Children:
+  - {fileID: 1799301178}
+  - {fileID: 548128004}
+  - {fileID: 630459258}
+  m_Father: {fileID: 664938391}
+  m_RootOrder: 81
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1658480171
 Prefab:
   m_ObjectHideFlags: 0
@@ -33278,10 +33657,6 @@ Prefab:
     - target: {fileID: 4141461237438614, guid: f6cf4d33fa55bcd4aa96592631dfad82, type: 2}
       propertyPath: m_RootOrder
       value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 1805616404371484, guid: f6cf4d33fa55bcd4aa96592631dfad82, type: 2}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f6cf4d33fa55bcd4aa96592631dfad82, type: 2}
@@ -35839,6 +36214,49 @@ BoxCollider2D:
   m_Offset: {x: 2.5, y: 0}
   serializedVersion: 2
   m_Size: {x: 5, y: 0.775}
+--- !u!1 &1799301177
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1799301178}
+  - component: {fileID: 1799301179}
+  m_Layer: 0
+  m_Name: Collider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1799301178
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1799301177}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.047468673, y: -1.4960309, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1655302865}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &1799301179
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1799301177}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
 --- !u!1 &1799656110
 GameObject:
   m_ObjectHideFlags: 0
@@ -35903,6 +36321,67 @@ SpriteRenderer:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
+--- !u!1 &1810438745
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1810438746}
+  - component: {fileID: 1810438748}
+  - component: {fileID: 1810438747}
+  m_Layer: 10
+  m_Name: Collider (13)
+  m_TagString: Wall
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1810438746
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1810438745}
+  m_LocalRotation: {x: -0, y: -0, z: 0.7071048, w: 0.70710886}
+  m_LocalPosition: {x: -0.75, y: 4.8129997, z: 0}
+  m_LocalScale: {x: 1.500001, y: 2.5, z: 1}
+  m_Children: []
+  m_Father: {fileID: 69701679}
+  m_RootOrder: 13
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90.00001}
+--- !u!114 &1810438747
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1810438745}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1470fd1c36da2d04486d17adb0c656c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_audioClip: {fileID: 0}
+  m_bRandomizePitch: 0
+  clipVolume: 1
+  m_bShakeCamera: 1
+  PlayParticles: 0
+  ParticlePrefab: {fileID: 0}
+--- !u!61 &1810438748
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1810438745}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Size: {x: 0.25, y: 1}
 --- !u!1 &1812301404
 GameObject:
   m_ObjectHideFlags: 0
@@ -39935,9 +40414,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1900418104}
   - component: {fileID: 1900418105}
-  m_Layer: 0
+  - component: {fileID: 1900418106}
+  m_Layer: 10
   m_Name: Collider (5)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -39969,6 +40449,23 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.25, y: 1}
+--- !u!114 &1900418106
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1900418103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1470fd1c36da2d04486d17adb0c656c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_audioClip: {fileID: 0}
+  m_bRandomizePitch: 0
+  clipVolume: 1
+  m_bShakeCamera: 1
+  PlayParticles: 0
+  ParticlePrefab: {fileID: 0}
 --- !u!1 &1906446869
 GameObject:
   m_ObjectHideFlags: 0
@@ -41638,7 +42135,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4863635197709490, guid: 4e2e0f5461f0e324f8f21dd4071a095f, type: 2}
       propertyPath: m_RootOrder
-      value: 79
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 4863635197709490, guid: 4e2e0f5461f0e324f8f21dd4071a095f, type: 2}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -42043,9 +42540,10 @@ GameObject:
   m_Component:
   - component: {fileID: 2028711299}
   - component: {fileID: 2028711300}
-  m_Layer: 0
+  - component: {fileID: 2028711301}
+  m_Layer: 10
   m_Name: Collider (2)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -42077,6 +42575,23 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.25, y: 1}
+--- !u!114 &2028711301
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2028711298}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1470fd1c36da2d04486d17adb0c656c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_audioClip: {fileID: 0}
+  m_bRandomizePitch: 0
+  clipVolume: 1
+  m_bShakeCamera: 1
+  PlayParticles: 0
+  ParticlePrefab: {fileID: 0}
 --- !u!1 &2034381451
 GameObject:
   m_ObjectHideFlags: 0
@@ -43277,7 +43792,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4449191571688328, guid: bfb7af45aa304094aa3ff4a6ca53437d, type: 2}
       propertyPath: m_RootOrder
-      value: 64
+      value: 65
       objectReference: {fileID: 0}
     - target: {fileID: 4449191571688328, guid: bfb7af45aa304094aa3ff4a6ca53437d, type: 2}
       propertyPath: m_LocalEulerAnglesHint.z
