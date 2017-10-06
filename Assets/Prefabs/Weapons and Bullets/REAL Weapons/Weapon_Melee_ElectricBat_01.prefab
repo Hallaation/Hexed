@@ -196,7 +196,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1240613873363474}
   m_LocalRotation: {x: 0.00000002812983, y: 0.000000556155, z: 0.0000005215406, w: -1}
-  m_LocalPosition: {x: -0.24000004, y: 0.0020001521, z: -0}
+  m_LocalPosition: {x: -0.37, y: 0.002, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4473286455861834}
@@ -209,7 +209,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1226134330056524}
   m_LocalRotation: {x: -0, y: -0, z: 0.13052596, w: 0.99144495}
-  m_LocalPosition: {x: -7.094, y: -2.347, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4957417639830258}
@@ -273,7 +273,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1408158153636848}
   m_LocalRotation: {x: 0.00000002812983, y: 0.000000556155, z: 0.0000005215406, w: -1}
-  m_LocalPosition: {x: -0.051000055, y: 0.0020000567, z: 0}
+  m_LocalPosition: {x: -0.152, y: 0.002, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4473286455861834}
@@ -325,7 +325,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1936562722221022}
   m_LocalRotation: {x: 0.00000002812983, y: 0.000000556155, z: 0.0000005215406, w: -1}
-  m_LocalPosition: {x: 0.19300026, y: 0.0019995796, z: 0}
+  m_LocalPosition: {x: 0.185, y: 0.002, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4473286455861834}
@@ -338,7 +338,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1793225060875410}
   m_LocalRotation: {x: 0.00000002812983, y: 0.000000556155, z: 0.0000005215406, w: -1}
-  m_LocalPosition: {x: 0.061000112, y: 0.0019998623, z: 0}
+  m_LocalPosition: {x: 0.004, y: 0.002, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4473286455861834}
@@ -427,7 +427,7 @@ TrailRenderer:
   m_Time: 0.2
   m_Parameters:
     serializedVersion: 2
-    widthMultiplier: 0.5
+    widthMultiplier: 1
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -449,10 +449,10 @@ TrailRenderer:
     colorGradient:
       key0:
         serializedVersion: 2
-        rgba: 4294953472
+        rgba: 4285515783
       key1:
         serializedVersion: 2
-        rgba: 4286643968
+        rgba: 4291687335
       key2:
         serializedVersion: 2
         rgba: 16777215
@@ -490,7 +490,7 @@ TrailRenderer:
       m_Mode: 0
       m_NumColorKeys: 3
       m_NumAlphaKeys: 3
-    numCornerVertices: 0
+    numCornerVertices: 30
     numCapVertices: 0
     alignment: 1
     textureMode: 1
@@ -531,7 +531,7 @@ TrailRenderer:
   m_Time: 0.17
   m_Parameters:
     serializedVersion: 2
-    widthMultiplier: 0.4
+    widthMultiplier: 0.75
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -553,10 +553,10 @@ TrailRenderer:
     colorGradient:
       key0:
         serializedVersion: 2
-        rgba: 4294953472
+        rgba: 4285515783
       key1:
         serializedVersion: 2
-        rgba: 4286643968
+        rgba: 4291687335
       key2:
         serializedVersion: 2
         rgba: 16777215
@@ -594,7 +594,7 @@ TrailRenderer:
       m_Mode: 0
       m_NumColorKeys: 3
       m_NumAlphaKeys: 3
-    numCornerVertices: 0
+    numCornerVertices: 30
     numCapVertices: 0
     alignment: 1
     textureMode: 1
@@ -635,7 +635,7 @@ TrailRenderer:
   m_Time: 0.12
   m_Parameters:
     serializedVersion: 2
-    widthMultiplier: 0.3
+    widthMultiplier: 0.25
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -657,10 +657,10 @@ TrailRenderer:
     colorGradient:
       key0:
         serializedVersion: 2
-        rgba: 4294953472
+        rgba: 4285515783
       key1:
         serializedVersion: 2
-        rgba: 4286643968
+        rgba: 4291687335
       key2:
         serializedVersion: 2
         rgba: 16777215
@@ -698,7 +698,7 @@ TrailRenderer:
       m_Mode: 0
       m_NumColorKeys: 3
       m_NumAlphaKeys: 3
-    numCornerVertices: 0
+    numCornerVertices: 30
     numCapVertices: 0
     alignment: 1
     textureMode: 1
@@ -739,7 +739,7 @@ TrailRenderer:
   m_Time: 0.1
   m_Parameters:
     serializedVersion: 2
-    widthMultiplier: 0.25
+    widthMultiplier: 0.1
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -761,10 +761,10 @@ TrailRenderer:
     colorGradient:
       key0:
         serializedVersion: 2
-        rgba: 4294953472
+        rgba: 4285515783
       key1:
         serializedVersion: 2
-        rgba: 4286643968
+        rgba: 4291687335
       key2:
         serializedVersion: 2
         rgba: 16777215
@@ -802,7 +802,7 @@ TrailRenderer:
       m_Mode: 0
       m_NumColorKeys: 3
       m_NumAlphaKeys: 3
-    numCornerVertices: 0
+    numCornerVertices: 30
     numCapVertices: 0
     alignment: 1
     textureMode: 1
@@ -843,7 +843,7 @@ TrailRenderer:
   m_Time: 0.15
   m_Parameters:
     serializedVersion: 2
-    widthMultiplier: 0.35
+    widthMultiplier: 0.5
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -865,10 +865,10 @@ TrailRenderer:
     colorGradient:
       key0:
         serializedVersion: 2
-        rgba: 4294953472
+        rgba: 4285515783
       key1:
         serializedVersion: 2
-        rgba: 4286643968
+        rgba: 4291687335
       key2:
         serializedVersion: 2
         rgba: 16777215
@@ -906,7 +906,7 @@ TrailRenderer:
       m_Mode: 0
       m_NumColorKeys: 3
       m_NumAlphaKeys: 3
-    numCornerVertices: 0
+    numCornerVertices: 30
     numCapVertices: 0
     alignment: 1
     textureMode: 1
@@ -927,7 +927,7 @@ MonoBehaviour:
   m_fTimeBetweenShots: 0.01
   m_iDamage: 0
   m_bGivePlayersIFrames: 0
-  ThrowHitKnockBack: 0
+  KnockBack: 0
   MaxShadow: 0.3
   MinShadow: 0
   ShadowGrowthSpeed: 0.5
