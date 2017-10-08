@@ -667,7 +667,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1568182744093302}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -15.101, y: 9.921815, z: 0}
   m_LocalScale: {x: 1.2, y: 1.2, z: 1}
   m_Children:
   - {fileID: 4834453555101378}
@@ -1184,9 +1184,14 @@ MonoBehaviour:
   m_iMaxCharges: 2
   m_iCurrentCharges: 0
   findUI: 1
-  manaBar: {fileID: 0}
   m_ChargeIndicator: {fileID: 0}
-  ChargeIndicatorSprites: []
+  ChargeReadySprites:
+  - {fileID: 21300002, guid: b4d90898914e2804881dabe07827e302, type: 3}
+  - {fileID: 21300004, guid: b4d90898914e2804881dabe07827e302, type: 3}
+  EmptyChargeSprites:
+  - {fileID: 21300006, guid: b4d90898914e2804881dabe07827e302, type: 3}
+  - {fileID: 21300008, guid: b4d90898914e2804881dabe07827e302, type: 3}
+  ChargeHighlighters: []
   ChargeCoolDown: 1
   m_TeleportForce: 3.5
 --- !u!114 &114222127503517894
