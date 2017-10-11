@@ -37,7 +37,7 @@ public class BaseAbility : MonoBehaviour
     protected int m_iCurrentCharges;
     protected Timer m_CoolDownTimer;
     public bool findUI = true;
-
+    private PlayerStatus m_PlayerStatus;
     public int AbilityCharges { get { return m_iCurrentCharges; }  set { m_iCurrentCharges = value; } }
     //TODO if the shield is charged up to 100% of mana, the shield can deflect bullets, knock over players when run over with it
     //TODO otherwise all the shield is block bullets and knock over players when run over with it.
@@ -58,7 +58,7 @@ public class BaseAbility : MonoBehaviour
         m_CoolDownTimer = new Timer(m_fAbilityCoolDown);
 
         m_MoveOwner = this.GetComponent<Move>();
-
+        m_PlayerStatus = this.GetComponent<PlayerStatus>();
         m_ChargeIndicator = this.transform.Find("Sprites").Find("TeleportIndicator").GetChild(0).gameObject;
         ChargeHighlighters = new GameObject[2];
 
@@ -74,6 +74,16 @@ public class BaseAbility : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (m_PlayerStatus.IsDead)
+        {
+            ChargeHighlighters[0].SetActive(false);
+            ChargeHighlighters[1].SetActive(false);
+        }
+        else
+        {
+            ChargeHighlighters[0].SetActive(true);
+            ChargeHighlighters[1].SetActive(true);
+        }
         if (!GameManagerc.Instance.Paused)
         {
             switch (m_iCurrentCharges)
