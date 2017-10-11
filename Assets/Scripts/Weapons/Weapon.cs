@@ -221,7 +221,7 @@ public class Weapon : MonoBehaviour
        
         //turn the physics back on set its parent to null, and apply the velocity. apply an angular velocity for it to spin.
         GetComponent<Rigidbody2D>().simulated = true;
-        this.transform.position = transform.parent.GetComponentInParent<Move>().weapon2HandedMount.position;
+        //this.transform.position = transform.parent.GetComponentInParent<Move>().weapon2HandedMount.position;
         this.transform.SetParent(null);
         GetComponent<Rigidbody2D>().AddForce(velocity, ForceMode2D.Impulse);
         if (velocity.magnitude > 50)
