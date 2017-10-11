@@ -882,6 +882,7 @@ public class Move : MonoBehaviour
                             BodyAnimator.SetTrigger("HeadSmashPullUp");
                             m_bInChokeMode = true;
                             chokingPlayer = collidersFound.gameObject;
+                            ThrowWeapon(_rigidBody.velocity, this.transform.up, false);
                             //this.GetComponentInChildren<Animator>().SetBool("IsKilling", true);
                             //collidersFound.transform.parent.GetComponent<PlayerStatus>().KillPlayer(this.GetComponent<PlayerStatus>());
                         }

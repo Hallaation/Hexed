@@ -408,7 +408,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             if (m_iHealth <= 0 /*&& (GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_POINTS *//*|| GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_TIMED*/)
             {
                 //update the bullet owner's score
-                GameManagerc.Instance.PlayerWins[aBullet.bulletOwner]++;
+                //GameManagerc.Instance.PlayerWins[aBullet.bulletOwner]++;
             }
         }
         if (abGiveIFrames)
@@ -430,7 +430,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             if (m_iHealth <= 0 /*&& (GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_POINTS*/ /*|| GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_TIMED*/)
             {
                 //update the bullet owner's score
-                GameManagerc.Instance.PlayerWins[a_weapon.transform.root.GetComponent<PlayerStatus>()]++;
+               // GameManagerc.Instance.PlayerWins[a_weapon.transform.root.GetComponent<PlayerStatus>()]++;
             }
         }
         if (abGiveIFrames)
@@ -452,7 +452,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             if (m_iHealth <= 0 /*&& (GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_POINTS*/ /*|| GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_TIMED*/)
             {
                 //update the bullet owner's score
-                GameManagerc.Instance.PlayerWins[a_Status]++;
+                //GameManagerc.Instance.PlayerWins[a_Status]++;
             }
         }
         if (abGiveIFrames)
