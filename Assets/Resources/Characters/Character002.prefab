@@ -649,6 +649,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1921375024367696
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4843025761266904}
+  m_Layer: 8
+  m_Name: ChokingSpot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1932055900661026
 GameObject:
   m_ObjectHideFlags: 1
@@ -840,6 +855,7 @@ Transform:
   - {fileID: 4515857867379680}
   - {fileID: 4580536354779162}
   - {fileID: 4756124661019836}
+  - {fileID: 4843025761266904}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1016,6 +1032,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4519722228047068}
   m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4843025761266904
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1921375024367696}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 13.531, y: -8.041815, z: 0}
+  m_LocalScale: {x: 1.1999999, y: 1.1999999, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4519722228047068}
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4922218648230138
 Transform:
@@ -1685,6 +1714,7 @@ MonoBehaviour:
   throwingForce: 300
   m_fChokedTimeIncrement: 0.1
   m_fChokeKillTime: 0.8
+  m_fPositionOffset: 0.2
   vibrationValue: {x: 0, y: 0}
   playerSpirte: {fileID: 0}
   StartMoveDelay: 0

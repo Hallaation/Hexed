@@ -272,7 +272,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             //_PlayerCanvas.transform.position = this.transform.position + Vector3.up;
             HealthContainer.transform.position = this.transform.position + Vector3.up;
             stunBarContainer.transform.position = this.transform.position + Vector3.up;
-            killbarContainer.transform.position = this.transform.position - Vector3.up * 1.5f;
+            //killbarContainer.transform.position = this.transform.position - Vector3.up * 1.5f;
             //Showing health change is when the health bar shows up. health loss is seperate.
             if (m_bShowHealthChange)
             {
