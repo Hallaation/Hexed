@@ -938,6 +938,11 @@ public class Move : MonoBehaviour
             }
             return true;
         }
+        else
+        {
+            KillBarContainer.SetActive(false);
+            m_ChokingTimer.CurrentTime = 0;
+        }
         return false;
     }
 
