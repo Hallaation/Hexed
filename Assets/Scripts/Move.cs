@@ -42,6 +42,7 @@ public class Move : MonoBehaviour
     public float throwingForce = 100.0f;
     float StoredMoveSpeed;
     private bool m_bInChokeMode = false;
+    private bool m_bSmashedHead;
     GameObject chokingPlayer = null;
     int OriginalSortingOrder;
     //public bool m_b2DMode = true;
@@ -176,7 +177,7 @@ public class Move : MonoBehaviour
         OriginalSortingOrder = BodyAnimator.GetComponent<SpriteRenderer>().sortingOrder;
         defaultWeapon = GetComponent<EmptyHand>();
         SceneManager.sceneLoaded += OnSceneLoaded;
-        
+
         // Delay
         // MoveDelayTimer = 0;
         StoredMoveSpeed = movementSpeed;
@@ -440,6 +441,7 @@ public class Move : MonoBehaviour
 
     public void ThrowWeapon(Vector2 movement, Vector2 throwDirection, bool tossWeapon)
     {
+        //if holding a weapon and the weapon is active
         if (heldWeapon && heldWeapon.GetComponent<Weapon>().m_bActive)
         {
             BodyAnimator.SetBool("ReverseAnimator", false);
@@ -447,7 +449,7 @@ public class Move : MonoBehaviour
             Vector3 GunMountPosition = Vector3.one;
             //drop the weapon 
             heldWeapon.transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = 0; //? Puts gun layer behinde player layer when it's dropped. 
-            //Determine what type of gun im holding
+            //Determine what type of weapon im holding
             if (heldWeapon.GetComponent<Gun>())
             {
                 GunMountPosition = (!heldWeapon.GetComponent<Gun>().m_b2Handed) ?/*True*/ weapon1HandedMount.position : /*False*/weapon2HandedMount.position;
@@ -459,7 +461,7 @@ public class Move : MonoBehaviour
                 heldWeapon.GetComponent<Melee>().SetAnimator(null);
             }
 
-            if (/*movement.magnitude == 0 ||*/ !tossWeapon)
+            if (/*movement.magnitude == 0 ||*/ !tossWeapon) //if drop weapon
             {
                 //Raycast from me to the gun mount position + an arbitrary number. IF I hit something, snap the gun to behind the wall
                 RaycastHit2D hit = Physics2D.Raycast(this.transform.position, throwDirection, (this.transform.position - GunMountPosition).magnitude + 0.3f, 1 << LayerMask.NameToLayer("Wall"));
@@ -483,7 +485,7 @@ public class Move : MonoBehaviour
                     SetHoldingGun(0);
 
             }
-            else
+            else //else throw weapon
             {
                 //toss it away with force
                 RaycastHit2D hit = Physics2D.Raycast(this.transform.position, throwDirection, (this.transform.position - GunMountPosition).magnitude, 1 << LayerMask.NameToLayer("Wall"));
@@ -881,10 +883,25 @@ public class Move : MonoBehaviour
             if (chokingPlayerStatus.IsStunned)
             {
                 this.transform.position = chokingPlayer.transform.root.position;
-                
+
                 if (XCI.GetButtonDown(XboxButton.X, m_controller.mXboxController))
                 {
                     BodyAnimator.SetTrigger("HeadSmashSmash");
+                }
+
+                //Check Animator State
+                if (BodyAnimator.GetCurrentAnimatorStateInfo(0).IsName("HeadSmash"))
+                {
+                    if (!m_bSmashedHead)
+                    {
+                        m_bSmashedHead = true;
+                        Debug.Log("Head Smash");
+                    }
+                }
+                else
+                {
+                    m_bSmashedHead = false;
+                    Debug.Log("Not in head smash");
                 }
             }
             else
