@@ -890,17 +890,18 @@ public class Move : MonoBehaviour
         }
         else if (m_bInChokeMode) //If in choke mode
         {
+            // #Head Smash, #Smash Head, #Choking, #smash,
             m_ChokingTimer.mfTimeToWait = m_fChokeKillTime; //set the time to wait
             PlayerStatus chokingPlayerStatus = chokingPlayer.transform.root.GetComponent<PlayerStatus>(); //get the player status of choking player
             if (chokingPlayerStatus.IsStunned) //if the choking player is still stunned
             {
                 this.transform.position = chokingPlayer.transform.root.position; //set my position to their position
-
+                float ZRotation = chokingPlayer.transform.root.rotation.eulerAngles.z - 180;
+                this.transform.rotation = Quaternion.Euler(new Vector3(0, 0, ZRotation));
                 if (XCI.GetButtonDown(XboxButton.X, m_controller.mXboxController)) //look for X button down
                 {
                     BodyAnimator.SetTrigger("HeadSmashSmash"); //Set trigger to do smash
                 }
-                // #Head Smash, #Smash Head, #Choking, 
                 //Check Animator State
                 if (BodyAnimator.GetCurrentAnimatorStateInfo(0).IsName("HeadSmash")) //if in head smash state
                 {
