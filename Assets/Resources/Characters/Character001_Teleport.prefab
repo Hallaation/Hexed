@@ -11,21 +11,6 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1568182744093302}
   m_IsPrefabParent: 1
---- !u!1 &1040000186476628
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 4914542962018960}
-  m_Layer: 8
-  m_Name: 2HandedMeleeSpot
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &1048387558026550
 GameObject:
   m_ObjectHideFlags: 1
@@ -55,7 +40,7 @@ GameObject:
   - component: {fileID: 114968409004713514}
   - component: {fileID: 114824774734849192}
   m_Layer: 5
-  m_Name: Scrolling_Icon
+  m_Name: Stun_Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -72,7 +57,7 @@ GameObject:
   - component: {fileID: 222176006904983826}
   - component: {fileID: 114634208532086162}
   m_Layer: 5
-  m_Name: Special_Fill_Backing
+  m_Name: Stun_Fill_Backing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -89,7 +74,7 @@ GameObject:
   - component: {fileID: 222185742943602890}
   - component: {fileID: 114913552651668284}
   m_Layer: 5
-  m_Name: Special_Amount_Fill
+  m_Name: Stun_Amount_Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -139,7 +124,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224234038351985920}
   m_Layer: 5
-  m_Name: SpecialBar
+  m_Name: StunBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -241,21 +226,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &1439962306110796
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 4168940400678624}
-  m_Layer: 8
-  m_Name: 2HandedMeleeSpot
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &1454751314594980
 GameObject:
   m_ObjectHideFlags: 0
@@ -266,21 +236,6 @@ GameObject:
   - component: {fileID: 4513932534797672}
   m_Layer: 0
   m_Name: 2HandedSpot
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &1461360850370188
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 4866358222128262}
-  m_Layer: 8
-  m_Name: 2HandedMeleeSpot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -330,7 +285,7 @@ GameObject:
   - component: {fileID: 222038031167904276}
   - component: {fileID: 114076634340831708}
   m_Layer: 5
-  m_Name: Special Outline
+  m_Name: Stun_Outline
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -786,7 +741,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1805616404371484}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.39}
+  m_LocalPosition: {x: 0, y: 0, z: 0.05}
   m_LocalScale: {x: 1, y: 1, z: 0}
   m_Children:
   - {fileID: 4370064170383390}
@@ -802,7 +757,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1568182744093302}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -4.66, y: -0.93, z: 0}
   m_LocalScale: {x: 1.2, y: 1.2, z: 1}
   m_Children:
   - {fileID: 4834453555101378}
@@ -814,9 +769,6 @@ Transform:
   - {fileID: 4000198835020106}
   - {fileID: 4513932534797672}
   - {fileID: 4152633453977802}
-  - {fileID: 4168940400678624}
-  - {fileID: 4866358222128262}
-  - {fileID: 4914542962018960}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -832,19 +784,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4141461237438614}
   m_RootOrder: 8
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &4168940400678624
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1439962306110796}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.773, y: 1.06, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4141461237438614}
-  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4203875953447844
 Transform:
@@ -868,7 +807,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1489341692227864}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.35}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.3333334, y: 1.3333334, z: 1}
   m_Children: []
   m_Father: {fileID: 4985821799328362}
@@ -1019,32 +958,6 @@ Transform:
   - {fileID: 4511116892527620}
   m_Father: {fileID: 4141461237438614}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &4866358222128262
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1461360850370188}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.773, y: 1.06, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4141461237438614}
-  m_RootOrder: 10
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &4914542962018960
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1040000186476628}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.773, y: 1.06, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4141461237438614}
-  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4920624073694488
 Transform:
@@ -1586,7 +1499,7 @@ MonoBehaviour:
   m_bInvincible: 1
   m_fInvincibleTime: 3
   test: 0.5
-  m_fStunTime: 1e+18
+  m_fStunTime: 7
   m_fMaximumStunWait: 2
   m_fStunTimerReduction: 0.5
   _playerColor: {r: 1, g: 0, b: 0, a: 1}
@@ -1768,8 +1681,8 @@ MonoBehaviour:
   fistObject: {fileID: 0}
   movementSpeed: 10
   throwingForce: 300
-  m_fChokedTimeIncrement: 21.04
-  m_fChokeKillTime: 500
+  m_fChokedTimeIncrement: 1
+  m_fChokeKillTime: 7
   vibrationValue: {x: 0, y: 0}
   playerSpirte: {fileID: 0}
   StartMoveDelay: 0
@@ -1890,7 +1803,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 316c1c2e46c1082438d5d45643e364b3, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 20fb0ef1bd43616449a6ba83f1fa8547, type: 3}
   m_Type: 2
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -1944,7 +1857,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 7a700b8ff2d01124f8777cb37a6930c7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: bd64f3c61db14a64faf3d9afd1bf344b, type: 3}
   m_Type: 2
   m_PreserveAspect: 1
   m_FillCenter: 1
