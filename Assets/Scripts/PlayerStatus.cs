@@ -439,6 +439,28 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         }
     }
 
+    public void HitPlayer(float a_Damage,PlayerStatus a_Status , bool abGiveIFrames = false) // maybe change to int
+    {
+        if (!m_bInvincible)
+        {
+            healthLossTimer.CurrentTime = 0;
+            m_bShowHealthLoss = true;
+            ShowHealthChangeTimer.CurrentTime = 0;
+            m_bShowHealthChange = true;
+            m_iHealth -= a_Damage;
+            //If the game mode is either the timed deathmatch or scores appointed on kills deathmatch, then give them points
+            if (m_iHealth <= 0 /*&& (GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_POINTS*/ /*|| GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_TIMED*/)
+            {
+                //update the bullet owner's score
+                GameManagerc.Instance.PlayerWins[a_Status]++;
+            }
+        }
+        if (abGiveIFrames)
+        {
+            m_bInvincible = true;
+        }
+    }
+
     //Give I frames to the player, the flashing is broken but whatever.
     IEnumerator InvinciblityTime()
     {
