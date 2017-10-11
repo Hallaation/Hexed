@@ -58,6 +58,8 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
     private GameObject stunBarContainer;
     private AudioSource m_MeleeHitAudioSource;
 
+    private GameObject killbarContainer; 
+
     public Sprite[] DeadSprites;
     public Sprite[] StunnedSprites;
     private bool DeathSpriteChanged = false;
@@ -270,7 +272,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             //_PlayerCanvas.transform.position = this.transform.position + Vector3.up;
             HealthContainer.transform.position = this.transform.position + Vector3.up;
             stunBarContainer.transform.position = this.transform.position + Vector3.up;
-
+            killbarContainer.transform.position = this.transform.position - Vector3.up * 1.5f;
             //Showing health change is when the health bar shows up. health loss is seperate.
             if (m_bShowHealthChange)
             {
@@ -386,6 +388,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             SetAllAnimatorsFalse();
             m_iHealth = 0;
             m_bDead = true;
+            m_bStunned = false;
             //if (GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_POINTS)
             //    GameManagerc.Instance.PlayerWins[killer]++;
         }
@@ -528,6 +531,11 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         stunBarContainer = this.transform.Find("Sprites").Find("PlayerCanvas").GetChild(1).gameObject;
         stunMask = stunBarContainer.transform.GetChild(0).GetComponent<Image>();
 
+        //Find the killcontainers
+        Image killMask;
+        killbarContainer = this.transform.Find("Sprites").Find("PlayerCanvas").GetChild(2).gameObject;
+        killMask = killbarContainer.transform.GetChild(0).GetComponent<Image>();
+
         //Find all the bars and containers related to health.
         _HealthMask = this.transform.Find("Sprites").Find("PlayerCanvas").GetChild(0).GetChild(0).gameObject;
         Material temp = new Material(_HealthMask.GetComponent<Image>().material.shader);
@@ -555,10 +563,24 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             if (item.GetComponent<Image>().material.HasProperty("_Color"))
                 item.GetComponent<Image>().material.color = _playerColor;
         }
+
+        //Set the killcontainer's colour;
+        foreach (var item in killbarContainer.GetComponentsInChildren<Image>())
+        {
+            Material oldMat = item.GetComponent<Image>().material;
+
+            Material tempMaterial = new Material(item.GetComponent<Image>().material.shader);
+            item.GetComponent<Image>().material = tempMaterial;
+            if (item.GetComponent<Image>().material.HasProperty("_Color"))
+                item.GetComponent<Image>().material.color = _playerColor;
+        }
+
+        m_MoveClass.SetUIBars(killMask, killbarContainer); //Set the UI bars for the move class to work
         //Change the health loss colour to yellow so it stands out. (kind of)
         HealthLost.color = Colors.Yellow;
         _PlayerCanvas.transform.SetParent(null); //Set its parent to null so it can properly follow the player's positon.
         HealthContainer.SetActive(false); //turn it off.
+        killbarContainer.SetActive(false);
 
     }
 }

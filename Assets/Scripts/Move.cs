@@ -40,11 +40,20 @@ public class Move : MonoBehaviour
     public GameObject fistObject;
     public float movementSpeed = 10.0f;
     public float throwingForce = 100.0f;
-    float StoredMoveSpeed;
-    private bool m_bInChokeMode = false;
-    private bool m_bSmashedHead;
-    GameObject chokingPlayer = null;
-    int OriginalSortingOrder;
+    private float StoredMoveSpeed;
+
+    [Header("Head Smashing Variables")]
+    public float m_fChokedTimeIncrement = 0.1f; //Everytime the choking is hpapening, increment the time.
+    public float m_fChokeKillTime = 0.8f; //Time it takes for the kill to happen
+    private bool m_bInChokeMode = false; //Determine if this guy is choking someone
+    private bool m_bChoked; //Used to check if the head has been smashed in the entire animation so it only happens once.
+    private GameObject chokingPlayer = null; //the player this guy is choking
+    private int OriginalSortingOrder; //Used to move the player back to their sorting layer so everything renders properly.
+    private Timer m_ChokingTimer;
+
+    private Image killMask;
+    private GameObject KillBarContainer;
+
     //public bool m_b2DMode = true;
     EmptyHand defaultWeapon;
     [HideInInspector]
@@ -52,6 +61,7 @@ public class Move : MonoBehaviour
     [HideInInspector]
     public GameObject playerSpirte;
     //float MoveDelayTimer;
+    [Space]
     public float StartMoveDelay = 3;
     public Vector3 m_LeftStickRotation;
     public float StickDeadZone = 0.12f;
@@ -72,6 +82,7 @@ public class Move : MonoBehaviour
     // Use this for initialization
     void Awake()
     {
+        m_ChokingTimer = new Timer(m_fChokeKillTime);
         // movement = Vector3.zero;
         //pool of audiosources
         m_audioSource = new AudioSource[16];
@@ -520,7 +531,7 @@ public class Move : MonoBehaviour
             PickUpWeaponCheck(movement, throwDirection, false);
         }
         //pressing LB will throw the weapon away at a higher velocity, essentially making a projectile, this throw will be used to stun players.
-        if (XCI.GetButtonDown(XboxButton.LeftBumper, m_controller.mXboxController))
+        if (XCI.GetButtonDown(XboxButton.LeftBumper, m_controller.mXboxController) || (Input.GetKey(KeyCode.LeftShift) && Input.GetMouseButtonDown(1)))
         {
             Vector2 movement = new Vector3(XCI.GetAxis(XboxAxis.LeftStickX, m_controller.mXboxController), XCI.GetAxis(XboxAxis.LeftStickY, m_controller.mXboxController));
             Vector2 throwDirection = new Vector2(this.transform.up.x, this.transform.up.y);
@@ -877,35 +888,50 @@ public class Move : MonoBehaviour
                 }
             }
         }
-        else if (m_bInChokeMode)
+        else if (m_bInChokeMode) //If in choke mode
         {
-            PlayerStatus chokingPlayerStatus = chokingPlayer.transform.root.GetComponent<PlayerStatus>();
-            if (chokingPlayerStatus.IsStunned)
+            m_ChokingTimer.mfTimeToWait = m_fChokeKillTime; //set the time to wait
+            PlayerStatus chokingPlayerStatus = chokingPlayer.transform.root.GetComponent<PlayerStatus>(); //get the player status of choking player
+            if (chokingPlayerStatus.IsStunned) //if the choking player is still stunned
             {
-                this.transform.position = chokingPlayer.transform.root.position;
+                this.transform.position = chokingPlayer.transform.root.position; //set my position to their position
 
-                if (XCI.GetButtonDown(XboxButton.X, m_controller.mXboxController))
+                if (XCI.GetButtonDown(XboxButton.X, m_controller.mXboxController)) //look for X button down
                 {
-                    BodyAnimator.SetTrigger("HeadSmashSmash");
+                    BodyAnimator.SetTrigger("HeadSmashSmash"); //Set trigger to do smash
                 }
-
+                // #Head Smash, #Smash Head, #Choking, 
                 //Check Animator State
-                if (BodyAnimator.GetCurrentAnimatorStateInfo(0).IsName("HeadSmash"))
+                if (BodyAnimator.GetCurrentAnimatorStateInfo(0).IsName("HeadSmash")) //if in head smash state
                 {
-                    if (!m_bSmashedHead)
+                    if (!m_bChoked) //check if I applied choking logic already
                     {
-                        m_bSmashedHead = true;
-                        Debug.Log("Head Smash");
+                        m_bChoked = true; //set the applied logic to true
+                        m_ChokingTimer.CurrentTime += m_fChokedTimeIncrement; //increase the timer
                     }
                 }
                 else
                 {
-                    m_bSmashedHead = false;
-                    Debug.Log("Not in head smash");
+                    m_bChoked = false; //Logic not applied
                 }
+
+                if (m_ChokingTimer.Tick(Time.deltaTime)) //If timer over, kill player
+                {
+                    chokingPlayerStatus.KillPlayer(this.GetComponent<PlayerStatus>());
+                }
+
+                //Do choking timer here.
+                if (KillBarContainer.activeSelf)
+                {
+                    float killOffset = m_ChokingTimer.CurrentTime / m_ChokingTimer.mfTimeToWait * 0.23f;
+                    killMask.material.SetTextureOffset("_MainTex", new Vector2(0 - killOffset, 0));
+                }
+                else
+                    KillBarContainer.SetActive(true);
             }
-            else
+            else //Otherwise if not stunned
             {
+                //get out of choke mode, choking player reference is now null
                 BodyAnimator.SetTrigger("CancelHeadSmash");
                 m_bInChokeMode = false;
                 chokingPlayer = null;
@@ -1064,5 +1090,11 @@ public class Move : MonoBehaviour
         yield return new WaitForSeconds(WaitTime);
         previousWeapon = null;
         yield return null;
+    }
+
+    public void SetUIBars(Image a_Mask, GameObject a_barContainer)
+    {
+        killMask = a_Mask;
+        KillBarContainer = a_barContainer;
     }
 }
