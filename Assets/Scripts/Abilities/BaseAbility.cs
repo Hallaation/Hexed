@@ -85,9 +85,10 @@ public class BaseAbility : MonoBehaviour
                     ChargeHighlighters[1].GetComponent<SpriteRenderer>().sprite = EmptyChargeSprites[1];
                     break;
                 case 2: //When there is 2 charges
-                    
+
                     //turn on highlight for obj 0
                     //turn on highlight for obj 1
+                    ChargeHighlighters[0].GetComponent<SpriteRenderer>().sprite = ChargeReadySprites[0];
                     ChargeHighlighters[1].GetComponent<SpriteRenderer>().sprite = ChargeReadySprites[1];
                     break;
                 default: //When none of the above apply (usually 0)
