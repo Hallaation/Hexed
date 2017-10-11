@@ -37,39 +37,54 @@ public class Melee : Weapon
         {
             if(m_bAttacking == true && other.tag == "Wall")
             {
-                float AnimationTime = BodyAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime;
-                BodyAnimator.SetFloat("Speed", -.5f);
-                if (BodyAnimator.GetCurrentAnimatorStateInfo(0).IsName("TwoHandedMeleeLeftAttack"))
-                {
-                    BodyAnimator.Play("TwoHandedMeleeLeftAttack", 0, AnimationTime);
-                    ReverseAnimation = true;
-                }
-                else if(BodyAnimator.GetCurrentAnimatorStateInfo(0).IsName("TwoHandedMeleeRightAttack"))
-                {
-                    BodyAnimator.Play("TwoHandedMeleeRightAttack", 0, AnimationTime);
-                    ReverseAnimation = true;
-                }
-                else
-                {
-                    BodyAnimator.Play("OneHandedMeleeAttack", 0, AnimationTime);
-                    ReverseAnimation = true;
-                }
+                //float AnimationTime = BodyAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime;
+                //BodyAnimator.SetFloat("Speed", -.5f);
+                //if (BodyAnimator.GetCurrentAnimatorStateInfo(0).IsName("TwoHandedMeleeLeftAttack"))
+                //{
+                //    BodyAnimator.Play("TwoHandedMeleeLeftAttack", 0, AnimationTime);
+                //    ReverseAnimation = true;
+                //}
+                //else if(BodyAnimator.GetCurrentAnimatorStateInfo(0).IsName("TwoHandedMeleeRightAttack"))
+                //{
+                //    BodyAnimator.Play("TwoHandedMeleeRightAttack", 0, AnimationTime);
+                //    ReverseAnimation = true;
+                //}
+                //else
+                //{
+                //    BodyAnimator.Play("OneHandedMeleeAttack", 0, AnimationTime);
+                //    ReverseAnimation = true;
+                //}
             }
            else if (m_bAttacking == true && other.tag == "Player" && other.transform.root != this.transform.root && other.transform.root.GetComponent<PlayerStatus>().m_bStunned == false)
             {
                 if (BodyAnimator != null)
                 {
-                    RaycastHit2D hit = Physics2D.Raycast(this.transform.position, other.transform.position - transform.position.normalized, (this.transform.position - transform.parent.position).magnitude + 0.3f, 1 << LayerMask.NameToLayer("Wall"));
+                    float length = (this.transform.position - other.transform.position).magnitude;
+                    Vector3 Direction = (other.transform.position - transform.position).normalized;
+                    RaycastHit2D hit = Physics2D.Raycast(this.transform.position, Direction, length + 2, 1 << LayerMask.NameToLayer("Wall"));
                     if (hit)
                     {
-
+                        Debug.Log("Wall");
+                        Vector2 Position = new Vector2(transform.position.x,transform.position.y);
+                        Vector2 OtherPosition = new Vector2(other.transform.position.x, other.transform.position.y);
+                        if((hit.point - Position).magnitude < (OtherPosition - Position).magnitude) // if RayHit Wall is closer then the other player.
+                        {
+                            Debug.Log("WallYYY");
+                        }
+                        
+                        else
+                        {
+                            m_AudioSource.Play();
+                            other.transform.parent.GetComponentInParent<PlayerStatus>().StunPlayer(transform.right * KnockBack);
+                            Debug.Log("PlayerCloserThenWall");
+                        }
                     }
                     else
                     {
                         m_AudioSource.Play();
                         //other.transform.parent.GetComponentInParent<PlayerStatus>().HitPlayer(this, false);
                         other.transform.parent.GetComponentInParent<PlayerStatus>().StunPlayer(transform.right * KnockBack);        //! Uses transform right instead of transform up due to using the bats right rather then players up
-
+                        Debug.Log("Stunned");
                         //Debug.Log("BatEnterStun");
                     }
                 }
@@ -95,6 +110,7 @@ public class Melee : Weapon
                 if (GetComponent<Rigidbody2D>().velocity.magnitude >= 10 && other.tag == "Player" && other.GetComponentInParent<PlayerStatus>().gameObject != weaponThrower)
                 {
                     //stun the player
+                    Debug.Log("ThrownStun");
                     other.transform.root.GetComponentInParent<PlayerStatus>().StunPlayer(transform.right * KnockBack);        //! Uses transform right instead of transform up due to using the bats right rather then players up
                 }
             }
@@ -113,22 +129,22 @@ public class Melee : Weapon
         {
             if (m_bAttacking == true && other.tag == "Wall")
             {
-                float AnimationTime = BodyAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime;
-                BodyAnimator.SetFloat("Speed", -.5f);
-                if (BodyAnimator.GetCurrentAnimatorStateInfo(0).IsName("TwoHandedMeleeLeftAttack"))
-                {
-                    BodyAnimator.Play("TwoHandedMeleeLeftAttack", 0, AnimationTime);
-                    ReverseAnimation = true;
-                }
-                else if (BodyAnimator.GetCurrentAnimatorStateInfo(0).IsName("TwoHandedMeleeRightAttack"))
-                {
-                    BodyAnimator.Play("TwoHandedMeleeRightAttack", 0, AnimationTime);
-                    ReverseAnimation = true;
-                }
-                else
-                {
-                    BodyAnimator.Play("OneHandedMeleeAttack", 0, AnimationTime);
-                }
+                //float AnimationTime = BodyAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime;
+                //BodyAnimator.SetFloat("Speed", -.5f);
+                //if (BodyAnimator.GetCurrentAnimatorStateInfo(0).IsName("TwoHandedMeleeLeftAttack"))
+                //{
+                //    BodyAnimator.Play("TwoHandedMeleeLeftAttack", 0, AnimationTime);
+                //    ReverseAnimation = true;
+                //}
+                //else if (BodyAnimator.GetCurrentAnimatorStateInfo(0).IsName("TwoHandedMeleeRightAttack"))
+                //{
+                //    BodyAnimator.Play("TwoHandedMeleeRightAttack", 0, AnimationTime);
+                //    ReverseAnimation = true;
+                //}
+                //else
+                //{
+                //    BodyAnimator.Play("OneHandedMeleeAttack", 0, AnimationTime);
+                //}
             }
             //check if attacking and check if its a valid hit (on another player and the other player isn't stunned)
            else if (m_bAttacking == true && other.tag == "Player" && other.transform.root != this.transform.root && other.transform.root.GetComponent<PlayerStatus>().m_bStunned == false)
