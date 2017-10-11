@@ -45,6 +45,7 @@ public class Move : MonoBehaviour
     [Header("Head Smashing Variables")]
     public float m_fChokedTimeIncrement = 0.1f; //Everytime the choking is hpapening, increment the time.
     public float m_fChokeKillTime = 0.8f; //Time it takes for the kill to happen
+    public float m_fPositionOffset = 0.2f;
     private bool m_bInChokeMode = false; //Determine if this guy is choking someone
     private bool m_bChoked; //Used to check if the head has been smashed in the entire animation so it only happens once.
     private GameObject chokingPlayer = null; //the player this guy is choking
@@ -654,7 +655,7 @@ public class Move : MonoBehaviour
             if (hitCollider.GetComponentInParent<Weapon>().previousOwner != this.gameObject)
             {
                 heldWeapon = hitCollider.transform.parent.GetComponentInParent<Weapon>().gameObject;
-                heldWeapon.transform.Find("Sprite").GetComponent<SpriteRenderer>().sortingOrder = 4; //? Puts gun layer infront of player layer when picked up. 
+                heldWeapon.transform.Find("Sprite").GetComponent<SpriteRenderer>().sortingOrder = 5; //? Puts gun layer infront of player layer when picked up. 
                 heldWeapon.transform.Find("Sprite").transform.localPosition = new Vector3(0, 0, 0); //! Resets Shadow on pickup.
                 heldWeapon.GetComponent<Weapon>().PlayPickup();
                 if (heldWeapon.tag == "2hMelee")
@@ -714,7 +715,7 @@ public class Move : MonoBehaviour
             if (hitCollider.GetComponentInParent<Weapon>().previousOwner != this.gameObject)
             {
                 heldWeapon = hitCollider.GetComponentInParent<Weapon>().gameObject;
-                heldWeapon.transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = 4; //? Puts gun layer infront of player layer when picked up. 
+                heldWeapon.transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = 5; //? Puts gun layer infront of player layer when picked up. 
                 heldWeapon.transform.GetChild(0).transform.localPosition = new Vector3(0, 0, 0); //! Resets Shadow on pickup.
                 heldWeapon.GetComponent<Weapon>().PlayPickup();
                 heldWeapon.transform.SetParent(this.gameObject.transform);
@@ -890,17 +891,23 @@ public class Move : MonoBehaviour
         }
         else if (m_bInChokeMode) //If in choke mode
         {
+            // #Head Smash, #Smash Head, #Choking, #smash,
+            _rigidBody.WakeUp();
             m_ChokingTimer.mfTimeToWait = m_fChokeKillTime; //set the time to wait
             PlayerStatus chokingPlayerStatus = chokingPlayer.transform.root.GetComponent<PlayerStatus>(); //get the player status of choking player
+            KillBarContainer.transform.position = chokingPlayer.transform.root.position - Vector3.up * 1.5f;
+
             if (chokingPlayerStatus.IsStunned) //if the choking player is still stunned
             {
-                this.transform.position = chokingPlayer.transform.root.position; //set my position to their position
-
+                Vector3 chokePosition = chokingPlayer.transform.root.Find("ChokingSpot").position;
+                this.transform.position = chokePosition;
+                //this.transform.position += this.transform.up * m_fPositionOffset;
+                float ZRotation = chokingPlayer.transform.root.rotation.eulerAngles.z - 180;
+                this.transform.rotation = Quaternion.Euler(new Vector3(0, 0, ZRotation));
                 if (XCI.GetButtonDown(XboxButton.X, m_controller.mXboxController)) //look for X button down
                 {
                     BodyAnimator.SetTrigger("HeadSmashSmash"); //Set trigger to do smash
                 }
-                // #Head Smash, #Smash Head, #Choking, 
                 //Check Animator State
                 if (BodyAnimator.GetCurrentAnimatorStateInfo(0).IsName("HeadSmash")) //if in head smash state
                 {
