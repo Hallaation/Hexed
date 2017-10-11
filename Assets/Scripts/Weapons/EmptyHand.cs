@@ -84,7 +84,7 @@ public class EmptyHand : Weapon
             if (BodyAnimator) //null check
             {
                 //Compare the 2 animations hashes, if they aren't the same, do the punch thing, also check if the hash isn't the initial state's hash
-                if (BodyAnimator.GetCurrentAnimatorStateInfo(0).fullPathHash != previousAnimatorState && BodyAnimator.GetCurrentAnimatorStateInfo(0).fullPathHash != InitialState && !BodyAnimator.GetCurrentAnimatorStateInfo(0).IsName("BodyWalking"))
+                if (BodyAnimator.GetCurrentAnimatorStateInfo(0).fullPathHash != previousAnimatorState && BodyAnimator.GetCurrentAnimatorStateInfo(0).fullPathHash != InitialState && (BodyAnimator.GetCurrentAnimatorStateInfo(0).IsName("Unarmed_LeftPunch") || BodyAnimator.GetCurrentAnimatorStateInfo(0).IsName("Unarmed_RightPunch")))
                 {
                     m_AudioSource.Play();
                     BoxCollider2D PunchHitBox = transform.Find("Punch").GetComponent<BoxCollider2D>();
