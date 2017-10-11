@@ -417,6 +417,13 @@ public class GameManagerc : MonoBehaviour
             GameObject[] ActivePanels = new GameObject[4 - CharacterSelectionManager.Instance.JoinedPlayers];
             int ActivePanelIndex = 0;
 
+            //Load player portraits.
+            for (int i = 0; i < PointContainers.Length; i++)
+            {
+                if ()
+                PointContainers[i].transform.GetChild(PointContainers[i].transform.childCount).GetChild(0).GetComponent<Image>().sprite = null;
+            }
+
             //Move the point containers depending on how many points are required.
             for (int i = 0; i < PointsPanel.transform.childCount; i++)
             {
@@ -437,7 +444,7 @@ public class GameManagerc : MonoBehaviour
             //can also be used for the amount of players in the scene.
             XboxController[] JoinedXboxControllers = new XboxController[CharacterSelectionManager.Instance.playerSelectedCharacter.Count];
             int nextIndex = 0;
-
+            
             for (int i = 0; i < 4; i++)
             {
                 if (CharacterSelectionManager.Instance.playerSelectedCharacter.ContainsKey(XboxController.First + i))
@@ -446,6 +453,7 @@ public class GameManagerc : MonoBehaviour
                     nextIndex++;
                 }
             }
+
             //Turn every player's UI on.
             foreach (var item in JoinedXboxControllers)
             {
@@ -472,6 +480,7 @@ public class GameManagerc : MonoBehaviour
                     }
                 }
             }
+
             //PointsPanel.SetActive(false);
             //mInstance.mbLoadedIntoGame = true;
         }
