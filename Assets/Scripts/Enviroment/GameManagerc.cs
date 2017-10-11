@@ -53,7 +53,7 @@ public class GameManagerc : MonoBehaviour
 {
 
     //dictionary mapping XCI index with the XInputDotNet indexes
-    Dictionary<XboxController , int> XboxControllerPlayerNumbers = new Dictionary<XboxController , int>
+    Dictionary<XboxController, int> XboxControllerPlayerNumbers = new Dictionary<XboxController, int>
     {
         {XboxController.First,   0 },
         {XboxController.Second,  1 },
@@ -64,7 +64,7 @@ public class GameManagerc : MonoBehaviour
     Timer waitForRoundEnd;
     //lets try a dictionary again
     //public List<int> PlayerWins = new List<int>();
-    public Dictionary<PlayerStatus , int> PlayerWins = new Dictionary<PlayerStatus , int>();
+    public Dictionary<PlayerStatus, int> PlayerWins = new Dictionary<PlayerStatus, int>();
     public List<PlayerStatus> InGamePlayers = new List<PlayerStatus>();
     // GameObject WinningPlayer = null;
 
@@ -138,7 +138,7 @@ public class GameManagerc : MonoBehaviour
         }
         //Debug.Log(mInstance.gameObject);
         m_bRoundOver = false;
-        Physics.gravity = new Vector3(0 , 0 , 10); //why
+        Physics.gravity = new Vector3(0, 0, 10); //why
     }
 
 
@@ -298,7 +298,7 @@ public class GameManagerc : MonoBehaviour
                 //Debug.LogError("Points required have been reached");
                 Time.timeScale = 0;
                 //open the finish panel, UI manager will set all the children to true, thus rendering them
-                UIManager.Instance.OpenUIElement(FinishUIPanel , true);
+                UIManager.Instance.OpenUIElement(FinishUIPanel, true);
                 UIManager.Instance.RemoveLastPanel = false;
                 //Reset the event managers current selected object to the rematch button
                 //FindObjectOfType<EventSystem>().SetSelectedGameObject(FinishUIPanel.transform.Find("Rematch").gameObject);
@@ -330,7 +330,7 @@ public class GameManagerc : MonoBehaviour
                     //Debug.LogError("Points required have been reached");
                     Time.timeScale = 0;
                     //open the finish panel, UI manager will set all the children to true, thus rendering them
-                    UIManager.Instance.OpenUIElement(FinishUIPanel , true);
+                    UIManager.Instance.OpenUIElement(FinishUIPanel, true);
                     UIManager.Instance.RemoveLastPanel = false;
                     //Reset the event managers current selected object to the rematch button
                     if (FindObjectOfType<EventSystem>().currentSelectedGameObject == null)
@@ -356,7 +356,7 @@ public class GameManagerc : MonoBehaviour
         //TODO Load Character select / win screen;
     }
 
-    void OnSceneLoaded(Scene scene , LoadSceneMode mode)
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         //oh fukc
         //check if the instance is this game object
@@ -365,7 +365,7 @@ public class GameManagerc : MonoBehaviour
         if (scene.buildIndex == 1)
         {
             UINavigation LoadInstance = UINavigation.Instance;
- 
+
             if (MapToLoad)
             {
                 GameObject go = Instantiate(MapToLoad);
@@ -417,34 +417,40 @@ public class GameManagerc : MonoBehaviour
             GameObject[] ActivePanels = new GameObject[4 - CharacterSelectionManager.Instance.JoinedPlayers];
             int ActivePanelIndex = 0;
 
-            //Load player portraits.
-            for (int i = 0; i < PointContainers.Length; i++)
-            {
-                if ()
-                PointContainers[i].transform.GetChild(PointContainers[i].transform.childCount).GetChild(0).GetComponent<Image>().sprite = null;
-            }
-
             //Move the point containers depending on how many points are required.
             for (int i = 0; i < PointsPanel.transform.childCount; i++)
             {
                 PointContainers[i] = PointsPanel.transform.GetChild(i).gameObject;
                 Vector3 temp = PointContainers[i].transform.position;
                 //Get the last object in container (portrait)
-                PointContainers[i].transform.position = new Vector3(PointXPositions[m_iPointsIndex].transform.position.x , temp.y , temp.z);
+                PointContainers[i].transform.position = new Vector3(PointXPositions[m_iPointsIndex].transform.position.x, temp.y, temp.z);
 
                 //For every object after the points neeeded, turn them off since their not required.
                 for (int j = m_iPointsNeeded; j < PointContainers[i].transform.childCount - 1; j++)
                 {
                     PointContainers[i].transform.GetChild(j).gameObject.SetActive(false);
                 }
-
+                //Turn off the containers so they don't show up.
                 PointContainers[i].SetActive(false);
             }
 
+            //Load player portraits.
+            foreach (var item in CharacterSelectionManager.Instance.playerSelectedCharacter)
+            {
+                //Debug.Log(item.Key);
+                int playerNumber = (int)item.Key - 1;
+                
+                if (item.Value.GetComponent<BaseAbility>().m_CharacterPortrait) //If the character has a portrait
+                {
+                    //Get the last object in point containers (the portrait container), get the first child (the "fill"- what is consitency) and change its sprite to the character's (item.value) sprite found in the base ability.
+                    PointContainers[playerNumber].transform.GetChild(PointContainers[playerNumber].transform.childCount - 1).GetChild(0).GetComponent<Image>().sprite = item.Value.GetComponent<BaseAbility>().m_CharacterPortrait;
+                }
+            }
+ 
             //can also be used for the amount of players in the scene.
             XboxController[] JoinedXboxControllers = new XboxController[CharacterSelectionManager.Instance.playerSelectedCharacter.Count];
             int nextIndex = 0;
-            
+
             for (int i = 0; i < 4; i++)
             {
                 if (CharacterSelectionManager.Instance.playerSelectedCharacter.ContainsKey(XboxController.First + i))
@@ -465,7 +471,7 @@ public class GameManagerc : MonoBehaviour
             for (int i = 0; i < 4 - CharacterSelectionManager.Instance.JoinedPlayers; i++)
             {
                 Vector3 temp = ActivePanels[i].transform.position;
-                ActivePanels[i].transform.position = new Vector3(temp.x , PointYPositions[4 - CharacterSelectionManager.Instance.JoinedPlayers - 2].transform.GetChild(i).position.y , temp.z);
+                ActivePanels[i].transform.position = new Vector3(temp.x, PointYPositions[4 - CharacterSelectionManager.Instance.JoinedPlayers - 2].transform.GetChild(i).position.y, temp.z);
             }
 
             foreach (var Player in InGamePlayers) //For every player in the game.
@@ -494,19 +500,19 @@ public class GameManagerc : MonoBehaviour
     public void AddPlayer(PlayerStatus aPlayer)
     {
         InGamePlayers.Add(aPlayer);
-        PlayerWins.Add(aPlayer , 0);
+        PlayerWins.Add(aPlayer, 0);
     }
 
 
     public void Rematch()
     {
-       // Debug.Log("Start of rematch");
+        // Debug.Log("Start of rematch");
         //reset the time scale
         Time.timeScale = 1;
         //The round is not over
         m_bRoundOver = false;
         //reset every player
-        foreach (KeyValuePair<PlayerStatus , int> item in PlayerWins)
+        foreach (KeyValuePair<PlayerStatus, int> item in PlayerWins)
         {
             item.Key.ResetPlayer();
         }
@@ -535,13 +541,13 @@ public class GameManagerc : MonoBehaviour
         {
             InGamePlayers[i].Clear();
             InGamePlayers[i].gameObject.SetActive(false);
-            Destroy(InGamePlayers[i].gameObject , 1);
+            Destroy(InGamePlayers[i].gameObject, 1);
         }
         InGamePlayers = new List<PlayerStatus>();
 
         //Quite literally a deconstrucotr
         PlayerWins.Clear();
-        PlayerWins = new Dictionary<PlayerStatus , int>();
+        PlayerWins = new Dictionary<PlayerStatus, int>();
         InGamePlayers.Clear();
         InGamePlayers = new List<PlayerStatus>();
         m_gameMode = Gamemode_type.LAST_MAN_STANDING_DEATHMATCH;
@@ -591,7 +597,7 @@ public class GameManagerc : MonoBehaviour
         MenuPanel.SetActive(false);
         InGameScreenAnimator.SetTrigger("ShowScreen");
         mbFinishedShowingScores = false;
-        GameObject go = new GameObject("Point" , typeof(RectTransform));
+        GameObject go = new GameObject("Point", typeof(RectTransform));
         go.AddComponent<CanvasRenderer>();
         go.AddComponent<Image>().sprite = PointSprite;
 
