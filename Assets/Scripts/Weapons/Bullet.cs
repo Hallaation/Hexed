@@ -78,7 +78,6 @@ public class Bullet : MonoBehaviour
             //Debug.Break();
             if (RayHit)
             {  
-
                 //If I hit a wall, glass or door, snap me to their location and turn me off
                 if (RayHit.transform.gameObject.layer == LayerMask.NameToLayer("Wall") || RayHit.transform.gameObject.layer == LayerMask.NameToLayer("Door")|| RayHit.transform.gameObject.layer == LayerMask.NameToLayer("Glass"))
                 {
@@ -253,7 +252,6 @@ public class Bullet : MonoBehaviour
             //    //print("lol");
             //    Destroy(this.gameObject);
 
-            //TODO Play Spark effect
 
         }
         if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Player"))

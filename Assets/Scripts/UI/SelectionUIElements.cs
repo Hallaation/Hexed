@@ -13,6 +13,11 @@ using XInputDotNetPure;
 public class SelectionUIElements : MonoBehaviour
 {
     public XboxController m_controller = XboxController.First;
+    public Sprite m_AToSelect;
+    public Sprite m_BToCancel;
+    public Sprite m_blankSprite;
+    private Image m_DockLight;
+    private bool m_bSpriteChanged;
     [Space]
     //Varaibles to do UI stuff
     private CharacterSelectionManager selectionManager;
@@ -31,9 +36,9 @@ public class SelectionUIElements : MonoBehaviour
     void Awake()
     {
         m_bNotJoined = false;
-        m_Animator = GetComponent<Animator>();
+        m_Animator = GetComponentInChildren<Animator>();
         //make a copy-ish of my transform
-        GameObject temp = new GameObject("return point" , typeof(RectTransform));
+        GameObject temp = new GameObject("return point", typeof(RectTransform));
         temp.transform.SetParent(this.transform.parent);
         temp.transform.position = this.transform.position;
 
@@ -42,8 +47,9 @@ public class SelectionUIElements : MonoBehaviour
         //EndPoint = new Vector3(this.GetComponent<RectTransform>().localPosition.x , EndPosition.localPosition.y , 0);
         //journeyLength = Vector3.Distance(startPoint.position , EndPosition.position);
 
-        m_PressAToJoinGO = transform.Find("PressAToJoin").gameObject;
-        m_SelectedCharacterGO = transform.Find("Character_Selected").gameObject;
+        m_PressAToJoinGO = this.transform.GetChild(0).transform.Find("PressAToJoin").gameObject;
+        m_SelectedCharacterGO = this.transform.GetChild(0).transform.Find("Character_Selected").gameObject;
+        m_DockLight = this.transform.Find("Blank").GetComponent<Image>();
         SelectedCharacterImage = m_SelectedCharacterGO.GetComponent<Image>();
         selectionManager = CharacterSelectionManager.Instance;
         if (!GetComponentInParent<SelectionUIArray>())
@@ -52,7 +58,7 @@ public class SelectionUIElements : MonoBehaviour
         }
 
         // Debug.Log(CharacterSelectionManager.instance);
-        StickMovement = new bool[2] { false , false };
+        StickMovement = new bool[2] { false, false };
     }
     //useless, keeping it here in case
     IEnumerator GetSelectionManagerInstance()
@@ -72,12 +78,12 @@ public class SelectionUIElements : MonoBehaviour
             //If I want to reset the sticks, check if any there is no movement from the left stick, if there isnt any the sticks are reset.
             if (ResetSticks)
             {
-                if (XCI.GetAxis(XboxAxis.LeftStickX , m_controller) < 0)
+                if (XCI.GetAxis(XboxAxis.LeftStickX, m_controller) < 0)
                 {
                     StickMovement[0] = true;
                     ResetSticks = false;
                 }
-                else if (XCI.GetAxis(XboxAxis.LeftStickX , m_controller) > 0)
+                else if (XCI.GetAxis(XboxAxis.LeftStickX, m_controller) > 0)
                 {
                     StickMovement[1] = true;
                     ResetSticks = false;
@@ -88,21 +94,21 @@ public class SelectionUIElements : MonoBehaviour
             if (m_bPlayerJoined)
             {
                 //Let the player press left and right to choose their character. Only if they havn't selected one yet.
-                //If I havn't
+                //If I havn't selected a character
                 if (!m_bSelectedCharacter)
                 {
                     //Do logic to turn set selected character to true, oh
                     #region
-                    if (XCI.GetButtonDown(XboxButton.B , m_controller))
+                    if (XCI.GetButtonDown(XboxButton.B, m_controller))
                     {
                         //Debug.Log("test");
                         m_bPlayerJoined = false;
                         m_PressAToJoinGO.SetActive(true);
                     }
-                    if (XCI.GetButtonDown(XboxButton.DPadLeft , m_controller) || XCI.GetAxis(XboxAxis.LeftStickX , m_controller) < 0)
+                    if (XCI.GetButtonDown(XboxButton.DPadLeft, m_controller) || XCI.GetAxis(XboxAxis.LeftStickX, m_controller) < 0)
                     {
                         //change the index first then change things accordingly
-                        if (StickMovement[0] || XCI.GetButtonDown(XboxButton.DPadLeft , m_controller))
+                        if (StickMovement[0] || XCI.GetButtonDown(XboxButton.DPadLeft, m_controller))
                         {
 
                             StickMovement[0] = false;
@@ -114,9 +120,9 @@ public class SelectionUIElements : MonoBehaviour
                             m_Animator.SetTrigger("ChangeCharacterLeft");
                         }
                     }
-                    else if (XCI.GetButtonDown(XboxButton.DPadRight , m_controller) || XCI.GetAxis(XboxAxis.LeftStickX , m_controller) > 0)
+                    else if (XCI.GetButtonDown(XboxButton.DPadRight, m_controller) || XCI.GetAxis(XboxAxis.LeftStickX, m_controller) > 0)
                     {
-                        if (StickMovement[1] || XCI.GetButtonDown(XboxButton.DPadRight , m_controller))
+                        if (StickMovement[1] || XCI.GetButtonDown(XboxButton.DPadRight, m_controller))
                         {
                             StickMovement[1] = false;
                             m_iSelectedIndex++;
@@ -127,32 +133,32 @@ public class SelectionUIElements : MonoBehaviour
                             m_Animator.SetTrigger("ChangeCharacterRight");
                         }
                     }
-                    else if (XCI.GetButtonDown(XboxButton.A , m_controller))
+                    else if (XCI.GetButtonDown(XboxButton.A, m_controller)) //Selects the character
                     {
                         //check to see if the character isn't selected
                         if (!selectionManager.CharacterSelectionStatus[selectionManager.CharacterArray[m_iSelectedIndex]])
                         {
                             //this is where the character is selected
                             m_bSelectedCharacter = true;
-                            selectionManager.playerSelectedCharacter.Add(m_controller , selectionManager.CharacterArray[m_iSelectedIndex]);
+                            selectionManager.playerSelectedCharacter.Add(m_controller, selectionManager.CharacterArray[m_iSelectedIndex]);
 
                             selectionManager.CharacterSelectionStatus[selectionManager.CharacterArray[m_iSelectedIndex]] = true; //set the status selected to true
-                            m_Animator.SetBool("IsSelected" , true);
+                            m_Animator.SetBool("IsSelected", true);
                         }
                     }
 #if UNITY_EDITOR
-                    else if (Input.GetKeyDown(KeyCode.X))
+                    else if (Input.GetKeyDown(KeyCode.X)) //Debug button for all the players to select a character.
                     {
                         m_bSelectedCharacter = true;
-                        selectionManager.playerSelectedCharacter.Add(m_controller , selectionManager.CharacterArray[m_iSelectedIndex]);
+                        selectionManager.playerSelectedCharacter.Add(m_controller, selectionManager.CharacterArray[m_iSelectedIndex]);
                         selectionManager.CharacterSelectionStatus[selectionManager.CharacterArray[m_iSelectedIndex]] = true; //set the status selected to true
-                        m_Animator.SetBool("IsSelected" , true);
+                        m_Animator.SetBool("IsSelected", true);
                     }
 #endif
                     #endregion
                 }
                 //If I pressed B and I have selected a character 
-                else if (XCI.GetButtonDown(XboxButton.B , m_controller) && selectionManager.CharacterSelectionStatus[selectionManager.CharacterArray[m_iSelectedIndex]])
+                else if (XCI.GetButtonDown(XboxButton.B, m_controller) && selectionManager.CharacterSelectionStatus[selectionManager.CharacterArray[m_iSelectedIndex]])
                 {
                     //reset my selected status
                     m_bSelectedCharacter = false;
@@ -160,18 +166,28 @@ public class SelectionUIElements : MonoBehaviour
                     selectionManager.playerSelectedCharacter.Remove(m_controller);
                     //reset the selection status
                     selectionManager.CharacterSelectionStatus[selectionManager.CharacterArray[m_iSelectedIndex]] = false;
-                    m_Animator.SetBool("IsSelected" , false);
+                    m_Animator.SetBool("IsSelected", false);
                 }
                 //If I press B and I don't have a character selected.
 
                 //! change the selected sprite near the end of the frame, after all the processing has been done.
                 bool IsCharacterSelected = selectionManager.CharacterSelectionStatus[selectionManager.CharacterArray[m_iSelectedIndex]];
                 SelectedCharacterImage.sprite = selectionManager.CharacterArray[m_iSelectedIndex].GetComponent<BaseAbility>().SelectionSprites[Convert.ToInt32(IsCharacterSelected)];
+                if (!m_bSelectedCharacter)
+                {
+                    m_DockLight.sprite = m_AToSelect;
+                    m_bSpriteChanged = false;
+                }
+                else if (m_bSelectedCharacter)
+                {
+                    if (!m_bSpriteChanged)
+                        StartCoroutine(ChangeSprite());
+                }
             }
             else //! if the player hasn't joined the game yet
             {
 #if UNITY_EDITOR
-                if (Input.GetKeyDown(KeyCode.Z))
+                if (Input.GetKeyDown(KeyCode.Z)) //Debug button, Z to have all the players join.
                 {
                     m_bPlayerJoined = true;
                     m_PressAToJoinGO.SetActive(false);
@@ -180,7 +196,7 @@ public class SelectionUIElements : MonoBehaviour
                 }
 #endif
                 //! scan for A input
-                if (XCI.GetButton(XboxButton.A , m_controller))
+                if (XCI.GetButton(XboxButton.A, m_controller))
                 {
                     //CharacterSelectionManager.Instance.JoinedPlayers++;
                     m_bPlayerJoined = true;
@@ -189,20 +205,21 @@ public class SelectionUIElements : MonoBehaviour
                     m_bNotJoined = true;
                 }
                 //If I press B and I havn't yet back out
-                if (XCI.GetButton(XboxButton.B , m_controller) && !m_bBackedOut)
+                if (XCI.GetButton(XboxButton.B, m_controller) && !m_bBackedOut)
                 {
                     //CharacterSelectionManager.Instance.JoinedPlayers--;
                     m_bNotJoined = false;
                     m_bBackedOut = true;
                 }
+                m_DockLight.sprite = m_blankSprite;
             }
             //check for stick reset at the end of the frame
-            ResetSticks = (XCI.GetAxis(XboxAxis.LeftStickX , m_controller) == 0);
+            ResetSticks = (XCI.GetAxis(XboxAxis.LeftStickX, m_controller) == 0);
 
         }
         //InterpolateToEndPoint(DoLerp, ReturnLerp);
     }// end of update
-    void InterpolateToEndPoint(bool a_bDoLerp , bool a_bReturnLerp)
+    void InterpolateToEndPoint(bool a_bDoLerp, bool a_bReturnLerp)
     {
         /*
         //if the boolean coming in is DoLerp, do the regular
@@ -229,7 +246,16 @@ public class SelectionUIElements : MonoBehaviour
         }
         */
     }
+
+    IEnumerator ChangeSprite()
+    {
+        m_bSpriteChanged = true;
+        yield return new WaitForSeconds(0.8f);
+        if (m_Animator.GetCurrentAnimatorStateInfo(0).IsName("Character_Selection_Docked"))
+            m_DockLight.sprite = m_BToCancel;
+    }
 }
+
 
 
 public class SelectionUIArray : MonoBehaviour
