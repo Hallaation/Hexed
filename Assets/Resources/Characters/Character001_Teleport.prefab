@@ -336,7 +336,7 @@ GameObject:
   - component: {fileID: 223000506352141086}
   - component: {fileID: 114727376258867102}
   - component: {fileID: 114633734094743158}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: PlayerCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -853,7 +853,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1568182744093302}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.66, y: -0.93, z: 0}
+  m_LocalPosition: {x: -4.66, y: 1.07, z: 0}
   m_LocalScale: {x: 1.2, y: 1.2, z: 1}
   m_Children:
   - {fileID: 4834453555101378}
@@ -1248,17 +1248,17 @@ PolygonCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_Offset: {x: 0, y: 0}
   m_Points:
     m_Paths:
     - - {x: -0.009272099, y: 0.29223585}
-      - {x: 0.45963955, y: 0.20702481}
-      - {x: 0.5352435, y: -0.2001543}
-      - {x: 0.051983833, y: -0.28051233}
-      - {x: -0.5492687, y: -0.20094347}
-      - {x: -0.54617834, y: 0.17920876}
+      - {x: 0.5132877, y: 0.15337655}
+      - {x: 0.5108579, y: -0.09285747}
+      - {x: -0.016295511, y: -0.2414953}
+      - {x: -0.520006, y: -0.079015285}
+      - {x: -0.5169157, y: 0.1499461}
 --- !u!61 &61441754281723248
 BoxCollider2D:
   m_ObjectHideFlags: 1
