@@ -665,6 +665,7 @@ public class Move : MonoBehaviour
                     heldWeapon.transform.SetParent(this.gameObject.transform.Find("Sprites").GetChild(0).Find("2HandedMeleeSpot"));
                     hitCollider.gameObject.transform.parent.position = Melee2HandedMount.position; //set position to the weapon mount spot
                     hitCollider.gameObject.transform.parent.rotation = Melee2HandedMount.rotation; //set its rotation
+                    
 
                 }
                 else
@@ -726,11 +727,13 @@ public class Move : MonoBehaviour
                 {
                     hitCollider.gameObject.transform.parent.position = weapon1HandedMount.position; //set position to the weapon mount spot
                     hitCollider.gameObject.transform.parent.rotation = weapon1HandedMount.rotation; //set its rotation
+                    hitCollider.gameObject.transform.parent.localPosition += hitCollider.gameObject.transform.parent.Find("HeldPosition").localPosition;
                 }
                 else //! mount it to the 2handed mounting position
                 {
                     hitCollider.gameObject.transform.parent.position = weapon2HandedMount.position; //set position to the weapon mount spot
                     hitCollider.gameObject.transform.parent.rotation = weapon2HandedMount.rotation; //set its rotation
+                    hitCollider.gameObject.transform.parent.localPosition += hitCollider.gameObject.transform.parent.Find("HeldPosition").localPosition;
                 }
                 Rigidbody2D weaponRigidBody = hitCollider.GetComponentInParent<Rigidbody2D>(); //find its rigidbody in its 
 
