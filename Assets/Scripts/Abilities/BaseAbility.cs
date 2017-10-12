@@ -7,7 +7,7 @@ public class BaseAbility : MonoBehaviour
 {
     public Sprite AbilityIcon;
     public Sprite[] SelectionSprites;
-    public Sprite m_CharacterPortrait;
+    public Sprite m_CharacterPortrait = null;
     [Space]
     //abilities are going to cost mana.
     [HideInInspector]

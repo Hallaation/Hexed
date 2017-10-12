@@ -507,6 +507,7 @@ public class Move : MonoBehaviour
                     Debug.Log("Hit wall");
                     heldWeapon.transform.position = this.transform.position - this.transform.up * 0.5f;
                 }
+                heldWeapon.transform.position = this.transform.position;
                 heldWeapon.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
                 heldWeapon.transform.Find("Sprite").GetComponent<Collider2D>().enabled = true;
                 heldWeapon.GetComponent<Weapon>().ThrowWeapon(throwDirection * throwingForce);
@@ -665,6 +666,7 @@ public class Move : MonoBehaviour
                     heldWeapon.transform.SetParent(this.gameObject.transform.Find("Sprites").GetChild(0).Find("2HandedMeleeSpot"));
                     hitCollider.gameObject.transform.parent.position = Melee2HandedMount.position; //set position to the weapon mount spot
                     hitCollider.gameObject.transform.parent.rotation = Melee2HandedMount.rotation; //set its rotation
+                    
 
                 }
                 else
@@ -726,11 +728,13 @@ public class Move : MonoBehaviour
                 {
                     hitCollider.gameObject.transform.parent.position = weapon1HandedMount.position; //set position to the weapon mount spot
                     hitCollider.gameObject.transform.parent.rotation = weapon1HandedMount.rotation; //set its rotation
+                    hitCollider.gameObject.transform.parent.localPosition += hitCollider.gameObject.transform.parent.Find("HeldPosition").localPosition;
                 }
                 else //! mount it to the 2handed mounting position
                 {
                     hitCollider.gameObject.transform.parent.position = weapon2HandedMount.position; //set position to the weapon mount spot
                     hitCollider.gameObject.transform.parent.rotation = weapon2HandedMount.rotation; //set its rotation
+                    hitCollider.gameObject.transform.parent.localPosition += hitCollider.gameObject.transform.parent.Find("HeldPosition").localPosition;
                 }
                 Rigidbody2D weaponRigidBody = hitCollider.GetComponentInParent<Rigidbody2D>(); //find its rigidbody in its 
 
@@ -900,7 +904,7 @@ public class Move : MonoBehaviour
             PlayerStatus chokingPlayerStatus = chokingPlayer.transform.root.GetComponent<PlayerStatus>(); //get the player status of choking player
             KillBarContainer.transform.position = chokingPlayer.transform.root.position - Vector3.up * 1.5f;
 
-            if (chokingPlayerStatus.IsStunned) //if the choking player is still stunned
+            if (chokingPlayerStatus.IsStunned) //if the Player getting choked player is still stunned
             {
                 Vector3 chokePosition = chokingPlayer.transform.root.Find("ChokingSpot").position;
                 this.transform.position = chokePosition;
@@ -911,13 +915,21 @@ public class Move : MonoBehaviour
                 {
                     BodyAnimator.SetTrigger("HeadSmashSmash"); //Set trigger to do smash
                 }
+                if (XCI.GetButtonDown(XboxButton.B, m_controller.mXboxController)) //look for X button down
+                {
+                    m_bInChokeMode = false;
+                    chokingPlayer = null;  //Set trigger to do smash
+                    BodyAnimator.SetTrigger("CancelHeadSmash");
+
+                }
                 //Check Animator State
-                if (BodyAnimator.GetCurrentAnimatorStateInfo(0).IsName("HeadSmash")) //if in head smash state
+                if (BodyAnimator.GetCurrentAnimatorStateInfo(0).IsName("HeadSmash") && m_bInChokeMode) //if in head smash state
                 {
                     if (!m_bChoked) //check if I applied choking logic already
                     {
                         m_bChoked = true; //set the applied logic to true
                         m_ChokingTimer.CurrentTime += m_fChokedTimeIncrement; //increase the timer
+
                     }
                 }
                 else
