@@ -7,6 +7,8 @@ using XboxCtrlrInput;
 using XInputDotNetPure;
 public class PlayerStatus : MonoBehaviour, IHitByMelee
 {
+    //TODO Cleanup
+
     private Move m_MoveClass;
     private float m_iMaxHealth;
     public float m_iHealth = 3; //health completely useless right now
@@ -19,8 +21,9 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
     public int m_iScore;
     public bool m_bInvincible = false;
     public float m_fInvincibleTime = 3.0f;
-    public float test = 0.5f;
+    public float m_fTimeBetweenColourSwapping = 0.5f;
     private Timer m_InvincibilityTimer;
+
     public bool IsDead { get { return m_bDead; } set { m_bDead = value; } }
     public bool IsStunned { get { return m_bStunned; } set { m_bStunned = value; } }
     public int TimesPunched { get { return m_iTimesPunched; } set { m_iTimesPunched = value; } }
@@ -479,7 +482,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
 
             PlayerSprite.GetComponent<Renderer>().material = null;
             PlayerSprite.GetComponent<Renderer>().material.color = Color.white;
-            yield return new WaitForSecondsRealtime(test);
+            yield return new WaitForSecondsRealtime(m_fTimeBetweenColourSwapping);
             PlayerSprite.GetComponent<Renderer>().material = m;
             PlayerSprite.GetComponent<Renderer>().material.color = _playerColor;
         }

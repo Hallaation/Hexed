@@ -476,12 +476,12 @@ public class Move : MonoBehaviour
             if (/*movement.magnitude == 0 ||*/ !tossWeapon) //if drop weapon
             {
                 //Raycast from me to the gun mount position + an arbitrary number. IF I hit something, snap the gun to behind the wall
-                RaycastHit2D hit = Physics2D.Raycast(this.transform.position, throwDirection, (this.transform.position - GunMountPosition).magnitude + 0.3f, 1 << LayerMask.NameToLayer("Wall"));
+                RaycastHit2D hit = Physics2D.Raycast(this.transform.position, throwDirection, (this.transform.position - GunMountPosition).magnitude + 0.3f, LayerMask.GetMask("Glass", "Wall"));
+                Debug.DrawRay(this.transform.position, throwDirection * (this.transform.position - GunMountPosition).magnitude, Color.yellow, 5);
                 if (hit)
                 {
                     heldWeapon.transform.position = hit.point + (hit.normal * 0.4f);
                 }
-                Debug.DrawRay(this.transform.position, throwDirection * (this.transform.position - GunMountPosition).magnitude, Color.yellow, 5);
 
                 heldWeapon.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
                 heldWeapon.transform.Find("Sprite").GetComponent<Collider2D>().enabled = true;
@@ -500,10 +500,12 @@ public class Move : MonoBehaviour
             else //else throw weapon
             {
                 //toss it away with force
-                RaycastHit2D hit = Physics2D.Raycast(this.transform.position, throwDirection, (this.transform.position - GunMountPosition).magnitude, 1 << LayerMask.NameToLayer("Wall"));
+                RaycastHit2D hit = Physics2D.Raycast(this.transform.position, throwDirection, (this.transform.position - GunMountPosition).magnitude + 0.5f, LayerMask.GetMask("Glass", "Wall"));
+                Debug.DrawRay(this.transform.position, throwDirection * ((this.transform.position - GunMountPosition).magnitude + 0.5f), Color.yellow, 5);
                 if (hit)
                 {
-                    heldWeapon.transform.localPosition = -this.transform.up * 0.2f;
+                    Debug.Log("Hit wall");
+                    heldWeapon.transform.position = this.transform.position - this.transform.up * 0.5f;
                 }
                 heldWeapon.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
                 heldWeapon.transform.Find("Sprite").GetComponent<Collider2D>().enabled = true;
