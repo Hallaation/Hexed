@@ -22,6 +22,9 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
     public bool m_bInvincible = false;
     public float m_fInvincibleTime = 3.0f;
     public float m_fTimeBetweenColourSwapping = 0.5f;
+    public float m_fStunBarOffset = 1.5f;
+    public float m_fHealthBarOffset = 1.5f;
+    public float m_fKillBarOffset = 1.5f;
     private Timer m_InvincibilityTimer;
 
     public bool IsDead { get { return m_bDead; } set { m_bDead = value; } }
@@ -61,7 +64,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
     private GameObject stunBarContainer;
     private AudioSource m_MeleeHitAudioSource;
 
-    private GameObject killbarContainer; 
+    private GameObject killbarContainer;
 
     public Sprite[] DeadSprites;
     public Sprite[] StunnedSprites;
@@ -69,6 +72,8 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
     private bool StunSpriteChanged = false;
     private SpriteRenderer m_SpriteRenderer;
     private CameraControl _cameraControlInstance;
+
+
     [Range(0, 0.22f)]
     public float fill;
     //if the player is dead, the renderer will change their Color to gray, and all physics simulation of the player's rigidbody will be turned off.
@@ -147,9 +152,8 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
                 }
                 if (resetStunTimer.Tick(Time.deltaTime))
                 {
-                    //  m_iTimesPunched = 0;
-                    // m_iPreviousTimesPunched = 0; 
-                    //TODO Needs to be readded at some point.
+                    m_iTimesPunched = 0;
+                    m_iPreviousTimesPunched = 0;
                 }
             }
 
@@ -227,7 +231,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
 
                 if (this.transform.GetChild(1).tag == "Stunned")
                 {
-                   // Debug.Log(this.transform.GetChild(0).tag);
+                    // Debug.Log(this.transform.GetChild(0).tag);
                     this.transform.GetChild(1).gameObject.GetComponent<Collider2D>().enabled = false;        //? child 0 is weaponSpot... 
                 }
                 else
@@ -249,10 +253,11 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             }
         }
     }
+
     //Snap all the health/stun bars to the player's position.
     public void LateUpdate()
     {
-        if (GameManagerc.Instance.Paused || Application.isEditor)
+        if (/*GameManagerc.Instance.Paused || Application.isEditor*/ true)
         {
             //Check for a health mask
             if (_HealthMask)
@@ -271,10 +276,10 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             }
 
             //If the previous frames health isnt the current frames health, show the changed health.
-            _PlayerCanvas.transform.localScale = new Vector3(Camera.main.orthographicSize, Camera.main.orthographicSize, Camera.main.orthographicSize) * 0.003f;
-            //_PlayerCanvas.transform.position = this.transform.position + Vector3.up;
-            HealthContainer.transform.position = this.transform.position + Vector3.up;
-            stunBarContainer.transform.position = this.transform.position + Vector3.up;
+            //_PlayerCanvas.transform.localScale = new Vector3(Camera.main.orthographicSize, Camera.main.orthographicSize, Camera.main.orthographicSize) * 0.003f;
+            _PlayerCanvas.transform.position = this.transform.position;
+            //HealthContainer.transform.position = this.transform.position + Vector3.up * m_fHealthBarOffset - Vector3.forward * 8 ;
+            //stunBarContainer.transform.position = this.transform.position + Vector3.up * m_fStunBarOffset - Vector3.forward * 8;
             //killbarContainer.transform.position = this.transform.position - Vector3.up * 1.5f;
             //Showing health change is when the health bar shows up. health loss is seperate.
             if (m_bShowHealthChange)
@@ -407,6 +412,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             ShowHealthChangeTimer.CurrentTime = 0;
             m_bShowHealthChange = true;
             m_iHealth -= aBullet.m_iDamage;
+            m_MoveClass.vibrationValue.x = 5;
             //If the game mode is either the timed deathmatch or scores appointed on kills deathmatch, then give them points
             if (m_iHealth <= 0 /*&& (GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_POINTS *//*|| GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_TIMED*/)
             {
@@ -429,11 +435,12 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             ShowHealthChangeTimer.CurrentTime = 0;
             m_bShowHealthChange = true;
             m_iHealth -= a_weapon.m_iDamage;
+            m_MoveClass.vibrationValue.x = 5;
             //If the game mode is either the timed deathmatch or scores appointed on kills deathmatch, then give them points
             if (m_iHealth <= 0 /*&& (GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_POINTS*/ /*|| GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_TIMED*/)
             {
                 //update the bullet owner's score
-               // GameManagerc.Instance.PlayerWins[a_weapon.transform.root.GetComponent<PlayerStatus>()]++;
+                // GameManagerc.Instance.PlayerWins[a_weapon.transform.root.GetComponent<PlayerStatus>()]++;
             }
         }
         if (abGiveIFrames)
@@ -442,7 +449,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         }
     }
 
-    public void HitPlayer(float a_Damage,PlayerStatus a_Status , bool abGiveIFrames = false) // maybe change to int
+    public void HitPlayer(float a_Damage, PlayerStatus a_Status, bool abGiveIFrames = false) // maybe change to int
     {
         if (!m_bInvincible)
         {
@@ -451,6 +458,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             ShowHealthChangeTimer.CurrentTime = 0;
             m_bShowHealthChange = true;
             m_iHealth -= a_Damage;
+            m_MoveClass.vibrationValue.x = 5;
             //If the game mode is either the timed deathmatch or scores appointed on kills deathmatch, then give them points
             if (m_iHealth <= 0 /*&& (GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_POINTS*/ /*|| GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_TIMED*/)
             {
@@ -575,7 +583,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
 
             Material tempMaterial = new Material(item.GetComponent<Image>().material.shader);
             item.GetComponent<Image>().material = tempMaterial;
-            if (item.GetComponent<Image>().material.HasProperty("_Color"))
+            if (item.GetComponent<Image>().material.HasProperty("_Color") && !item.CompareTag("White"))
                 item.GetComponent<Image>().material.color = _playerColor;
         }
         //Set the stun bar container colours
@@ -585,7 +593,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
 
             Material tempMaterial = new Material(item.GetComponent<Image>().material.shader);
             item.GetComponent<Image>().material = tempMaterial;
-            if (item.GetComponent<Image>().material.HasProperty("_Color"))
+            if (item.GetComponent<Image>().material.HasProperty("_Color") && !item.CompareTag("White"))
                 item.GetComponent<Image>().material.color = _playerColor;
         }
 
@@ -596,7 +604,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
 
             Material tempMaterial = new Material(item.GetComponent<Image>().material.shader);
             item.GetComponent<Image>().material = tempMaterial;
-            if (item.GetComponent<Image>().material.HasProperty("_Color"))
+            if (item.GetComponent<Image>().material.HasProperty("_Color") && !item.CompareTag("White"))
                 item.GetComponent<Image>().material.color = _playerColor;
         }
 
@@ -606,7 +614,6 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         _PlayerCanvas.transform.SetParent(null); //Set its parent to null so it can properly follow the player's positon.
         HealthContainer.SetActive(false); //turn it off.
         killbarContainer.SetActive(false);
-
     }
 }
 

@@ -126,8 +126,6 @@ public class GroundPound : BaseAbility
         //}
 
         //? !
-
-        //TODO Use Collider.OverlapCollider
         // Collider[] Collider = Physics.c(transform.position, i, 1 << LayerMask.NameToLayer("Player")); //? Currently doesnt collide.
         MoveScript.enabled = true;
         MoveScript.SetActive(true);

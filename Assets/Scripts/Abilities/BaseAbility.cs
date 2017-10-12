@@ -11,7 +11,7 @@ public class BaseAbility : MonoBehaviour
     [Space]
     //abilities are going to cost mana.
     [HideInInspector]
-    public float currentMana = 0.0f; //TODO change back to protectd
+    protected float currentMana = 0.0f;
     protected bool RegenMana;
 
     [HideInInspector]
@@ -39,8 +39,6 @@ public class BaseAbility : MonoBehaviour
     public bool findUI = true;
     private PlayerStatus m_PlayerStatus;
     public int AbilityCharges { get { return m_iCurrentCharges; }  set { m_iCurrentCharges = value; } }
-    //TODO if the shield is charged up to 100% of mana, the shield can deflect bullets, knock over players when run over with it
-    //TODO otherwise all the shield is block bullets and knock over players when run over with it.
 
     protected Text _AbilityTypeText;
     protected Move m_MoveOwner;

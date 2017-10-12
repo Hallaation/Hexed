@@ -240,7 +240,6 @@ public class ControllerManager : MonoBehaviour
             //print(spawnParent.transform.GetChild(PlayerCountIndex));
             //print(spawnParent.transform.GetChild(PlayerCountIndex).GetChild(i));
             spawnPoints[i] = spawnParent.transform.GetChild(PlayerCountIndex).GetChild(i);
-           
         }
 
         //Scramble array
