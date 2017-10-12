@@ -35,12 +35,11 @@ public class GamemodeSelection : MonoBehaviour
     };
 
 
-    public Sprite[] mapSprites; //TODO in heavy construction should be done later
+    public Sprite[] mapSprites;
     public GameObject[] MapObjects;
     public GameObject MapToLoad;
 
     Text _SettingsValue;
-    GameManagerc m_ManagerInstance;
     // Use this for initialization
     void Start()
     {
@@ -69,7 +68,6 @@ public class GamemodeSelection : MonoBehaviour
         if (m_pickType == PickType.GAMEMODESETTINGS)
         {
             _SettingsValue = GetComponentInChildren<Text>();
-            m_ManagerInstance = GameManagerc.Instance;
 
             /* old shit
             //find the objects, make the array then populate the array.
@@ -133,6 +131,7 @@ public class GamemodeSelection : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //if the top of the stack is the peek of this transform's parent's parent
         if (UIManager.Instance.menuStatus.Peek() == this.transform.parent.parent.gameObject)
         {
             CheckForStickReset();
@@ -241,8 +240,8 @@ public class GamemodeSelection : MonoBehaviour
 
                         }
                         _SettingsValue.text = mPointsToWin[m_iPointWinIndex].ToString("0");
-                        m_ManagerInstance.m_iPointsNeeded = (int)mPointsToWin[m_iPointWinIndex];
-                        m_ManagerInstance.m_iPointsIndex = m_iPointWinIndex;
+                        GameManagerc.Instance.m_iPointsNeeded = (int)mPointsToWin[m_iPointWinIndex];
+                        GameManagerc.Instance.m_iPointsIndex = m_iPointWinIndex;
                         #endregion
                         break;
                 }

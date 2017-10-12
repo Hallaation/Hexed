@@ -8,10 +8,10 @@ public class CharacterSelectionManager : MonoBehaviour
 {
     public GameObject[] CharacterArray;
 
-    public Dictionary<GameObject , bool> CharacterSelectionStatus;
+    public Dictionary<GameObject, bool> CharacterSelectionStatus;
     public int JoinedPlayers = 0;
     //Each controller will have a gameobject(their player);
-    public Dictionary<XboxCtrlrInput.XboxController , GameObject> playerSelectedCharacter = new Dictionary<XboxCtrlrInput.XboxController , GameObject>();
+    public Dictionary<XboxCtrlrInput.XboxController, GameObject> playerSelectedCharacter = new Dictionary<XboxCtrlrInput.XboxController, GameObject>();
 
     static CharacterSelectionManager mInstance = null;
     public bool m_bMovedToMainScene = false;
@@ -45,7 +45,7 @@ public class CharacterSelectionManager : MonoBehaviour
     {
         SingletonTester.Instance.AddSingleton(this);
         SceneManager.sceneLoaded += OnSceneLoaded;
-        Object[] temp = Resources.LoadAll("Characters" , typeof(GameObject));
+        Object[] temp = Resources.LoadAll("Characters", typeof(GameObject));
         CharacterArray = new GameObject[temp.Length];
         for (int i = 0; i < CharacterArray.Length; ++i)
         {
@@ -54,18 +54,19 @@ public class CharacterSelectionManager : MonoBehaviour
         //Application.targetFrameRate = 30;
         //! check if there is already an instance
         //? instantiate the dictionary, and populate it with the selectable characters.
-        CharacterSelectionStatus = new Dictionary<GameObject , bool>();
+        CharacterSelectionStatus = new Dictionary<GameObject, bool>();
         foreach (GameObject character in CharacterArray)
         {
-            CharacterSelectionStatus.Add(character , false);
+            CharacterSelectionStatus.Add(character, false);
         }
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R))
+        if (UIManager.Instance.m_bInMainMenu)
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            StartWhenReady dockThing = FindObjectOfType<StartWhenReady>();
+            dockThing.m_SpriteRenderer.sprite = dockThing.PressStartSprites[System.Convert.ToInt32(playerSelectedCharacter.Count > 1)];
         }
         if (playerSelectedCharacter.Count > 1 && UIManager.Instance.m_bInMainMenu /*|| Application.isEditor*/)
         {
@@ -76,6 +77,10 @@ public class CharacterSelectionManager : MonoBehaviour
                 //SceneManager.LoadScene(2); //oh fuck.
             }
 #if UNITY_EDITOR
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            }
             if (Input.GetKeyDown(KeyCode.Return))
             {
                 UIManager.Instance.MainMenuChangePanel(GameObject.Find("Third_Panel"));
@@ -87,7 +92,7 @@ public class CharacterSelectionManager : MonoBehaviour
         {
             foreach (PlayerStatus player in GameManagerc.Instance.InGamePlayers)
             {
-                Destroy(player.gameObject.gameObject , 1);
+                Destroy(player.gameObject.gameObject, 1);
             }
             SceneManager.LoadScene(0);
         }
@@ -115,7 +120,7 @@ public class CharacterSelectionManager : MonoBehaviour
                 Vector3 spawnPosition = ControllerManager.Instance.spawnPoints[i].position; //Get the spawn position
                 //Make the gameojbect and keep a reference scoped to the single loop
 
-                GameObject go = Instantiate(playerSelectedCharacter[JoinedXboxControllers[i]] , spawnPosition , Quaternion.identity , null);
+                GameObject go = Instantiate(playerSelectedCharacter[JoinedXboxControllers[i]], spawnPosition, Quaternion.identity, null);
                 //Set anything required for the player to work.
                 go.transform.position = spawnPosition;
                 go.GetComponent<ControllerSetter>().SetController(JoinedXboxControllers[i]);
@@ -133,7 +138,7 @@ public class CharacterSelectionManager : MonoBehaviour
         }
 
     }
-    void OnSceneLoaded(Scene scene , LoadSceneMode mode)
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
 
         if (scene.buildIndex == 0)
@@ -141,7 +146,7 @@ public class CharacterSelectionManager : MonoBehaviour
             playerSelectedCharacter.Clear();
             CharacterSelectionStatus.Clear();
 
-            Object[] temp = Resources.LoadAll("Characters" , typeof(GameObject));
+            Object[] temp = Resources.LoadAll("Characters", typeof(GameObject));
             CharacterArray = new GameObject[temp.Length];
             for (int i = 0; i < CharacterArray.Length; ++i)
             {
@@ -150,10 +155,10 @@ public class CharacterSelectionManager : MonoBehaviour
             //Application.targetFrameRate = 30;
             //! check if there is already an instance
             //? instantiate the dictionary, and populate it with the selectable characters.
-            CharacterSelectionStatus = new Dictionary<GameObject , bool>();
+            CharacterSelectionStatus = new Dictionary<GameObject, bool>();
             foreach (GameObject character in CharacterArray)
             {
-                CharacterSelectionStatus.Add(character , false);
+                CharacterSelectionStatus.Add(character, false);
             }
         }
     }

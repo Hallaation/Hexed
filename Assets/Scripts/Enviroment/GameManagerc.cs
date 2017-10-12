@@ -271,7 +271,6 @@ public class GameManagerc : MonoBehaviour
                 {
                     //increase the winning player's point by 1
                     PlayerWins[player] += 1;
-                    //TODO Point tallying screen goes here.
                     StartCoroutine(AddPointsToPanel(player));
                     // Debug.Break();
                 }
@@ -303,17 +302,15 @@ public class GameManagerc : MonoBehaviour
                 //Reset the event managers current selected object to the rematch button
                 //FindObjectOfType<EventSystem>().SetSelectedGameObject(FinishUIPanel.transform.Find("Rematch").gameObject);
 
-                //TODO Load Character select / win screen;
-                //TODO Sort players by score?
             }
         }
         //RoundEndLastManStanding();
-        //TODO round shouldn't be over until one of the players has reached the maximum points
-        //TODO For Max points, guns should be respawning with new ammo, any guns with no ammo should be deleted after a while when they have no ammo (like duck game)
-        //TODO Respawn players after they are killed (Like Smash bros.) no i-Frames though, they can be camped for all I care.
+        //// round shouldn't be over until one of the players has reached the maximum points
+        //// For Max points, guns should be respawning with new ammo, any guns with no ammo should be deleted after a while when they have no ammo (like duck game)
+        //// Respawn players after they are killed (Like Smash bros.) no i-Frames though, they can be camped for all I care.
         //m_bRoundOver = true;
-        //TODO Sort players by score?
-        //TODO Load Character select / win screen;
+        //// Sort players by score?
+        //// Load Character select / win screen;
     }
 
     void CheckPlayersPoints()
@@ -339,8 +336,7 @@ public class GameManagerc : MonoBehaviour
                         FindObjectOfType<EventSystem>().SetSelectedGameObject(FinishUIPanel.transform.Find("Main Menu").gameObject);
                         //mbFinishedPanelShown = true;
                     }
-                    //TODO Load Character select / win screen;
-                    //TODO Sort players by score?
+
                 }
             }
         }
@@ -348,12 +344,6 @@ public class GameManagerc : MonoBehaviour
     void RoundEndDeathMatchTimed()
     {
         RoundEndLastManStanding();
-        //TODO similiar to max points (should change this to kills) 
-        //TODO Penalty for death? 
-        //TODO Round isn't over until the timer has reached 0.
-        //m_bRoundOver = true;
-        //TODO Sort players by score?
-        //TODO Load Character select / win screen;
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -428,6 +418,7 @@ public class GameManagerc : MonoBehaviour
                 //For every object after the points neeeded, turn them off since their not required.
                 for (int j = m_iPointsNeeded; j < PointContainers[i].transform.childCount - 1; j++)
                 {
+                    Debug.Log(m_iPointsNeeded);
                     PointContainers[i].transform.GetChild(j).gameObject.SetActive(false);
                 }
                 //Turn off the containers so they don't show up.
@@ -551,7 +542,6 @@ public class GameManagerc : MonoBehaviour
         InGamePlayers.Clear();
         InGamePlayers = new List<PlayerStatus>();
         m_gameMode = Gamemode_type.LAST_MAN_STANDING_DEATHMATCH;
-        m_iPointsNeeded = 5;
         mInstance = null;
         FinishUIPanel = null;
         m_bRoundOver = false;
@@ -580,6 +570,7 @@ public class GameManagerc : MonoBehaviour
         Destroy(ControllerManager.Instance.gameObject);
         Destroy(CharacterSelectionManager.Instance.gameObject);
         Destroy(UINavigation.Instance.gameObject);
+        Destroy(GameManagerc.Instance);
         Destroy(this.gameObject);
         SceneManager.LoadScene(0);
         //StartCoroutine(WaitForSeconds(0.2f));

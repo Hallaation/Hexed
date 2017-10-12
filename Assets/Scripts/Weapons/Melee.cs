@@ -101,7 +101,6 @@ public class Melee : Weapon
                 }
             }
         }
-
         //Velocity check
         else if (GetComponent<Rigidbody2D>().velocity.magnitude > 10)
         {
@@ -112,8 +111,12 @@ public class Melee : Weapon
                 if (GetComponent<Rigidbody2D>().velocity.magnitude >= 10 && other.tag == "Player" && other.GetComponentInParent<PlayerStatus>().gameObject != weaponThrower)
                 {
                     //stun the player
-                    Debug.Log("ThrownStun");
                     other.transform.root.GetComponentInParent<PlayerStatus>().StunPlayer(transform.right * KnockBack);        //! Uses transform right instead of transform up due to using the bats right rather then players up
+                    //Play the hit audio
+                    hitPlayerAudioSource.clip = ThrowHitAudio; 
+                    hitPlayerAudioSource.volume = ThrowHitAudioVolume;
+                    hitPlayerAudioSource.pitch = (m_bRandomizeThrowHitPitch) ? Random.Range(0.9f, 1.1f) : 1;
+                    hitPlayerAudioSource.Play();
                 }
             }
             //Find every hit by melee interface and call its function
@@ -203,7 +206,6 @@ public class Melee : Weapon
                 if (GetComponent<Rigidbody2D>().velocity.magnitude >= 10 && other.tag == "Player" && other.GetComponentInParent<PlayerStatus>().gameObject != weaponThrower)
                 {
                     //stun the player
-                    Debug.Log("ThrownStun");
                     other.transform.root.GetComponentInParent<PlayerStatus>().StunPlayer(transform.right * KnockBack);        //! Uses transform right instead of transform up due to using the bats right rather then players up
                 }
             }
@@ -231,7 +233,7 @@ public class Melee : Weapon
     }
 
 
-    void HitPlayerStuff(Collider2D other)
+    void HitPlayerStuff(Collider2D other) //called whenever a player is hit
     {
         PlayerStatus OtherPlayerStatus = other.transform.root.GetComponent<PlayerStatus>();
         if(m_Stun == true)
@@ -244,7 +246,15 @@ public class Melee : Weapon
                 OtherPlayerStatus.KillPlayer(this.transform.root.GetComponent<PlayerStatus>());
             }
         }
-        m_AudioSource.Play();
+        //Play hit by melee sound effect.
+        if (OtherPlayerStatus.GetComponentInChildren<IHitByMelee>() != null)
+        {
+            foreach (IHitByMelee item in OtherPlayerStatus.GetComponentsInChildren<IHitByMelee>())
+            {
+                item.HitByMelee(this, null);
+            }
+        }
+       // m_AudioSource.Play();
 
        
     }
@@ -287,6 +297,7 @@ public class Melee : Weapon
         if (m_bAttacking && !m_bPlayedAudio)
         {
             m_bPlayedAudio = true;
+            m_AudioSource.pitch = (m_bRandomizePitch) ? Random.Range(0.9f, 1.1f) : 1;
             m_AudioSource.Play();
             //reset audio
         }

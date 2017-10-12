@@ -51,6 +51,8 @@ public class Move : MonoBehaviour
     private GameObject chokingPlayer = null; //the player this guy is choking
     private int OriginalSortingOrder; //Used to move the player back to their sorting layer so everything renders properly.
     private Timer m_ChokingTimer;
+    private Vector3 originalPosition;
+    private bool m_bOutOfChoke;
 
     private Image killMask;
     private GameObject KillBarContainer;
@@ -280,9 +282,9 @@ public class Move : MonoBehaviour
             //Buggy with XBone controller with high frame rates.
             //GamePad.SetVibration(m_controller.mPlayerIndex , XCI.GetAxis(XboxAxis.LeftTrigger , m_controller.mXboxController) , XCI.GetAxis(XboxAxis.RightTrigger , m_controller.mXboxController));
             //vibrationValue = new Vector2(XCI.GetAxis(XboxAxis.LeftTrigger , m_controller.mXboxController) , XCI.GetAxis(XboxAxis.RightTrigger , m_controller.mXboxController));
-            // GamePad.SetVibration(m_controller.mPlayerIndex , vibrationValue.x , vibrationValue.y);
+            //GamePad.SetVibration(m_controller.mPlayerIndex , vibrationValue.x , vibrationValue.y);
 
-            //  vibrationValue *= 0.99f; //magic numbers.
+            vibrationValue *= 0.99f; //magic numbers.
 
             if (vibrationValue.magnitude < 0.4f)
             {
@@ -490,6 +492,7 @@ public class Move : MonoBehaviour
                 heldWeapon.GetComponent<Weapon>().ThrowWeapon(throwDirection * 2);
                 heldWeapon.GetComponent<Weapon>().previousOwner = this.gameObject;
                 heldWeapon.GetComponent<Weapon>().weaponThrower = this.gameObject;
+
                 //heldWeapon.transform.Find("Sprite").GetComponent<Collider2D>().enabled = false;
                 m_bHoldingWeapon = false;
 
@@ -511,9 +514,11 @@ public class Move : MonoBehaviour
                 heldWeapon.transform.position = this.transform.position;
                 heldWeapon.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
                 heldWeapon.transform.Find("Sprite").GetComponent<Collider2D>().enabled = true;
+               // heldWeapon.transform.position = this.transform.position;
                 heldWeapon.GetComponent<Weapon>().ThrowWeapon(throwDirection * throwingForce);
                 heldWeapon.GetComponent<Weapon>().previousOwner = this.gameObject;
                 heldWeapon.GetComponent<Weapon>().weaponThrower = this.gameObject;
+
                 //heldWeapon.transform.Find("Sprite").GetComponent<Collider2D>().enabled = false;
                 m_bHoldingWeapon = false;
                 heldWeapon = null;
@@ -652,12 +657,12 @@ public class Move : MonoBehaviour
 
     void PickupWeapon(Collider2D hitCollider)
     {
-        if (hitCollider.GetComponentInParent<Weapon>() && (hitCollider.transform.parent.tag == "2hMelee" || hitCollider.transform.parent.tag == "1hMelee"))
+        if (hitCollider.GetComponentInParent<Weapon>() && (hitCollider.transform.parent.tag == "2hMelee" || hitCollider.transform.parent.tag == "1hMelee")) //IF found a melee
         {
             if (hitCollider.GetComponentInParent<Weapon>().previousOwner != this.gameObject)
             {
                 heldWeapon = hitCollider.transform.parent.GetComponentInParent<Weapon>().gameObject;
-                heldWeapon.transform.Find("Sprite").GetComponent<SpriteRenderer>().sortingOrder = 5; //? Puts gun layer infront of player layer when picked up. 
+                heldWeapon.transform.Find("Sprite").GetComponent<SpriteRenderer>().sortingOrder = 3; //? Puts gun layer infront of player layer when picked up. 
                 heldWeapon.transform.Find("Sprite").transform.localPosition = new Vector3(0, 0, 0); //! Resets Shadow on pickup.
                 heldWeapon.GetComponent<Weapon>().PlayPickup();
                 if (heldWeapon.tag == "2hMelee")
@@ -709,11 +714,10 @@ public class Move : MonoBehaviour
                             break;
                     }
                 }
-                vibrationValue.y = 0.5f; //vibrate controller for haptic feedback
             }
 
         }
-        else if (hitCollider.GetComponentInParent<Weapon>())
+        else if (hitCollider.GetComponentInParent<Weapon>()) //else if if haven't found a melee
         {
             if (hitCollider.GetComponentInParent<Weapon>().previousOwner != this.gameObject)
             {
@@ -766,7 +770,6 @@ public class Move : MonoBehaviour
                             break;
                     }
                 }
-                vibrationValue.y = 0.5f; //vibrate controller for haptic feedback
             }
         }
     }
@@ -790,15 +793,12 @@ public class Move : MonoBehaviour
                     if (heldWeapon.GetComponent<Weapon>().Attack(TriggerCheck))
                     {
                         //CameraShake.Instance.ShakeCamera();
-                        vibrationValue.x = 0.45f;
                     }
                 }
                 m_bTriggerReleased = false;
             }
             else
             {
-                vibrationValue.x = 0.1f;
-                //GamePad.SetVibration(m_controller.mPlayerIndex , vibrationValue.x , vibrationValue.y);
                 defaultWeapon.Attack(TriggerCheck);
                 if (BodyAnimator != null)
                 {
@@ -887,6 +887,7 @@ public class Move : MonoBehaviour
                             BodyAnimator.SetTrigger("HeadSmashPullUp");
                             m_bInChokeMode = true;
                             chokingPlayer = collidersFound.gameObject;
+                            originalPosition = this.transform.position;
                             ThrowWeapon(_rigidBody.velocity, this.transform.up, false);
                             //this.GetComponentInChildren<Animator>().SetBool("IsKilling", true);
                             //collidersFound.transform.parent.GetComponent<PlayerStatus>().KillPlayer(this.GetComponent<PlayerStatus>());
@@ -899,9 +900,10 @@ public class Move : MonoBehaviour
         {
             // #Head Smash, #Smash Head, #Choking, #smash,
             _rigidBody.WakeUp();
+            m_bOutOfChoke = false;
             m_ChokingTimer.mfTimeToWait = m_fChokeKillTime; //set the time to wait
             PlayerStatus chokingPlayerStatus = chokingPlayer.transform.root.GetComponent<PlayerStatus>(); //get the player status of choking player
-            KillBarContainer.transform.position = chokingPlayer.transform.root.position - Vector3.up * 1.5f;
+            KillBarContainer.transform.position = chokingPlayer.transform.root.position - Vector3.up * m_status.m_fKillBarOffset - Vector3.forward * 8;
 
             if (chokingPlayerStatus.IsStunned) //if the Player getting choked player is still stunned
             {
@@ -919,7 +921,6 @@ public class Move : MonoBehaviour
                     m_bInChokeMode = false;
                     chokingPlayer = null;  //Set trigger to do smash
                     BodyAnimator.SetTrigger("CancelHeadSmash");
-
                 }
                 //Check Animator State
                 if (BodyAnimator.GetCurrentAnimatorStateInfo(0).IsName("HeadSmash") && m_bInChokeMode) //if in head smash state
@@ -961,6 +962,11 @@ public class Move : MonoBehaviour
         }
         else
         {
+            if (!m_bOutOfChoke)
+            {
+                this.transform.position = originalPosition;
+                m_bOutOfChoke = true;
+            }
             KillBarContainer.SetActive(false);
             m_ChokingTimer.CurrentTime = 0;
         }
