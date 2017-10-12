@@ -420,7 +420,7 @@ public class GameManagerc : MonoBehaviour
             //Load player portraits.
             for (int i = 0; i < PointContainers.Length; i++)
             {
-                if ()
+                //if ()
                 PointContainers[i].transform.GetChild(PointContainers[i].transform.childCount).GetChild(0).GetComponent<Image>().sprite = null;
             }
 
