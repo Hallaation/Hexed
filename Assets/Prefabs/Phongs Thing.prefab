@@ -150,7 +150,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!70 &70150208257212872
 CapsuleCollider2D:
@@ -194,9 +194,8 @@ MonoBehaviour:
   m_HeldSprite: {fileID: 0}
   m_fTimeBetweenShots: 0.01
   m_iDamage: 0
-  m_bMeleeWeapon: 0
   m_bGivePlayersIFrames: 0
-  KnockBack: 0
+  KnockBack: 0.1
   MaxShadow: 0.2
   MinShadow: 0
   ShadowGrowthSpeed: 0.2
@@ -204,24 +203,24 @@ MonoBehaviour:
   previousOwner: {fileID: 0}
   weaponThrower: {fileID: 0}
   m_bMoveWeaponSpriteUp: 1
-  m_AudioClip: {fileID: 0}
-  m_bRandomizePitch: 0
-  clipVolume: 0
-  PickupAudio: {fileID: 8300000, guid: a5b6f4312b2748b4291f4dd7310d2271, type: 3}
+  m_AudioClip: {fileID: 8300000, guid: 92b1f2d0c4524b241a7344601398bb3c, type: 3}
+  m_bRandomizePitch: 1
+  clipVolume: 1
+  PickupAudio: {fileID: 8300000, guid: 92b1f2d0c4524b241a7344601398bb3c, type: 3}
   pickupVolume: 1
-  DropAudioClip: {fileID: 8300000, guid: 97081f0c745f5554cbff5c7a1c0fca98, type: 3}
+  DropAudioClip: {fileID: 8300000, guid: 92b1f2d0c4524b241a7344601398bb3c, type: 3}
   DropAudioVolume: 1
-  ThrowAudioClip: {fileID: 0}
+  ThrowAudioClip: {fileID: 8300000, guid: 92b1f2d0c4524b241a7344601398bb3c, type: 3}
   ThrowAudioVolume: 1
-  ThrowHitAudio: {fileID: 0}
-  m_bRandomizeThrowHitPitch: 0
+  ThrowHitAudio: {fileID: 8300000, guid: 92b1f2d0c4524b241a7344601398bb3c, type: 3}
+  m_bRandomizeThrowHitPitch: 1
   ThrowHitAudioVolume: 1
-  OnHitFlinchTime: 0
-  Attacking: 0
+  m_Stun: 0
+  m_fHitFlinchTime: 0
+  m_bAttacking: 0
   m_b2Handed: 0
-  DurationOfAttack: 0
-  hitAudioClip: {fileID: 0}
-  m_bRandomizeHitAudio: 0
+  hitAudioClip: {fileID: 8300000, guid: 92b1f2d0c4524b241a7344601398bb3c, type: 3}
+  m_bRandomizeHitAudio: 1
   hitAudioVolume: 1
 --- !u!212 &212120341330159126
 SpriteRenderer:
