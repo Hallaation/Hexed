@@ -124,14 +124,15 @@ public class SettingsManager : MonoBehaviour
     public void OnSFXVolumeChange()
     {
         gameSettings.sfxVolume = sfxVolumeSlider.value;
-        masterMixer.SetFloat("SFX", masterVolumeSlider.value);
+        masterMixer.SetFloat("SFX", sfxVolumeSlider.value);
         m_bUnsavedChanges = true;
     }
 
     public void OnMusicVolumeChange()
     {
         gameSettings.musicVolume = musicVolumeSlider.value;
-        masterMixer.SetFloat("Music", masterVolumeSlider.value);
+        Debug.Log(musicVolumeSlider.value);
+        masterMixer.SetFloat("Music", musicVolumeSlider.value);
         m_bUnsavedChanges = true;
     }
     public void OnApplyButtonClick()

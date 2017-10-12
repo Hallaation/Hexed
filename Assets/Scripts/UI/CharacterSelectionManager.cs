@@ -66,7 +66,10 @@ public class CharacterSelectionManager : MonoBehaviour
         if (UIManager.Instance.m_bInMainMenu)
         {
             StartWhenReady dockThing = FindObjectOfType<StartWhenReady>();
-            dockThing.m_SpriteRenderer.sprite = dockThing.PressStartSprites[System.Convert.ToInt32(playerSelectedCharacter.Count > 1)];
+            if (dockThing)
+            {
+                dockThing.m_SpriteRenderer.sprite = dockThing.PressStartSprites[System.Convert.ToInt32(playerSelectedCharacter.Count > 1)];
+            }
         }
         if (playerSelectedCharacter.Count > 1 && UIManager.Instance.m_bInMainMenu /*|| Application.isEditor*/)
         {
