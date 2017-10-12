@@ -563,8 +563,6 @@ public class Move : MonoBehaviour
                     //    weaponToPickUp = WeaponCollider;
                     //    break;
                     //}
-
-
                     weaponToPickUp = WeaponCollider;
                     break;
 

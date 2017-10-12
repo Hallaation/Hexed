@@ -117,7 +117,7 @@ public class Glass : MonoBehaviour, IHitByBullet, IHitByMelee
 
         for (int i = 0; i < Shards.Length; i++)
         {
-            shardObjects[i] = Instantiate(Shard1, this.transform.position + this.transform.up * UnityEngine.Random.Range(-1f, 0f), this.transform.rotation);
+            shardObjects[i] = Instantiate(Shards[i], this.transform.position + this.transform.up * UnityEngine.Random.Range(-1f, 0f), this.transform.rotation);
             shardObjects[i].transform.rotation = Quaternion.Euler(Vector3.forward * UnityEngine.Random.Range(40, 180));
             //shardObjects[i].GetComponent<Rigidbody2D>().velocity = hit.gameObject.GetComponent<Rigidbody2D>().velocity * UnityEngine.Random.Range(0.03f , .1f);
             if (hit.gameObject.GetComponent<Bullet>())
@@ -142,7 +142,8 @@ public class Glass : MonoBehaviour, IHitByBullet, IHitByMelee
         //The shards will be instantiated along the object's up vector, the range will be UnityEngine.Randomed so they spawn in UnityEngine.Random locations of the glass piece
         for (int i = 0; i < Shards.Length; i++)
         {
-            shardObjects[i] = Instantiate(Shard1, this.transform.position + this.transform.up * UnityEngine.Random.Range(-1f, 0f), this.transform.rotation);
+
+            shardObjects[i] = Instantiate(Shards[i] , this.transform.position + this.transform.up * UnityEngine.Random.Range(-1f, 0f), this.transform.rotation);
             shardObjects[i].transform.rotation = Quaternion.Euler(Vector3.forward * UnityEngine.Random.Range(40, 180));
             //shardObjects[i].GetComponent<Rigidbody2D>().velocity = hit.gameObject.GetComponent<Rigidbody2D>().velocity * UnityEngine.Random.Range(0.03f , .1f);
             if (hit.transform.tag == "2hMelee")
@@ -174,7 +175,8 @@ public class Glass : MonoBehaviour, IHitByBullet, IHitByMelee
         //The shards will be instantiated along the object's up vector, the range will be UnityEngine.Randomed so they spawn in UnityEngine.Random locations of the glass piece
         for (int i = 0; i < Shards.Length; i++)
         {
-            shardObjects[i] = Instantiate(Shard1, this.transform.position + this.transform.up * UnityEngine.Random.Range(-1f, 0f), this.transform.rotation);
+            
+            shardObjects[i] = Instantiate(Shards[i], this.transform.position + this.transform.up * UnityEngine.Random.Range(-1f, 0f), this.transform.rotation);
             shardObjects[i].transform.rotation = Quaternion.Euler(Vector3.forward * UnityEngine.Random.Range(40, 180));
             //shardObjects[i].GetComponent<Rigidbody2D>().velocity = hit.gameObject.GetComponent<Rigidbody2D>().velocity * UnityEngine.Random.Range(0.03f , .1f);
             shardObjects[i].GetComponent<Rigidbody2D>().AddForce(a_Vecocity * UnityEngine.Random.Range(0.03f, .1f), ForceMode2D.Impulse);
