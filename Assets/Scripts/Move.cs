@@ -903,7 +903,7 @@ public class Move : MonoBehaviour
             PlayerStatus chokingPlayerStatus = chokingPlayer.transform.root.GetComponent<PlayerStatus>(); //get the player status of choking player
             KillBarContainer.transform.position = chokingPlayer.transform.root.position - Vector3.up * 1.5f;
 
-            if (chokingPlayerStatus.IsStunned) //if the choking player is still stunned
+            if (chokingPlayerStatus.IsStunned) //if the Player getting choked player is still stunned
             {
                 Vector3 chokePosition = chokingPlayer.transform.root.Find("ChokingSpot").position;
                 this.transform.position = chokePosition;
@@ -914,13 +914,21 @@ public class Move : MonoBehaviour
                 {
                     BodyAnimator.SetTrigger("HeadSmashSmash"); //Set trigger to do smash
                 }
+                if (XCI.GetButtonDown(XboxButton.B, m_controller.mXboxController)) //look for X button down
+                {
+                    m_bInChokeMode = false;
+                    chokingPlayer = null;  //Set trigger to do smash
+                    BodyAnimator.SetTrigger("CancelHeadSmash");
+
+                }
                 //Check Animator State
-                if (BodyAnimator.GetCurrentAnimatorStateInfo(0).IsName("HeadSmash")) //if in head smash state
+                if (BodyAnimator.GetCurrentAnimatorStateInfo(0).IsName("HeadSmash") && m_bInChokeMode) //if in head smash state
                 {
                     if (!m_bChoked) //check if I applied choking logic already
                     {
                         m_bChoked = true; //set the applied logic to true
                         m_ChokingTimer.CurrentTime += m_fChokedTimeIncrement; //increase the timer
+
                     }
                 }
                 else
