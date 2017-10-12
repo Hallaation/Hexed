@@ -52,7 +52,7 @@ public class Move : MonoBehaviour
     private int OriginalSortingOrder; //Used to move the player back to their sorting layer so everything renders properly.
     private Timer m_ChokingTimer;
     private Vector3 originalPosition;
-    private bool m_bOutOfChoke;
+    private bool m_bOutOfChoke = true;
 
     private Image killMask;
     private GameObject KillBarContainer;

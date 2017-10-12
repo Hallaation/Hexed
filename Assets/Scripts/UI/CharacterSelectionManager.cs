@@ -66,7 +66,10 @@ public class CharacterSelectionManager : MonoBehaviour
         if (UIManager.Instance.m_bInMainMenu)
         {
             StartWhenReady dockThing = FindObjectOfType<StartWhenReady>();
-            dockThing.m_SpriteRenderer.sprite = dockThing.PressStartSprites[System.Convert.ToInt32(playerSelectedCharacter.Count > 1)];
+            if (dockThing)
+            {
+                dockThing.m_SpriteRenderer.sprite = dockThing.PressStartSprites[System.Convert.ToInt32(playerSelectedCharacter.Count > 1)];
+            }
         }
         if (playerSelectedCharacter.Count > 1 && UIManager.Instance.m_bInMainMenu /*|| Application.isEditor*/)
         {
@@ -119,7 +122,6 @@ public class CharacterSelectionManager : MonoBehaviour
 
                 Vector3 spawnPosition = ControllerManager.Instance.spawnPoints[i].position; //Get the spawn position
                 //Make the gameojbect and keep a reference scoped to the single loop
-
                 GameObject go = Instantiate(playerSelectedCharacter[JoinedXboxControllers[i]], spawnPosition, Quaternion.identity, null);
                 //Set anything required for the player to work.
                 go.transform.position = spawnPosition;

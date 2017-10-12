@@ -39,6 +39,7 @@ public class Melee : Weapon
         {
             if(m_bAttacking == true && other.tag == "Wall")
             {
+                #region
                 //float AnimationTime = BodyAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime;
                 //BodyAnimator.SetFloat("Speed", -.5f);
                 //if (BodyAnimator.GetCurrentAnimatorStateInfo(0).IsName("TwoHandedMeleeLeftAttack"))
@@ -56,8 +57,9 @@ public class Melee : Weapon
                 //    BodyAnimator.Play("OneHandedMeleeAttack", 0, AnimationTime);
                 //    ReverseAnimation = true;
                 //}
+                #endregion
             }
-           else if (m_bAttacking == true && other.tag == "Player" && other.transform.root != this.transform.root && other.transform.root.GetComponent<PlayerStatus>().m_bStunned == false)
+            else if (m_bAttacking == true && other.tag == "Player" && other.transform.root != this.transform.root && other.transform.root.GetComponent<PlayerStatus>().m_bStunned == false)
             {
                 if (BodyAnimator != null)
                 {
@@ -66,31 +68,24 @@ public class Melee : Weapon
                     RaycastHit2D hit = Physics2D.Raycast(this.transform.position, Direction, length + 2, 1 << LayerMask.NameToLayer("Wall"));
                     if (hit)
                     {
-                        Debug.Log("Wall");
                         Vector2 Position = new Vector2(transform.position.x,transform.position.y);
                         Vector2 OtherPosition = new Vector2(other.transform.position.x, other.transform.position.y);
                         if((hit.point - Position).magnitude < (OtherPosition - Position).magnitude) // if RayHit Wall is closer then the other player.
                         {
-                            Debug.Log("WallYYY");
                         }
-                        
                         else
                         {
-
                             HitPlayerStuff(other);
                         }
                     }
                     else
                     {
                         HitPlayerStuff(other);
-                        
                         //other.transform.parent.GetComponentInParent<PlayerStatus>().HitPlayer(this, false);
-                              //! Uses transform right instead of transform up due to using the bats right rather then players up
-                       
+                              //! Uses transform right instead of transform up due to using the bats right rather then players 
                         //Debug.Log("BatEnterStun");
                     }
                 }
-                
                 //Find every hitbymelee interface and call its function
                 if (other.GetComponent<IHitByMelee>() != null)
                 {
@@ -120,6 +115,13 @@ public class Melee : Weapon
                 }
             }
             //Find every hit by melee interface and call its function
+            foreach (IHitByMelee item in other.GetComponents<IHitByMelee>())
+            {
+                item.HitByMelee(this, null);
+            }
+        }
+        if (other.GetComponent<IHitByMelee>() != null)
+        {
             foreach (IHitByMelee item in other.GetComponents<IHitByMelee>())
             {
                 item.HitByMelee(this, null);

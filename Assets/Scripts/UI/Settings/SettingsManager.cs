@@ -124,14 +124,14 @@ public class SettingsManager : MonoBehaviour
     public void OnSFXVolumeChange()
     {
         gameSettings.sfxVolume = sfxVolumeSlider.value;
-        masterMixer.SetFloat("SFX", masterVolumeSlider.value);
+        masterMixer.SetFloat("SFX", sfxVolumeSlider.value);
         m_bUnsavedChanges = true;
     }
 
     public void OnMusicVolumeChange()
     {
         gameSettings.musicVolume = musicVolumeSlider.value;
-        masterMixer.SetFloat("Music", masterVolumeSlider.value);
+        masterMixer.SetFloat("Music", musicVolumeSlider.value);
         m_bUnsavedChanges = true;
     }
     public void OnApplyButtonClick()
@@ -165,19 +165,23 @@ public class SettingsManager : MonoBehaviour
             //textureQualityDropdown.value = textureQualityDropdown.options.Count + gameSettings.textureQuality;
             if (resolutionDropdwon)
                 resolutionDropdwon.value = gameSettings.resolutionIndex;
+
             if (fullscreenToggle)
+            {
                 fullscreenToggle.isOn = gameSettings.Fullscreen;
+                onFullScreenToggle();
+            }
 
             if (resolutionDropdwon)
+            {
                 resolutionDropdwon.RefreshShownValue();
+            }
 
             //Apply the changes
             OnMasterVolumeChange();
             OnSFXVolumeChange();
             OnMusicVolumeChange();
 
-            onFullScreenToggle();
-            onResolutionChange();
             //onAntialiasingChange();
             //onTextureQualityChange();
         }

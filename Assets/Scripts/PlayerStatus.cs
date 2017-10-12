@@ -277,7 +277,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
 
             //If the previous frames health isnt the current frames health, show the changed health.
             //_PlayerCanvas.transform.localScale = new Vector3(Camera.main.orthographicSize, Camera.main.orthographicSize, Camera.main.orthographicSize) * 0.003f;
-            _PlayerCanvas.transform.position = this.transform.position;
+            _PlayerCanvas.transform.position = this.transform.position - Vector3.forward * 8;
             //HealthContainer.transform.position = this.transform.position + Vector3.up * m_fHealthBarOffset - Vector3.forward * 8 ;
             //stunBarContainer.transform.position = this.transform.position + Vector3.up * m_fStunBarOffset - Vector3.forward * 8;
             //killbarContainer.transform.position = this.transform.position - Vector3.up * 1.5f;
