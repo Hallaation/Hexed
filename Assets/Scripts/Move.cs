@@ -507,6 +507,7 @@ public class Move : MonoBehaviour
                     Debug.Log("Hit wall");
                     heldWeapon.transform.position = this.transform.position - this.transform.up * 0.5f;
                 }
+                heldWeapon.transform.position = this.transform.position;
                 heldWeapon.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
                 heldWeapon.transform.Find("Sprite").GetComponent<Collider2D>().enabled = true;
                 heldWeapon.GetComponent<Weapon>().ThrowWeapon(throwDirection * throwingForce);
