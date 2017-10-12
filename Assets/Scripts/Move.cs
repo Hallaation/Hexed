@@ -478,6 +478,7 @@ public class Move : MonoBehaviour
                 //Raycast from me to the gun mount position + an arbitrary number. IF I hit something, snap the gun to behind the wall
                 RaycastHit2D hit = Physics2D.Raycast(this.transform.position, throwDirection, (this.transform.position - GunMountPosition).magnitude + 0.3f, LayerMask.GetMask("Glass", "Wall"));
                 Debug.DrawRay(this.transform.position, throwDirection * (this.transform.position - GunMountPosition).magnitude, Color.yellow, 5);
+                heldWeapon.transform.position = this.transform.position;
                 if (hit)
                 {
                     heldWeapon.transform.position = hit.point + (hit.normal * 0.4f);
