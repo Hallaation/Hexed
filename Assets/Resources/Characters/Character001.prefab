@@ -34,7 +34,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4115687349359538}
-  - component: {fileID: 114762604034780394}
+  - component: {fileID: 114825307498702124}
   m_Layer: 0
   m_Name: Sprites
   m_TagString: Untagged
@@ -957,7 +957,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1277424391826748}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9.5, y: 0, z: 0}
+  m_LocalPosition: {x: -5.7586966, y: 7.081749, z: 0.54794025}
   m_LocalScale: {x: 1.2, y: 1.2, z: 1}
   m_Children:
   - {fileID: 4282961892030130}
@@ -2282,7 +2282,21 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114762604034780394
+--- !u!114 &114815310358513250
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1277424391826748}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3c90d49e5289ca438daff1445e2af0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mXboxController: 0
+  mPlayerIndex: 0
+  m_playerNumber: 0
+--- !u!114 &114825307498702124
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -2301,20 +2315,6 @@ MonoBehaviour:
   Blood4: {fileID: 1290339145213612, guid: e64bad0f14da79444a1f540b4bd72711, type: 2}
   Blood5: {fileID: 1059244047924568, guid: 514a33878839b464db9d2ca0aed560cc, type: 2}
   MaxSize: 0
---- !u!114 &114815310358513250
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1277424391826748}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3c90d49e5289ca438daff1445e2af0f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mXboxController: 0
-  mPlayerIndex: 0
-  m_playerNumber: 0
 --- !u!114 &114871196914284096
 MonoBehaviour:
   m_ObjectHideFlags: 1
