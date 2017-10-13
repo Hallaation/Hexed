@@ -7,7 +7,6 @@ using UnityEngine.UI;
 
 public class PlayerUIElements : MonoBehaviour
 {
-    //TODO change these to the sprites and sprite masks later. 
     [HideInInspector]
     public GameObject m_AmmoText;
     [HideInInspector]

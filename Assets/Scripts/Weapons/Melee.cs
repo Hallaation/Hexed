@@ -39,6 +39,7 @@ public class Melee : Weapon
         {
             if(m_bAttacking == true && other.tag == "Wall")
             {
+                #region
                 //float AnimationTime = BodyAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime;
                 //BodyAnimator.SetFloat("Speed", -.5f);
                 //if (BodyAnimator.GetCurrentAnimatorStateInfo(0).IsName("TwoHandedMeleeLeftAttack"))
@@ -56,8 +57,9 @@ public class Melee : Weapon
                 //    BodyAnimator.Play("OneHandedMeleeAttack", 0, AnimationTime);
                 //    ReverseAnimation = true;
                 //}
+                #endregion
             }
-           else if (m_bAttacking == true && other.tag == "Player" && other.transform.root != this.transform.root && other.transform.root.GetComponent<PlayerStatus>().m_bStunned == false)
+            else if (m_bAttacking == true && other.tag == "Player" && other.transform.root != this.transform.root && other.transform.root.GetComponent<PlayerStatus>().m_bStunned == false)
             {
                 if (BodyAnimator != null)
                 {
@@ -66,31 +68,24 @@ public class Melee : Weapon
                     RaycastHit2D hit = Physics2D.Raycast(this.transform.position, Direction, length + 2, 1 << LayerMask.NameToLayer("Wall"));
                     if (hit)
                     {
-                        Debug.Log("Wall");
                         Vector2 Position = new Vector2(transform.position.x,transform.position.y);
                         Vector2 OtherPosition = new Vector2(other.transform.position.x, other.transform.position.y);
                         if((hit.point - Position).magnitude < (OtherPosition - Position).magnitude) // if RayHit Wall is closer then the other player.
                         {
-                            Debug.Log("WallYYY");
                         }
-                        
                         else
                         {
-
                             HitPlayerStuff(other);
                         }
                     }
                     else
                     {
                         HitPlayerStuff(other);
-                        
                         //other.transform.parent.GetComponentInParent<PlayerStatus>().HitPlayer(this, false);
-                              //! Uses transform right instead of transform up due to using the bats right rather then players up
-                       
+                              //! Uses transform right instead of transform up due to using the bats right rather then players 
                         //Debug.Log("BatEnterStun");
                     }
                 }
-                
                 //Find every hitbymelee interface and call its function
                 if (other.GetComponent<IHitByMelee>() != null)
                 {
@@ -101,7 +96,6 @@ public class Melee : Weapon
                 }
             }
         }
-
         //Velocity check
         else if (GetComponent<Rigidbody2D>().velocity.magnitude > 10)
         {
@@ -112,8 +106,12 @@ public class Melee : Weapon
                 if (GetComponent<Rigidbody2D>().velocity.magnitude >= 10 && other.tag == "Player" && other.GetComponentInParent<PlayerStatus>().gameObject != weaponThrower)
                 {
                     //stun the player
-                    Debug.Log("ThrownStun");
                     other.transform.root.GetComponentInParent<PlayerStatus>().StunPlayer(transform.right * KnockBack);        //! Uses transform right instead of transform up due to using the bats right rather then players up
+                    //Play the hit audio
+                    hitPlayerAudioSource.clip = ThrowHitAudio; 
+                    hitPlayerAudioSource.volume = ThrowHitAudioVolume;
+                    hitPlayerAudioSource.pitch = (m_bRandomizeThrowHitPitch) ? Random.Range(0.9f, 1.1f) : 1;
+                    hitPlayerAudioSource.Play();
                 }
             }
             //Find every hit by melee interface and call its function
@@ -122,7 +120,16 @@ public class Melee : Weapon
                 item.HitByMelee(this, null);
             }
         }
+        if (other.GetComponent<IHitByMelee>() != null && m_bAttacking)
+        {
+            foreach (IHitByMelee item in other.GetComponents<IHitByMelee>())
+            {
+                item.HitByMelee(this, null);
+            }
+        }
+
     }
+    
 
     void OnTriggerStay2D(Collider2D other)
     {
@@ -203,7 +210,6 @@ public class Melee : Weapon
                 if (GetComponent<Rigidbody2D>().velocity.magnitude >= 10 && other.tag == "Player" && other.GetComponentInParent<PlayerStatus>().gameObject != weaponThrower)
                 {
                     //stun the player
-                    Debug.Log("ThrownStun");
                     other.transform.root.GetComponentInParent<PlayerStatus>().StunPlayer(transform.right * KnockBack);        //! Uses transform right instead of transform up due to using the bats right rather then players up
                 }
             }
@@ -231,7 +237,7 @@ public class Melee : Weapon
     }
 
 
-    void HitPlayerStuff(Collider2D other)
+    void HitPlayerStuff(Collider2D other) //called whenever a player is hit
     {
         PlayerStatus OtherPlayerStatus = other.transform.root.GetComponent<PlayerStatus>();
         if(m_Stun == true)
@@ -244,7 +250,15 @@ public class Melee : Weapon
                 OtherPlayerStatus.KillPlayer(this.transform.root.GetComponent<PlayerStatus>());
             }
         }
-        m_AudioSource.Play();
+        //Play hit by melee sound effect.
+        if (OtherPlayerStatus.GetComponentInChildren<IHitByMelee>() != null)
+        {
+            foreach (IHitByMelee item in OtherPlayerStatus.GetComponentsInChildren<IHitByMelee>())
+            {
+                item.HitByMelee(this, null);
+            }
+        }
+       // m_AudioSource.Play();
 
        
     }
@@ -287,6 +301,7 @@ public class Melee : Weapon
         if (m_bAttacking && !m_bPlayedAudio)
         {
             m_bPlayedAudio = true;
+            m_AudioSource.pitch = (m_bRandomizePitch) ? Random.Range(0.9f, 1.1f) : 1;
             m_AudioSource.Play();
             //reset audio
         }

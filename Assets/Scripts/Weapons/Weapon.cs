@@ -62,7 +62,7 @@ public class Weapon : MonoBehaviour
     public bool m_bRandomizeThrowHitPitch = true;
     [Range(0 , 1)]
     public float ThrowHitAudioVolume = 1;
-    private AudioSource hitPlayerAudioSource;
+    protected AudioSource hitPlayerAudioSource;
     protected bool m_bPlayedAudio = false; //A fallback incase audio doesn't work, mostly a major fallback for the melee guns.
     //[Range(-2, 2)]
     //public float clipPitch;
@@ -101,6 +101,7 @@ public class Weapon : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         if (!transform.parent) // If weapon is not held, Grow and shrink shadow.
         {
             #region
@@ -255,7 +256,6 @@ public class Weapon : MonoBehaviour
             //if it enters a trigger (another player in this case") the hit player gets stunned. calls the status applied to drop their weapon.
             if (GetComponent<Rigidbody2D>().velocity.magnitude >= 10 && a_collider.tag == "Player" && a_collider.GetComponentInParent<PlayerStatus>().gameObject != weaponThrower)
             {
-
                 if (a_collider.GetComponentInParent<PlayerStatus>().IsStunned == false)
                 {
                     a_collider.GetComponentInParent<PlayerStatus>().StunPlayer(_rigidbody.velocity * KnockBack);

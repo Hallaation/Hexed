@@ -60,8 +60,7 @@ public class UINavigation : MonoBehaviour
             {
                 for (int i = 0; i < 4; i++)
                 {
-
-                    if (XCI.GetButtonDown(XboxButton.DPadDown, XboxController.First + i))
+                    if (XCI.GetButtonDown(XboxButton.DPadDown, XboxController.First + i) )
                     {
                         if (_EventSystem.currentSelectedGameObject.GetComponent<Selectable>().navigation.selectOnDown != null)
                         //Debug.Log("left is null");

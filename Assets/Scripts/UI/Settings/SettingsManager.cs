@@ -78,6 +78,16 @@ public class SettingsManager : MonoBehaviour
         LoadSettings();
     }
 
+
+    void Update()
+    {
+        if (m_bUnsavedChanges)
+        {
+            OnMasterVolumeChange();
+            OnSFXVolumeChange();
+            OnMusicVolumeChange();
+        }
+    }
     public void onFullScreenToggle()
     {
         /*Screen.fullScreen = */
@@ -124,14 +134,14 @@ public class SettingsManager : MonoBehaviour
     public void OnSFXVolumeChange()
     {
         gameSettings.sfxVolume = sfxVolumeSlider.value;
-        masterMixer.SetFloat("SFX", masterVolumeSlider.value);
+        masterMixer.SetFloat("SFX", sfxVolumeSlider.value);
         m_bUnsavedChanges = true;
     }
 
     public void OnMusicVolumeChange()
     {
         gameSettings.musicVolume = musicVolumeSlider.value;
-        masterMixer.SetFloat("Music", masterVolumeSlider.value);
+        masterMixer.SetFloat("Music", musicVolumeSlider.value);
         m_bUnsavedChanges = true;
     }
     public void OnApplyButtonClick()
@@ -144,10 +154,13 @@ public class SettingsManager : MonoBehaviour
     }
     public void SaveSettings()
     {
-     //   Debug.Log("settings saved");
-        string jsonData = JsonUtility.ToJson(gameSettings, true);
-        File.WriteAllText(Application.persistentDataPath + "/gameSettings.json", jsonData);
-        print(Application.persistentDataPath);
+        if (m_bUnsavedChanges)
+        {
+            //   Debug.Log("settings saved");
+            string jsonData = JsonUtility.ToJson(gameSettings, true);
+            File.WriteAllText(Application.persistentDataPath + "/gameSettings.json", jsonData);
+            print(Application.persistentDataPath);
+        }
     }
 
     public void LoadSettings()
@@ -155,29 +168,44 @@ public class SettingsManager : MonoBehaviour
         if (File.Exists(Application.persistentDataPath + "/gameSettings.json"))
         {
             gameSettings = JsonUtility.FromJson<Settings>(File.ReadAllText(Application.persistentDataPath + "/gameSettings.json"));
+
             if (masterVolumeSlider)
+            {
                 masterVolumeSlider.value = gameSettings.masterVolume;
+                masterMixer.SetFloat("Master", masterVolumeSlider.value);
+            }
             if (sfxVolumeSlider)
+            {
                 sfxVolumeSlider.value = gameSettings.sfxVolume;
+                masterMixer.SetFloat("SFX", sfxVolumeSlider.value);
+            }
             if (musicVolumeSlider)
+            {
                 musicVolumeSlider.value = gameSettings.musicVolume;
+                masterMixer.SetFloat("Music", musicVolumeSlider.value);
+            }
+
             //AAdropdown.value = (int)Mathf.Sqrt(gameSettings.antiAliasing);
             //textureQualityDropdown.value = textureQualityDropdown.options.Count + gameSettings.textureQuality;
             if (resolutionDropdwon)
                 resolutionDropdwon.value = gameSettings.resolutionIndex;
+
             if (fullscreenToggle)
+            {
                 fullscreenToggle.isOn = gameSettings.Fullscreen;
+                onFullScreenToggle();
+            }
 
             if (resolutionDropdwon)
+            {
                 resolutionDropdwon.RefreshShownValue();
+            }
 
             //Apply the changes
             OnMasterVolumeChange();
             OnSFXVolumeChange();
             OnMusicVolumeChange();
 
-            onFullScreenToggle();
-            onResolutionChange();
             //onAntialiasingChange();
             //onTextureQualityChange();
         }

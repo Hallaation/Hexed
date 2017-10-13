@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+/*
 [CustomEditor(typeof(HitByBulletAction), true)]
 public class BulletAudioEditor : Editor
 {
@@ -46,5 +47,5 @@ public class MeleeAudioEditor : Editor
         }
     }
 }
-
+*/
 

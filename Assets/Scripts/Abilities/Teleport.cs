@@ -55,7 +55,6 @@ public class Teleport : BaseAbility
             //if there is any rotation from the left stick, the player will teleport the direction of the left stick, otherwise they will teleport the way they are looking
             if (m_MoveOwner.m_LeftStickRotation.magnitude > 0)
             {
-
                 Vector2 V2rotation = new Vector2(rotation.x, rotation.y);
                 RaycastHit2D hitLeftStick = Physics2D.Raycast(transform.position, V2rotation, m_TeleportForce, LayerMask.GetMask("Wall", "Glass"));
                 Debug.DrawRay(transform.position, V2rotation * m_TeleportForce, Color.blue, 5);
