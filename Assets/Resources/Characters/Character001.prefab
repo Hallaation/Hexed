@@ -1656,7 +1656,7 @@ MonoBehaviour:
   fistObject: {fileID: 0}
   movementSpeed: 10
   throwingForce: 300
-  m_fChokedTimeIncrement: 1
+  m_fChokedTimeIncrement: 1.5
   m_fChokeKillTime: 7
   m_fPositionOffset: 0.2
   vibrationValue: {x: 0, y: 0}
@@ -2097,6 +2097,7 @@ MonoBehaviour:
   m_iMaxCharges: 2
   m_iCurrentCharges: 0
   findUI: 1
+  m_MoveOwner: {fileID: 0}
   m_ChargeIndicator: {fileID: 0}
   ChargeReadySprites:
   - {fileID: 21300002, guid: b4d90898914e2804881dabe07827e302, type: 3}
