@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class ScreenTransition : MonoBehaviour {
 
-    Animator m_Animator;
+    public Animator m_Animator;
 	// Use this for initialization
 	void Awake ()
     {
@@ -17,21 +17,25 @@ public class ScreenTransition : MonoBehaviour {
 	
     public void CloseDoor()
     {
+        Debug.Log("Close Door");
         m_Animator.SetTrigger("CloseDoor");
     }
 
 
     public void OpenDoor()
     {
+        Debug.Log("Open Door");
         m_Animator.SetTrigger("OpenDoor");
     }
 
     void OnSceneLoad(Scene scene, LoadSceneMode mode)
     {
-        if (FindObjectOfType<ScreenTransition>() != this)
-        {
-            Destroy(FindObjectOfType<ScreenTransition>().gameObject);
-        }
-        this.transform.SetParent(FindObjectOfType<Canvas>().transform);
+       // if (FindObjectOfType<ScreenTransition>() != this)
+       // {
+       //     Destroy(FindObjectOfType<ScreenTransition>().gameObject);
+       // }
+       // this.transform.SetParent(FindObjectOfType<Canvas>().transform);
+       // this.transform.localPosition = Vector3.zero;
+       // m_Animator.SetTrigger("OpenDoor");
     }
 }
