@@ -634,9 +634,10 @@ GameObject:
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 4375618762102182}
-  m_Layer: 8
-  m_Name: 2HandedMeleeSpot
+  - component: {fileID: 4956824935442008}
+  - component: {fileID: 212216648619215456}
+  m_Layer: 0
+  m_Name: Crosshair
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -919,8 +920,33 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1747210499335676}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.773, y: 1.06, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -15.101, y: 9.921815, z: 0}
+  m_LocalScale: {x: 1.2, y: 1.2, z: 1}
+  m_Children:
+  - {fileID: 4834453555101378}
+  - {fileID: 4985821799328362}
+  - {fileID: 4956824935442008}
+  - {fileID: 4997846841212680}
+  - {fileID: 4920624073694488}
+  - {fileID: 4350440211359944}
+  - {fileID: 4000198835020106}
+  - {fileID: 4513932534797672}
+  - {fileID: 4109101236570844}
+  - {fileID: 4152633453977802}
+  - {fileID: 4736044510565938}
+  - {fileID: 4807947911444630}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4152633453977802
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1539878823307486}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.5, z: 0}
+  m_LocalScale: {x: 0.9999998, y: 0.9999998, z: 1}
   m_Children: []
   m_Father: {fileID: 4205327217388016}
   m_RootOrder: 8
@@ -1580,20 +1606,7 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114016415784092158
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1444455564827940}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a4f3dfa8c0a0b1e4da4d06c295c12e67, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speedX: 0.25
-  speedY: 0.25
---- !u!114 &114038160586672010
+--- !u!114 &114076634340831708
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -1697,48 +1710,34 @@ MonoBehaviour:
   m_Script: {fileID: 1980459831, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
-  m_ReferencePixelsPerUnit: 100
-  m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
-  m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
-  m_PhysicalUnit: 3
-  m_FallbackScreenDPI: 96
-  m_DefaultSpriteDPI: 96
-  m_DynamicPixelsPerUnit: 1
---- !u!114 &114090022714090244
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1823792554242768}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac6f130352d45f24a987e6d68e08e370, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  heldWeapon: {fileID: 0}
-  m_bStopStickRotation: 0
-  crosshair: {fileID: 1385739695000614}
-  weapon1HandedMount: {fileID: 4264121703138712}
-  weapon2HandedMount: {fileID: 4733449680805330}
-  Melee1HandedMount: {fileID: 0}
-  Melee2HandedMount: {fileID: 0}
-  fistObject: {fileID: 0}
-  movementSpeed: 10
-  throwingForce: 300
-  m_fChokedTimeIncrement: 1
-  m_fChokeKillTime: 7
-  m_fPositionOffset: 0.2
-  vibrationValue: {x: 0, y: 0}
-  playerSpirte: {fileID: 0}
-  StartMoveDelay: 0
-  m_LeftStickRotation: {x: -0, y: 0, z: 0}
-  StickDeadZone: 0.12
-  ColorDatabaseKey: Teleport
-  quack: {fileID: 8300000, guid: 97081f0c745f5554cbff5c7a1c0fca98, type: 3}
---- !u!114 &114096488671213032
+  AbilityIcon: {fileID: 21300000, guid: beb561301c429c1478719366046b5f33, type: 3}
+  SelectionSprites:
+  - {fileID: 21300010, guid: 8560db96e33c8ae4a837c261da8941ce, type: 3}
+  - {fileID: 21300032, guid: 8560db96e33c8ae4a837c261da8941ce, type: 3}
+  m_CharacterPortrait: {fileID: 21300008, guid: d2ac2712cc3a7914c8b1107d379e88a3,
+    type: 3}
+  m_fMaximumMana: 100
+  PassiveManaRegeneration: 2.5
+  ManaCost: 50
+  RepeatedUsage: 0
+  repeatedManaCost: 0
+  m_fMinimumManaRequired: 40
+  m_fMovementSpeedSlowDown: 2
+  m_fAbilityCoolDown: 4
+  m_iMaxCharges: 2
+  m_iCurrentCharges: 0
+  findUI: 1
+  m_ChargeIndicator: {fileID: 0}
+  ChargeReadySprites:
+  - {fileID: 21300002, guid: b4d90898914e2804881dabe07827e302, type: 3}
+  - {fileID: 21300004, guid: b4d90898914e2804881dabe07827e302, type: 3}
+  EmptyChargeSprites:
+  - {fileID: 21300006, guid: b4d90898914e2804881dabe07827e302, type: 3}
+  - {fileID: 21300008, guid: b4d90898914e2804881dabe07827e302, type: 3}
+  ChargeHighlighters: []
+  ChargeCoolDown: 1
+  m_TeleportForce: 3.5
+--- !u!114 &114242636016527110
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}

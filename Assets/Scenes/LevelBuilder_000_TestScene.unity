@@ -115,6 +115,29 @@ Transform:
   m_PrefabParentObject: {fileID: 4985492388138710, guid: c534203a4e7d4574ea47f390bce706de,
     type: 2}
   m_PrefabInternal: {fileID: 1996563125}
+--- !u!1 &27976425 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1762035757360004, guid: bfb7af45aa304094aa3ff4a6ca53437d,
+    type: 2}
+  m_PrefabInternal: {fileID: 2045072434}
+--- !u!114 &27976430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 27976425}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecb55bb6f42f1b24590c5e94dda606a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CopyBulletAudio: 1
+  m_audioClip: {fileID: 0}
+  m_bRandomizePitch: 0
+  clipVolume: 1
+  m_bShakeCamera: 1
+  PlayParticles: 0
+  ParticlePrefab: {fileID: 0}
 --- !u!4 &50753778 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4449191571688328, guid: bfb7af45aa304094aa3ff4a6ca53437d,
@@ -167,9 +190,37 @@ Prefab:
       propertyPath: m_Name
       value: Glass Prefab (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 114243614894238674, guid: bfb7af45aa304094aa3ff4a6ca53437d,
+        type: 2}
+      propertyPath: KeepBreaking
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: bfb7af45aa304094aa3ff4a6ca53437d, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &60630585 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1762035757360004, guid: bfb7af45aa304094aa3ff4a6ca53437d,
+    type: 2}
+  m_PrefabInternal: {fileID: 1860373273}
+--- !u!114 &60630590
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 60630585}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecb55bb6f42f1b24590c5e94dda606a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CopyBulletAudio: 1
+  m_audioClip: {fileID: 0}
+  m_bRandomizePitch: 0
+  clipVolume: 1
+  m_bShakeCamera: 1
+  PlayParticles: 0
+  ParticlePrefab: {fileID: 0}
 --- !u!1001 &74619772
 Prefab:
   m_ObjectHideFlags: 0
@@ -281,6 +332,11 @@ Prefab:
       propertyPath: m_Name
       value: Glass Prefab (19)
       objectReference: {fileID: 0}
+    - target: {fileID: 114243614894238674, guid: bfb7af45aa304094aa3ff4a6ca53437d,
+        type: 2}
+      propertyPath: KeepBreaking
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: bfb7af45aa304094aa3ff4a6ca53437d, type: 2}
   m_IsPrefabParent: 0
@@ -331,6 +387,11 @@ Prefab:
       propertyPath: m_Name
       value: Glass Prefab (22)
       objectReference: {fileID: 0}
+    - target: {fileID: 114243614894238674, guid: bfb7af45aa304094aa3ff4a6ca53437d,
+        type: 2}
+      propertyPath: KeepBreaking
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: bfb7af45aa304094aa3ff4a6ca53437d, type: 2}
   m_IsPrefabParent: 0
@@ -339,6 +400,29 @@ Transform:
   m_PrefabParentObject: {fileID: 4449191571688328, guid: bfb7af45aa304094aa3ff4a6ca53437d,
     type: 2}
   m_PrefabInternal: {fileID: 714843137}
+--- !u!1 &138695937 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1762035757360004, guid: bfb7af45aa304094aa3ff4a6ca53437d,
+    type: 2}
+  m_PrefabInternal: {fileID: 1407070049}
+--- !u!114 &138695942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 138695937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecb55bb6f42f1b24590c5e94dda606a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CopyBulletAudio: 1
+  m_audioClip: {fileID: 0}
+  m_bRandomizePitch: 0
+  clipVolume: 1
+  m_bShakeCamera: 1
+  PlayParticles: 0
+  ParticlePrefab: {fileID: 0}
 --- !u!4 &139440819 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4449191571688328, guid: bfb7af45aa304094aa3ff4a6ca53437d,
@@ -404,6 +488,52 @@ Transform:
   m_PrefabParentObject: {fileID: 4354170426050840, guid: 843b64e2f3947cb4eae4ee0e2c2286fd,
     type: 2}
   m_PrefabInternal: {fileID: 1071332355}
+--- !u!1 &219939211 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1762035757360004, guid: bfb7af45aa304094aa3ff4a6ca53437d,
+    type: 2}
+  m_PrefabInternal: {fileID: 1281658687}
+--- !u!114 &219939216
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 219939211}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecb55bb6f42f1b24590c5e94dda606a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CopyBulletAudio: 1
+  m_audioClip: {fileID: 0}
+  m_bRandomizePitch: 0
+  clipVolume: 1
+  m_bShakeCamera: 1
+  PlayParticles: 0
+  ParticlePrefab: {fileID: 0}
+--- !u!1 &251600640 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1762035757360004, guid: bfb7af45aa304094aa3ff4a6ca53437d,
+    type: 2}
+  m_PrefabInternal: {fileID: 1431674166}
+--- !u!114 &251600645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 251600640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecb55bb6f42f1b24590c5e94dda606a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CopyBulletAudio: 1
+  m_audioClip: {fileID: 0}
+  m_bRandomizePitch: 0
+  clipVolume: 1
+  m_bShakeCamera: 1
+  PlayParticles: 0
+  ParticlePrefab: {fileID: 0}
 --- !u!4 &269398676 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4449191571688328, guid: bfb7af45aa304094aa3ff4a6ca53437d,
@@ -433,6 +563,29 @@ Transform:
   m_PrefabParentObject: {fileID: 4985492388138710, guid: c534203a4e7d4574ea47f390bce706de,
     type: 2}
   m_PrefabInternal: {fileID: 1825262619}
+--- !u!1 &357698696 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1762035757360004, guid: bfb7af45aa304094aa3ff4a6ca53437d,
+    type: 2}
+  m_PrefabInternal: {fileID: 594291516}
+--- !u!114 &357698701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 357698696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecb55bb6f42f1b24590c5e94dda606a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CopyBulletAudio: 1
+  m_audioClip: {fileID: 0}
+  m_bRandomizePitch: 0
+  clipVolume: 1
+  m_bShakeCamera: 1
+  PlayParticles: 0
+  ParticlePrefab: {fileID: 0}
 --- !u!4 &388380065 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4449191571688328, guid: bfb7af45aa304094aa3ff4a6ca53437d,
@@ -490,6 +643,11 @@ Prefab:
       propertyPath: m_Name
       value: Glass Prefab (15)
       objectReference: {fileID: 0}
+    - target: {fileID: 114243614894238674, guid: bfb7af45aa304094aa3ff4a6ca53437d,
+        type: 2}
+      propertyPath: KeepBreaking
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: bfb7af45aa304094aa3ff4a6ca53437d, type: 2}
   m_IsPrefabParent: 0
@@ -540,6 +698,11 @@ Prefab:
       propertyPath: m_Name
       value: Glass Prefab (23)
       objectReference: {fileID: 0}
+    - target: {fileID: 114243614894238674, guid: bfb7af45aa304094aa3ff4a6ca53437d,
+        type: 2}
+      propertyPath: KeepBreaking
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: bfb7af45aa304094aa3ff4a6ca53437d, type: 2}
   m_IsPrefabParent: 0
@@ -580,7 +743,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4949507886628032, guid: 3e887145b78ae5f4fac2ea308b949fd0, type: 2}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1522888881079006, guid: 3e887145b78ae5f4fac2ea308b949fd0, type: 2}
       propertyPath: m_IsActive
@@ -613,6 +776,29 @@ Transform:
   m_PrefabParentObject: {fileID: 4985492388138710, guid: c534203a4e7d4574ea47f390bce706de,
     type: 2}
   m_PrefabInternal: {fileID: 2072759459}
+--- !u!1 &660251708 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1762035757360004, guid: bfb7af45aa304094aa3ff4a6ca53437d,
+    type: 2}
+  m_PrefabInternal: {fileID: 1596300783}
+--- !u!114 &660251713
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 660251708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecb55bb6f42f1b24590c5e94dda606a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CopyBulletAudio: 1
+  m_audioClip: {fileID: 0}
+  m_bRandomizePitch: 0
+  clipVolume: 1
+  m_bShakeCamera: 1
+  PlayParticles: 0
+  ParticlePrefab: {fileID: 0}
 --- !u!1 &701164684
 GameObject:
   m_ObjectHideFlags: 0
@@ -703,6 +889,11 @@ Prefab:
       propertyPath: m_Name
       value: Glass Prefab (12)
       objectReference: {fileID: 0}
+    - target: {fileID: 114243614894238674, guid: bfb7af45aa304094aa3ff4a6ca53437d,
+        type: 2}
+      propertyPath: KeepBreaking
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: bfb7af45aa304094aa3ff4a6ca53437d, type: 2}
   m_IsPrefabParent: 0
@@ -766,6 +957,48 @@ Transform:
   m_PrefabParentObject: {fileID: 4354170426050840, guid: 843b64e2f3947cb4eae4ee0e2c2286fd,
     type: 2}
   m_PrefabInternal: {fileID: 1891910837}
+--- !u!1001 &922145324
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4037203128459178, guid: 7d91d90283e3e274bb1eeb54a772815e, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -10.065329
+      objectReference: {fileID: 0}
+    - target: {fileID: 4037203128459178, guid: 7d91d90283e3e274bb1eeb54a772815e, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 9.172844
+      objectReference: {fileID: 0}
+    - target: {fileID: 4037203128459178, guid: 7d91d90283e3e274bb1eeb54a772815e, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4037203128459178, guid: 7d91d90283e3e274bb1eeb54a772815e, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4037203128459178, guid: 7d91d90283e3e274bb1eeb54a772815e, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4037203128459178, guid: 7d91d90283e3e274bb1eeb54a772815e, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4037203128459178, guid: 7d91d90283e3e274bb1eeb54a772815e, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4037203128459178, guid: 7d91d90283e3e274bb1eeb54a772815e, type: 2}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 7d91d90283e3e274bb1eeb54a772815e, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1001 &945038701
 Prefab:
   m_ObjectHideFlags: 0
@@ -812,6 +1045,11 @@ Prefab:
     - target: {fileID: 1762035757360004, guid: bfb7af45aa304094aa3ff4a6ca53437d, type: 2}
       propertyPath: m_Name
       value: Glass Prefab (11)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114243614894238674, guid: bfb7af45aa304094aa3ff4a6ca53437d,
+        type: 2}
+      propertyPath: KeepBreaking
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: bfb7af45aa304094aa3ff4a6ca53437d, type: 2}
@@ -943,7 +1181,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 222.85}
 --- !u!1 &997223522
 GameObject:
@@ -1006,7 +1244,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!4 &1029603017 stripped
 Transform:
@@ -1070,6 +1308,29 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 843b64e2f3947cb4eae4ee0e2c2286fd, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &1124511764 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1762035757360004, guid: bfb7af45aa304094aa3ff4a6ca53437d,
+    type: 2}
+  m_PrefabInternal: {fileID: 1440613921}
+--- !u!114 &1124511769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1124511764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecb55bb6f42f1b24590c5e94dda606a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CopyBulletAudio: 1
+  m_audioClip: {fileID: 0}
+  m_bRandomizePitch: 0
+  clipVolume: 1
+  m_bShakeCamera: 1
+  PlayParticles: 0
+  ParticlePrefab: {fileID: 0}
 --- !u!1001 &1145681741
 Prefab:
   m_ObjectHideFlags: 0
@@ -1116,6 +1377,11 @@ Prefab:
     - target: {fileID: 1762035757360004, guid: bfb7af45aa304094aa3ff4a6ca53437d, type: 2}
       propertyPath: m_Name
       value: Glass Prefab (20)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114243614894238674, guid: bfb7af45aa304094aa3ff4a6ca53437d,
+        type: 2}
+      propertyPath: KeepBreaking
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: bfb7af45aa304094aa3ff4a6ca53437d, type: 2}
@@ -1167,9 +1433,37 @@ Prefab:
       propertyPath: m_Name
       value: Glass Prefab (10)
       objectReference: {fileID: 0}
+    - target: {fileID: 114243614894238674, guid: bfb7af45aa304094aa3ff4a6ca53437d,
+        type: 2}
+      propertyPath: KeepBreaking
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: bfb7af45aa304094aa3ff4a6ca53437d, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &1177932464 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1762035757360004, guid: bfb7af45aa304094aa3ff4a6ca53437d,
+    type: 2}
+  m_PrefabInternal: {fileID: 1145681741}
+--- !u!114 &1177932469
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1177932464}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecb55bb6f42f1b24590c5e94dda606a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CopyBulletAudio: 1
+  m_audioClip: {fileID: 0}
+  m_bRandomizePitch: 0
+  clipVolume: 1
+  m_bShakeCamera: 1
+  PlayParticles: 0
+  ParticlePrefab: {fileID: 0}
 --- !u!1001 &1281658687
 Prefab:
   m_ObjectHideFlags: 0
@@ -1216,6 +1510,11 @@ Prefab:
     - target: {fileID: 1762035757360004, guid: bfb7af45aa304094aa3ff4a6ca53437d, type: 2}
       propertyPath: m_Name
       value: Glass Prefab (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114243614894238674, guid: bfb7af45aa304094aa3ff4a6ca53437d,
+        type: 2}
+      propertyPath: KeepBreaking
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: bfb7af45aa304094aa3ff4a6ca53437d, type: 2}
@@ -1314,6 +1613,11 @@ Prefab:
       propertyPath: m_Name
       value: Glass Prefab (13)
       objectReference: {fileID: 0}
+    - target: {fileID: 114243614894238674, guid: bfb7af45aa304094aa3ff4a6ca53437d,
+        type: 2}
+      propertyPath: KeepBreaking
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: bfb7af45aa304094aa3ff4a6ca53437d, type: 2}
   m_IsPrefabParent: 0
@@ -1363,6 +1667,11 @@ Prefab:
     - target: {fileID: 1762035757360004, guid: bfb7af45aa304094aa3ff4a6ca53437d, type: 2}
       propertyPath: m_Name
       value: Glass Prefab (16)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114243614894238674, guid: bfb7af45aa304094aa3ff4a6ca53437d,
+        type: 2}
+      propertyPath: KeepBreaking
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: bfb7af45aa304094aa3ff4a6ca53437d, type: 2}
@@ -1419,6 +1728,11 @@ Prefab:
       propertyPath: m_Name
       value: Glass Prefab (21)
       objectReference: {fileID: 0}
+    - target: {fileID: 114243614894238674, guid: bfb7af45aa304094aa3ff4a6ca53437d,
+        type: 2}
+      propertyPath: KeepBreaking
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: bfb7af45aa304094aa3ff4a6ca53437d, type: 2}
   m_IsPrefabParent: 0
@@ -1468,6 +1782,11 @@ Prefab:
     - target: {fileID: 1762035757360004, guid: bfb7af45aa304094aa3ff4a6ca53437d, type: 2}
       propertyPath: m_Name
       value: Glass Prefab (25)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114243614894238674, guid: bfb7af45aa304094aa3ff4a6ca53437d,
+        type: 2}
+      propertyPath: KeepBreaking
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: bfb7af45aa304094aa3ff4a6ca53437d, type: 2}
@@ -1549,6 +1868,11 @@ Prefab:
       propertyPath: m_Name
       value: Glass Prefab (17)
       objectReference: {fileID: 0}
+    - target: {fileID: 114243614894238674, guid: bfb7af45aa304094aa3ff4a6ca53437d,
+        type: 2}
+      propertyPath: KeepBreaking
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: bfb7af45aa304094aa3ff4a6ca53437d, type: 2}
   m_IsPrefabParent: 0
@@ -1599,9 +1923,37 @@ Prefab:
       propertyPath: m_Name
       value: Glass Prefab (24)
       objectReference: {fileID: 0}
+    - target: {fileID: 114243614894238674, guid: bfb7af45aa304094aa3ff4a6ca53437d,
+        type: 2}
+      propertyPath: KeepBreaking
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: bfb7af45aa304094aa3ff4a6ca53437d, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &1588550039 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1762035757360004, guid: bfb7af45aa304094aa3ff4a6ca53437d,
+    type: 2}
+  m_PrefabInternal: {fileID: 1170547496}
+--- !u!114 &1588550044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1588550039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecb55bb6f42f1b24590c5e94dda606a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CopyBulletAudio: 1
+  m_audioClip: {fileID: 0}
+  m_bRandomizePitch: 0
+  clipVolume: 1
+  m_bShakeCamera: 1
+  PlayParticles: 0
+  ParticlePrefab: {fileID: 0}
 --- !u!1001 &1596300783
 Prefab:
   m_ObjectHideFlags: 0
@@ -1649,9 +2001,101 @@ Prefab:
       propertyPath: m_Name
       value: Glass Prefab (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 114243614894238674, guid: bfb7af45aa304094aa3ff4a6ca53437d,
+        type: 2}
+      propertyPath: KeepBreaking
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: bfb7af45aa304094aa3ff4a6ca53437d, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &1636045644
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1636045646}
+  - component: {fileID: 1636045645}
+  m_Layer: 0
+  m_Name: Music
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1636045645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1636045644}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15c508bedf136b448a7cf7712a946867, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MusicClips: []
+--- !u!4 &1636045646
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1636045644}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.5548322, y: 10.504798, z: 0.296875}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 13
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1641676261 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1762035757360004, guid: bfb7af45aa304094aa3ff4a6ca53437d,
+    type: 2}
+  m_PrefabInternal: {fileID: 1584004602}
+--- !u!114 &1641676266
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1641676261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecb55bb6f42f1b24590c5e94dda606a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CopyBulletAudio: 1
+  m_audioClip: {fileID: 0}
+  m_bRandomizePitch: 0
+  clipVolume: 1
+  m_bShakeCamera: 1
+  PlayParticles: 0
+  ParticlePrefab: {fileID: 0}
+--- !u!1 &1689869320 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1762035757360004, guid: bfb7af45aa304094aa3ff4a6ca53437d,
+    type: 2}
+  m_PrefabInternal: {fileID: 57455883}
+--- !u!114 &1689869325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1689869320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecb55bb6f42f1b24590c5e94dda606a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CopyBulletAudio: 1
+  m_audioClip: {fileID: 0}
+  m_bRandomizePitch: 0
+  clipVolume: 1
+  m_bShakeCamera: 1
+  PlayParticles: 0
+  ParticlePrefab: {fileID: 0}
 --- !u!4 &1700277445 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4449191571688328, guid: bfb7af45aa304094aa3ff4a6ca53437d,
@@ -1738,8 +2182,31 @@ Transform:
   - {fileID: 2068649021}
   - {fileID: 889771227}
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90.00001}
+--- !u!1 &1756326898 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1762035757360004, guid: bfb7af45aa304094aa3ff4a6ca53437d,
+    type: 2}
+  m_PrefabInternal: {fileID: 113135923}
+--- !u!114 &1756326903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1756326898}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecb55bb6f42f1b24590c5e94dda606a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CopyBulletAudio: 1
+  m_audioClip: {fileID: 0}
+  m_bRandomizePitch: 0
+  clipVolume: 1
+  m_bShakeCamera: 1
+  PlayParticles: 0
+  ParticlePrefab: {fileID: 0}
 --- !u!1 &1766593532
 GameObject:
   m_ObjectHideFlags: 0
@@ -1845,6 +2312,29 @@ MonoBehaviour:
   yOffset: 0.5
   m_Targets: []
   DeathWaitTime: 3
+--- !u!1 &1768034366 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1762035757360004, guid: bfb7af45aa304094aa3ff4a6ca53437d,
+    type: 2}
+  m_PrefabInternal: {fileID: 945038701}
+--- !u!114 &1768034371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1768034366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecb55bb6f42f1b24590c5e94dda606a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CopyBulletAudio: 1
+  m_audioClip: {fileID: 0}
+  m_bRandomizePitch: 0
+  clipVolume: 1
+  m_bShakeCamera: 1
+  PlayParticles: 0
+  ParticlePrefab: {fileID: 0}
 --- !u!1001 &1779775103
 Prefab:
   m_ObjectHideFlags: 0
@@ -1882,7 +2372,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4793291003472360, guid: fb3c2fd87b794ac44b324ccfa1636559, type: 2}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1796801244791532, guid: fb3c2fd87b794ac44b324ccfa1636559, type: 2}
       propertyPath: m_Name
@@ -1911,6 +2401,29 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: fb3c2fd87b794ac44b324ccfa1636559, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &1784192401 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1762035757360004, guid: bfb7af45aa304094aa3ff4a6ca53437d,
+    type: 2}
+  m_PrefabInternal: {fileID: 124721527}
+--- !u!114 &1784192406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1784192401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecb55bb6f42f1b24590c5e94dda606a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CopyBulletAudio: 1
+  m_audioClip: {fileID: 0}
+  m_bRandomizePitch: 0
+  clipVolume: 1
+  m_bShakeCamera: 1
+  PlayParticles: 0
+  ParticlePrefab: {fileID: 0}
 --- !u!1001 &1825262619
 Prefab:
   m_ObjectHideFlags: 0
@@ -1973,6 +2486,29 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c534203a4e7d4574ea47f390bce706de, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &1830702727 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1762035757360004, guid: bfb7af45aa304094aa3ff4a6ca53437d,
+    type: 2}
+  m_PrefabInternal: {fileID: 1912733090}
+--- !u!114 &1830702732
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1830702727}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecb55bb6f42f1b24590c5e94dda606a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CopyBulletAudio: 1
+  m_audioClip: {fileID: 0}
+  m_bRandomizePitch: 0
+  clipVolume: 1
+  m_bShakeCamera: 1
+  PlayParticles: 0
+  ParticlePrefab: {fileID: 0}
 --- !u!1 &1848299216
 GameObject:
   m_ObjectHideFlags: 0
@@ -2003,7 +2539,7 @@ Transform:
   - {fileID: 625150653}
   - {fileID: 536783}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1852671642 stripped
 Transform:
@@ -2056,6 +2592,11 @@ Prefab:
     - target: {fileID: 1762035757360004, guid: bfb7af45aa304094aa3ff4a6ca53437d, type: 2}
       propertyPath: m_Name
       value: Glass Prefab (9)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114243614894238674, guid: bfb7af45aa304094aa3ff4a6ca53437d,
+        type: 2}
+      propertyPath: KeepBreaking
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: bfb7af45aa304094aa3ff4a6ca53437d, type: 2}
@@ -2120,6 +2661,29 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 843b64e2f3947cb4eae4ee0e2c2286fd, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &1910392791 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1762035757360004, guid: bfb7af45aa304094aa3ff4a6ca53437d,
+    type: 2}
+  m_PrefabInternal: {fileID: 563505510}
+--- !u!114 &1910392796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1910392791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecb55bb6f42f1b24590c5e94dda606a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CopyBulletAudio: 1
+  m_audioClip: {fileID: 0}
+  m_bRandomizePitch: 0
+  clipVolume: 1
+  m_bShakeCamera: 1
+  PlayParticles: 0
+  ParticlePrefab: {fileID: 0}
 --- !u!1001 &1912733090
 Prefab:
   m_ObjectHideFlags: 0
@@ -2166,6 +2730,11 @@ Prefab:
     - target: {fileID: 1762035757360004, guid: bfb7af45aa304094aa3ff4a6ca53437d, type: 2}
       propertyPath: m_Name
       value: Glass Prefab (14)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114243614894238674, guid: bfb7af45aa304094aa3ff4a6ca53437d,
+        type: 2}
+      propertyPath: KeepBreaking
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: bfb7af45aa304094aa3ff4a6ca53437d, type: 2}
@@ -2221,7 +2790,7 @@ Transform:
   - {fileID: 269398676}
   - {fileID: 1732422103}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1940913986 stripped
 Transform:
@@ -2355,6 +2924,29 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c534203a4e7d4574ea47f390bce706de, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &2010802710 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1762035757360004, guid: bfb7af45aa304094aa3ff4a6ca53437d,
+    type: 2}
+  m_PrefabInternal: {fileID: 714843137}
+--- !u!114 &2010802715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2010802710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecb55bb6f42f1b24590c5e94dda606a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CopyBulletAudio: 1
+  m_audioClip: {fileID: 0}
+  m_bRandomizePitch: 0
+  clipVolume: 1
+  m_bShakeCamera: 1
+  PlayParticles: 0
+  ParticlePrefab: {fileID: 0}
 --- !u!1 &2019463424 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1727528328597980, guid: c534203a4e7d4574ea47f390bce706de,
@@ -2426,9 +3018,37 @@ Prefab:
       propertyPath: m_Name
       value: Glass Prefab (18)
       objectReference: {fileID: 0}
+    - target: {fileID: 114243614894238674, guid: bfb7af45aa304094aa3ff4a6ca53437d,
+        type: 2}
+      propertyPath: KeepBreaking
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: bfb7af45aa304094aa3ff4a6ca53437d, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &2046891547 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1762035757360004, guid: bfb7af45aa304094aa3ff4a6ca53437d,
+    type: 2}
+  m_PrefabInternal: {fileID: 1546627617}
+--- !u!114 &2046891552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2046891547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecb55bb6f42f1b24590c5e94dda606a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CopyBulletAudio: 1
+  m_audioClip: {fileID: 0}
+  m_bRandomizePitch: 0
+  clipVolume: 1
+  m_bShakeCamera: 1
+  PlayParticles: 0
+  ParticlePrefab: {fileID: 0}
 --- !u!1 &2051366560
 GameObject:
   m_ObjectHideFlags: 0
@@ -2455,7 +3075,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &2068649021 stripped
 Transform:
@@ -2636,6 +3256,29 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c534203a4e7d4574ea47f390bce706de, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &2143231954 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1762035757360004, guid: bfb7af45aa304094aa3ff4a6ca53437d,
+    type: 2}
+  m_PrefabInternal: {fileID: 1480676439}
+--- !u!114 &2143231959
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2143231954}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecb55bb6f42f1b24590c5e94dda606a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CopyBulletAudio: 1
+  m_audioClip: {fileID: 0}
+  m_bRandomizePitch: 0
+  clipVolume: 1
+  m_bShakeCamera: 1
+  PlayParticles: 0
+  ParticlePrefab: {fileID: 0}
 --- !u!1001 &2144646233
 Prefab:
   m_ObjectHideFlags: 0
@@ -2673,7 +3316,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4766062031835860, guid: 37b1f81919ee4ec4d9ab8f671fb80d16, type: 2}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 37b1f81919ee4ec4d9ab8f671fb80d16, type: 2}

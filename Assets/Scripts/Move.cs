@@ -132,7 +132,7 @@ public class Move : MonoBehaviour
                 BodyAnimator = transform.Find("Sprites").transform.Find("Character001_Body").GetComponent<Animator>();
             }
         }
-        if (crosshair)
+        if (!crosshair.GetComponent<CrosshairClamp>())
             crosshair.AddComponent<CrosshairClamp>();
 
         vibrationValue = Vector2.zero;

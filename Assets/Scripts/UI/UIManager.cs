@@ -168,6 +168,7 @@ public class UIManager : MonoBehaviour
                 case "Options_Panel":
                     m_ButtonAnimator.SetBool("IsSettings", false);
                     m_ButtonAnimator.SetTrigger("SelectedSettings");
+                    SettingsManager.Instance.SaveSettings();
                     break;
                 case "Credits_Panel":
                     m_ButtonAnimator.SetTrigger("SelectedCredits");
