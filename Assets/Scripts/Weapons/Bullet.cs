@@ -34,7 +34,7 @@ public class Bullet : MonoBehaviour
         BulletSprite = GetComponent<SpriteRenderer>();
         ParticleSparks = GetComponentInChildren<ParticleSystem>();
         WallCollidedParticles = transform.GetChild(0).GetComponentsInChildren<ParticleSystem>();
-        
+
         m_CircleCollider = GetComponent<CircleCollider2D>();
         m_rigidBody = GetComponent<Rigidbody2D>();
         PreviousRotation = GetComponent<Rigidbody2D>().rotation;
@@ -50,7 +50,7 @@ public class Bullet : MonoBehaviour
             trail.sortingLayerName = "Defult";
             trail.sortingOrder = 8;
         }
-         Destroy(this.gameObject , m_fMaximumTime);
+        Destroy(this.gameObject, m_fMaximumTime);
     }
     // Update is called once per frame
     void Update()
@@ -58,7 +58,7 @@ public class Bullet : MonoBehaviour
 
         PreviousVelocity = this.GetComponent<Rigidbody2D>().velocity;
         PreviousRotation = m_rigidBody.rotation;
-        
+
 
 
         VChildPrevRotation = transform.localEulerAngles;
@@ -71,22 +71,23 @@ public class Bullet : MonoBehaviour
             // Ray2D WallCheckRay = new Ray2D(transform.position, transform.right);
             //Raycast from me, to my right vector (because all the rotations are fucked) on the distance I'll travel for the next frame.
             //Only raycast against the player, wall, door and glass 
-            RaycastHit2D RayHit = Physics2D.Raycast(this.transform.position , this.transform.right , m_rigidBody.velocity.magnitude * Time.fixedDeltaTime * 2 ,
+            RaycastHit2D RayHit = Physics2D.Raycast(this.transform.position, this.transform.right, m_rigidBody.velocity.magnitude * Time.fixedDeltaTime * 2,
                 (/*Player */ 1 << 8 | /*Shield*/ 1 << 9 | /* Wall */1 << 10 |/*Glass*/ 1 << 14 | /*Door*/ 1 << 11));
-            Debug.DrawRay(this.transform.position , this.transform.right * m_rigidBody.velocity.magnitude * Time.fixedDeltaTime * 2 , Color.red , 10.0f);
+            Debug.DrawRay(this.transform.position, this.transform.right * m_rigidBody.velocity.magnitude * Time.fixedDeltaTime * 2, Color.red, 10.0f);
 
             //Debug.Break();
             if (RayHit)
-            {  
+            {
+
                 //If I hit a wall, glass or door, snap me to their location and turn me off
-                if (RayHit.transform.gameObject.layer == LayerMask.NameToLayer("Wall") || RayHit.transform.gameObject.layer == LayerMask.NameToLayer("Door")|| RayHit.transform.gameObject.layer == LayerMask.NameToLayer("Glass"))
+                if (RayHit.transform.gameObject.layer == LayerMask.NameToLayer("Wall") || RayHit.transform.gameObject.layer == LayerMask.NameToLayer("Door") || RayHit.transform.gameObject.layer == LayerMask.NameToLayer("Glass"))
                 {
                     //If I find any hitbybullet interface, find all, then call its function
                     if (RayHit.transform.gameObject.GetComponent<IHitByBullet>() != null)
                     {
                         foreach (IHitByBullet item in RayHit.transform.gameObject.GetComponents<IHitByBullet>())
                         {
-                            item.HitByBullet(m_rigidBody.velocity , RayHit.point);
+                            item.HitByBullet(m_rigidBody.velocity, RayHit.point);
                         }
                     }
                     m_bStopRayCasts = true;
@@ -114,7 +115,7 @@ public class Bullet : MonoBehaviour
                     {
                         foreach (IHitByBullet item in RayHit.transform.gameObject.GetComponents<IHitByBullet>())
                         {
-                            item.HitByBullet(m_rigidBody.velocity , RayHit.point);
+                            item.HitByBullet(m_rigidBody.velocity, RayHit.point);
                         }
                     }
                     m_bStopRayCasts = true;
@@ -123,7 +124,7 @@ public class Bullet : MonoBehaviour
                     BulletSprite.enabled = false;
                     transform.position = RayHit.point;
                     transform.rotation = StartRotation;
-                    Destroy(this.gameObject , 1);
+                    Destroy(this.gameObject, 1);
 
                 }
                 else
@@ -136,26 +137,29 @@ public class Bullet : MonoBehaviour
                         {
                             foreach (IHitByBullet item in RayHit.transform.gameObject.GetComponents<IHitByBullet>())
                             {
-                                item.HitByBullet(m_rigidBody.velocity , RayHit.point);
+                                item.HitByBullet(m_rigidBody.velocity, RayHit.point);
+
                             }
                         }
                         //Debug.Log("Hit player");
                         //Debug.Log("Raycast hit player");
                         m_rigidBody.position = RayHit.point; //Snap the bullet to the collided object
-                        RayHit.transform.GetComponent<Rigidbody2D>().position +=  (Vector2)this.transform.right * m_fBulletImpactKnockBack;
+                        RayHit.transform.GetComponent<Rigidbody2D>().position += (Vector2)this.transform.right * m_fBulletImpactKnockBack;
                         PlayerStatus PlayerIHit = RayHit.transform.GetComponent<PlayerStatus>(); //Store the player I hit temporarily
-                        PlayerIHit.HitPlayer(this , m_bGiveIFrames);
+                        PlayerIHit.HitPlayer(this, m_bGiveIFrames);
                         if (PlayerIHit.m_iHealth <= 0)
                         {
                             PlayerIHit.IsDead = true;
                         }
                         //RayHit.transform.GetComponent<Move>().StatusApplied();
                         m_bStopRayCasts = true;
+                        RayHit.transform.root.Find("Sprites").GetComponent<Blood>();
+                        RayHit.transform.root.Find("Sprites").GetComponent<Blood>().CreateBloodSplatter(RayHit.transform.root.position, PreviousVelocity, StartRotation);
                         m_rigidBody.velocity = Vector2.zero;
                         m_rigidBody.simulated = false;
                         BulletSprite.enabled = false;
                         transform.position = RayHit.point;
-                        transform.rotation = StartRotation; 
+                        transform.rotation = StartRotation;
                         Destroy(this.gameObject, 0.5f); //Destroy me beacuse I have no other purpose, 
                         //? Maybe change the bullets to a pool instead
                     }
@@ -174,12 +178,12 @@ public class Bullet : MonoBehaviour
 
     IEnumerator PlayParticle(Collision2D hit)
     {
-       // Debug.Log("spark");
+        // Debug.Log("spark");
         if (ParticleSparks != null)
         {
-            
+
             // transform.GetChild(0).localEulerAngles = new Vector3(VChildPrevRotation.x , VChildPrevRotation.y , VChildPrevRotation.z); // parent - 90z
-            transform.position = new Vector3(hit.contacts[0].point.x , hit.contacts[0].point.y , 0);
+            transform.position = new Vector3(hit.contacts[0].point.x, hit.contacts[0].point.y, 0);
             ParticleSparks.Play();
 
             //GameObject hitInstance = Instantiate(HitParticle, this.transform.position, Quaternion.identity) as GameObject;
@@ -212,7 +216,7 @@ public class Bullet : MonoBehaviour
         if (WallCollidedParticles.Length > 0)
         {
 
-      
+
             // transform.GetChild(0).localEulerAngles = new Vector3(VChildPrevRotation.x , VChildPrevRotation.y , VChildPrevRotation.z);
             foreach (ParticleSystem particle in WallCollidedParticles)
             {
@@ -233,7 +237,7 @@ public class Bullet : MonoBehaviour
         if (m_rigidBody.isKinematic == false)
             if (hit.collider.tag == "Shield")
             {
-                this.GetComponent<Rigidbody2D>().velocity = Vector3.Reflect(transform.up + PreviousVelocity , hit.transform.up);
+                this.GetComponent<Rigidbody2D>().velocity = Vector3.Reflect(transform.up + PreviousVelocity, hit.transform.up);
 
                 return;
             }
@@ -252,6 +256,7 @@ public class Bullet : MonoBehaviour
             //    //print("lol");
             //    Destroy(this.gameObject);
 
+            //TODO Play Spark effect
 
         }
         if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Player"))
@@ -259,7 +264,7 @@ public class Bullet : MonoBehaviour
             if (!hit.transform.GetComponent<PlayerStatus>().IsStunned && hit.transform.GetComponent<PlayerStatus>() != bulletOwner)
             {
                 //hit.transform.GetComponent<PlayerStatus>().m_iHealth -= m_iDamage;
-                hit.transform.GetComponent<PlayerStatus>().HitPlayer(this , m_bGiveIFrames);
+                hit.transform.GetComponent<PlayerStatus>().HitPlayer(this, m_bGiveIFrames);
                 if (hit.transform.GetComponent<PlayerStatus>().m_iHealth <= 0)
                 {
                     hit.transform.GetComponent<PlayerStatus>().IsDead = true;

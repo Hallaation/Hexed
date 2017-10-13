@@ -232,7 +232,7 @@ public class Weapon : MonoBehaviour
         }
         else
         {
-            GetComponent<Rigidbody2D>().angularVelocity = 100.0f;
+            GetComponent<Rigidbody2D>().angularVelocity = 200.0f;
             m_AudioSource.PlayOneShot(DropAudioClip , DropAudioVolume);
         }
         //GetComponent<Rigidbody2D>().angularVelocity = angularVelocity;

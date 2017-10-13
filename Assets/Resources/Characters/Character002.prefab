@@ -34,6 +34,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4115687349359538}
+  - component: {fileID: 114832075317070100}
   m_Layer: 0
   m_Name: Sprites
   m_TagString: Untagged
@@ -2295,6 +2296,25 @@ MonoBehaviour:
   mXboxController: 0
   mPlayerIndex: 0
   m_playerNumber: 0
+--- !u!114 &114832075317070100
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1056504326371816}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80fbde53d6702144db74bf815c075fb7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BloodTravelSpeed: 1
+  GrowthSpeed: 1.2
+  Blood1: {fileID: 1824629749766284, guid: f339c4f3fc53d894f93f756fd1fbf08e, type: 2}
+  Blood2: {fileID: 1684398446899704, guid: a550b67997b8aa9488fd5e42ec0fbea8, type: 2}
+  Blood3: {fileID: 1556113154150286, guid: 5ac9d5dc43eac11469de65162dc05e7d, type: 2}
+  Blood4: {fileID: 1290339145213612, guid: e64bad0f14da79444a1f540b4bd72711, type: 2}
+  Blood5: {fileID: 1059244047924568, guid: 514a33878839b464db9d2ca0aed560cc, type: 2}
+  MaxSize: 0
 --- !u!114 &114871196914284096
 MonoBehaviour:
   m_ObjectHideFlags: 1
