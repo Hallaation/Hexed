@@ -200,7 +200,7 @@ public class GamemodeSelection : MonoBehaviour
                                 }
                                 else
                                 {
-                                 //   Debug.Log("Decrement");
+                                    //   Debug.Log("Decrement");
                                     m_iMapPickIndex--;
                                 }
 
@@ -234,7 +234,7 @@ public class GamemodeSelection : MonoBehaviour
                             }
                             else
                             {
-                               // Debug.Log("Decrement");
+                                // Debug.Log("Decrement");
                                 m_iPointWinIndex--;
                             }
 
@@ -348,7 +348,7 @@ public class GamemodeSelection : MonoBehaviour
         {
             temp.x = 0;
         }
-        
+
         return temp;
     }
 
@@ -356,13 +356,25 @@ public class GamemodeSelection : MonoBehaviour
     public void EnterGame()
     {
         ScreenTransition transitionScrene = FindObjectOfType<ScreenTransition>();
-
-        transitionScrene.transform.SetParent(null);
-        DontDestroyOnLoad(transitionScrene.gameObject);
-        UIManager.Instance.m_bInMainMenu = false;
-        SceneManager.LoadScene(1);
+        transitionScrene.m_Animator.SetTrigger("CloseDoor");
+        StartCoroutine(WaitforTransition());
+        //if (transitionScrene.m_Animator.GetCurrentAnimatorStateInfo(0).IsName("Transition_Closed"))
+        //{
+        //    transitionScrene.transform.SetParent(null);
+        //    DontDestroyOnLoad(transitionScrene.gameObject);
+        //    UIManager.Instance.m_bInMainMenu = false;
+        //    SceneManager.LoadScene(1);
+        //}
     }
 
+    IEnumerator WaitforTransition()
+    {
+        ScreenTransition transitionScrene = FindObjectOfType<ScreenTransition>();
+        yield return new WaitForSeconds(2);
+        SceneManager.LoadScene(1);
+        UIManager.Instance.m_bInMainMenu = false;
+        yield return null;
+    }
     public void ButtonTest()
     {
         //Debug.Log("Test button");
