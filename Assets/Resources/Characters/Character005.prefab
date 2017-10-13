@@ -943,7 +943,7 @@ Transform:
   m_GameObject: {fileID: 1103359725655460}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.2, y: 1.2, z: 1}
   m_Children:
   - {fileID: 4704638626269318}
   - {fileID: 4868889757733764}
@@ -1041,7 +1041,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1532022660935440}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 13.531, y: -0.5, z: 0}
+  m_LocalPosition: {x: 0, y: -0.5, z: 0}
   m_LocalScale: {x: 1.1999999, y: 1.1999999, z: 1}
   m_Children: []
   m_Father: {fileID: 4733786066544998}
@@ -1325,8 +1325,8 @@ MonoBehaviour:
   fistObject: {fileID: 0}
   movementSpeed: 10
   throwingForce: 300
-  m_fChokedTimeIncrement: 0.1
-  m_fChokeKillTime: 0.8
+  m_fChokedTimeIncrement: 1
+  m_fChokeKillTime: 7
   m_fPositionOffset: 0.2
   vibrationValue: {x: 0, y: 0}
   playerSpirte: {fileID: 0}
@@ -1439,7 +1439,7 @@ MonoBehaviour:
   repeatedManaCost: 0
   m_fMinimumManaRequired: 40
   m_fMovementSpeedSlowDown: 2
-  m_fAbilityCoolDown: 12
+  m_fAbilityCoolDown: 4
   m_iMaxCharges: 2
   m_iCurrentCharges: 0
   findUI: 1
@@ -1529,7 +1529,7 @@ MonoBehaviour:
   m_fStunBarOffset: 1.5
   m_fHealthBarOffset: 1.5
   m_fKillBarOffset: 1.5
-  m_fStunTime: 5
+  m_fStunTime: 7
   m_fMaximumStunWait: 2
   m_fStunTimerReduction: 0.5
   _playerColor: {r: 1, g: 0, b: 0, a: 1}

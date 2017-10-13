@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Glass : MonoBehaviour, IHitByBullet, IHitByMelee
 {
+    public bool KeepBreaking = false;
     //? What is an array
     public GameObject Shard1;
     public GameObject Shard2;
@@ -68,7 +69,6 @@ public class Glass : MonoBehaviour, IHitByBullet, IHitByMelee
         }
         else if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Bullet") && IsShattered == false)
         {
-
             Shatter();
             SpawnShards(hit);
             Destroy(hit.gameObject);
@@ -99,11 +99,14 @@ public class Glass : MonoBehaviour, IHitByBullet, IHitByMelee
 
     void Shatter()
     {
-        GlassSpriteRenderer.sprite = BrokenGlass;
-        GlassCollider.enabled = false;
-        IsShattered = true;
-        GlassSpriteRenderer.sortingOrder = -10;
-        //m_audioSource.PlayOneShot(m_BreakingClip);
+        if (!KeepBreaking)
+        {
+            GlassSpriteRenderer.sprite = BrokenGlass;
+            GlassCollider.enabled = false;
+            IsShattered = true;
+            GlassSpriteRenderer.sortingOrder = -10;
+            //m_audioSource.PlayOneShot(m_BreakingClip);
+        }
     }
 
     void SpawnShards(Collision2D hit)

@@ -7,6 +7,12 @@ public class GameAudioPicker : MonoBehaviour {
     AudioSource m_AudioSource;
 
     public AudioClip[] MusicClips;
+
+    private float minVolume = 0;
+    private float maxVolume = 1;
+    private float currentValue = 0;
+    public float VolumeIncrement = 0.1f;
+    
 	// Use this for initialization
 	void Awake ()
     {
@@ -31,6 +37,12 @@ public class GameAudioPicker : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-		
+        m_AudioSource.volume = Mathf.Lerp(minVolume, maxVolume, currentValue);
+        currentValue += VolumeIncrement * Time.deltaTime;
+
+		if (currentValue > maxVolume)
+        {
+            currentValue = 1;
+        }
 	}
 }
