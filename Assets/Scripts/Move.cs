@@ -487,7 +487,7 @@ public class Move : MonoBehaviour
                 heldWeapon.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
                 heldWeapon.transform.Find("Sprite").GetComponent<Collider2D>().enabled = true;
                 //drop the weapon. magic number 2.
-                heldWeapon.GetComponent<Weapon>().ThrowWeapon(throwDirection * 2);
+                heldWeapon.GetComponent<Weapon>().ThrowWeapon(throwDirection * 20);
                 heldWeapon.GetComponent<Weapon>().previousOwner = this.gameObject;
                 heldWeapon.GetComponent<Weapon>().weaponThrower = this.gameObject;
                 //heldWeapon.transform.Find("Sprite").GetComponent<Collider2D>().enabled = false;
