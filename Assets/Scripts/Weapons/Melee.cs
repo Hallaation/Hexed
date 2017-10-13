@@ -120,14 +120,16 @@ public class Melee : Weapon
                 item.HitByMelee(this, null);
             }
         }
-        if (other.GetComponent<IHitByMelee>() != null)
+        if (other.GetComponent<IHitByMelee>() != null && m_bAttacking)
         {
             foreach (IHitByMelee item in other.GetComponents<IHitByMelee>())
             {
                 item.HitByMelee(this, null);
             }
         }
+
     }
+    
 
     void OnTriggerStay2D(Collider2D other)
     {
