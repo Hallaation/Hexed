@@ -380,8 +380,7 @@ public class Move : MonoBehaviour
         KeyboardMovement = CheckKeyboardInput();
         //Vrotation used to determine what way the character to rotate
         Vector3 vrotation = Vector3.zero;
-        Vector3 LeftStickRotation = Vector3.zero; // consistently left stick rotation
-        m_LeftStickRotation = new Vector2(-GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Left.X, GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Left.Y);
+        m_LeftStickRotation = new Vector2(-XCI.GetAxisRaw(XboxAxis.LeftStickX, m_controller.mXboxController), XCI.GetAxisRaw(XboxAxis.LeftStickY, m_controller.mXboxController));
 
         if (!m_bStopStickRotation) //IF dont stop the stick rotation, populate the rotation vectors.
         {
@@ -389,7 +388,7 @@ public class Move : MonoBehaviour
 
             vrotation = new Vector2(-XCI.GetAxisRaw(XboxAxis.RightStickX, m_controller.mXboxController), XCI.GetAxisRaw(XboxAxis.RightStickY, m_controller.mXboxController));
 
-            LeftStickRotation = new Vector2(-GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Left.X, GamePad.GetState(m_controller.mPlayerIndex).ThumbSticks.Left.Y);
+            m_LeftStickRotation = new Vector2(-XCI.GetAxisRaw(XboxAxis.LeftStickX, m_controller.mXboxController), XCI.GetAxisRaw(XboxAxis.LeftStickY, m_controller.mXboxController));
         }
 
         //if im not getting any input from the right stick, make my rotation from the left stick instead
@@ -413,7 +412,7 @@ public class Move : MonoBehaviour
 
         //Do deadzone calculations on rotation vectors
         vrotation = CheckDeadZone(vrotation, StickDeadZone);
-        LeftStickRotation = CheckDeadZone(LeftStickRotation, StickDeadZone);
+        m_LeftStickRotation = CheckDeadZone(m_LeftStickRotation, StickDeadZone);
 
         //After deadzone checks, if there is still input, and set the character rotation to the vectors direction
         if (vrotation != Vector3.zero)
@@ -422,9 +421,9 @@ public class Move : MonoBehaviour
             this.transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(vrotation.x, vrotation.y) * Mathf.Rad2Deg);
 
             //! This makes the feet face the left sticks direction. Quaternions are wierd.
-            if (LeftStickRotation.magnitude != 0 && FeetAnimator)
+            if (m_LeftStickRotation.magnitude != 0 && FeetAnimator)
             {
-                transform.Find("Sprites").transform.Find("Character001_Feet").transform.rotation = transform.Find("Sprites").transform.Find("Character001_Feet").transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(LeftStickRotation.x, LeftStickRotation.y) * Mathf.Rad2Deg);
+                transform.Find("Sprites").transform.Find("Character001_Feet").transform.rotation = transform.Find("Sprites").transform.Find("Character001_Feet").transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(m_LeftStickRotation.x, m_LeftStickRotation.y) * Mathf.Rad2Deg);
                 transform.Find("Sprites").transform.Find("Character001_Feet").transform.rotation *= Quaternion.Euler(0, 0, 90);
             }
         }

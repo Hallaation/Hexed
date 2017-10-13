@@ -41,7 +41,7 @@ public class BaseAbility : MonoBehaviour
     public int AbilityCharges { get { return m_iCurrentCharges; }  set { m_iCurrentCharges = value; } }
 
     protected Text _AbilityTypeText;
-    protected Move m_MoveOwner;
+    public Move m_MoveOwner;
 
     public GameObject m_ChargeIndicator;
     public Sprite[] ChargeReadySprites;

@@ -418,7 +418,6 @@ public class GameManagerc : MonoBehaviour
                 //For every object after the points neeeded, turn them off since their not required.
                 for (int j = m_iPointsNeeded; j < PointContainers[i].transform.childCount - 1; j++)
                 {
-                    Debug.Log(m_iPointsNeeded);
                     PointContainers[i].transform.GetChild(j).gameObject.SetActive(false);
                 }
                 //Turn off the containers so they don't show up.

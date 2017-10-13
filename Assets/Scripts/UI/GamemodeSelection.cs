@@ -355,6 +355,10 @@ public class GamemodeSelection : MonoBehaviour
 
     public void EnterGame()
     {
+        ScreenTransition transitionScrene = FindObjectOfType<ScreenTransition>();
+
+        transitionScrene.transform.SetParent(null);
+        DontDestroyOnLoad(transitionScrene.gameObject);
         UIManager.Instance.m_bInMainMenu = false;
         SceneManager.LoadScene(1);
     }
