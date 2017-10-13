@@ -298,6 +298,7 @@ public class GameManagerc : MonoBehaviour
                 Time.timeScale = 0;
                 //open the finish panel, UI manager will set all the children to true, thus rendering them
                 UIManager.Instance.OpenUIElement(FinishUIPanel, true);
+                FindObjectOfType<ScreenTransition>().OpenDoor();
                 UIManager.Instance.RemoveLastPanel = false;
                 //Reset the event managers current selected object to the rematch button
                 //FindObjectOfType<EventSystem>().SetSelectedGameObject(FinishUIPanel.transform.Find("Rematch").gameObject);
@@ -325,10 +326,12 @@ public class GameManagerc : MonoBehaviour
                 {
                     //Set the time scale to 0 (essentially pausing the game-ish)
                     //Debug.LogError("Points required have been reached");
-                    Time.timeScale = 0;
+                    //Time.timeScale = 0;
                     //open the finish panel, UI manager will set all the children to true, thus rendering them
                     UIManager.Instance.OpenUIElement(FinishUIPanel, true);
+                    FindObjectOfType<ScreenTransition>().OpenDoor();
                     UIManager.Instance.RemoveLastPanel = false;
+                    GameManagerc.Instance.Paused = true;
                     //Reset the event managers current selected object to the rematch button
                     if (FindObjectOfType<EventSystem>().currentSelectedGameObject == null)
                     {
@@ -418,7 +421,6 @@ public class GameManagerc : MonoBehaviour
                 //For every object after the points neeeded, turn them off since their not required.
                 for (int j = m_iPointsNeeded; j < PointContainers[i].transform.childCount - 1; j++)
                 {
-                    Debug.Log(m_iPointsNeeded);
                     PointContainers[i].transform.GetChild(j).gameObject.SetActive(false);
                 }
                 //Turn off the containers so they don't show up.
@@ -499,7 +501,7 @@ public class GameManagerc : MonoBehaviour
     {
         // Debug.Log("Start of rematch");
         //reset the time scale
-        Time.timeScale = 1;
+        GameManagerc.Instance.Paused = false;
         //The round is not over
         m_bRoundOver = false;
         //reset every player
@@ -542,6 +544,7 @@ public class GameManagerc : MonoBehaviour
         InGamePlayers.Clear();
         InGamePlayers = new List<PlayerStatus>();
         m_gameMode = Gamemode_type.LAST_MAN_STANDING_DEATHMATCH;
+        FindObjectOfType<ScreenTransition>().CloseDoor();
         mInstance = null;
         FinishUIPanel = null;
         m_bRoundOver = false;
@@ -600,6 +603,7 @@ public class GameManagerc : MonoBehaviour
         yield return new WaitForSeconds(2);
         mbFinishedShowingScores = true;
         InGameScreenAnimator.SetTrigger("RemoveScreen");
+        FindObjectOfType<ScreenTransition>().CloseDoor();
         //PointsPanel.SetActive(false);
 
     }
