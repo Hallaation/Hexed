@@ -8,7 +8,7 @@ public class Door : MonoBehaviour, IHitByBullet
     public float DoorAngleOfBounce;
     public int DoorBounceForce;
     public HingeJoint2D DoorHinge;
-
+    Quaternion StartRotation;
     [Space]
     Rigidbody2D MyRigidBody;
 
@@ -31,6 +31,7 @@ public class Door : MonoBehaviour, IHitByBullet
     // Use this for initialization
     void Start()
     {
+        StartRotation = transform.rotation;
         m_audioSource = GetComponent<AudioSource>();
         //m_audioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as  AudioSource).outputAudioMixerGroup;
         if (m_audioSource == null)
@@ -86,6 +87,9 @@ public class Door : MonoBehaviour, IHitByBullet
         //   // timer += Time.deltaTime;
         //}
     }
-
+    void Reset()
+    {
+        this.transform.rotation = StartRotation;
+    }
 
 }

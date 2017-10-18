@@ -56,4 +56,8 @@ public class Blood : MonoBehaviour
         BloodSprites[RandomBlood].GetComponent<Rigidbody2D>().velocity =  new Vector3(0,0,0);
         BloodSprites[RandomBlood].GetComponent<Rigidbody2D>().AddForce(a_Velocity.normalized * BloodTravelSpeed, ForceMode2D.Impulse);
     }
+    void Reset()
+    {
+        Destroy(this);
+    }
 }

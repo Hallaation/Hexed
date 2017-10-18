@@ -331,6 +331,9 @@ public class Melee : Weapon
        
     }
 
-    
+    void Reset()
+    {
+        Destroy(this);
+    }
 
 }

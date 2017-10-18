@@ -167,5 +167,9 @@ public class BaseAbility : MonoBehaviour
         //    PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_SpecialScrollingIcon.GetComponent<Image>().material.SetColor("_Color" , //GetComponent<PlayerStatus>()._playerColor);
         //}
     }
+    void Reset()
+    {
+        m_iCurrentCharges = 0;
+    }
 }
 

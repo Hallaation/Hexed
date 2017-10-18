@@ -24,14 +24,17 @@ public class Glass : MonoBehaviour, IHitByBullet, IHitByMelee
     //[Space]
     private GameObject[] Shards;
     //private AudioSource m_audioSource;
-
+    Sprite SolidGlass;
     public Sprite BrokenGlass;
     SpriteRenderer GlassSpriteRenderer;
     bool IsShattered = false;
     BoxCollider2D GlassCollider;
+    int StoredSortingLayer;
     // Use this for initialization
     void Start()
     {
+        SolidGlass = GetComponent<Sprite>();
+        StoredSortingLayer = GetComponent<SpriteRenderer>().sortingOrder;
         //if (this.GetComponent<AudioSource>())
         //{
         //    m_audioSource = this.gameObject.AddComponent<AudioSource>();
@@ -229,5 +232,15 @@ public class Glass : MonoBehaviour, IHitByBullet, IHitByMelee
         }*/
     }
 
-
+    void Reset()
+    {
+        foreach (Transform child in transform)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
+        IsShattered = false;
+        GlassCollider.enabled = true;
+        GlassSpriteRenderer.sortingOrder = StoredSortingLayer;
+        GlassSpriteRenderer.sprite = SolidGlass;
+    }
 }
