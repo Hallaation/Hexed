@@ -860,7 +860,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1869406489864708}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.05}
+  m_LocalPosition: {x: 0, y: 0, z: 0.3}
   m_LocalScale: {x: 1, y: 1, z: 0}
   m_Children:
   - {fileID: 4455628781805756}
@@ -1577,7 +1577,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: fa2e7ddcd9eb44843ad6a3c87d3c1f6f, type: 2}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
   m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -1657,7 +1657,7 @@ MonoBehaviour:
   fistObject: {fileID: 0}
   movementSpeed: 10
   throwingForce: 300
-  m_fChokedTimeIncrement: 1.5
+  m_fChokedTimeIncrement: 1.8
   m_fChokeKillTime: 7
   m_fPositionOffset: 0.2
   vibrationValue: {x: 0, y: 0}
@@ -2137,6 +2137,7 @@ MonoBehaviour:
   _playerColor: {r: 1, g: 0, b: 0, a: 1}
   killMePrompt: {fileID: 1428127762099588}
   killMeArea: {fileID: 1723327659649874}
+  Choker: {fileID: 0}
   HealthLost: {fileID: 0}
   spawnIndex: 0
   stunBar: {fileID: 0}
@@ -2232,7 +2233,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: fa2e7ddcd9eb44843ad6a3c87d3c1f6f, type: 2}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -2464,7 +2465,7 @@ SpriteRenderer:
   m_GameObject: {fileID: 1569176501695152}
   m_Enabled: 1
   m_CastShadows: 0
-  m_ReceiveShadows: 0
+  m_ReceiveShadows: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
@@ -2499,7 +2500,7 @@ SpriteRenderer:
   m_GameObject: {fileID: 1123635415878842}
   m_Enabled: 1
   m_CastShadows: 0
-  m_ReceiveShadows: 0
+  m_ReceiveShadows: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
@@ -2604,7 +2605,7 @@ SpriteRenderer:
   m_GameObject: {fileID: 1177775648095214}
   m_Enabled: 1
   m_CastShadows: 0
-  m_ReceiveShadows: 0
+  m_ReceiveShadows: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
