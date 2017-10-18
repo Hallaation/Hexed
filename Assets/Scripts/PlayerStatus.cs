@@ -45,6 +45,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
 
     public GameObject killMePrompt = null;
     public GameObject killMeArea = null;
+    public Move Choker = null;
 
     private GameObject _PlayerCanvas;
     private GameObject _HealthMask;
@@ -172,7 +173,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
                 if (DeadSprites.Length > 0 && !DeathSpriteChanged)
                 {
                     DeathSpriteChanged = true;
-                    m_SpriteRenderer.sprite = DeadSprites[Random.Range(0, DeadSprites.Length - 1)];
+                    m_SpriteRenderer.sprite = DeadSprites[Random.Range(0, DeadSprites.Length)];
                 }
 
                 return;
@@ -197,7 +198,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
                 if (StunnedSprites.Length > 0 && !StunSpriteChanged)
                 {
                     StunSpriteChanged = true;
-                    m_SpriteRenderer.sprite = StunnedSprites[Random.Range(0, StunnedSprites.Length - 1)];
+                    m_SpriteRenderer.sprite = StunnedSprites[Random.Range(0, StunnedSprites.Length)];
                 }
 
                 SetAllAnimatorsFalse();
@@ -221,6 +222,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             //When not stunned
             else
             {
+                Choker = null;
                 GetComponent<Move>().GetBodyAnimator().enabled = true; //Get the animator(s) from the Move script and enable them
                 GetComponent<Move>().GetFeetAnimator().enabled = true; //Get the animator(s) from the Move script and enable them
                 m_Ability.m_ChargeIndicator.SetActive(true); //Turn the ability charge indicator back on
@@ -278,6 +280,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             //If the previous frames health isnt the current frames health, show the changed health.
             //_PlayerCanvas.transform.localScale = new Vector3(Camera.main.orthographicSize, Camera.main.orthographicSize, Camera.main.orthographicSize) * 0.003f;
             _PlayerCanvas.transform.position = this.transform.position - Vector3.forward * 8;
+            _PlayerCanvas.transform.rotation = Quaternion.identity; //This should fix it, though not sure
             //HealthContainer.transform.position = this.transform.position + Vector3.up * m_fHealthBarOffset - Vector3.forward * 8 ;
             //stunBarContainer.transform.position = this.transform.position + Vector3.up * m_fStunBarOffset - Vector3.forward * 8;
             //killbarContainer.transform.position = this.transform.position - Vector3.up * 1.5f;
@@ -416,6 +419,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             //If the game mode is either the timed deathmatch or scores appointed on kills deathmatch, then give them points
             if (m_iHealth <= 0 /*&& (GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_POINTS *//*|| GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_TIMED*/)
             {
+                m_MoveClass.ThrowWeapon(Vector2.zero, Vector2.zero, false);
                 //update the bullet owner's score
                 //GameManagerc.Instance.PlayerWins[aBullet.bulletOwner]++;
             }
@@ -439,6 +443,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             //If the game mode is either the timed deathmatch or scores appointed on kills deathmatch, then give them points
             if (m_iHealth <= 0 /*&& (GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_POINTS*/ /*|| GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_TIMED*/)
             {
+                m_MoveClass.ThrowWeapon(Vector2.zero, Vector2.zero, false);
                 //update the bullet owner's score
                 // GameManagerc.Instance.PlayerWins[a_weapon.transform.root.GetComponent<PlayerStatus>()]++;
             }
@@ -462,6 +467,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             //If the game mode is either the timed deathmatch or scores appointed on kills deathmatch, then give them points
             if (m_iHealth <= 0 /*&& (GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_POINTS*/ /*|| GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_TIMED*/)
             {
+                m_MoveClass.ThrowWeapon(Vector2.zero, Vector2.zero, false);
                 //update the bullet owner's score
                 //GameManagerc.Instance.PlayerWins[a_Status]++;
             }

@@ -251,6 +251,11 @@ public class Move : MonoBehaviour
             }
             else
             {
+                crosshair.SetActive(false);
+                m_bInChokeMode = false;
+                chokingPlayer = null;
+                KillBarContainer.SetActive(false);
+                m_ChokingTimer.CurrentTime = 0;
                 //  _rigidBody.velocity = Vector2.zero;
             }
         }
@@ -370,9 +375,6 @@ public class Move : MonoBehaviour
     }
     void CalculateMovement()
     {
-
-        //Quack.
-
         Vector3 movement = Vector3.zero;
         Vector3 KeyboardMovement = Vector3.zero;
         //Gets the input from the left stick to determine the movement
@@ -405,7 +407,6 @@ public class Move : MonoBehaviour
         else
         {
             //If not stopping right stick rotation, turn the crosshair on.
-
             crosshair.SetActive(!m_bStopStickRotation);
 
         }
@@ -879,13 +880,15 @@ public class Move : MonoBehaviour
                     //Null check
                     if (collidersFound.tag == "Stunned")           //? Never Passes.
                     {
-                        if (collidersFound.gameObject.transform.parent.GetComponent<PlayerStatus>().IsStunned)
+                        if (collidersFound.gameObject.transform.parent.GetComponent<PlayerStatus>().IsStunned && collidersFound.gameObject.transform.parent.GetComponent<PlayerStatus>().Choker == null)
                         {
+                            PlayerStatus playerBeingChoked = collidersFound.gameObject.transform.parent.GetComponent<PlayerStatus>();
                             runningAnimation = true;
                             _rigidBody.velocity = Vector2.zero;
                             BodyAnimator.SetTrigger("HeadSmashPullUp");
                             m_bInChokeMode = true;
                             chokingPlayer = collidersFound.gameObject;
+                            playerBeingChoked.Choker = this;
                             originalPosition = this.transform.position;
                             ThrowWeapon(_rigidBody.velocity, this.transform.up, false);
                             //this.GetComponentInChildren<Animator>().SetBool("IsKilling", true);
@@ -919,6 +922,7 @@ public class Move : MonoBehaviour
                 {
                     m_bInChokeMode = false;
                     chokingPlayer = null;  //Set trigger to do smash
+                    chokingPlayerStatus.Choker = null;
                     BodyAnimator.SetTrigger("CancelHeadSmash");
                 }
                 //Check Animator State
