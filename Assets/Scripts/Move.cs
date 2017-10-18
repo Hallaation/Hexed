@@ -16,6 +16,7 @@ using UnityEngine.SceneManagement;
 [RequireComponent(typeof(PlayerStatus))]
 public class Move : MonoBehaviour
 {
+    #region variables
     ControllerSetter m_controller;
     // CharacterController _characterController;
     bool PlayerIsActive = true; public bool getActive() { return PlayerIsActive; }
@@ -82,6 +83,7 @@ public class Move : MonoBehaviour
 
     private AudioSource[] m_audioSource;
     private GameObject AudioSourcePool;
+    #endregion
     //Vector3 movement;
     // Use this for initialization
     void Awake()
@@ -816,6 +818,25 @@ public class Move : MonoBehaviour
         }
     }
 
+    public void StopChoke()
+    {
+        Debug.Log("help");
+        if (!m_bOutOfChoke) //not out of choke
+        {
+            this.transform.position = originalPosition;
+            m_bOutOfChoke = true;
+        }
+        //if (chokingPlayer)
+        //{
+        //    chokingPlayer.GetComponent<PlayerStatus>().Choker = null;
+        //}
+        chokingPlayer = null;
+        m_ChokingTimer.CurrentTime = 0;
+        KillBarContainer.SetActive(false);
+        BodyAnimator.SetTrigger("CancelHeadSmash");
+        m_bInChokeMode = false;
+        chokingPlayer = null;
+    }
     public void StatusApplied()
     {
         //called outside
@@ -865,6 +886,7 @@ public class Move : MonoBehaviour
         }
 
     }
+
     bool CheckForDownedKill()
     {
         //look for controller input x
