@@ -53,8 +53,6 @@ public class HitByMeleeAction : MonoBehaviour, IHitByMelee
 
     public void HitByMelee(Weapon meleeWeapon, AudioClip soundEffect, float Volume = 1, float Pitch = 1)
     {
-        Debug.Log("Help");
-
         m_audioSource.Play();
     }
 

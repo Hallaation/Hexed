@@ -14,6 +14,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
     public float m_iHealth = 3; //health completely useless right now
     int m_iTimesPunched = 0;
     int m_iPreviousTimesPunched = 0;
+
     bool m_bDead = false;
     public bool m_bStunned = false;
     public bool m_bMiniStun;
@@ -125,6 +126,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
 
     void Update()
     {
+
         if (!GameManagerc.Instance.Paused)
         {
             if (stunBarContainer.activeSelf)
@@ -161,8 +163,11 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             //if im dead, set my Color to gray, turn of all physics simulations and exit the function
             if (m_bDead)
             {
+                if (m_MoveClass.heldWeapon)
+                {
+                    m_MoveClass.ThrowWeapon(Vector2.zero, Vector2.zero, false);
+                }
                 SetAllAnimatorsFalse();
-
                 PlayerSprite.material.color = Color.grey;
                 this.GetComponent<Rigidbody2D>().simulated = false;
                 killMePrompt.SetActive(false);
@@ -172,6 +177,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
                 GetComponent<Move>().GetFeetAnimator().enabled = false;
                 if (DeadSprites.Length > 0 && !DeathSpriteChanged)
                 {
+                    Debug.Log("Dead sprite");
                     DeathSpriteChanged = true;
                     m_SpriteRenderer.sprite = DeadSprites[Random.Range(0, DeadSprites.Length)];
                 }
@@ -182,6 +188,13 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             //if im stunned, make me cyan and show any kill prompts (X button and kill radius);
             if (m_bStunned)
             {
+                if (Choker != null)
+                {
+                    if (Choker.chokingPlayer.transform.root != this.gameObject.transform.root)
+                    {
+                        Choker = null;
+                    }
+                }
                 if (m_MoveClass.heldWeapon) //if holding weapon;
                 {
                     m_MoveClass.StatusApplied();
@@ -296,7 +309,6 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
                     m_bShowHealthChange = false;
                 }
             }
-
         }
     }
 
@@ -363,6 +375,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         m_Ability.AbilityCharges = 0;
         float xOffset = m_iHealth * -0.0791f;
         _HealthMask.GetComponent<Image>().material.SetTextureOffset("_MainTex", new Vector2(0 + xOffset, 0));
+        ControllerManager.Instance.FindSpawns();
         this.transform.position = ControllerManager.Instance.spawnPoints[spawnIndex].position;
         //this.transform.position = Vector3.zero;
         GetComponent<Move>().ThrowWeapon(Vector2.zero, Vector2.up, false);

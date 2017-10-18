@@ -232,8 +232,6 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.P))
-            CameraShake.Instance.ShakeCamera();
 
         //If loaded in main menu, run the main menu update
         if (m_bInMainMenu)

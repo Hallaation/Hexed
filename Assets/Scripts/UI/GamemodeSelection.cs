@@ -28,6 +28,7 @@ public class GamemodeSelection : MonoBehaviour
     private bool ResetSticks = false;
     private bool[] StickMovement; // index 0 for left horizontal, index 1 for right horizontal
     private GameObject[] GMSettingObjects;
+    private Animator m_animator;
     Image _mapSprite;
     public int[] mPointsToWin =
     {
@@ -43,6 +44,7 @@ public class GamemodeSelection : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        m_animator = GetComponentInChildren<Animator>();
         m_iPointWinIndex = 0;
         m_iMapPickIndex = 0;
         _button = GetComponentInChildren<Button>();
@@ -179,6 +181,7 @@ public class GamemodeSelection : MonoBehaviour
                             GameManagerc.Instance.MapToLoad = MapObjects[m_iMapPickIndex];
                             if ((DpadHorizontalTest() > 0) || StickMovement[1])
                             {
+                                m_animator.SetTrigger("ButtonChangeRight");
                                 StickMovement[1] = false;
                                 if (m_iMapPickIndex == mapSprites.Length - 1)
                                 {
@@ -192,6 +195,7 @@ public class GamemodeSelection : MonoBehaviour
                             }
                             else if ((DpadHorizontalTest() < 0) || StickMovement[0])
                             {
+                                m_animator.SetTrigger("ButtonChangeLeft");
                                 StickMovement[0] = false;
 
                                 if (m_iMapPickIndex == 0)
@@ -213,6 +217,7 @@ public class GamemodeSelection : MonoBehaviour
                         #region
                         if ((DpadHorizontalTest() > 0) || StickMovement[1])
                         {
+                            m_animator.SetTrigger("ButtonChangeRight");
                             StickMovement[1] = false;
                             if (m_iPointWinIndex == mPointsToWin.Length - 1)
                             {
@@ -226,6 +231,7 @@ public class GamemodeSelection : MonoBehaviour
                         }
                         else if ((DpadHorizontalTest() < 0) || StickMovement[0])
                         {
+                            m_animator.SetTrigger("ButtonChangeLeft");
                             StickMovement[0] = false;
 
                             if (m_iPointWinIndex == 0)
@@ -247,7 +253,7 @@ public class GamemodeSelection : MonoBehaviour
                 }
 
             }
-            //update different according to pick type
+            //update button sprite according to pick type
             switch (m_pickType)
             {
                 case PickType.GAMEMODEPICK:
@@ -320,8 +326,9 @@ public class GamemodeSelection : MonoBehaviour
         //check each controller
         for (int i = 0; i < (int)PlayerIndex.Four; ++i)
         {
-            Vector2 StickInput = new Vector2(XCI.GetAxis(XboxAxis.LeftStickX, XboxController.First + i), 0);
-            StickInput = CheckDeadZone(StickInput, 0.2f);
+            Vector2 StickInput = new Vector2(XCI.GetAxisRaw(XboxAxis.LeftStickX, XboxController.First + i), 0);
+            //Debug.Log(StickInput);
+            StickInput = CheckDeadZone(StickInput, 0.12f);
             if (ResetSticks)
             {
                 if (StickInput.x < 0)
@@ -340,13 +347,13 @@ public class GamemodeSelection : MonoBehaviour
     }
 
 
-    Vector3 CheckDeadZone(Vector3 controllerInput, float deadzone)
+    Vector2 CheckDeadZone(Vector2 controllerInput, float deadzone)
     {
-        Vector3 temp = controllerInput;
+        Vector2 temp = controllerInput;
         //if any of the numbers are below a certain deadzone, they get zeroed.
-        if (Mathf.Abs(controllerInput.x) < deadzone)
+        if (temp.magnitude < deadzone)
         {
-            temp.x = 0;
+            temp = Vector2.zero;
         }
 
         return temp;

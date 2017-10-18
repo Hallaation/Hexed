@@ -19,6 +19,7 @@ public class Gun : Weapon
     public bool m_bBurstFire;
     public bool m_b2Handed = false;
     public int m_iAmmo = 30;
+    private int m_iMaxAmmo;
     public float m_fBulletImpactKnockback = 0.1f;
     public GameObject bullet;
     [SerializeField]
@@ -46,6 +47,7 @@ public class Gun : Weapon
         //the max jitter is determined in the editor, this is to simply remember the maximum jitter desired
         //m_fMaxJitter = m_fSpreadJitter;
         m_fSpreadJitter = 0;
+        m_iMaxAmmo = m_iAmmo;
         //set the spread jitter to 0
         //make a timer with a wait time of 0.2f, around the human average reaction speed
         spreadTimer = new Timer(0.2f);

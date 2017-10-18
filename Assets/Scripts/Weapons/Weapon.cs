@@ -7,10 +7,10 @@ public class Weapon : MonoBehaviour
     //base weapon class
     private Sprite m_DefaultSprite;
     public Sprite m_HeldSprite = null;
-    public float m_fTimeBetweenShots = 0.01f; 
+    public float m_fTimeBetweenShots = 0.01f;
     public float m_iDamage;
 
-    public bool m_bGivePlayersIFrames = false; 
+    public bool m_bGivePlayersIFrames = false;
     public float KnockBack;
 
     [Space]
@@ -35,41 +35,40 @@ public class Weapon : MonoBehaviour
     [Header("Weapon Attack Audio")]
     public AudioClip m_AudioClip;
     public bool m_bRandomizePitch = true;
-    [Range(0 , 1)]
+    [Range(0, 1)]
     public float clipVolume = 1;
 
     [Space]
-    [Header("Pickup Audio")] 
+    [Header("Pickup Audio")]
     public AudioClip PickupAudio;
-    [Range(0 , 1)]
+    [Range(0, 1)]
     public float pickupVolume = 1;
 
     [Space]
     [Header("Weapon Drop Audio")]
     public AudioClip DropAudioClip;
-    [Range(0 , 1)]
+    [Range(0, 1)]
     public float DropAudioVolume = 1;
-    
+
     [Space]
     [Header("Weapon Throw Audio")]
     public AudioClip ThrowAudioClip;
-    [Range(0 , 1)]
+    [Range(0, 1)]
     public float ThrowAudioVolume = 1;
 
     [Space]
     [Header("Thrown hit Audio")]
     public AudioClip ThrowHitAudio;
     public bool m_bRandomizeThrowHitPitch = true;
-    [Range(0 , 1)]
+    [Range(0, 1)]
     public float ThrowHitAudioVolume = 1;
     protected AudioSource hitPlayerAudioSource;
     protected bool m_bPlayedAudio = false; //A fallback incase audio doesn't work, mostly a major fallback for the melee guns.
     //[Range(-2, 2)]
     //public float clipPitch;
     protected AudioSource m_AudioSource;
-
     // Use this for initialization
-    void Start()
+    void Awake()
     {
         m_AudioSource = this.gameObject.AddComponent<AudioSource>();
         m_AudioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as GameObject).GetComponent<AudioSource>().outputAudioMixerGroup;
@@ -77,13 +76,13 @@ public class Weapon : MonoBehaviour
         m_AudioSource.playOnAwake = false;
         m_AudioSource.clip = m_AudioClip;
         m_AudioSource.volume = clipVolume;
-        m_AudioSource.spatialBlend =  1;
+        m_AudioSource.spatialBlend = 1;
 
         hitPlayerAudioSource = this.gameObject.AddComponent<AudioSource>();
         hitPlayerAudioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as GameObject).GetComponent<AudioSource>().outputAudioMixerGroup;
         //hitPlayerAudioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as  AudioSource).outputAudioMixerGroup;
         hitPlayerAudioSource.playOnAwake = false;
-        hitPlayerAudioSource.spatialBlend =  1;
+        hitPlayerAudioSource.spatialBlend = 1;
         //m_AudioSource = AudioManager.RequestAudioSource(m_AudioClip, clipVolume, clipPitch);
         _rigidbody = GetComponent<Rigidbody2D>();
         TimerBetweenFiring = new Timer(m_fTimeBetweenShots);
@@ -95,6 +94,7 @@ public class Weapon : MonoBehaviour
 
             weaponSpriteTransform = transform.GetChild(0).GetComponent<Transform>();
         }
+        //m_originalPosition = this.transform.position;
         StartUp();
     }
 
@@ -136,8 +136,8 @@ public class Weapon : MonoBehaviour
                     if (weaponSpriteTransform.localPosition.z >= MaxShadow)
                     {
                         //Snap the weapon's sprite transform to the max location
-                        weaponSpriteTransform.localPosition = new Vector3(weaponSpriteTransform.localPosition.x, weaponSpriteTransform.localPosition.y, MaxShadow); 
-                         m_bMoveWeaponSpriteUp = false;
+                        weaponSpriteTransform.localPosition = new Vector3(weaponSpriteTransform.localPosition.x, weaponSpriteTransform.localPosition.y, MaxShadow);
+                        m_bMoveWeaponSpriteUp = false;
                         //set the bool to false so the weapon will move down instead
                     }
                 }
@@ -209,9 +209,9 @@ public class Weapon : MonoBehaviour
     {
         //dropping the weapon will turn the physics back on
         GetComponent<Rigidbody2D>().simulated = true;
-        this.transform.SetParent(null);                                                
+        this.transform.SetParent(null);
         GetComponent<Rigidbody2D>().angularVelocity = 50.0f;
-        m_AudioSource.PlayOneShot(DropAudioClip , DropAudioVolume);
+        m_AudioSource.PlayOneShot(DropAudioClip, DropAudioVolume);
     }
     /// <summary>
     /// Takes in a velocity vector, this will determine how fast it will be thrown out of the player's hand. Low velocity means it can be just dropped.
@@ -219,7 +219,7 @@ public class Weapon : MonoBehaviour
     /// <param name="velocity"></param>
     public void ThrowWeapon(Vector2 velocity)
     {
-       
+
         //turn the physics back on set its parent to null, and apply the velocity. apply an angular velocity for it to spin.
         GetComponent<Rigidbody2D>().simulated = true;
         //this.transform.position = transform.parent.GetComponentInParent<Move>().weapon2HandedMount.position;
@@ -228,12 +228,12 @@ public class Weapon : MonoBehaviour
         if (velocity.magnitude > 50)
         {
             GetComponent<Rigidbody2D>().angularVelocity = 600.0f;
-            m_AudioSource.PlayOneShot(ThrowAudioClip , ThrowAudioVolume);
+            m_AudioSource.PlayOneShot(ThrowAudioClip, ThrowAudioVolume);
         }
         else
         {
             GetComponent<Rigidbody2D>().angularVelocity = 200.0f;
-            m_AudioSource.PlayOneShot(DropAudioClip , DropAudioVolume);
+            m_AudioSource.PlayOneShot(DropAudioClip, DropAudioVolume);
         }
         //GetComponent<Rigidbody2D>().angularVelocity = angularVelocity;
 
@@ -262,7 +262,7 @@ public class Weapon : MonoBehaviour
                     a_collider.GetComponentInParent<Move>().StatusApplied();
                     hitPlayerAudioSource.clip = ThrowHitAudio;
                     hitPlayerAudioSource.volume = ThrowHitAudioVolume;
-                    hitPlayerAudioSource.pitch = (m_bRandomizeThrowHitPitch) ? Random.Range(0.9f , 1.1f) : 1;
+                    hitPlayerAudioSource.pitch = (m_bRandomizeThrowHitPitch) ? Random.Range(0.9f, 1.1f) : 1;
                     hitPlayerAudioSource.Play();
                 }
             }
@@ -278,6 +278,6 @@ public class Weapon : MonoBehaviour
 
     public void PlayPickup()
     {
-        m_AudioSource.PlayOneShot(PickupAudio , pickupVolume);
+        m_AudioSource.PlayOneShot(PickupAudio, pickupVolume);
     }
 }
