@@ -48,7 +48,8 @@ public class Move : MonoBehaviour
     public float m_fPositionOffset = 0.2f;
     private bool m_bInChokeMode = false; //Determine if this guy is choking someone
     private bool m_bChoked; //Used to check if the head has been smashed in the entire animation so it only happens once.
-    private GameObject chokingPlayer = null; //the player this guy is choking
+    [HideInInspector]
+    public GameObject chokingPlayer = null; //the player this guy is choking
     private int OriginalSortingOrder; //Used to move the player back to their sorting layer so everything renders properly.
     private Timer m_ChokingTimer;
     private Vector3 originalPosition;
@@ -514,7 +515,7 @@ public class Move : MonoBehaviour
                 heldWeapon.transform.position = this.transform.position;
                 heldWeapon.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
                 heldWeapon.transform.Find("Sprite").GetComponent<Collider2D>().enabled = true;
-               // heldWeapon.transform.position = this.transform.position;
+                // heldWeapon.transform.position = this.transform.position;
                 heldWeapon.GetComponent<Weapon>().ThrowWeapon(throwDirection * throwingForce);
                 heldWeapon.GetComponent<Weapon>().previousOwner = this.gameObject;
                 heldWeapon.GetComponent<Weapon>().weaponThrower = this.gameObject;
@@ -670,7 +671,7 @@ public class Move : MonoBehaviour
                     heldWeapon.transform.SetParent(this.gameObject.transform.Find("Sprites").GetChild(0).Find("2HandedMeleeSpot"));
                     hitCollider.gameObject.transform.parent.position = Melee2HandedMount.position; //set position to the weapon mount spot
                     hitCollider.gameObject.transform.parent.rotation = Melee2HandedMount.rotation; //set its rotation
-                    
+
 
                 }
                 else
@@ -891,6 +892,7 @@ public class Move : MonoBehaviour
                             playerBeingChoked.Choker = this;
                             originalPosition = this.transform.position;
                             ThrowWeapon(_rigidBody.velocity, this.transform.up, false);
+                            
                             //this.GetComponentInChildren<Animator>().SetBool("IsKilling", true);
                             //collidersFound.transform.parent.GetComponent<PlayerStatus>().KillPlayer(this.GetComponent<PlayerStatus>());
                         }
@@ -965,11 +967,12 @@ public class Move : MonoBehaviour
         }
         else
         {
-            if (!m_bOutOfChoke)
+            if (!m_bOutOfChoke) //not out of choke
             {
                 this.transform.position = originalPosition;
                 m_bOutOfChoke = true;
             }
+            chokingPlayer = null;
             KillBarContainer.SetActive(false);
             m_ChokingTimer.CurrentTime = 0;
         }

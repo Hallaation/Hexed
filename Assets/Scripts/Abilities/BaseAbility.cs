@@ -74,11 +74,13 @@ public class BaseAbility : MonoBehaviour
     {
         if (m_PlayerStatus.IsDead)
         {
+            m_ChargeIndicator.SetActive(false);
             ChargeHighlighters[0].SetActive(false);
             ChargeHighlighters[1].SetActive(false);
         }
         else
         {
+            m_ChargeIndicator.SetActive(true);
             ChargeHighlighters[0].SetActive(true);
             ChargeHighlighters[1].SetActive(true);
         }

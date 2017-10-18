@@ -71,6 +71,8 @@ public class GameManagerc : MonoBehaviour
     public Gamemode_type m_gameMode = Gamemode_type.LAST_MAN_STANDING_DEATHMATCH;
 
     public int m_iPointsNeeded = 5;
+    public float m_fTimeTillPoints = 2f;
+    public float m_fTimeAfterPoints = 3.0f;
     // public float m_fTimedDeathMatchTime;
 
     static GameManagerc mInstance = null;
@@ -125,7 +127,7 @@ public class GameManagerc : MonoBehaviour
         //Find the 
         DontDestroyOnLoad(this.gameObject);
         //DeathmatchTimer = new Timer(m_fTimedDeathMatchTime);
-        waitForRoundEnd = new Timer(3);
+        waitForRoundEnd = new Timer(m_fTimeAfterPoints);
         mInstance = GameManagerc.Instance;
         if (mInstance.gameObject != this.gameObject)
         {
@@ -222,10 +224,10 @@ public class GameManagerc : MonoBehaviour
                     {
                         players.ResetPlayer();
                     }
-                    //InGamePlayers = new List<PlayerStatus>(); this is wrong, the players should be reset not deleted the controller manager should not be reset as well
                     m_bRoundOver = false;
-                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-
+                    FindObjectOfType<ScreenTransition>().OpenDoor();
+                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //reloads the scene.
+                    //TODO instead of reloading scene, just reset E V E R Y T H I N G in the scene.
                     //End of round logic goes here.
                 }
             }
@@ -271,6 +273,7 @@ public class GameManagerc : MonoBehaviour
                 {
                     //increase the winning player's point by 1
                     PlayerWins[player] += 1;
+
                     StartCoroutine(AddPointsToPanel(player));
                     // Debug.Break();
                 }
@@ -295,7 +298,7 @@ public class GameManagerc : MonoBehaviour
             {
                 //Set the time scale to 0 (essentially pausing the game-ish)
                 //Debug.LogError("Points required have been reached");
-                Time.timeScale = 0;
+                //Time.timeScale = 0;
                 //open the finish panel, UI manager will set all the children to true, thus rendering them
                 UIManager.Instance.OpenUIElement(FinishUIPanel, true);
                 FindObjectOfType<ScreenTransition>().OpenDoor();
@@ -432,14 +435,14 @@ public class GameManagerc : MonoBehaviour
             {
                 //Debug.Log(item.Key);
                 int playerNumber = (int)item.Key - 1;
-                
+
                 if (item.Value.GetComponent<BaseAbility>().m_CharacterPortrait) //If the character has a portrait
                 {
                     //Get the last object in point containers (the portrait container), get the first child (the "fill"- what is consitency) and change its sprite to the character's (item.value) sprite found in the base ability.
                     PointContainers[playerNumber].transform.GetChild(PointContainers[playerNumber].transform.childCount - 1).GetChild(0).GetComponent<Image>().sprite = item.Value.GetComponent<BaseAbility>().m_CharacterPortrait;
                 }
             }
- 
+
             //can also be used for the amount of players in the scene.
             XboxController[] JoinedXboxControllers = new XboxController[CharacterSelectionManager.Instance.playerSelectedCharacter.Count];
             int nextIndex = 0;
@@ -529,6 +532,11 @@ public class GameManagerc : MonoBehaviour
     public void GoToStart()
     {
         Time.timeScale = 1;
+        FindObjectOfType<ScreenTransition>().CloseDoor();
+        CameraControl.mInstance.enabled = false;
+        Destroy(CameraControl.mInstance);
+        //CameraControl.mInstance.m_Targets.Clear();
+        Debug.Log("help");
         //clear the players list
         for (int i = 0; i < InGamePlayers.Count; i++)
         {
@@ -544,7 +552,7 @@ public class GameManagerc : MonoBehaviour
         InGamePlayers.Clear();
         InGamePlayers = new List<PlayerStatus>();
         m_gameMode = Gamemode_type.LAST_MAN_STANDING_DEATHMATCH;
-        FindObjectOfType<ScreenTransition>().CloseDoor();
+        //FindObjectOfType<ScreenTransition>().CloseDoor();
         mInstance = null;
         FinishUIPanel = null;
         m_bRoundOver = false;
@@ -559,6 +567,7 @@ public class GameManagerc : MonoBehaviour
         mbInstanceIsMe = false;
         //mbFinishedPanelShown = false;
         mbMapLoaded = false;
+        m_bGamePaused = false;
 
         UIManager.Instance.gameObject.SetActive(false);
         ControllerManager.Instance.gameObject.SetActive(false);
@@ -573,12 +582,17 @@ public class GameManagerc : MonoBehaviour
         Destroy(ControllerManager.Instance.gameObject);
         Destroy(CharacterSelectionManager.Instance.gameObject);
         Destroy(UINavigation.Instance.gameObject);
-        Destroy(GameManagerc.Instance);
-        Destroy(this.gameObject);
-        SceneManager.LoadScene(0);
-        //StartCoroutine(WaitForSeconds(0.2f));
+        StartCoroutine(ReturnToMenu());
+        //Destroy(GameManagerc.Instance);
+        //Destroy(this.gameObject);
     }
 
+    IEnumerator ReturnToMenu()
+    {
+        yield return new WaitForSeconds(2);
+        SceneManager.LoadScene(0);
+        yield return null;
+    }
     IEnumerator WaitForSeconds(float time)
     {
         yield return new WaitForEndOfFrame();
@@ -587,6 +601,7 @@ public class GameManagerc : MonoBehaviour
 
     IEnumerator AddPointsToPanel(PlayerStatus player)
     {
+        yield return new WaitForSeconds(m_fTimeTillPoints);
         PointsPanel.SetActive(true);
         MenuPanel.SetActive(false);
         InGameScreenAnimator.SetTrigger("ShowScreen");

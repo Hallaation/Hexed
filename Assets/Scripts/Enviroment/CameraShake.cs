@@ -53,6 +53,9 @@ public class CameraShake : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.P))
+            ShakeCamera();
+
         if (m_bShakeCamera)
         {
            //? for (int i = 0; i < 4; i++)

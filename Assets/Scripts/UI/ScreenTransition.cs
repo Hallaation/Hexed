@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+using UnityEngine.EventSystems;
 public class ScreenTransition : MonoBehaviour {
 
     public Animator m_Animator;
@@ -15,6 +15,19 @@ public class ScreenTransition : MonoBehaviour {
         SceneManager.sceneLoaded += OnSceneLoad;
 	}
 	
+    void Update()
+    {
+        if (m_Animator.GetCurrentAnimatorStateInfo(0).IsName("Scene_Transition_Open"))
+        {
+            FindObjectOfType<EventSystem>().enabled = true;
+            FindObjectOfType<UINavigation>().enabled = true;
+        }
+        else
+        {
+            FindObjectOfType<EventSystem>().enabled = false;
+            FindObjectOfType<UINavigation>().enabled = false;
+        }
+    }
     public void CloseDoor()
     {
         Debug.Log("Close Door");
@@ -30,6 +43,7 @@ public class ScreenTransition : MonoBehaviour {
 
     void OnSceneLoad(Scene scene, LoadSceneMode mode)
     {
+        
        // if (FindObjectOfType<ScreenTransition>() != this)
        // {
        //     Destroy(FindObjectOfType<ScreenTransition>().gameObject);

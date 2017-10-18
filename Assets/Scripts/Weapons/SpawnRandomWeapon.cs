@@ -72,6 +72,7 @@ public class SpawnRandomWeapon : MonoBehaviour
         GameObject spawnedWeapon = Instantiate(Weapons[randomIndex]);
         spawnedWeapon.transform.position = this.transform.position;
         spawnedWeapon.transform.rotation = this.transform.rotation;
+
     }
 
     void Reset()
