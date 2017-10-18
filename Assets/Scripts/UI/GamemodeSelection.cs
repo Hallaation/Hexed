@@ -137,59 +137,97 @@ public class GamemodeSelection : MonoBehaviour
         if (UIManager.Instance.menuStatus.Peek() == this.transform.parent.parent.gameObject)
         {
             CheckForStickReset();
-            //if the event systems currently selected object is my assigned buttons parent, do the things according to my type.
-            if (_eventSystem.currentSelectedGameObject.transform.parent == _button.transform.parent)
+            if (_eventSystem.enabled)
             {
-                switch (m_pickType)
+                //if the event systems currently selected object is my assigned buttons parent, do the things according to my type.
+                if (_eventSystem.currentSelectedGameObject.transform.parent == _button.transform.parent)
                 {
-                    case PickType.GAMEMODEPICK:
-                        #region
-                        /*
-                        GameManagerc.Instance.m_gameMode = Gamemode_type.LAST_MAN_STANDING_DEATHMATCH + m_iGamemodeIndex;
-                        //check for right input
-                        //If Dpad right, increment through the array
-                        //If dpad left, decrement through the array
-                        //wrap around if at the bounds of array
-                        if ((DpadHorizontalTest() > 0) || StickMovement[1])
-                        {
-                            StickMovement[1] = false;
-                            if (m_iGamemodeIndex == (int)Gamemode_type.DEATHMATCH_POINTS)
-                                m_iGamemodeIndex = 0;
-                            else
-                                m_iGamemodeIndex++;
+                    switch (m_pickType)
+                    {
+                        case PickType.GAMEMODEPICK:
+                            #region
+                            /*
+                            GameManagerc.Instance.m_gameMode = Gamemode_type.LAST_MAN_STANDING_DEATHMATCH + m_iGamemodeIndex;
+                            //check for right input
+                            //If Dpad right, increment through the array
+                            //If dpad left, decrement through the array
+                            //wrap around if at the bounds of array
+                            if ((DpadHorizontalTest() > 0) || StickMovement[1])
+                            {
+                                StickMovement[1] = false;
+                                if (m_iGamemodeIndex == (int)Gamemode_type.DEATHMATCH_POINTS)
+                                    m_iGamemodeIndex = 0;
+                                else
+                                    m_iGamemodeIndex++;
 
-                            m_GamemodeSelected = Gamemode_type.LAST_MAN_STANDING_DEATHMATCH + m_iGamemodeIndex;
-                        }
-                        else if ((DpadHorizontalTest() < 0) || StickMovement[0])
-                        {
-                            StickMovement[0] = false;
-                            if (m_iGamemodeIndex == 0)
-                                m_iGamemodeIndex = (int)Gamemode_type.DEATHMATCH_POINTS;
-                            else
-                                m_iGamemodeIndex--;
+                                m_GamemodeSelected = Gamemode_type.LAST_MAN_STANDING_DEATHMATCH + m_iGamemodeIndex;
+                            }
+                            else if ((DpadHorizontalTest() < 0) || StickMovement[0])
+                            {
+                                StickMovement[0] = false;
+                                if (m_iGamemodeIndex == 0)
+                                    m_iGamemodeIndex = (int)Gamemode_type.DEATHMATCH_POINTS;
+                                else
+                                    m_iGamemodeIndex--;
 
-                            m_GamemodeSelected = Gamemode_type.LAST_MAN_STANDING_DEATHMATCH + m_iGamemodeIndex;
-                        }
-                        
-                    */
-                        break;
-                    #endregion
-                    case PickType.MAPPICK:
-                        #region
-                        {
-                            _mapSprite.sprite = mapSprites[m_iMapPickIndex];
-                            GameManagerc.Instance.MapToLoad = MapObjects[m_iMapPickIndex];
+                                m_GamemodeSelected = Gamemode_type.LAST_MAN_STANDING_DEATHMATCH + m_iGamemodeIndex;
+                            }
+
+                        */
+                            break;
+                        #endregion
+                        case PickType.MAPPICK:
+                            #region
+                            {
+                                _mapSprite.sprite = mapSprites[m_iMapPickIndex];
+                                GameManagerc.Instance.MapToLoad = MapObjects[m_iMapPickIndex];
+                                if ((DpadHorizontalTest() > 0) || StickMovement[1])
+                                {
+                                    m_animator.SetTrigger("ButtonChangeRight");
+                                    StickMovement[1] = false;
+                                    if (m_iMapPickIndex == mapSprites.Length - 1)
+                                    {
+                                        m_iMapPickIndex = 0;
+                                    }
+                                    else
+                                    {
+                                        m_iMapPickIndex++;
+                                    }
+
+                                }
+                                else if ((DpadHorizontalTest() < 0) || StickMovement[0])
+                                {
+                                    m_animator.SetTrigger("ButtonChangeLeft");
+                                    StickMovement[0] = false;
+
+                                    if (m_iMapPickIndex == 0)
+                                    {
+                                        m_iMapPickIndex = mapSprites.Length - 1;
+                                    }
+                                    else
+                                    {
+                                        //   Debug.Log("Decrement");
+                                        m_iMapPickIndex--;
+                                    }
+
+                                }
+
+                            }
+                            break;
+                        #endregion
+                        case PickType.GAMEMODESETTINGS:
+                            #region
                             if ((DpadHorizontalTest() > 0) || StickMovement[1])
                             {
                                 m_animator.SetTrigger("ButtonChangeRight");
                                 StickMovement[1] = false;
-                                if (m_iMapPickIndex == mapSprites.Length - 1)
+                                if (m_iPointWinIndex == mPointsToWin.Length - 1)
                                 {
-                                    m_iMapPickIndex = 0;
+                                    m_iPointWinIndex = 0;
                                 }
                                 else
                                 {
-                                    m_iMapPickIndex++;
+                                    m_iPointWinIndex++;
                                 }
 
                             }
@@ -198,60 +236,25 @@ public class GamemodeSelection : MonoBehaviour
                                 m_animator.SetTrigger("ButtonChangeLeft");
                                 StickMovement[0] = false;
 
-                                if (m_iMapPickIndex == 0)
+                                if (m_iPointWinIndex == 0)
                                 {
-                                    m_iMapPickIndex = mapSprites.Length - 1;
+                                    m_iPointWinIndex = mPointsToWin.Length - 1;
                                 }
                                 else
                                 {
-                                    //   Debug.Log("Decrement");
-                                    m_iMapPickIndex--;
+                                    // Debug.Log("Decrement");
+                                    m_iPointWinIndex--;
                                 }
 
                             }
+                            _SettingsValue.text = mPointsToWin[m_iPointWinIndex].ToString("0");
+                            GameManagerc.Instance.m_iPointsNeeded = (int)mPointsToWin[m_iPointWinIndex];
+                            GameManagerc.Instance.m_iPointsIndex = m_iPointWinIndex;
+                            #endregion
+                            break;
+                    }
 
-                        }
-                        break;
-                    #endregion
-                    case PickType.GAMEMODESETTINGS:
-                        #region
-                        if ((DpadHorizontalTest() > 0) || StickMovement[1])
-                        {
-                            m_animator.SetTrigger("ButtonChangeRight");
-                            StickMovement[1] = false;
-                            if (m_iPointWinIndex == mPointsToWin.Length - 1)
-                            {
-                                m_iPointWinIndex = 0;
-                            }
-                            else
-                            {
-                                m_iPointWinIndex++;
-                            }
-
-                        }
-                        else if ((DpadHorizontalTest() < 0) || StickMovement[0])
-                        {
-                            m_animator.SetTrigger("ButtonChangeLeft");
-                            StickMovement[0] = false;
-
-                            if (m_iPointWinIndex == 0)
-                            {
-                                m_iPointWinIndex = mPointsToWin.Length - 1;
-                            }
-                            else
-                            {
-                                // Debug.Log("Decrement");
-                                m_iPointWinIndex--;
-                            }
-
-                        }
-                        _SettingsValue.text = mPointsToWin[m_iPointWinIndex].ToString("0");
-                        GameManagerc.Instance.m_iPointsNeeded = (int)mPointsToWin[m_iPointWinIndex];
-                        GameManagerc.Instance.m_iPointsIndex = m_iPointWinIndex;
-                        #endregion
-                        break;
                 }
-
             }
             //update button sprite according to pick type
             switch (m_pickType)
