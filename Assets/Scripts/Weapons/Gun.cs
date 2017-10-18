@@ -177,5 +177,8 @@ public class Gun : Weapon
             }
         }
     }
-
+    void Reset()
+    {
+        Destroy(this);
+    }
 }
