@@ -12,7 +12,8 @@ public class Melee : Weapon
     public bool m_bAttacking;
     public bool m_b2Handed;
     bool ReverseAnimation;
- 
+    bool ThrownHit = false;
+    public int ThrownDamage = 1;
     private Animator BodyAnimator;
     public void SetAnimator(Animator AnimatorToSet) { BodyAnimator = AnimatorToSet; }
 
@@ -75,12 +76,12 @@ public class Melee : Weapon
                         }
                         else
                         {
-                            HitPlayerStuff(other);
+                            HitPlayerStuff(other, false);
                         }
                     }
                     else
                     {
-                        HitPlayerStuff(other);
+                        HitPlayerStuff(other, false);
                         //other.transform.parent.GetComponentInParent<PlayerStatus>().HitPlayer(this, false);
                               //! Uses transform right instead of transform up due to using the bats right rather then players 
                         //Debug.Log("BatEnterStun");
@@ -105,8 +106,9 @@ public class Melee : Weapon
                 //Check my RB velocity's magnitude, if hit another player and the other player isn't the weapon thrower
                 if (GetComponent<Rigidbody2D>().velocity.magnitude >= 10 && other.tag == "Player" && other.GetComponentInParent<PlayerStatus>().gameObject != weaponThrower)
                 {
+
                     //stun the player
-                    other.transform.root.GetComponentInParent<PlayerStatus>().StunPlayer(transform.right * KnockBack);        //! Uses transform right instead of transform up due to using the bats right rather then players up
+                    HitPlayerStuff(other, true);      //! Uses transform right instead of transform up due to using the bats right rather then players up
                     //Play the hit audio
                     hitPlayerAudioSource.clip = ThrowHitAudio; 
                     hitPlayerAudioSource.volume = ThrowHitAudioVolume;
@@ -174,13 +176,12 @@ public class Melee : Weapon
 
                         else
                         {
-
-                            HitPlayerStuff(other);
+                            HitPlayerStuff(other, false);
                         }
                     }
                     else
                     {
-                        HitPlayerStuff(other);
+                        HitPlayerStuff(other, false);
 
                         //other.transform.parent.GetComponentInParent<PlayerStatus>().HitPlayer(this, false);
                         //! Uses transform right instead of transform up due to using the bats right rather then players up
@@ -210,7 +211,7 @@ public class Melee : Weapon
                 if (GetComponent<Rigidbody2D>().velocity.magnitude >= 10 && other.tag == "Player" && other.GetComponentInParent<PlayerStatus>().gameObject != weaponThrower)
                 {
                     //stun the player
-                    other.transform.root.GetComponentInParent<PlayerStatus>().StunPlayer(transform.right * KnockBack);        //! Uses transform right instead of transform up due to using the bats right rather then players up
+                    HitPlayerStuff(other, true);        //! Uses transform right instead of transform up due to using the bats right rather then players up
                 }
             }
             //Find every hit by melee interface and call its function
@@ -237,18 +238,32 @@ public class Melee : Weapon
     }
 
 
-    void HitPlayerStuff(Collider2D other) //called whenever a player is hit
+    void HitPlayerStuff(Collider2D other, bool thrown) //called whenever a player is hit
     {
         PlayerStatus OtherPlayerStatus = other.transform.root.GetComponent<PlayerStatus>();
-        if(m_Stun == true)
+        if (m_Stun == true)
+        {
             OtherPlayerStatus.StunPlayer(transform.right * KnockBack);
-        if (m_iDamage > 0)
+        }
+
+      
+        if (thrown)
+        {
+            if (ThrownHit == false)
+            {
+                OtherPlayerStatus.HitPlayer(ThrownDamage, this.transform.root.GetComponent<PlayerStatus>(), false);
+                ThrownHit = true;
+                transform.GetComponent<Rigidbody2D>().velocity = -PreviousVelocity * .2f;
+                
+            }
+        }
+        else if (m_iDamage > 0)
         {
             OtherPlayerStatus.HitPlayer(m_iDamage, this.transform.root.GetComponent<PlayerStatus>(), false);
-            if(other.transform.root.GetComponent<PlayerStatus>().m_iHealth <= .1f)
-            {
-                OtherPlayerStatus.KillPlayer(this.transform.root.GetComponent<PlayerStatus>());
-            }
+        }
+        if (other.transform.root.GetComponent<PlayerStatus>().m_iHealth <= .1f)
+        {
+            OtherPlayerStatus.KillPlayer(this.transform.root.GetComponent<PlayerStatus>());
         }
         //Play hit by melee sound effect.
         if (OtherPlayerStatus.GetComponentInChildren<IHitByMelee>() != null)
@@ -264,6 +279,10 @@ public class Melee : Weapon
     }
     public override void DoWeaponThings()
     {
+       if( GetComponent<Rigidbody2D>().velocity.magnitude < 10)
+        {
+            ThrownHit = false;
+        }
         PreviousVelocity = GetComponent<Rigidbody2D>().velocity;
         if (BodyAnimator)
             if (BodyAnimator.GetCurrentAnimatorStateInfo(0).IsName("TwoHandedMeleeRightAttack")

@@ -14,7 +14,7 @@ public class EmptyHand : Weapon
 
     private Animator m_BodyAnimator;
     private bool m_bAttacking;
-
+    public int m_PunchesToKnockOut = 2;
     private int previousAnimatorState;
     private int InitialState;
     private Move _moveClass;
@@ -125,7 +125,7 @@ public class EmptyHand : Weapon
                                         hitPlayer.GetComponent<IHitByMelee>().HitByMelee(this, audioClip, m_clipVolume, tempPitch);
 
                                         //Debug.Log("PunchedEnemy");
-                                        if (hitPlayer.TimesPunched >= 3)
+                                        if (hitPlayer.TimesPunched >= m_PunchesToKnockOut)
                                         {
                                             hitPlayer.StunPlayer(transform.up * KnockBack);
                                             hitPlayer.TimesPunched = 0;

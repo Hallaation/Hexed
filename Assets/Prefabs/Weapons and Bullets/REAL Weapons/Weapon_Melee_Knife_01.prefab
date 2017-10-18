@@ -180,7 +180,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!70 &70056990953105470
 CapsuleCollider2D:
@@ -321,7 +321,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HeldSprite: {fileID: 0}
   m_fTimeBetweenShots: 0.01
-  m_iDamage: 0
+  m_iDamage: 3
   m_bGivePlayersIFrames: 0
   KnockBack: 0.25
   MaxShadow: 0.3
@@ -343,10 +343,11 @@ MonoBehaviour:
   ThrowHitAudio: {fileID: 8300000, guid: 66e375b0086b1f64d82c217b8872db40, type: 3}
   m_bRandomizeThrowHitPitch: 0
   ThrowHitAudioVolume: 1
-  m_Stun: 1
+  m_Stun: 0
   m_fHitFlinchTime: 0.3
   m_bAttacking: 0
   m_b2Handed: 0
+  ThrownDamage: 1
   hitAudioClip: {fileID: 0}
   m_bRandomizeHitAudio: 0
   hitAudioVolume: 1
