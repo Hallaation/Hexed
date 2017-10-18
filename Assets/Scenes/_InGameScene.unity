@@ -1827,7 +1827,7 @@ MonoBehaviour:
   m_FillRect: {fileID: 1277852145}
   m_HandleRect: {fileID: 1791658608}
   m_Direction: 0
-  m_MinValue: -40
+  m_MinValue: -80
   m_MaxValue: 0
   m_WholeNumbers: 0
   m_Value: 0
@@ -2888,10 +2888,10 @@ MonoBehaviour:
   m_FillRect: {fileID: 1368885276}
   m_HandleRect: {fileID: 397767584}
   m_Direction: 0
-  m_MinValue: -40
-  m_MaxValue: 0
+  m_MinValue: -80
+  m_MaxValue: -15
   m_WholeNumbers: 0
-  m_Value: 0
+  m_Value: -25
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -4253,6 +4253,7 @@ GameObject:
   - component: {fileID: 1082374060}
   - component: {fileID: 1082374059}
   - component: {fileID: 1082374066}
+  - component: {fileID: 1082374067}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -4373,6 +4374,22 @@ MonoBehaviour:
   m_fShakeAmount: 5
   m_fDecreaseFactor: 1
   m_bShakeCamera: 0
+--- !u!114 &1082374067
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1082374058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 870b9a8f0f82f4f56800cc427bcd1025, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _scanLineJitter: 0
+  _verticalJump: 0
+  _horizontalShake: 0
+  _colorDrift: 0
+  _shader: {fileID: 4800000, guid: da33272284ea24f208f36998880990be, type: 3}
 --- !u!1 &1102007484
 GameObject:
   m_ObjectHideFlags: 0
@@ -7709,10 +7726,10 @@ MonoBehaviour:
   m_FillRect: {fileID: 1657789963}
   m_HandleRect: {fileID: 1532076290}
   m_Direction: 0
-  m_MinValue: -40
-  m_MaxValue: 0
+  m_MinValue: -80
+  m_MaxValue: 5
   m_WholeNumbers: 0
-  m_Value: 0
+  m_Value: 5
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
