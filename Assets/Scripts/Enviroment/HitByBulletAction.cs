@@ -52,7 +52,7 @@ public class HitByBulletAction : MonoBehaviour, IHitByBullet
             m_audioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as GameObject).GetComponent<AudioSource>().outputAudioMixerGroup;
             //m_audioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as  AudioSource).outputAudioMixerGroup;
             m_audioSource.playOnAwake = false;
-            m_audioSource.spatialBlend = 1;
+            m_audioSource.spatialBlend = 0.8f;
             m_audioSource.clip = m_audioClip;
             m_audioSource.pitch = (m_bRandomizePitch) ? UnityEngine.Random.Range(0.9f, 1.1f) : 1;
         }
