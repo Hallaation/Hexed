@@ -75,6 +75,7 @@ GameObject:
   - component: {fileID: 193}
   - component: {fileID: 176}
   - component: {fileID: 67}
+  - component: {fileID: 68}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -94,6 +95,87 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   profile: {fileID: 11400000, guid: f9a97d828337b03489a4054048da4c4e, type: 2}
+--- !u!82 &68
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 66}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 243707469334360128, guid: 528bc32848037e6438730e90acdddd8b,
+    type: 2}
+  m_audioClip: {fileID: 8300000, guid: b61a500a2a0cb0c4eb5d84aabbd698cc, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
 --- !u!1 &75
 GameObject:
   m_ObjectHideFlags: 0
@@ -728,16 +810,11 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 95252384054601610, guid: a84a57b846ee00d40b393031ed561d07,
+    - target: {fileID: 114846500299797952, guid: a84a57b846ee00d40b393031ed561d07,
         type: 2}
-      propertyPath: m_Controller
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 9100000, guid: 5746361b160a65c4c822d05f7e029416, type: 2}
-    - target: {fileID: 95441595327796960, guid: a84a57b846ee00d40b393031ed561d07,
-        type: 2}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: bb82c5407b9bea44ab6a2fadf08756cf, type: 2}
+      objectReference: {fileID: 608}
     - target: {fileID: 114515008434259492, guid: a84a57b846ee00d40b393031ed561d07,
         type: 2}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -748,11 +825,16 @@ Prefab:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 6cdd3d91f1ef3614b8d0091177ef6062, type: 2}
-    - target: {fileID: 114846500299797952, guid: a84a57b846ee00d40b393031ed561d07,
+    - target: {fileID: 95441595327796960, guid: a84a57b846ee00d40b393031ed561d07,
         type: 2}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 608}
+      objectReference: {fileID: 9100000, guid: bb82c5407b9bea44ab6a2fadf08756cf, type: 2}
+    - target: {fileID: 95252384054601610, guid: a84a57b846ee00d40b393031ed561d07,
+        type: 2}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 5746361b160a65c4c822d05f7e029416, type: 2}
     - target: {fileID: 224525055873841224, guid: a84a57b846ee00d40b393031ed561d07,
         type: 2}
       propertyPath: m_AnchorMax.x
