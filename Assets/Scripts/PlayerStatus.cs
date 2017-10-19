@@ -163,6 +163,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             //if im dead, set my Color to gray, turn of all physics simulations and exit the function
             if (m_bDead)
             {
+                m_SpriteRenderer.sortingOrder = -4;
                 m_MoveClass.StopChoke();
                 if (m_MoveClass.heldWeapon)
                 {
@@ -188,6 +189,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             //if im stunned, make me cyan and show any kill prompts (X button and kill radius);
             if (m_bStunned)
             {
+                m_SpriteRenderer.sortingOrder = -4;
                 if (Choker != null && Choker.chokingPlayer != null)
                 {
                     if (Choker.chokingPlayer.transform.root != this.gameObject.transform.root)

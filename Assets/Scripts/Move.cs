@@ -73,7 +73,7 @@ public class Move : MonoBehaviour
     public string ColorDatabaseKey = "Player1";
     public AudioClip quack;
     private Database ColorDatabase;
-    private Dictionary<string, Color> colorDictionary;
+    public Dictionary<string, Color> colorDictionary;
     //  private Text _AmmoText;
 
     private GameObject previousWeapon = null;
