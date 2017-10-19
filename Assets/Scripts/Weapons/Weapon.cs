@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Weapon : MonoBehaviour
+public class Weapon : MonoBehaviour, Reset
 {
     //base weapon class
     private Sprite m_DefaultSprite;
@@ -279,5 +279,10 @@ public class Weapon : MonoBehaviour
     public void PlayPickup()
     {
         m_AudioSource.PlayOneShot(PickupAudio, pickupVolume);
+    }
+
+    public void Reset()
+    {
+        Destroy(this);
     }
 }

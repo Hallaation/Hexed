@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Glass : MonoBehaviour, IHitByBullet, IHitByMelee
+public class Glass : MonoBehaviour, IHitByBullet, IHitByMelee, Reset
 {
     public bool KeepBreaking = false;
     //? What is an array
@@ -232,7 +232,7 @@ public class Glass : MonoBehaviour, IHitByBullet, IHitByMelee
         }*/
     }
 
-    void Reset()
+    public void Reset()
     {
         foreach (Transform child in transform)
         {
