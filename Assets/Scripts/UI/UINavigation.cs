@@ -92,7 +92,7 @@ public class UINavigation : MonoBehaviour
                             float MinValue = sld.minValue;
 
                             float range = MaxValue - MinValue;
-                            float DecrementValue = 8 * (range + (-MinValue)) / 100;
+                            float DecrementValue = 6 * (range + (-MinValue)) / 100;
         
                             _EventSystem.currentSelectedGameObject.GetComponent<Slider>().value -= DecrementValue;
                         }
@@ -115,7 +115,7 @@ public class UINavigation : MonoBehaviour
                             float MaxValue = sld.maxValue;
                             float MinValue = sld.minValue;
                             float range = MaxValue - MinValue;
-                            float IncrementValue = 8 * (range + (-MinValue)) / 100;
+                            float IncrementValue = 6 * (range + (-MinValue)) / 100;
               
                             _EventSystem.currentSelectedGameObject.GetComponent<Slider>().value += IncrementValue;
                         }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Weapon : MonoBehaviour
+public class Weapon : MonoBehaviour, Reset
 {
     //base weapon class
     private Sprite m_DefaultSprite;
@@ -76,13 +76,13 @@ public class Weapon : MonoBehaviour
         m_AudioSource.playOnAwake = false;
         m_AudioSource.clip = m_AudioClip;
         m_AudioSource.volume = clipVolume;
-        m_AudioSource.spatialBlend = 1;
+        m_AudioSource.spatialBlend = 0.8f;
 
         hitPlayerAudioSource = this.gameObject.AddComponent<AudioSource>();
         hitPlayerAudioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as GameObject).GetComponent<AudioSource>().outputAudioMixerGroup;
         //hitPlayerAudioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as  AudioSource).outputAudioMixerGroup;
         hitPlayerAudioSource.playOnAwake = false;
-        hitPlayerAudioSource.spatialBlend = 1;
+        hitPlayerAudioSource.spatialBlend = 0.8f;
         //m_AudioSource = AudioManager.RequestAudioSource(m_AudioClip, clipVolume, clipPitch);
         _rigidbody = GetComponent<Rigidbody2D>();
         TimerBetweenFiring = new Timer(m_fTimeBetweenShots);
@@ -279,5 +279,10 @@ public class Weapon : MonoBehaviour
     public void PlayPickup()
     {
         m_AudioSource.PlayOneShot(PickupAudio, pickupVolume);
+    }
+
+    public void Reset()
+    {
+        Destroy(this);
     }
 }
