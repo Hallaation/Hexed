@@ -92,7 +92,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         m_MeleeHitAudioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as GameObject).GetComponent<AudioSource>().outputAudioMixerGroup;
         //m_MeleeHitAudioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as  AudioSource).outputAudioMixerGroup;
         m_MeleeHitAudioSource.playOnAwake = false;
-        m_MeleeHitAudioSource.spatialBlend = 1;
+        m_MeleeHitAudioSource.spatialBlend = 0.8f;
         m_Ability = this.GetComponent<BaseAbility>();
         m_InvincibilityTimer = new Timer(m_fInvincibleTime);
         _rigidbody = GetComponent<Rigidbody2D>();
@@ -188,7 +188,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             //if im stunned, make me cyan and show any kill prompts (X button and kill radius);
             if (m_bStunned)
             {
-                if (Choker != null)
+                if (Choker != null && Choker.chokingPlayer != null)
                 {
                     if (Choker.chokingPlayer.transform.root != this.gameObject.transform.root)
                     {
@@ -346,6 +346,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         //stun the player called outside of class
         //Vector3 a = ThrownItemVelocity.normalized;
         // _rigidbody.velocity = (a * StunedSlide);
+        m_MoveClass.StopChoke();
         this.GetComponent<Move>().StatusApplied();
         SetAllAnimatorsFalse();
         _rigidbody.velocity = ThrownItemVelocity;

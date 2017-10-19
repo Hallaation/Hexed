@@ -957,7 +957,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1277424391826748}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.2, y: 1.2, z: 1}
   m_Children:
   - {fileID: 4282961892030130}
@@ -1657,9 +1657,10 @@ MonoBehaviour:
   fistObject: {fileID: 0}
   movementSpeed: 10
   throwingForce: 300
-  m_fChokedTimeIncrement: 1.8
+  m_fChokedTimeIncrement: 1.7
   m_fChokeKillTime: 7
   m_fPositionOffset: 0.2
+  chokingPlayer: {fileID: 0}
   vibrationValue: {x: 0, y: 0}
   playerSpirte: {fileID: 0}
   StartMoveDelay: 0
@@ -1706,8 +1707,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CopyBulletAudio: 1
-  m_audioClip: {fileID: 0}
-  m_bRandomizePitch: 0
+  m_audioClip: {fileID: 8300000, guid: 15751d19a0e4c2441ab8cbfbb21c4348, type: 3}
+  m_bRandomizePitch: 1
   clipVolume: 1
   m_bShakeCamera: 1
   PlayParticles: 0
@@ -2022,6 +2023,7 @@ MonoBehaviour:
   m_bRandomizeHitPitch: 1
   m_clipVolume: 0.6
   PunchFlinchTime: 0.33
+  m_PunchesToKnockOut: 2
 --- !u!114 &114464100071623612
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -4069,6 +4069,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1149167253461704
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4295508057067880}
+  - component: {fileID: 114598510161810270}
+  m_Layer: 0
+  m_Name: Object_Spawn (5)
+  m_TagString: Untagged
+  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1149632876899616
 GameObject:
   m_ObjectHideFlags: 1
@@ -24922,7 +24938,7 @@ GameObject:
   - component: {fileID: 4848946977383488}
   - component: {fileID: 114889514003698644}
   m_Layer: 0
-  m_Name: Object_Spawn (5)
+  m_Name: Object_Spawn (6)
   m_TagString: Untagged
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -33024,6 +33040,19 @@ Transform:
   m_Father: {fileID: 4752889408090344}
   m_RootOrder: 92
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -449.999}
+--- !u!4 &4295508057067880
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1149167253461704}
+  m_LocalRotation: {x: 0, y: 0, z: 0.13052616, w: 0.9914449}
+  m_LocalPosition: {x: 14, y: -6.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4394909890812772}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 15}
 --- !u!4 &4295629545218620
 Transform:
   m_ObjectHideFlags: 1
@@ -35351,6 +35380,7 @@ Transform:
   - {fileID: 4794052869542888}
   - {fileID: 4975902452315448}
   - {fileID: 4931083840867624}
+  - {fileID: 4295508057067880}
   - {fileID: 4848946977383488}
   m_Father: {fileID: 4062519215334916}
   m_RootOrder: 0
@@ -46214,12 +46244,12 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1947464636020936}
-  m_LocalRotation: {x: 0, y: 0, z: 0.13052616, w: 0.9914449}
-  m_LocalPosition: {x: 14, y: -6.5, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: 0.13052616, w: 0.9914449}
+  m_LocalPosition: {x: -20.5, y: 12.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4394909890812772}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 15}
 --- !u!4 &4849240435638496
 Transform:
@@ -53425,6 +53455,27 @@ MonoBehaviour:
   DoorHinge: {fileID: 233241526172052534}
   m_MovingClip: {fileID: 0}
   m_MovingVolume: 1
+--- !u!114 &114598510161810270
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1149167253461704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f7866ad2c8a0cd49b56edb021340758, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SpawnTime: 0
+  Weapons:
+  - {fileID: 1517788638582294, guid: 37b1f81919ee4ec4d9ab8f671fb80d16, type: 2}
+  - {fileID: 1852384859055214, guid: 3e887145b78ae5f4fac2ea308b949fd0, type: 2}
+  - {fileID: 1088063092901144, guid: e34a32eb4c94d7940a4f975ffa146155, type: 2}
+  - {fileID: 1880336961509972, guid: 2bbc7d53aa2af2f4aad74aa94229f1e8, type: 2}
+  - {fileID: 1796801244791532, guid: fb3c2fd87b794ac44b324ccfa1636559, type: 2}
+  - {fileID: 1226134330056524, guid: 7d91d90283e3e274bb1eeb54a772815e, type: 2}
+  - {fileID: 1715055193550766, guid: c5823bd132cb5e04ab042431d6d8d4f1, type: 2}
+  ContinuallySpawnWeapons: 0
 --- !u!114 &114600966620341420
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -54949,13 +55000,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SpawnTime: 0
   Weapons:
-  - {fileID: 1517788638582294, guid: 37b1f81919ee4ec4d9ab8f671fb80d16, type: 2}
-  - {fileID: 1852384859055214, guid: 3e887145b78ae5f4fac2ea308b949fd0, type: 2}
-  - {fileID: 1088063092901144, guid: e34a32eb4c94d7940a4f975ffa146155, type: 2}
-  - {fileID: 1880336961509972, guid: 2bbc7d53aa2af2f4aad74aa94229f1e8, type: 2}
-  - {fileID: 1796801244791532, guid: fb3c2fd87b794ac44b324ccfa1636559, type: 2}
-  - {fileID: 1226134330056524, guid: 7d91d90283e3e274bb1eeb54a772815e, type: 2}
-  - {fileID: 1715055193550766, guid: c5823bd132cb5e04ab042431d6d8d4f1, type: 2}
+  - {fileID: 1061893188064722, guid: 2a40453e947c27b41a60559bc796ab4d, type: 2}
   ContinuallySpawnWeapons: 0
 --- !u!114 &114903888645604340
 MonoBehaviour:
