@@ -237,6 +237,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             //When not stunned
             else
             {
+                m_SpriteRenderer.sortingOrder = 0;
                 Choker = null;
                 GetComponent<Move>().GetBodyAnimator().enabled = true; //Get the animator(s) from the Move script and enable them
                 GetComponent<Move>().GetFeetAnimator().enabled = true; //Get the animator(s) from the Move script and enable them
