@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bullet : MonoBehaviour
+public class Bullet : MonoBehaviour, Reset
 {
     CircleCollider2D m_CircleCollider;
     Vector2 m_vVelocity;
@@ -281,4 +281,8 @@ public class Bullet : MonoBehaviour
 
     }
 
+    public void Reset()
+    {
+        Destroy(this);
+    }
 }

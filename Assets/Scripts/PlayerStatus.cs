@@ -92,7 +92,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         m_MeleeHitAudioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as GameObject).GetComponent<AudioSource>().outputAudioMixerGroup;
         //m_MeleeHitAudioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as  AudioSource).outputAudioMixerGroup;
         m_MeleeHitAudioSource.playOnAwake = false;
-        m_MeleeHitAudioSource.spatialBlend = 1;
+        m_MeleeHitAudioSource.spatialBlend = 0.8f;
         m_Ability = this.GetComponent<BaseAbility>();
         m_InvincibilityTimer = new Timer(m_fInvincibleTime);
         _rigidbody = GetComponent<Rigidbody2D>();

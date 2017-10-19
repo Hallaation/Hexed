@@ -102,7 +102,7 @@ public class Move : MonoBehaviour
             m_audioSource[i].outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as GameObject).GetComponent<AudioSource>().outputAudioMixerGroup;
             m_audioSource[i].playOnAwake = false;
             m_audioSource[i].clip = quack;
-            m_audioSource[i].spatialBlend = 1;
+            m_audioSource[i].spatialBlend = 0.8f;
         }
 
         if (!ColorDatabase)
