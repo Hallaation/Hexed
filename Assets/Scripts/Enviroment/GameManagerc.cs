@@ -195,6 +195,7 @@ public class GameManagerc : MonoBehaviour
                 case Gamemode_type.LAST_MAN_STANDING_DEATHMATCH:
                     RoundEndLastManStanding();
                     CheckPlayersPoints();
+                    mbFinishedShowingScores = false;
                     break;
                 //case Gamemode_type.DEATHMATCH_POINTS:
                 //    RoundEndDeathMatchMaxPoints();
@@ -225,7 +226,8 @@ public class GameManagerc : MonoBehaviour
                         players.ResetPlayer();
                     }
                     m_bRoundOver = false;
-                    FindObjectOfType<ScreenTransition>().OpenDoor();
+                    if (FindObjectOfType<ScreenTransition>())
+                        FindObjectOfType<ScreenTransition>().OpenDoor();
                     SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //reloads the scene.
                     //TODO instead of reloading scene, just reset E V E R Y T H I N G in the scene.
                     //End of round logic goes here.
@@ -265,27 +267,23 @@ public class GameManagerc : MonoBehaviour
             //the round is now over
             //look for the one player that is 
             m_bRoundOver = true;
-            int i = 0;
             foreach (PlayerStatus player in InGamePlayers)
             {
-
                 if (!player.IsDead)
                 {
                     //increase the winning player's point by 1
                     PlayerWins[player] += 1;
-
                     StartCoroutine(AddPointsToPanel(player));
                     // Debug.Break();
                 }
-                ++i; //probably unused, keeping it here in case it is actually used.
             }
-            CheckPlayersPoints();
         }
-
     }
 
+    //! USELESS FUNCTION
     void RoundEndDeathMatchMaxPoints()
     {
+        //! USELESS FUNCTION
         foreach (PlayerStatus player in InGamePlayers)
         {
             if (player.IsDead)
@@ -296,25 +294,16 @@ public class GameManagerc : MonoBehaviour
             //If player has reached the points required to win
             if (PlayerWins[player] >= m_iPointsNeeded)
             {
-                //Set the time scale to 0 (essentially pausing the game-ish)
-                //Debug.LogError("Points required have been reached");
-                //Time.timeScale = 0;
                 //open the finish panel, UI manager will set all the children to true, thus rendering them
                 UIManager.Instance.OpenUIElement(FinishUIPanel, true);
-                FindObjectOfType<ScreenTransition>().OpenDoor();
+                if (FindObjectOfType<ScreenTransition>())
+                    FindObjectOfType<ScreenTransition>().OpenDoor();
                 UIManager.Instance.RemoveLastPanel = false;
                 //Reset the event managers current selected object to the rematch button
                 //FindObjectOfType<EventSystem>().SetSelectedGameObject(FinishUIPanel.transform.Find("Rematch").gameObject);
 
             }
         }
-        //RoundEndLastManStanding();
-        //// round shouldn't be over until one of the players has reached the maximum points
-        //// For Max points, guns should be respawning with new ammo, any guns with no ammo should be deleted after a while when they have no ammo (like duck game)
-        //// Respawn players after they are killed (Like Smash bros.) no i-Frames though, they can be camped for all I care.
-        //m_bRoundOver = true;
-        //// Sort players by score?
-        //// Load Character select / win screen;
     }
 
     void CheckPlayersPoints()
@@ -332,7 +321,9 @@ public class GameManagerc : MonoBehaviour
                     //Time.timeScale = 0;
                     //open the finish panel, UI manager will set all the children to true, thus rendering them
                     UIManager.Instance.OpenUIElement(FinishUIPanel, true);
-                    FindObjectOfType<ScreenTransition>().OpenDoor();
+                    if (FindObjectOfType<ScreenTransition>())
+                        FindObjectOfType<ScreenTransition>().OpenDoor();
+
                     UIManager.Instance.RemoveLastPanel = false;
                     GameManagerc.Instance.Paused = true;
                     //Reset the event managers current selected object to the rematch button
@@ -349,7 +340,6 @@ public class GameManagerc : MonoBehaviour
     }
     void RoundEndDeathMatchTimed()
     {
-        RoundEndLastManStanding();
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -532,11 +522,11 @@ public class GameManagerc : MonoBehaviour
     public void GoToStart()
     {
         Time.timeScale = 1;
-        FindObjectOfType<ScreenTransition>().CloseDoor();
+        if (FindObjectOfType<ScreenTransition>())
+            FindObjectOfType<ScreenTransition>().CloseDoor();
         CameraControl.mInstance.enabled = false;
         Destroy(CameraControl.mInstance);
         //CameraControl.mInstance.m_Targets.Clear();
-        Debug.Log("help");
         //clear the players list
         for (int i = 0; i < InGamePlayers.Count; i++)
         {
@@ -572,6 +562,7 @@ public class GameManagerc : MonoBehaviour
         UIManager.Instance.gameObject.SetActive(false);
         ControllerManager.Instance.gameObject.SetActive(false);
         CharacterSelectionManager.Instance.gameObject.SetActive(false);
+        GameAudioPicker.Instance.gameObject.SetActive(false);
         //PlayerUIArray.Instance.gameObject.SetActive(false);
 
         UINavigation.Instance.gameObject.SetActive(false);
@@ -582,6 +573,8 @@ public class GameManagerc : MonoBehaviour
         Destroy(ControllerManager.Instance.gameObject);
         Destroy(CharacterSelectionManager.Instance.gameObject);
         Destroy(UINavigation.Instance.gameObject);
+        Destroy(GameAudioPicker.Instance);
+        Destroy(GameAudioPicker.Instance.gameObject);
         StartCoroutine(ReturnToMenu());
         //Destroy(GameManagerc.Instance);
         //Destroy(this.gameObject);
@@ -618,7 +611,10 @@ public class GameManagerc : MonoBehaviour
         yield return new WaitForSeconds(2);
         mbFinishedShowingScores = true;
         InGameScreenAnimator.SetTrigger("RemoveScreen");
-        FindObjectOfType<ScreenTransition>().CloseDoor();
+        if (FindObjectOfType<ScreenTransition>())
+            FindObjectOfType<ScreenTransition>().CloseDoor();
+
+        Debug.Log("??");
         //PointsPanel.SetActive(false);
 
     }
