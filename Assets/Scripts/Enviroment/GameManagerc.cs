@@ -320,6 +320,10 @@ public class GameManagerc : MonoBehaviour
                     //Debug.LogError("Points required have been reached");
                     //Time.timeScale = 0;
                     //open the finish panel, UI manager will set all the children to true, thus rendering them
+                    //#finish panel, 
+                    InGameScreenAnimator.SetTrigger("ShowScreen");
+                    PointsPanel.SetActive(false);
+                    MenuPanel.SetActive(false);
                     UIManager.Instance.OpenUIElement(FinishUIPanel, true);
                     if (FindObjectOfType<ScreenTransition>())
                         FindObjectOfType<ScreenTransition>().OpenDoor();
@@ -430,6 +434,19 @@ public class GameManagerc : MonoBehaviour
                 {
                     //Get the last object in point containers (the portrait container), get the first child (the "fill"- what is consitency) and change its sprite to the character's (item.value) sprite found in the base ability.
                     PointContainers[playerNumber].transform.GetChild(PointContainers[playerNumber].transform.childCount - 1).GetChild(0).GetComponent<Image>().sprite = item.Value.GetComponent<BaseAbility>().m_CharacterPortrait;
+                    Image portraitOutline = PointContainers[playerNumber].transform.GetChild(PointContainers[playerNumber].transform.childCount - 1).GetChild(1).GetComponent<Image>();
+                    portraitOutline.material.SetColor("_Color", Color.white);
+                    Move tempMove = item.Value.GetComponent<Move>();
+
+                    Database ColorDatabase = Resources.Load("Database") as Database;
+
+                    Dictionary<string, Color> colorDictionary = new Dictionary<string, Color>();
+                    for (int i = 0; i < ColorDatabase.colors.Length; i++)
+                    {
+                        if (!colorDictionary.ContainsKey(ColorDatabase.colors[i].PlayerType))
+                            colorDictionary.Add(ColorDatabase.colors[i].PlayerType, ColorDatabase.colors[i].playerColor);
+                    }
+                    portraitOutline.color = colorDictionary[tempMove.ColorDatabaseKey];
                 }
             }
 
