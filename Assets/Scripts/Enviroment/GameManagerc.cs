@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using XboxCtrlrInput;
 using XInputDotNetPure;
+using Kino;
 //?
 //? F R O M
 //? T H E
@@ -220,7 +221,9 @@ public class GameManagerc : MonoBehaviour
             {
                 if (waitForRoundEnd.Tick(Time.deltaTime))
                 {
+                    //Don't think I need to scramble the spawns here, I'll do it anyway
                     //reload scene
+                    ControllerManager.Instance.FindSpawns();
                     foreach (PlayerStatus players in InGamePlayers)
                     {
                         players.ResetPlayer();
@@ -515,6 +518,7 @@ public class GameManagerc : MonoBehaviour
         //The round is not over
         m_bRoundOver = false;
         //reset every player
+        ControllerManager.Instance.FindSpawns();
         foreach (KeyValuePair<PlayerStatus, int> item in PlayerWins)
         {
             item.Key.ResetPlayer();
