@@ -178,7 +178,6 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
                 GetComponent<Move>().GetFeetAnimator().enabled = false;
                 if (DeadSprites.Length > 0 && !DeathSpriteChanged)
                 {
-                    Debug.Log("Dead sprite");
                     DeathSpriteChanged = true;
                     m_SpriteRenderer.sprite = DeadSprites[Random.Range(0, DeadSprites.Length)];
                 }

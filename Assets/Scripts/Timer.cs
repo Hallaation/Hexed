@@ -9,6 +9,11 @@ public class Timer
     /// Constructor, Time to wait to determine how long the timer will last
     /// </summary>
     /// <param name="a_fTimeToWait"></param>
+    public Timer(ref float a_fTimeToWait)
+    {
+        mfTimeToWait = a_fTimeToWait;
+    }
+
     public Timer(float a_fTimeToWait)
     {
         mfTimeToWait = a_fTimeToWait;
@@ -17,10 +22,10 @@ public class Timer
     public float mfTimeToWait = 0;
     private float mfTimer = 0;
 
-    
+
     public float CurrentTime { get { return mfTimer; } set { mfTimer = value; } }
 
-    public void SetTimer(float SetTime) { mfTimer = SetTime; } 
+    public void SetTimer(float SetTime) { mfTimer = SetTime; }
 
     /// <summary>
     /// Increments the timer based on the time increment argument (usually deltatime)
