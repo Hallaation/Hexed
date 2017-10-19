@@ -9,7 +9,7 @@ public class Gun : Weapon
     [Space]
     [Header("Empty Clip Audio")]
     public AudioClip m_EmptyClipAudio;
-    [Range(0 , 1)]
+    [Range(0, 1)]
     public float EmptyVolume = 1.0f;
 
     [Space]
@@ -82,7 +82,7 @@ public class Gun : Weapon
                 m_AudioSource.clip = m_EmptyClipAudio;
                 m_AudioSource.volume = clipVolume;
             }
-            m_AudioSource.PlayOneShot(m_EmptyClipAudio , clipVolume);
+            m_AudioSource.PlayOneShot(m_EmptyClipAudio, clipVolume);
             shotReady = false;
 
             //TODO Add an empty chamber sound effect
@@ -117,27 +117,43 @@ public class Gun : Weapon
     void FireBullet()
     {
         //Whenever fire bullet mis called, Make the bullet prefab, get the damage from the player that is holding this gun
-
-        GameObject FiredBullet = Instantiate(bullet , this.transform.parent.position + this.transform.parent.up * m_fBulletSpawnOffSet , this.transform.rotation);
+        GameObject FiredBullet = Instantiate(bullet, this.transform.parent.position + this.transform.parent.up * m_fBulletSpawnOffSet, this.transform.rotation);
         Bullet bulletComponent = FiredBullet.GetComponent<Bullet>();
         bulletComponent.bulletOwner = GetComponentInParent<PlayerStatus>(); //copy stuff over
         bulletComponent.m_iDamage = this.m_iDamage;
         bulletComponent.m_bGiveIFrames = m_bGivePlayersIFrames;
         bulletComponent.m_fBulletImpactKnockBack = m_fBulletImpactKnockback;
+
         //Make a quaternion on the forward vector to determine the bullet spread jitter and set the bullet's rotation to the jitter
-        FiredBullet.transform.rotation = this.transform.parent.rotation * Quaternion.Euler(Vector3.forward * m_fSpreadJitter * Random.Range(-1.0f , 1.0f));
+        FiredBullet.transform.rotation = this.transform.parent.rotation * Quaternion.Euler(Vector3.forward * m_fSpreadJitter * Random.Range(-1.0f, 1.0f));
         //apply an initial force to the bullet's rigidbody based on what direction the bullet is facing,
-        FiredBullet.GetComponent<Rigidbody2D>().AddForce(FiredBullet.transform.up * m_fFiringForce , ForceMode2D.Impulse);
+        Rigidbody2D FiredBulletRigidBody = FiredBullet.GetComponent<Rigidbody2D>();
+        FiredBulletRigidBody.AddForce(FiredBullet.transform.up * m_fFiringForce, ForceMode2D.Impulse);
+
+        Ray2D ray = new Ray2D(this.transform.parent.position, FiredBullet.transform.up);
+        Debug.DrawRay(ray.origin, ray.direction * m_fBulletSpawnOffSet * 1.5f, Colors.Azure, 5);
+        RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, m_fBulletSpawnOffSet * 1.5f, LayerMask.GetMask("Wall", "Door", "Glass"));
+        if (hit)
+        {
+            foreach (var item in hit.transform.GetComponents<IHitByBullet>())
+            {
+                item.HitByBullet(FiredBulletRigidBody.velocity, hit.point);
+            }
+            FiredBullet.transform.position = hit.point;
+            FiredBulletRigidBody.velocity = Vector2.zero;
+            bulletComponent.PlayParticles(hit.point);
+        }
+
         //! Based on the bullet's velocity vector, get a rotation from it and change the bullets rotation to represent the velocity vector;
-        Vector2 dir = FiredBullet.GetComponent<Rigidbody2D>().velocity;
-        float angle = Mathf.Atan2(dir.y , dir.x) * Mathf.Rad2Deg;
-        FiredBullet.GetComponent<Transform>().rotation = Quaternion.AngleAxis(angle , Vector3.forward);
+        Vector2 dir = FiredBulletRigidBody.velocity;
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        FiredBullet.GetComponent<Transform>().rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         //!If I do have a Muzzel flash particle, play them.
         if (MuzzelFlash != null)
             MuzzelFlash.Play();
         shotReady = false; //set shot ready to false to enable the timer to tick.
         //Copy.CopyComponent(m_AudioSource, FiredBullet);
-        m_AudioSource.pitch = (m_bRandomizePitch) ? Random.Range(0.9f , 1.1f) : 1;
+        m_AudioSource.pitch = (m_bRandomizePitch) ? Random.Range(0.9f, 1.1f) : 1;
 
         m_AudioSource.Play();
         //AudioSource bulletSource = FiredBullet.GetComponent<AudioSource>();
@@ -179,8 +195,6 @@ public class Gun : Weapon
             }
         }
     }
-    void Reset()
-    {
-        Destroy(this);
-    }
+
+
 }

@@ -194,6 +194,11 @@ public class Bullet : MonoBehaviour, Reset
         Destroy(this.gameObject);
     }
 
+    public void PlayParticles(Vector2 HitPoint)
+    {
+        WallCollidedParticles = transform.GetChild(0).GetComponentsInChildren<ParticleSystem>();
+        StartCoroutine(PlayParticle(HitPoint));
+    }
     /// <summary>
     /// Called whenever the raycast hits a wall
     /// </summary>
@@ -215,8 +220,6 @@ public class Bullet : MonoBehaviour, Reset
         float longestParticleDuration = 0;
         if (WallCollidedParticles.Length > 0)
         {
-
-
             // transform.GetChild(0).localEulerAngles = new Vector3(VChildPrevRotation.x , VChildPrevRotation.y , VChildPrevRotation.z);
             foreach (ParticleSystem particle in WallCollidedParticles)
             {
