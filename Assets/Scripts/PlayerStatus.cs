@@ -163,6 +163,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             //if im dead, set my Color to gray, turn of all physics simulations and exit the function
             if (m_bDead)
             {
+                m_MoveClass.StopChoke();
                 if (m_MoveClass.heldWeapon)
                 {
                     m_MoveClass.ThrowWeapon(Vector2.zero, Vector2.zero, false);
