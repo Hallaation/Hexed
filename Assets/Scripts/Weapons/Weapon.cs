@@ -189,7 +189,7 @@ public class Weapon : MonoBehaviour, Reset
         WaitForNextShot();
 
     }
-
+    
     void WaitForNextShot()
     {
         //once the player has shot a bullet, the timer will start to tick until the desired time. Until the desired time hasn't reached, the player cannot shoot

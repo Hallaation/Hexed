@@ -365,8 +365,9 @@ public class GamemodeSelection : MonoBehaviour
 
     public void EnterGame()
     {
-        ScreenTransition transitionScrene = FindObjectOfType<ScreenTransition>();
-        transitionScrene.m_Animator.SetTrigger("CloseDoor");
+        ScreenTransition transitionScreen = FindObjectOfType<ScreenTransition>();
+        if (transitionScreen)
+            transitionScreen.m_Animator.SetTrigger("CloseDoor");
         StartCoroutine(WaitforTransition());
         //if (transitionScrene.m_Animator.GetCurrentAnimatorStateInfo(0).IsName("Transition_Closed"))
         //{
