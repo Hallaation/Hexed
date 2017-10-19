@@ -907,6 +907,7 @@ public class Move : MonoBehaviour
                         {
                             PlayerStatus playerBeingChoked = collidersFound.gameObject.transform.parent.GetComponent<PlayerStatus>();
                             runningAnimation = true;
+                            FeetAnimator.SetBool("Choking", true);
                             _rigidBody.velocity = Vector2.zero;
                             BodyAnimator.SetTrigger("HeadSmashPullUp");
                             m_bInChokeMode = true;
@@ -928,7 +929,7 @@ public class Move : MonoBehaviour
             _rigidBody.WakeUp();
             m_bOutOfChoke = false;
             m_ChokingTimer.mfTimeToWait = m_fChokeKillTime; //set the time to wait
-            PlayerStatus chokingPlayerStatus = chokingPlayer.transform.root.GetComponent<PlayerStatus>(); //get the player status of choking player
+            PlayerStatus chokingPlayerStatus = chokingPlayer.transform.root.GetComponent<PlayerStatus>(); //get the player status of the player GETTING CHOKED
             KillBarContainer.transform.position = chokingPlayer.transform.root.position - Vector3.up * m_status.m_fKillBarOffset - Vector3.forward * 8;
 
             if (chokingPlayerStatus.IsStunned) //if the Player getting choked player is still stunned
@@ -941,13 +942,16 @@ public class Move : MonoBehaviour
                 if (XCI.GetButtonDown(XboxButton.X, m_controller.mXboxController)) //look for X button down
                 {
                     BodyAnimator.SetTrigger("HeadSmashSmash"); //Set trigger to do smash
+
+                    //TODO Audio Here.
                 }
-                if (XCI.GetButtonDown(XboxButton.B, m_controller.mXboxController)) //look for X button down
+                if (XCI.GetButtonDown(XboxButton.B, m_controller.mXboxController)) //look for B button down
                 {
                     m_bInChokeMode = false;
                     chokingPlayer = null;  //Set trigger to do smash
                     chokingPlayerStatus.Choker = null;
                     BodyAnimator.SetTrigger("CancelHeadSmash");
+                    FeetAnimator.SetBool("Choking", false);
                 }
                 //Check Animator State
                 if (BodyAnimator.GetCurrentAnimatorStateInfo(0).IsName("HeadSmash") && m_bInChokeMode) //if in head smash state
@@ -956,12 +960,17 @@ public class Move : MonoBehaviour
                     {
                         m_bChoked = true; //set the applied logic to true
                         m_ChokingTimer.CurrentTime += m_fChokedTimeIncrement; //increase the timer
-
+                        FeetAnimator.SetBool("Choking", true);
                     }
                 }
                 else
                 {
-                    m_bChoked = false; //Logic not applied
+                    m_bChoked = false; //Logic not applied?
+                    //if (chokingPlayer != null)
+                    //{
+                    //    m_bInChokeMode = false;
+                    //}
+                   // FeetAnimator.SetBool("Choking", false);
                 }
 
                 if (m_ChokingTimer.Tick(Time.deltaTime)) //If timer over, kill player
@@ -981,9 +990,11 @@ public class Move : MonoBehaviour
             else //Otherwise if not stunned
             {
                 //get out of choke mode, choking player reference is now null
+
                 BodyAnimator.SetTrigger("CancelHeadSmash");
                 m_bInChokeMode = false;
                 chokingPlayer = null;
+                FeetAnimator.SetBool("Choking", false);
             }
             return true;
         }
@@ -997,6 +1008,9 @@ public class Move : MonoBehaviour
             chokingPlayer = null;
             KillBarContainer.SetActive(false);
             m_ChokingTimer.CurrentTime = 0;
+            FeetAnimator.SetBool("Choking", false);
+            m_bInChokeMode = false;
+
         }
         return false;
     }
