@@ -832,7 +832,7 @@ public class Move : MonoBehaviour
         chokingPlayer = null;
         m_ChokingTimer.CurrentTime = 0;
         KillBarContainer.SetActive(false);
-        BodyAnimator.SetTrigger("CancelHeadSmash");
+        BodyAnimator.SetBool("CancelHeadSmash", true);
         m_bInChokeMode = false;
         chokingPlayer = null;
     }
