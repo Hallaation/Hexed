@@ -932,6 +932,7 @@ public class Move : MonoBehaviour
                             originalPosition = this.transform.position;
                             ThrowWeapon(_rigidBody.velocity, this.transform.up, false);
 
+                           // chokingPlayer.GetComponentInParent<Move>().BodyAnimator.SetTrigger("HavingHeadSmashPullUp");
                             //this.GetComponentInChildren<Animator>().SetBool("IsKilling", true);
                             //collidersFound.transform.parent.GetComponent<PlayerStatus>().KillPlayer(this.GetComponent<PlayerStatus>());
                         }
@@ -977,6 +978,8 @@ public class Move : MonoBehaviour
                         m_bChoked = true; //set the applied logic to true
                         m_ChokingTimer.CurrentTime += m_fChokedTimeIncrement; //increase the timer
                         FeetAnimator.SetBool("Choking", true);
+
+                        chokingPlayer.GetComponentInParent<Move>().BodyAnimator.SetTrigger("HavingHeadSmashed");
                     }
                 }
                 else
