@@ -99,6 +99,7 @@ public class GameManagerc : MonoBehaviour
     public bool Paused { get { return m_bGamePaused; } set { m_bGamePaused = value; } }
 
     public int m_iPointsIndex = 0;
+    public bool m_bAllowPause = false;
     GameObject[] PointXPositions;
     GameObject[] PointYPositions;
 
@@ -664,6 +665,7 @@ public class GameManagerc : MonoBehaviour
 
     IEnumerator AddPointsToPanel(PlayerStatus player)
     {
+        m_bAllowPause = false;
         yield return new WaitForSeconds(m_fTimeTillPoints);
         PointsPanel.SetActive(true);
         MenuPanel.SetActive(false);
@@ -692,6 +694,7 @@ public class GameManagerc : MonoBehaviour
             glitch.verticalJump = .5f;
             glitch.scanLineJitter = .5f;
         }
+        m_bAllowPause = true;
         //PointsPanel.SetActive(false);
     }
 

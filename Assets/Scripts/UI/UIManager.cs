@@ -270,24 +270,27 @@ public class UIManager : MonoBehaviour
             //If I press start and the menu status (stack of UI elements) is nothing, push the default panel into the stack.
             if (XCI.GetButton(XboxButton.Start, XboxController.First + i) && menuStatus.Count <= 0)
             {
-                if (!menuStatus.Contains(defaultPanel))
+                if (GameManagerc.Instance.m_bAllowPause)
                 {
-                    menuStatus.Push(defaultPanel);
-                    defaultPanel.SetActive(true);
-                    if (GameManagerc.Instance.PointsPanel)
-                        GameManagerc.Instance.PointsPanel.SetActive(false);
+                    if (!menuStatus.Contains(defaultPanel))
+                    {
+                        menuStatus.Push(defaultPanel);
+                        defaultPanel.SetActive(true);
+                        if (GameManagerc.Instance.PointsPanel)
+                            GameManagerc.Instance.PointsPanel.SetActive(false);
 
-                    //Debug.Log(defaultPanel.GetComponentInChildren<DefaultButton>().gameObject.transform.parent);
+                        //Debug.Log(defaultPanel.GetComponentInChildren<DefaultButton>().gameObject.transform.parent);
 
-                    GameManagerc.Instance.GetScreenAnimator().SetTrigger("ShowScreen");
-                    GameManagerc.Instance.Paused = true;
+                        GameManagerc.Instance.GetScreenAnimator().SetTrigger("ShowScreen");
+                        GameManagerc.Instance.Paused = true;
 
-                    StartCoroutine(PauseGame()); //Pause the game
+                        StartCoroutine(PauseGame()); //Pause the game
 
-                    GameObject selectable = defaultPanel.GetComponentInChildren<DefaultButton>().gameObject;
-                    defaultPanel.transform.GetChild(0).Find("MainMenu").GetChild(0).GetComponent<Button>().onClick.AddListener(delegate { GameManagerc.Instance.GoToStart(); });
-                    SetCurrentSelected(selectable);
-                    //Debug.Log(_eventSystem.gameObject);
+                        GameObject selectable = defaultPanel.GetComponentInChildren<DefaultButton>().gameObject;
+                        defaultPanel.transform.GetChild(0).Find("MainMenu").GetChild(0).GetComponent<Button>().onClick.AddListener(delegate { GameManagerc.Instance.GoToStart(); });
+                        SetCurrentSelected(selectable);
+                        //Debug.Log(_eventSystem.gameObject);
+                    }
                 }
             }
 
