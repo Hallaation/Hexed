@@ -37,7 +37,7 @@ public class Blood : MonoBehaviour
         int RandomBlood = Random.Range(0, BloodSprites.Length);
         Vector3 NormalizedVelocity = a_Velocity.normalized;
         Vector3 AdjustedPosition = a_Position + (NormalizedVelocity);
-        GameObject spawnedBlood = Instantiate(BloodSprites[RandomBlood], AdjustedPosition, this.transform.rotation);
+        GameObject spawnedBlood = Instantiate(BloodSprites[RandomBlood], AdjustedPosition, a_Rotation);
         spawnedBlood.transform.localScale *= .2f;
         spawnedBlood.GetComponent<Rigidbody2D>().velocity = new Vector3(0,0,0);
         spawnedBlood.GetComponent<Rigidbody2D>().AddForce(a_Velocity.normalized * BloodTravelSpeed, ForceMode2D.Impulse);
