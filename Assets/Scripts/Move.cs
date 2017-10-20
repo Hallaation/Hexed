@@ -82,7 +82,9 @@ public class Move : MonoBehaviour
     private Collider2D m_TwoHandedCollider;
 
     private AudioSource[] m_audioSource;
+    private AudioSource m_HeadAudio;
     private GameObject AudioSourcePool;
+    public AudioClip HeadSmash;
     #endregion
     //Vector3 movement;
     // Use this for initialization
@@ -95,7 +97,9 @@ public class Move : MonoBehaviour
         AudioSourcePool = new GameObject("AudioSources");
         AudioSourcePool.transform.SetParent(this.transform);
         AudioSourcePool.transform.localPosition = Vector3.zero;
-
+        m_HeadAudio = gameObject.AddComponent<AudioSource>();
+        m_HeadAudio.spatialBlend = 0.8f;
+        m_HeadAudio.clip = HeadSmash;
         for (int i = 0; i < m_audioSource.Length; ++i)
         {
             m_audioSource[i] = AudioSourcePool.AddComponent<AudioSource>();
@@ -978,8 +982,8 @@ public class Move : MonoBehaviour
                         m_bChoked = true; //set the applied logic to true
                         m_ChokingTimer.CurrentTime += m_fChokedTimeIncrement; //increase the timer
                         FeetAnimator.SetBool("Choking", true);
-
                         chokingPlayer.GetComponentInParent<Move>().BodyAnimator.SetTrigger("HavingHeadSmashed");
+                        m_HeadAudio.Play();
                     }
                 }
                 else
