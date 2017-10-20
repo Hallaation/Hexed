@@ -92,7 +92,9 @@ public class GameManagerc : MonoBehaviour
     private bool mbFinishedShowingScores = false;
     public bool mbInstanceIsMe = false;
     public bool mbMapLoaded = false;
+    private bool m_bFirstTimeLoading = true;
     private bool m_bGamePaused = false;
+    private ScreenTransition screenTransition;
     public bool Paused { get { return m_bGamePaused; } set { m_bGamePaused = value; } }
 
     public int m_iPointsIndex = 0;
@@ -358,6 +360,30 @@ public class GameManagerc : MonoBehaviour
         if (scene.buildIndex == 1)
         {
             UINavigation LoadInstance = UINavigation.Instance;
+            if (!m_bFirstTimeLoading) //if this isn't the first time loading into the scene
+            {
+                if (FindObjectOfType<ScreenTransition>())
+                {
+                    screenTransition = FindObjectOfType<ScreenTransition>();
+                    for (int i = 0; i < screenTransition.transform.childCount; i++)
+                    {
+                        screenTransition.transform.GetChild(i).GetComponent<Image>().enabled = false;
+                    }
+                }
+                AnalogGlitch glitch = FindObjectOfType<AnalogGlitch>();
+                if (glitch)
+                {
+                    glitch.colorDrift = .5f;
+                    glitch.horizontalShake = .5f;
+                    glitch.verticalJump = .5f;
+                    glitch.scanLineJitter = .5f;
+                }
+                StartCoroutine(StopGlitch(glitch));
+            }
+            else
+            {
+                m_bFirstTimeLoading = false;
+            }
 
             if (MapToLoad)
             {
@@ -543,6 +569,11 @@ public class GameManagerc : MonoBehaviour
     public void GoToStart()
     {
         Time.timeScale = 1;
+
+        for (int i = 0; i < screenTransition.transform.childCount; i++)
+        {
+            screenTransition.transform.GetChild(i).GetComponent<Image>().enabled = true;
+        }
         if (FindObjectOfType<ScreenTransition>())
             FindObjectOfType<ScreenTransition>().CloseDoor();
         CameraControl.mInstance.enabled = false;
@@ -579,7 +610,7 @@ public class GameManagerc : MonoBehaviour
         //mbFinishedPanelShown = false;
         mbMapLoaded = false;
         m_bGamePaused = false;
-
+        m_bFirstTimeLoading = true;
         UIManager.Instance.gameObject.SetActive(false);
         ControllerManager.Instance.gameObject.SetActive(false);
         CharacterSelectionManager.Instance.gameObject.SetActive(false);
@@ -632,14 +663,32 @@ public class GameManagerc : MonoBehaviour
         yield return new WaitForSeconds(2);
         mbFinishedShowingScores = true;
         InGameScreenAnimator.SetTrigger("RemoveScreen");
-        if (FindObjectOfType<ScreenTransition>())
-            FindObjectOfType<ScreenTransition>().CloseDoor();
-
-        Debug.Log("??");
+        //if (FindObjectOfType<ScreenTransition>())
+        //    FindObjectOfType<ScreenTransition>().CloseDoor();
+        AnalogGlitch glitch = FindObjectOfType<AnalogGlitch>();
+        if (glitch)
+        {
+            glitch.colorDrift = .5f;
+            glitch.horizontalShake = .5f;
+            glitch.verticalJump = .5f;
+            glitch.scanLineJitter = .5f;
+        }
         //PointsPanel.SetActive(false);
-
     }
 
+    IEnumerator StopGlitch(AnalogGlitch glitch)
+    {
+        yield return new WaitForSeconds(1);
+        for (float i = 0.5f; i > 0; i -= 0.05f * Time.deltaTime)
+        {
+            glitch.scanLineJitter = i;
+            glitch.colorDrift = i;
+            glitch.horizontalShake = i;
+            glitch.verticalJump = i;
+        }
 
+
+
+    }
 }
 
