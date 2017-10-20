@@ -10,6 +10,7 @@ public class Blood : MonoBehaviour
     SpriteRenderer GlassSpriteRenderer;
     public GameObject[] BloodSprites;
     private Vector2 StoredVelocity;
+    public bool BloodSpawner = false;
     // Use this for initialization
     void Start()
     {
@@ -20,7 +21,7 @@ public class Blood : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (MaxSize == false)
+        if (MaxSize == false && BloodSpawner == false )
         {
             if (transform.localScale.sqrMagnitude < 2.99)
             {
