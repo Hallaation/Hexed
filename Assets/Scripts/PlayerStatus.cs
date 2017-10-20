@@ -193,7 +193,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
                 {
                     StunSpriteChanged = true;
                     m_SpriteRenderer.sprite = StunnedSprites[Random.Range(0, StunnedSprites.Length)];
-                    GetComponentInParent<Move>().GetBodyAnimator().SetTrigger("HavingHeadSmashPullUp");
+                    //GetComponentInParent<Move>().GetBodyAnimator().SetTrigger("HavingHeadSmashPullUp");
                 }
 
                 m_SpriteRenderer.sortingOrder = -4;
@@ -210,8 +210,8 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
                 }
                 stunTimer.mfTimeToWait = m_fStunTime;
      
-                //GetComponent<Move>().GetBodyAnimator().enabled = false; //enable animators
-                //GetComponent<Move>().GetFeetAnimator().enabled = false; //enable animators
+                GetComponent<Move>().GetBodyAnimator().enabled = false; //enable animators
+                GetComponent<Move>().GetFeetAnimator().enabled = false; //enable animators
 
                 m_Ability.m_ChargeIndicator.SetActive(false);
                 m_Ability.ChargeCoolDown = false;
@@ -242,9 +242,9 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             {
                 m_SpriteRenderer.sortingOrder = 4;
                 Choker = null;
-                GetComponentInParent<Move>().GetBodyAnimator().SetBool("CancelHeadSmash", true);
-                //GetComponent<Move>().GetBodyAnimator().enabled = true; //Get the animator(s) from the Move script and enable them
-                //GetComponent<Move>().GetFeetAnimator().enabled = true; //Get the animator(s) from the Move script and enable them
+                //GetComponentInParent<Move>().GetBodyAnimator().SetBool("CancelHeadSmash", true);
+                GetComponent<Move>().GetBodyAnimator().enabled = true; //Get the animator(s) from the Move script and enable them
+                GetComponent<Move>().GetFeetAnimator().enabled = true; //Get the animator(s) from the Move script and enable them
                 m_Ability.m_ChargeIndicator.SetActive(true); //Turn the ability charge indicator back on
                 m_Ability.ChargeCoolDown = true; //Continue to tick the timer for more Ability charges
                 StunSpriteChanged = false;
