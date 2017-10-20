@@ -95,11 +95,17 @@ public class GameManagerc : MonoBehaviour
     private bool m_bFirstTimeLoading = true;
     private bool m_bGamePaused = false;
     private ScreenTransition screenTransition;
+
     public bool Paused { get { return m_bGamePaused; } set { m_bGamePaused = value; } }
 
     public int m_iPointsIndex = 0;
     GameObject[] PointXPositions;
     GameObject[] PointYPositions;
+
+    public AudioClip m_DingSound;
+    private AudioSource m_AudioSource;
+    //! Screen Glitch lerp values
+    
     //Lazy singleton
     public static GameManagerc Instance
     {
@@ -125,6 +131,14 @@ public class GameManagerc : MonoBehaviour
     // Use this for initialization
     void Awake()
     {
+        m_DingSound = Resources.Load("Audio/SFX/ding-sound-effect") as AudioClip;
+        m_AudioSource = this.GetComponent<AudioSource>();
+        if (!m_AudioSource)
+        {
+            m_AudioSource = this.gameObject.AddComponent<AudioSource>();
+            m_AudioSource.clip = m_DingSound;
+            m_AudioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as GameObject).GetComponent<AudioSource>().outputAudioMixerGroup;
+        }
         SingletonTester.Instance.AddSingleton(this);
         InstanceCreated = true;
         //Find the 
@@ -299,6 +313,7 @@ public class GameManagerc : MonoBehaviour
             //If player has reached the points required to win
             if (PlayerWins[player] >= m_iPointsNeeded)
             {
+                //! USELESS FUNCTION
                 //open the finish panel, UI manager will set all the children to true, thus rendering them
                 UIManager.Instance.OpenUIElement(FinishUIPanel, true);
                 if (FindObjectOfType<ScreenTransition>())
@@ -330,6 +345,9 @@ public class GameManagerc : MonoBehaviour
                     PointsPanel.SetActive(false);
                     MenuPanel.SetActive(false);
                     UIManager.Instance.OpenUIElement(FinishUIPanel, true);
+                    //TODO Player portraits
+                    FinishUIPanel.transform.GetChild(2).GetChild(0).GetComponent<Image>().sprite = player.GetComponent<BaseAbility>().m_CharacterPortrait;
+                    FinishUIPanel.transform.GetChild(2).GetChild(1).GetComponent<Image>().color = player.GetComponent<PlayerStatus>()._playerColor;
                     if (FindObjectOfType<ScreenTransition>())
                         FindObjectOfType<ScreenTransition>().OpenDoor();
 
@@ -659,7 +677,8 @@ public class GameManagerc : MonoBehaviour
 
         int PlayerIndex = XboxControllerPlayerNumbers[player.GetComponent<ControllerSetter>().mXboxController];
         PointContainers[PlayerIndex].transform.GetChild(PlayerWins[player] - 1).GetComponent<Image>().color = Color.blue;
-
+        //TODO play ding.
+        m_AudioSource.Play();
         yield return new WaitForSeconds(2);
         mbFinishedShowingScores = true;
         InGameScreenAnimator.SetTrigger("RemoveScreen");
