@@ -819,7 +819,6 @@ public class Move : MonoBehaviour
 
     public void StopChoke()
     {
-        Debug.Log("help");
         if (!m_bOutOfChoke) //not out of choke
         {
             this.transform.position = originalPosition;
@@ -829,6 +828,15 @@ public class Move : MonoBehaviour
         //{
         //    chokingPlayer.GetComponent<PlayerStatus>().Choker = null;
         //}
+        //chokingPlayer.GetComponent<PlayerStatus>().Choker = null;
+        if (chokingPlayer)
+        {
+            PlayerStatus chokingPlayerStatus = chokingPlayer.GetComponent<PlayerStatus>();
+            if (chokingPlayerStatus)
+            {
+                chokingPlayerStatus.Choker = null;
+            }
+        }
         chokingPlayer = null;
         m_ChokingTimer.CurrentTime = 0;
         KillBarContainer.SetActive(false);
@@ -902,6 +910,15 @@ public class Move : MonoBehaviour
                     //Null check
                     if (collidersFound.tag == "Stunned")           //? Never Passes.
                     {
+                        PlayerStatus playerFoundStatus = collidersFound.GetComponentInParent<PlayerStatus>();
+                        if (playerFoundStatus.Choker)
+                        {
+                            if (playerFoundStatus.Choker.GetComponentInParent<PlayerStatus>().IsDead)
+                            {
+                                playerFoundStatus.Choker = null;
+                            }
+                        }
+
                         if (collidersFound.gameObject.transform.parent.GetComponent<PlayerStatus>().IsStunned && collidersFound.gameObject.transform.parent.GetComponent<PlayerStatus>().Choker == null)
                         {
                             PlayerStatus playerBeingChoked = collidersFound.gameObject.transform.parent.GetComponent<PlayerStatus>();
@@ -914,7 +931,7 @@ public class Move : MonoBehaviour
                             playerBeingChoked.Choker = this;
                             originalPosition = this.transform.position;
                             ThrowWeapon(_rigidBody.velocity, this.transform.up, false);
-                            
+
                             //this.GetComponentInChildren<Animator>().SetBool("IsKilling", true);
                             //collidersFound.transform.parent.GetComponent<PlayerStatus>().KillPlayer(this.GetComponent<PlayerStatus>());
                         }
@@ -965,11 +982,11 @@ public class Move : MonoBehaviour
                 else
                 {
                     m_bChoked = false; //Logic not applied?
-                    //if (chokingPlayer != null)
-                    //{
-                    //    m_bInChokeMode = false;
-                    //}
-                   // FeetAnimator.SetBool("Choking", false);
+                                       //if (chokingPlayer != null)
+                                       //{
+                                       //    m_bInChokeMode = false;
+                                       //}
+                                       // FeetAnimator.SetBool("Choking", false);
                 }
 
                 if (m_ChokingTimer.Tick(Time.deltaTime)) //If timer over, kill player
