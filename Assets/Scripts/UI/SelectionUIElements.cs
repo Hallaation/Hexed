@@ -31,10 +31,18 @@ public class SelectionUIElements : MonoBehaviour
     private Image SelectedCharacterImage;
     private int m_iSelectedIndex = 0;
     private bool m_bBackedOut = false;
+    public AudioClip[] selectionSounds;
+    private AudioSource m_AudioSource;
     Animator m_Animator;
     // Use this for initialization
     void Awake()
     {
+        m_AudioSource = this.GetComponent<AudioSource>();
+        if (!m_AudioSource)
+        {
+            m_AudioSource = this.gameObject.AddComponent<AudioSource>();
+            m_AudioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as GameObject).GetComponent<AudioSource>().outputAudioMixerGroup;
+        }
         m_bNotJoined = false;
         m_Animator = GetComponentInChildren<Animator>();
         //make a copy-ish of my transform
@@ -144,6 +152,8 @@ public class SelectionUIElements : MonoBehaviour
 
                             selectionManager.CharacterSelectionStatus[selectionManager.CharacterArray[m_iSelectedIndex]] = true; //set the status selected to true
                             m_Animator.SetBool("IsSelected", true);
+                            //m_AudioSource.clip = selectionSounds[0];
+                            //m_AudioSource.Play();
                         }
                     }
 #if UNITY_EDITOR
@@ -167,6 +177,8 @@ public class SelectionUIElements : MonoBehaviour
                     //reset the selection status
                     selectionManager.CharacterSelectionStatus[selectionManager.CharacterArray[m_iSelectedIndex]] = false;
                     m_Animator.SetBool("IsSelected", false);
+                    m_AudioSource.clip = selectionSounds[1];
+                    m_AudioSource.Play();
                 }
                 //If I press B and I don't have a character selected.
 
@@ -250,9 +262,13 @@ public class SelectionUIElements : MonoBehaviour
     IEnumerator ChangeSprite()
     {
         m_bSpriteChanged = true;
-        yield return new WaitForSeconds(0.8f);
+        yield return new WaitForSeconds(0.5f);
         if (m_Animator.GetCurrentAnimatorStateInfo(0).IsName("Character_Selection_Docked"))
+        {
+            m_AudioSource.clip = selectionSounds[0];
+            m_AudioSource.Play();
             m_DockLight.sprite = m_BToCancel;
+        }
     }
 }
 
