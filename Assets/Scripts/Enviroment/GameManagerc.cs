@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using XboxCtrlrInput;
 using XInputDotNetPure;
+using Kino;
 //?
 //? F R O M
 //? T H E
@@ -91,12 +92,20 @@ public class GameManagerc : MonoBehaviour
     private bool mbFinishedShowingScores = false;
     public bool mbInstanceIsMe = false;
     public bool mbMapLoaded = false;
+    private bool m_bFirstTimeLoading = true;
     private bool m_bGamePaused = false;
+    private ScreenTransition screenTransition;
+
     public bool Paused { get { return m_bGamePaused; } set { m_bGamePaused = value; } }
 
     public int m_iPointsIndex = 0;
     GameObject[] PointXPositions;
     GameObject[] PointYPositions;
+
+    public AudioClip m_DingSound;
+    private AudioSource m_AudioSource;
+    //! Screen Glitch lerp values
+    
     //Lazy singleton
     public static GameManagerc Instance
     {
@@ -122,6 +131,14 @@ public class GameManagerc : MonoBehaviour
     // Use this for initialization
     void Awake()
     {
+        m_DingSound = Resources.Load("Audio/SFX/ding-sound-effect") as AudioClip;
+        m_AudioSource = this.GetComponent<AudioSource>();
+        if (!m_AudioSource)
+        {
+            m_AudioSource = this.gameObject.AddComponent<AudioSource>();
+            m_AudioSource.clip = m_DingSound;
+            m_AudioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as GameObject).GetComponent<AudioSource>().outputAudioMixerGroup;
+        }
         SingletonTester.Instance.AddSingleton(this);
         InstanceCreated = true;
         //Find the 
@@ -220,7 +237,9 @@ public class GameManagerc : MonoBehaviour
             {
                 if (waitForRoundEnd.Tick(Time.deltaTime))
                 {
+                    //Don't think I need to scramble the spawns here, I'll do it anyway
                     //reload scene
+                    ControllerManager.Instance.FindSpawns();
                     foreach (PlayerStatus players in InGamePlayers)
                     {
                         players.ResetPlayer();
@@ -294,6 +313,7 @@ public class GameManagerc : MonoBehaviour
             //If player has reached the points required to win
             if (PlayerWins[player] >= m_iPointsNeeded)
             {
+                //! USELESS FUNCTION
                 //open the finish panel, UI manager will set all the children to true, thus rendering them
                 UIManager.Instance.OpenUIElement(FinishUIPanel, true);
                 if (FindObjectOfType<ScreenTransition>())
@@ -325,6 +345,9 @@ public class GameManagerc : MonoBehaviour
                     PointsPanel.SetActive(false);
                     MenuPanel.SetActive(false);
                     UIManager.Instance.OpenUIElement(FinishUIPanel, true);
+                    //TODO Player portraits
+                    FinishUIPanel.transform.GetChild(2).GetChild(0).GetComponent<Image>().sprite = player.GetComponent<BaseAbility>().m_CharacterPortrait;
+                    FinishUIPanel.transform.GetChild(2).GetChild(1).GetComponent<Image>().color = player.GetComponent<PlayerStatus>()._playerColor;
                     if (FindObjectOfType<ScreenTransition>())
                         FindObjectOfType<ScreenTransition>().OpenDoor();
 
@@ -355,6 +378,30 @@ public class GameManagerc : MonoBehaviour
         if (scene.buildIndex == 1)
         {
             UINavigation LoadInstance = UINavigation.Instance;
+            if (!m_bFirstTimeLoading) //if this isn't the first time loading into the scene
+            {
+                if (FindObjectOfType<ScreenTransition>())
+                {
+                    screenTransition = FindObjectOfType<ScreenTransition>();
+                    for (int i = 0; i < screenTransition.transform.childCount; i++)
+                    {
+                        screenTransition.transform.GetChild(i).GetComponent<Image>().enabled = false;
+                    }
+                }
+                AnalogGlitch glitch = FindObjectOfType<AnalogGlitch>();
+                if (glitch)
+                {
+                    glitch.colorDrift = .5f;
+                    glitch.horizontalShake = .5f;
+                    glitch.verticalJump = .5f;
+                    glitch.scanLineJitter = .5f;
+                }
+                StartCoroutine(StopGlitch(glitch));
+            }
+            else
+            {
+                m_bFirstTimeLoading = false;
+            }
 
             if (MapToLoad)
             {
@@ -515,6 +562,7 @@ public class GameManagerc : MonoBehaviour
         //The round is not over
         m_bRoundOver = false;
         //reset every player
+        ControllerManager.Instance.FindSpawns();
         foreach (KeyValuePair<PlayerStatus, int> item in PlayerWins)
         {
             item.Key.ResetPlayer();
@@ -539,6 +587,11 @@ public class GameManagerc : MonoBehaviour
     public void GoToStart()
     {
         Time.timeScale = 1;
+
+        for (int i = 0; i < screenTransition.transform.childCount; i++)
+        {
+            screenTransition.transform.GetChild(i).GetComponent<Image>().enabled = true;
+        }
         if (FindObjectOfType<ScreenTransition>())
             FindObjectOfType<ScreenTransition>().CloseDoor();
         CameraControl.mInstance.enabled = false;
@@ -575,7 +628,7 @@ public class GameManagerc : MonoBehaviour
         //mbFinishedPanelShown = false;
         mbMapLoaded = false;
         m_bGamePaused = false;
-
+        m_bFirstTimeLoading = true;
         UIManager.Instance.gameObject.SetActive(false);
         ControllerManager.Instance.gameObject.SetActive(false);
         CharacterSelectionManager.Instance.gameObject.SetActive(false);
@@ -624,18 +677,37 @@ public class GameManagerc : MonoBehaviour
 
         int PlayerIndex = XboxControllerPlayerNumbers[player.GetComponent<ControllerSetter>().mXboxController];
         PointContainers[PlayerIndex].transform.GetChild(PlayerWins[player] - 1).GetComponent<Image>().color = Color.blue;
-
+        //TODO play ding.
+        m_AudioSource.Play();
         yield return new WaitForSeconds(2);
         mbFinishedShowingScores = true;
         InGameScreenAnimator.SetTrigger("RemoveScreen");
-        if (FindObjectOfType<ScreenTransition>())
-            FindObjectOfType<ScreenTransition>().CloseDoor();
-
-        Debug.Log("??");
+        //if (FindObjectOfType<ScreenTransition>())
+        //    FindObjectOfType<ScreenTransition>().CloseDoor();
+        AnalogGlitch glitch = FindObjectOfType<AnalogGlitch>();
+        if (glitch)
+        {
+            glitch.colorDrift = .5f;
+            glitch.horizontalShake = .5f;
+            glitch.verticalJump = .5f;
+            glitch.scanLineJitter = .5f;
+        }
         //PointsPanel.SetActive(false);
-
     }
 
+    IEnumerator StopGlitch(AnalogGlitch glitch)
+    {
+        yield return new WaitForSeconds(1);
+        for (float i = 0.5f; i > 0; i -= 0.05f * Time.deltaTime)
+        {
+            glitch.scanLineJitter = i;
+            glitch.colorDrift = i;
+            glitch.horizontalShake = i;
+            glitch.verticalJump = i;
+        }
 
+
+
+    }
 }
 

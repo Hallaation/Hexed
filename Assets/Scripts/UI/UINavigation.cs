@@ -88,13 +88,8 @@ public class UINavigation : MonoBehaviour
                         if (_EventSystem.currentSelectedGameObject.GetComponent<Slider>())
                         {
                             Slider sld = _EventSystem.currentSelectedGameObject.GetComponent<Slider>();
-                            float MaxValue = sld.maxValue;
-                            float MinValue = sld.minValue;
-
-                            float range = MaxValue - MinValue;
-                            float DecrementValue = 6 * (range + (-MinValue)) / 100;
-        
-                            _EventSystem.currentSelectedGameObject.GetComponent<Slider>().value -= DecrementValue;
+                            //_EventSystem.currentSelectedGameObject.GetComponent<Slider>().value -= DecrementValue;
+                            sld.normalizedValue -= 0.1f;
                         }
 
                         if (_EventSystem.currentSelectedGameObject.GetComponent<Selectable>().navigation.selectOnLeft != null)
@@ -111,13 +106,8 @@ public class UINavigation : MonoBehaviour
                         if (_EventSystem.currentSelectedGameObject.GetComponent<Slider>())
                         {
                             Slider sld = _EventSystem.currentSelectedGameObject.GetComponent<Slider>();
-                            
-                            float MaxValue = sld.maxValue;
-                            float MinValue = sld.minValue;
-                            float range = MaxValue - MinValue;
-                            float IncrementValue = 6 * (range + (-MinValue)) / 100;
-              
-                            _EventSystem.currentSelectedGameObject.GetComponent<Slider>().value += IncrementValue;
+             
+                            sld.normalizedValue += 0.1f;
                         }
 
                         if (_EventSystem.currentSelectedGameObject.GetComponent<Selectable>().navigation.selectOnRight != null)

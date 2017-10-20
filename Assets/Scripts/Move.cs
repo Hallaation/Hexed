@@ -674,7 +674,6 @@ public class Move : MonoBehaviour
                     hitCollider.gameObject.transform.parent.position = Melee2HandedMount.position; //set position to the weapon mount spot
                     hitCollider.gameObject.transform.parent.rotation = Melee2HandedMount.rotation; //set its rotation
 
-
                 }
                 else
                 {       //! if the weapon isn't a 2 handed weapon, mount it to the 1 handed location
@@ -950,7 +949,7 @@ public class Move : MonoBehaviour
                     m_bInChokeMode = false;
                     chokingPlayer = null;  //Set trigger to do smash
                     chokingPlayerStatus.Choker = null;
-                    BodyAnimator.SetTrigger("CancelHeadSmash");
+                    BodyAnimator.SetBool("CancelHeadSmash", true);
                     FeetAnimator.SetBool("Choking", false);
                 }
                 //Check Animator State
@@ -991,7 +990,7 @@ public class Move : MonoBehaviour
             {
                 //get out of choke mode, choking player reference is now null
 
-                BodyAnimator.SetTrigger("CancelHeadSmash");
+                BodyAnimator.SetBool("CancelHeadSmash", true);
                 m_bInChokeMode = false;
                 chokingPlayer = null;
                 FeetAnimator.SetBool("Choking", false);

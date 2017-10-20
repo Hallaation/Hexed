@@ -237,6 +237,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             //When not stunned
             else
             {
+                m_SpriteRenderer.sortingOrder = 4;
                 Choker = null;
                 GetComponent<Move>().GetBodyAnimator().enabled = true; //Get the animator(s) from the Move script and enable them
                 GetComponent<Move>().GetFeetAnimator().enabled = true; //Get the animator(s) from the Move script and enable them
@@ -273,7 +274,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
 
     //Snap all the health/stun bars to the player's position.
     public void LateUpdate()
-    {
+    { 
         if (/*GameManagerc.Instance.Paused || Application.isEditor*/ true)
         {
             //Check for a health mask
@@ -378,7 +379,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         m_Ability.AbilityCharges = 0;
         float xOffset = m_iHealth * -0.0791f;
         _HealthMask.GetComponent<Image>().material.SetTextureOffset("_MainTex", new Vector2(0 + xOffset, 0));
-        ControllerManager.Instance.FindSpawns();
+        //ControllerManager.Instance.FindSpawns();
         this.transform.position = ControllerManager.Instance.spawnPoints[spawnIndex].position;
         //this.transform.position = Vector3.zero;
         GetComponent<Move>().ThrowWeapon(Vector2.zero, Vector2.up, false);
