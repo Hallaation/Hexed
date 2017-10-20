@@ -242,7 +242,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             {
                 m_SpriteRenderer.sortingOrder = 4;
                 Choker = null;
-                //GetComponentInParent<Move>().GetBodyAnimator().SetBool("CancelHeadSmash", true);
+                GetComponentInParent<Move>().GetBodyAnimator().SetBool("CancelHeadSmash", true);
                 //GetComponent<Move>().GetBodyAnimator().enabled = true; //Get the animator(s) from the Move script and enable them
                 //GetComponent<Move>().GetFeetAnimator().enabled = true; //Get the animator(s) from the Move script and enable them
                 m_Ability.m_ChargeIndicator.SetActive(true); //Turn the ability charge indicator back on
