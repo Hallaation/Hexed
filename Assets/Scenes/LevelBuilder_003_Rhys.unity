@@ -492,6 +492,7 @@ MonoBehaviour:
   m_MinSize: 6.5
   yOffset: 0.5
   m_Targets: []
+  m_TargetsCopy: []
   DeathWaitTime: 3
 --- !u!114 &43692
 MonoBehaviour:
@@ -619,6 +620,10 @@ Prefab:
     - target: {fileID: 4357406047528208, guid: 854a0efcd8bf83340a178d56410b43df, type: 2}
       propertyPath: m_RootOrder
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1277424391826748, guid: 854a0efcd8bf83340a178d56410b43df, type: 2}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 854a0efcd8bf83340a178d56410b43df, type: 2}
@@ -824,6 +829,10 @@ Prefab:
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 1277424391826748, guid: 974accbf4f2fa6d4abf013c216aab1f2, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 974accbf4f2fa6d4abf013c216aab1f2, type: 2}
   m_IsPrefabParent: 0
@@ -963,6 +972,10 @@ Prefab:
       propertyPath: m_RootOrder
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 1277424391826748, guid: e70202a492dcf6d4b868b9eb98c9018d, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e70202a492dcf6d4b868b9eb98c9018d, type: 2}
   m_IsPrefabParent: 0
@@ -1013,6 +1026,10 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4357406047528208, guid: 1706586d11c5d9442988fc2d63e5ffd9, type: 2}
       propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1277424391826748, guid: 1706586d11c5d9442988fc2d63e5ffd9, type: 2}
+      propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

@@ -153,8 +153,10 @@ public class Bullet : MonoBehaviour, Reset
                         }
                         //RayHit.transform.GetComponent<Move>().StatusApplied();
                         m_bStopRayCasts = true;
-                        RayHit.transform.root.Find("Sprites").GetComponent<Blood>();
-                        RayHit.transform.root.Find("Sprites").GetComponent<Blood>().CreateBloodSplatter(RayHit.transform.root.position, PreviousVelocity, StartRotation);
+                        Blood hitBlood = RayHit.transform.root.Find("Sprites").GetComponent<Blood>();
+                        if (hitBlood)
+                            RayHit.transform.root.Find("Sprites").GetComponent<Blood>().CreateBloodSplatter(RayHit.transform.root.position, PreviousVelocity, StartRotation);
+
                         m_rigidBody.velocity = Vector2.zero;
                         m_rigidBody.simulated = false;
                         BulletSprite.enabled = false;
