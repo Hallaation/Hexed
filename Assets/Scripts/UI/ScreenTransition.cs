@@ -7,12 +7,17 @@ public class ScreenTransition : MonoBehaviour
 {
 
     public Animator m_Animator;
+
+    UINavigation _UINavi;
+    EventSystem _eventSystem;
     // Use this for initialization
     void Awake()
     {
         m_Animator = this.GetComponent<Animator>();
 
         OpenDoor();
+        _UINavi = UINavigation.Instance;
+        _eventSystem = FindObjectOfType<EventSystem>();
         SceneManager.sceneLoaded += OnSceneLoad;
     }
 
@@ -20,15 +25,17 @@ public class ScreenTransition : MonoBehaviour
     {
         if (m_Animator.GetCurrentAnimatorStateInfo(0).IsName("Scene_Transition_Open"))
         {
-            FindObjectOfType<EventSystem>().enabled = true;
-            if (FindObjectOfType<UINavigation>())
-                FindObjectOfType<UINavigation>().enabled = true;
+            if (_eventSystem)
+                _eventSystem.enabled = true;
+            if (_UINavi)
+                _UINavi.enabled = true;
         }
         else
         {
-            FindObjectOfType<EventSystem>().enabled = false;
-            if (FindObjectOfType<UINavigation>())
-                FindObjectOfType<UINavigation>().enabled = false;
+            if (_eventSystem)
+                _eventSystem.enabled = false;
+            if (_UINavi)
+                _UINavi.enabled = false;
 
         }
     }
@@ -47,7 +54,7 @@ public class ScreenTransition : MonoBehaviour
 
     void OnSceneLoad(Scene scene, LoadSceneMode mode)
     {
-
+        _eventSystem = FindObjectOfType<EventSystem>();
         // if (FindObjectOfType<ScreenTransition>() != this)
         // {
         //     Destroy(FindObjectOfType<ScreenTransition>().gameObject);

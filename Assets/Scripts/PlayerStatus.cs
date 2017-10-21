@@ -176,8 +176,8 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
                 killMePrompt.SetActive(false);
                 killMeArea.SetActive(false);
                 stunBarContainer.SetActive(false);
-                GetComponent<Move>().GetBodyAnimator().enabled = false;
-                GetComponent<Move>().GetFeetAnimator().enabled = false;
+                m_MoveClass.GetBodyAnimator().enabled = false;
+                m_MoveClass.GetFeetAnimator().enabled = false;
                 if (DeadSprites.Length > 0 && !DeathSpriteChanged)
                 {
                     DeathSpriteChanged = true;
@@ -194,7 +194,8 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
                 {
                     StunSpriteChanged = true;
                     m_SpriteRenderer.sprite = StunnedSprites[Random.Range(0, StunnedSprites.Length)];
-                    GetComponentInParent<Move>().GetBodyAnimator().SetTrigger("HavingHeadSmashPullUp");
+                    m_MoveClass.GetBodyAnimator().SetTrigger("HavingHeadSmashPullUp");
+
                 }
 
                 m_SpriteRenderer.sortingOrder = -4;
@@ -210,15 +211,12 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
                     m_MoveClass.StatusApplied();
                 }
                 stunTimer.mfTimeToWait = m_fStunTime;
-     
-               // GetComponent<Move>().GetBodyAnimator().enabled = false; //enable animators
-               // GetComponent<Move>().GetFeetAnimator().enabled = false; //enable animators
 
                 m_Ability.m_ChargeIndicator.SetActive(false);
                 m_Ability.ChargeCoolDown = false;
 
                 //Changes the sprite if stunned.
-      
+
 
                 SetAllAnimatorsFalse();
                 killMeArea.SetActive(true);
@@ -232,7 +230,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
                 //this.transform.Find("Colliders").gameObject.GetComponent<Collider2D>().isTrigger = true;
 
 
-                this.GetComponent<Move>().MakeCollidersTriggers(true);
+                m_MoveClass.MakeCollidersTriggers(true);
                 if (stunTimer.Tick(Time.deltaTime))
                 {
                     m_bStunned = false;
@@ -246,7 +244,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
                 Choker = null;
                 if (!m_bLeftStun)
                 {
-                    GetComponentInParent<Move>().GetBodyAnimator().SetBool("CancelHeadSmash", true);
+                    m_MoveClass.GetBodyAnimator().SetBool("CancelHeadSmash", true);
                     m_bLeftStun = true;
                 }
                 //GetComponent<Move>().GetBodyAnimator().enabled = true; //Get the animator(s) from the Move script and enable them
@@ -254,7 +252,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
                 m_Ability.m_ChargeIndicator.SetActive(true); //Turn the ability charge indicator back on
                 m_Ability.ChargeCoolDown = true; //Continue to tick the timer for more Ability charges
                 StunSpriteChanged = false;
-                this.GetComponent<Move>().MakeCollidersTriggers(false);
+                m_MoveClass.MakeCollidersTriggers(false);
                 stunBarContainer.SetActive(false);
 
                 if (this.transform.GetChild(1).tag == "Stunned")
@@ -284,7 +282,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
 
     //Snap all the health/stun bars to the player's position.
     public void LateUpdate()
-    { 
+    {
         if (/*GameManagerc.Instance.Paused || Application.isEditor*/ true)
         {
             //Check for a health mask
@@ -396,6 +394,32 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         _PlayerCanvas.transform.SetParent(this.transform.Find("Sprites"));
         // this.GetComponent<Collider2D>().isTrigger = true;
         m_bInvincible = true;
+        m_MoveClass.GetBodyAnimator().enabled = true;
+        m_MoveClass.GetFeetAnimator().enabled = true;
+        //Reset the body animator
+        foreach (AnimatorControllerParameter item in m_MoveClass.GetBodyAnimator().parameters)
+        {
+            if (item.type == AnimatorControllerParameterType.Bool)
+            {
+                m_MoveClass.GetBodyAnimator().SetBool(item.name, false);
+            }
+            else if (item.type == AnimatorControllerParameterType.Trigger)
+            {
+                m_MoveClass.GetBodyAnimator().ResetTrigger(item.name);
+            }
+        }
+        //Reset feet animator
+        foreach (AnimatorControllerParameter item in m_MoveClass.GetFeetAnimator().parameters)
+        {
+            if (item.type == AnimatorControllerParameterType.Bool)
+            {
+                m_MoveClass.GetBodyAnimator().SetBool(item.name, false);
+            }
+            else if (item.type == AnimatorControllerParameterType.Trigger)
+            {
+                m_MoveClass.GetBodyAnimator().ResetTrigger(item.name);
+            }
+        }
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)

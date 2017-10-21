@@ -378,6 +378,7 @@ public class GameManagerc : MonoBehaviour
         //If the map to load isnt null, load it
         if (scene.buildIndex == 1)
         {
+            m_bAllowPause = true;
             UINavigation LoadInstance = UINavigation.Instance;
             if (!m_bFirstTimeLoading) //if this isn't the first time loading into the scene
             {
@@ -436,7 +437,6 @@ public class GameManagerc : MonoBehaviour
             //Find the points panel and populate the array.
             PointsPanel = GameObject.Find("PointsPanel");
             InGameScreenAnimator = PointsPanel.GetComponentInParent<Animator>();
-
             PointXPositions = new GameObject[GameObject.Find("PointXPositions").transform.childCount];
             for (int i = 0; i < PointXPositions.Length; i++)
             {
@@ -588,11 +588,14 @@ public class GameManagerc : MonoBehaviour
     public void GoToStart()
     {
         Time.timeScale = 1;
-
-        for (int i = 0; i < screenTransition.transform.childCount; i++)
+        if (!screenTransition)
         {
-            screenTransition.transform.GetChild(i).GetComponent<Image>().enabled = true;
+            screenTransition = FindObjectOfType<ScreenTransition>();
         }
+            for (int i = 0; i < screenTransition.transform.childCount; i++)
+            {
+                screenTransition.transform.GetChild(i).GetComponent<Image>().enabled = true;
+            }
         if (FindObjectOfType<ScreenTransition>())
             FindObjectOfType<ScreenTransition>().CloseDoor();
         CameraControl.mInstance.enabled = false;

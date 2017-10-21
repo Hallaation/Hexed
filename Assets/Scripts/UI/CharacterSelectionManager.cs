@@ -17,6 +17,7 @@ public class CharacterSelectionManager : MonoBehaviour
     public bool m_bMovedToMainScene = false;
 
     public bool LetPlayersSelectCharacters = false;
+    StartWhenReady dockThing;
     //lazy singleton if an instance of this doesn't exist, make one
     //Instance property 
     public static CharacterSelectionManager Instance
@@ -51,6 +52,7 @@ public class CharacterSelectionManager : MonoBehaviour
         {
             CharacterArray[i] = temp[i] as GameObject;
         }
+        dockThing = FindObjectOfType<StartWhenReady>();
         //Application.targetFrameRate = 30;
         //! check if there is already an instance
         //? instantiate the dictionary, and populate it with the selectable characters.
@@ -65,7 +67,6 @@ public class CharacterSelectionManager : MonoBehaviour
     {
         if (UIManager.Instance.m_bInMainMenu)
         {
-            StartWhenReady dockThing = FindObjectOfType<StartWhenReady>();
             if (dockThing)
             {
                 dockThing.m_SpriteRenderer.sprite = dockThing.PressStartSprites[System.Convert.ToInt32(playerSelectedCharacter.Count > 1)];

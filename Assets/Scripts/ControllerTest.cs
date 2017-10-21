@@ -16,13 +16,7 @@ public class ControllerTest : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        for (int i = 0; i < 4; i++)
-        {
-            if (XCI.GetButtonDown(XboxButton.DPadLeft , XboxController.First + i))
-            {
 
-            }
-        }
     }
  
 }

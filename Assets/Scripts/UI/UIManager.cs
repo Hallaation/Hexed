@@ -280,7 +280,7 @@ public class UIManager : MonoBehaviour
                             GameManagerc.Instance.PointsPanel.SetActive(false);
 
                         //Debug.Log(defaultPanel.GetComponentInChildren<DefaultButton>().gameObject.transform.parent);
-
+                        Debug.Log("trying to show screen");
                         GameManagerc.Instance.GetScreenAnimator().SetTrigger("ShowScreen");
                         GameManagerc.Instance.Paused = true;
 

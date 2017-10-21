@@ -8,7 +8,7 @@ public class ResetTriggers : StateMachineBehaviour {
 	override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
         
         animator.ResetTrigger("HavingHeadSmashed");
-        animator.ResetTrigger("HavingHeadSmashedPullUp");
+        animator.ResetTrigger("HavingHeadSmashPullUp");
         animator.ResetTrigger("HeadSmashPullUp");
         animator.ResetTrigger("HeadSmashSmash");
 
