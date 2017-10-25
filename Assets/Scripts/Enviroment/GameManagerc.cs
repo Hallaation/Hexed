@@ -106,7 +106,9 @@ public class GameManagerc : MonoBehaviour
     public AudioClip m_DingSound;
     private AudioSource m_AudioSource;
     //! Screen Glitch lerp values
-    
+    //Scan line, Vertical Lines, Horizontal Shake, Colour Drift.
+    private Vector4 lerpValues = new Vector4(0.8f, 0.6f, 0.3f, 0.7f);
+    private Vector4 CurrentGlitchValues = new Vector4();
     //Lazy singleton
     public static GameManagerc Instance
     {
@@ -193,6 +195,14 @@ public class GameManagerc : MonoBehaviour
                     //InGamePlayers[i].KillPlayer(InGamePlayers[InGamePlayers.Count - 1]);
                     InGamePlayers[i].StunPlayer(Vector3.zero);
                 }
+            }
+            if (Input.GetKeyDown(KeyCode.O))
+            {
+                StartCoroutine(InterpolateGlitch(false));
+            }
+            if (Input.GetKeyDown(KeyCode.I))
+            {
+                StartCoroutine(InterpolateGlitch(true));
             }
 #endif
             if (InGamePlayers.Count > 1)
@@ -398,7 +408,7 @@ public class GameManagerc : MonoBehaviour
                     glitch.verticalJump = .5f;
                     glitch.scanLineJitter = .5f;
                 }
-                StartCoroutine(StopGlitch(glitch));
+                StartCoroutine(InterpolateGlitch(true));
             }
             else
             {
@@ -592,10 +602,10 @@ public class GameManagerc : MonoBehaviour
         {
             screenTransition = FindObjectOfType<ScreenTransition>();
         }
-            for (int i = 0; i < screenTransition.transform.childCount; i++)
-            {
-                screenTransition.transform.GetChild(i).GetComponent<Image>().enabled = true;
-            }
+        for (int i = 0; i < screenTransition.transform.childCount; i++)
+        {
+            screenTransition.transform.GetChild(i).GetComponent<Image>().enabled = true;
+        }
         if (FindObjectOfType<ScreenTransition>())
             FindObjectOfType<ScreenTransition>().CloseDoor();
         CameraControl.mInstance.enabled = false;
@@ -687,33 +697,46 @@ public class GameManagerc : MonoBehaviour
         yield return new WaitForSeconds(2);
         mbFinishedShowingScores = true;
         InGameScreenAnimator.SetTrigger("RemoveScreen");
+        StartCoroutine(InterpolateGlitch(false));
         //if (FindObjectOfType<ScreenTransition>())
         //    FindObjectOfType<ScreenTransition>().CloseDoor();
-        AnalogGlitch glitch = FindObjectOfType<AnalogGlitch>();
-        if (glitch)
-        {
-            glitch.colorDrift = .5f;
-            glitch.horizontalShake = .5f;
-            glitch.verticalJump = .5f;
-            glitch.scanLineJitter = .5f;
-        }
+        //Start interpolation.
         m_bAllowPause = true;
         //PointsPanel.SetActive(false);
     }
 
-    IEnumerator StopGlitch(AnalogGlitch glitch)
+    IEnumerator InterpolateGlitch(bool Reverse)
     {
-        yield return new WaitForSeconds(1);
-        for (float i = 0.5f; i > 0; i -= 0.05f * Time.deltaTime)
+        AnalogGlitch glitch = FindObjectOfType<AnalogGlitch>();
+        var t = 0.0f;
+        float maxTime = 1;
+
+        while (t < maxTime)
         {
-            glitch.scanLineJitter = i;
-            glitch.colorDrift = i;
-            glitch.horizontalShake = i;
-            glitch.verticalJump = i;
+            //Scan line, Vertical Lines, Horizontal Shake, Colour Drift.
+            if (!Reverse)
+            {
+                t += Time.deltaTime / maxTime;
+                CurrentGlitchValues = Vector4.Lerp(Vector4.zero, lerpValues, t);
+                //Debug.Log(CurrentGlitchValues);
+                glitch.scanLineJitter = CurrentGlitchValues.x;
+                glitch.verticalJump = CurrentGlitchValues.y;
+                glitch.horizontalShake = CurrentGlitchValues.z;
+                glitch.colorDrift = CurrentGlitchValues.w;
+                yield return null;
+            }
+            else
+            {
+                t += Time.deltaTime / maxTime;
+                CurrentGlitchValues = Vector4.Lerp(lerpValues, Vector4.zero, t);
+                //Debug.Log(CurrentGlitchValues);
+                glitch.scanLineJitter = CurrentGlitchValues.x;
+                glitch.verticalJump = CurrentGlitchValues.y;
+                glitch.horizontalShake = CurrentGlitchValues.z;
+                glitch.colorDrift = CurrentGlitchValues.w;
+                yield return null;
+            }
         }
-
-
-
     }
 }
 
