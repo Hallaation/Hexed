@@ -146,10 +146,14 @@ public class Bullet : MonoBehaviour, Reset
                         m_rigidBody.position = RayHit.point; //Snap the bullet to the collided object
                         RayHit.transform.GetComponent<Rigidbody2D>().position += (Vector2)this.transform.right * m_fBulletImpactKnockBack;
                         PlayerStatus PlayerIHit = RayHit.transform.GetComponent<PlayerStatus>(); //Store the player I hit temporarily
+                        RayHit.transform.GetComponent<Rigidbody2D>().AddForce(m_rigidBody.velocity);
                         PlayerIHit.HitPlayer(this, m_bGiveIFrames);
                         if (PlayerIHit.m_iHealth <= 0)
                         {
-                            PlayerIHit.IsDead = true;
+                            PlayerIHit.IsDead = true;       
+                            PlayerIHit.GetComponent<Rigidbody2D>().velocity = m_rigidBody.velocity * m_fBulletImpactKnockBack;
+                            float angle = Mathf.Atan2(m_rigidBody.velocity.normalized.x, -m_rigidBody.velocity.normalized.y);
+                            PlayerIHit.transform.rotation = Quaternion.AngleAxis(angle * Mathf.Rad2Deg, Vector3.forward);
                         }
                         //RayHit.transform.GetComponent<Move>().StatusApplied();
                         m_bStopRayCasts = true;

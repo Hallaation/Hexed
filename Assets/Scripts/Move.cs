@@ -54,6 +54,7 @@ public class Move : MonoBehaviour
     private int OriginalSortingOrder; //Used to move the player back to their sorting layer so everything renders properly.
     private Timer m_ChokingTimer;
     private Vector3 originalPosition;
+    private Vector3 PositionOfDownedPlayer;
     private bool m_bOutOfChoke = true;
 
     private Image killMask;
@@ -219,6 +220,7 @@ public class Move : MonoBehaviour
                 {
                     if (PlayerIsActive)
                     {
+                        movementSpeed = StoredMoveSpeed * System.Convert.ToInt16(GameManagerc.Instance.RoundReady);
                         if (CheckForDownedKill())
                             return;
                         Quack();
@@ -825,7 +827,7 @@ public class Move : MonoBehaviour
     {
         if (!m_bOutOfChoke) //not out of choke
         {
-            this.transform.position = originalPosition;
+            this.transform.position = PositionOfDownedPlayer; // used to be OriginalPosition
             m_bOutOfChoke = true;
         }
         //if (chokingPlayer)
@@ -936,6 +938,7 @@ public class Move : MonoBehaviour
                             playerBeingChoked.Choker = this;
                             playerBeingChoked.transform.GetComponent<Move>().BodyAnimator.SetBool("BeingSmashed", true);
                             originalPosition = this.transform.position;
+                            PositionOfDownedPlayer = chokingPlayer.transform.position;
                             ThrowWeapon(_rigidBody.velocity, this.transform.up, false);
 
                            // chokingPlayer.GetComponentInParent<Move>().BodyAnimator.SetTrigger("HavingHeadSmashPullUp");
@@ -1032,7 +1035,7 @@ public class Move : MonoBehaviour
         {
             if (!m_bOutOfChoke) //not out of choke
             {
-                this.transform.position = originalPosition;
+                this.transform.position = PositionOfDownedPlayer; // used to be    originalPosition;
                 m_bOutOfChoke = true;
             }
             

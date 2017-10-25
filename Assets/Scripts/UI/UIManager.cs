@@ -456,6 +456,7 @@ public class UIManager : MonoBehaviour
                 }
             }
         }
+        SettingsManager.Instance.SaveSettings();
         GameManagerc.Instance.GetScreenAnimator().SetTrigger("RemoveScreen");
 
         Time.timeScale = 1;
@@ -469,10 +470,10 @@ public class UIManager : MonoBehaviour
         //very specific scene, if in this scene, I want to remove the last panel
         if (scene.buildIndex == 1)
         {
-            defaultPanel = FindObjectOfType<DefaultPanel>().gameObject;
-            Button ResumeButton = defaultPanel.transform.GetChild(0).transform.Find("ResumeButton").GetChild(0).GetComponent<Button>();
-            ResumeButton.onClick.AddListener(delegate { UnpauseGame(); });
-            m_bRemoveLastPanel = false;
+            //defaultPanel = FindObjectOfType<DefaultPanel>().gameObject;
+            //Button ResumeButton = defaultPanel.transform.GetChild(0).transform.Find("ResumeButton").GetChild(0).GetComponent<Button>();
+            //ResumeButton.onClick.AddListener(delegate { UnpauseGame(); });
+            //m_bRemoveLastPanel = false;
             //    defaultPanel.gameObject.SetActive(false);
 
         }
@@ -500,6 +501,14 @@ public class UIManager : MonoBehaviour
     {
         _eventSystem.SetSelectedGameObject(null);
         _eventSystem.SetSelectedGameObject(a_selected);
+    }
+
+    public void SetDefaultPanel(GameObject a_DefaultPanel)
+    {
+        defaultPanel = a_DefaultPanel;
+        Button ResumeButton = defaultPanel.transform.GetChild(0).transform.Find("ResumeButton").GetChild(0).GetComponent<Button>();
+        ResumeButton.onClick.AddListener(delegate { UnpauseGame(); });
+        m_bRemoveLastPanel = false;
     }
 
 }
