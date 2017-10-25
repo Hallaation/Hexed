@@ -86,6 +86,7 @@ public class GameManagerc : MonoBehaviour
     public GameObject[] PointContainers;
     public GameObject PointsPanel;
     public GameObject MenuPanel;
+    private PlayerStatus m_WinningPlayer;
     private Animator InGameScreenAnimator;
     public Animator GetScreenAnimator() { return InGameScreenAnimator; }
     private bool mbFinishedShowingScores = false;
@@ -373,6 +374,7 @@ public class GameManagerc : MonoBehaviour
                     //TODO Player portraits
                     FinishUIPanel.transform.GetChild(2).GetChild(0).GetComponent<Image>().sprite = player.GetComponent<BaseAbility>().m_CharacterPortrait;
                     FinishUIPanel.transform.GetChild(2).GetChild(1).GetComponent<Image>().color = player.GetComponent<PlayerStatus>()._playerColor;
+                    m_WinningPlayer = player;
                     if (FindObjectOfType<ScreenTransition>())
                         FindObjectOfType<ScreenTransition>().OpenDoor();
 
@@ -571,7 +573,7 @@ public class GameManagerc : MonoBehaviour
             GameObject GetReady = ReadyFightContainer.transform.GetChild(1).gameObject;
             if (m_bShowReadyFight)
             {
-                StartCoroutine(ReadyKill(GetReady, KillAudio));
+                StartCoroutine(ReadyKill(ReadyFightContainer));
             }
             m_bDoLogoTransition = false;
             //PointsPanel.SetActive(false);
@@ -614,7 +616,20 @@ public class GameManagerc : MonoBehaviour
         mbFinishedShowingScores = false;
         //mbFinishedPanelShown = false;
         //reload the current scene
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        FinishUIPanel.SetActive(false);
+        m_bShowReadyFight = true;
+
+
+        //Go through each point and turn them back to white.
+        foreach (var item in PointContainers) //for every point container
+        {
+            for (int i = 0; i < item.transform.childCount - 2; i++)
+            {
+                item.transform.GetChild(i).GetComponent<Image>().color = Color.red;
+            }
+        }
+        //StartCoroutine(ReadyKill(GameObject.Find("StartScreen")));
         //Debug.Log("End of rematch after button");
     }
 
@@ -765,8 +780,11 @@ public class GameManagerc : MonoBehaviour
         }
     }
 
-    IEnumerator ReadyKill(GameObject getReady, GameObject Kill)
+    IEnumerator ReadyKill(GameObject ReadyFightContainer)
     {
+        GameObject Kill = ReadyFightContainer.transform.GetChild(0).gameObject;
+        GameObject getReady = ReadyFightContainer.transform.GetChild(1).gameObject;
+
         m_bRoundReady = false;
         MenuPanel.SetActive(false);
         ScreenTransition transition = FindObjectOfType<ScreenTransition>();
