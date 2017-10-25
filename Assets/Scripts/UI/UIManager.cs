@@ -456,6 +456,7 @@ public class UIManager : MonoBehaviour
                 }
             }
         }
+        SettingsManager.Instance.SaveSettings();
         GameManagerc.Instance.GetScreenAnimator().SetTrigger("RemoveScreen");
 
         Time.timeScale = 1;

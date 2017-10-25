@@ -63,7 +63,6 @@ public class ScreenTransition : MonoBehaviour
         {
             while (t < maxTime)
             {
-                Debug.Log("is this shit even running");
                 t += Time.deltaTime;
                 alphaValue = Mathf.Lerp(255.0f, 0, t);
                 fadingQueue.Peek().color = new Vector4(1, 1, 1, alphaValue / 255.0f);
@@ -111,7 +110,6 @@ public class ScreenTransition : MonoBehaviour
 
     public void OpenDoor()
     {
-        Debug.Log("Open Door");
         m_Animator.SetTrigger("OpenDoor");
     }
 

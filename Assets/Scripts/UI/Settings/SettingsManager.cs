@@ -206,6 +206,7 @@ public class SettingsManager : MonoBehaviour
             OnSFXVolumeChange();
             OnMusicVolumeChange();
 
+            Debug.Log("Settings loaded");
             //onAntialiasingChange();
             //onTextureQualityChange();
         }
