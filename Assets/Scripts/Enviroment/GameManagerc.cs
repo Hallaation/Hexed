@@ -96,6 +96,7 @@ public class GameManagerc : MonoBehaviour
     private bool m_bGamePaused = false;
     [SerializeField]
     private bool m_bRoundReady = false;
+    private bool m_bShowReadyFight = true;
     public bool RoundReady { get { return m_bRoundReady; } }
     private ScreenTransition screenTransition;
 
@@ -364,6 +365,7 @@ public class GameManagerc : MonoBehaviour
                     //Time.timeScale = 0;
                     //open the finish panel, UI manager will set all the children to true, thus rendering them
                     //#finish panel, 
+                    m_bShowReadyFight = false;
                     InGameScreenAnimator.SetTrigger("ShowScreen");
                     PointsPanel.SetActive(false);
                     MenuPanel.SetActive(false);
@@ -567,7 +569,10 @@ public class GameManagerc : MonoBehaviour
             GameObject ReadyFightContainer = GameObject.Find("StartScreen");
             GameObject KillAudio = ReadyFightContainer.transform.GetChild(0).gameObject;
             GameObject GetReady = ReadyFightContainer.transform.GetChild(1).gameObject;
-            StartCoroutine(ReadyKill(GetReady, KillAudio));
+            if (m_bShowReadyFight)
+            {
+                StartCoroutine(ReadyKill(GetReady, KillAudio));
+            }
             m_bDoLogoTransition = false;
             //PointsPanel.SetActive(false);
             //mInstance.mbLoadedIntoGame = true;
@@ -772,31 +777,32 @@ public class GameManagerc : MonoBehaviour
             getReady.GetComponent<Image>().enabled = false;
             InGameScreenAnimator.SetTrigger("ShowScreen");
             while (!transition.DoorOpened) { yield return null; } //while the door hasn't opened yet.
-
             yield return new WaitForSeconds(2);
-            //Turn kill off
-            Kill.GetComponent<Image>().enabled = false;
-            //turn get ready on
-            getReady.GetComponent<Image>().enabled = true;
-            //play the get ready audio
-            getReady.GetComponent<AudioSource>().Play();
+            if (m_bShowReadyFight)
+            {
+                //Turn kill off
+                Kill.GetComponent<Image>().enabled = false;
+                //turn get ready on
+                getReady.GetComponent<Image>().enabled = true;
+                //play the get ready audio
+                getReady.GetComponent<AudioSource>().Play();
 
-            yield return new WaitForSeconds(2);
-            //Turn get ready off
-            getReady.GetComponent<Image>().enabled = false;
-            //Turn kill on
-            Kill.GetComponent<Image>().enabled = true;
-            //play kill audio
-            Kill.GetComponent<AudioSource>().Play();
-            //remove screen
-            InGameScreenAnimator.SetTrigger("RemoveScreen");
-            m_bRoundReady = true;
+                yield return new WaitForSeconds(2);
+                //Turn get ready off
+                getReady.GetComponent<Image>().enabled = false;
+                //Turn kill on
+                Kill.GetComponent<Image>().enabled = true;
+                //play kill audio
+                Kill.GetComponent<AudioSource>().Play();
+                //remove screen
+                InGameScreenAnimator.SetTrigger("RemoveScreen");
+                m_bRoundReady = true;
 
-            yield return new WaitForSeconds(1);
-            Kill.GetComponent<Image>().enabled = false;
-            m_bAllowPause = true;
-            //ready to play
-
+                yield return new WaitForSeconds(1);
+                Kill.GetComponent<Image>().enabled = false;
+                m_bAllowPause = true;
+                //ready to play
+            }
 
         }
         yield return null;
