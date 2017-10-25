@@ -170,7 +170,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
                 {
                     m_MoveClass.ThrowWeapon(Vector2.zero, Vector2.zero, false);
                 }
-                SetAllAnimatorsFalse();
+                SetAllAnimatorsFalse(false);
                 PlayerSprite.material.color = Color.grey;
                 this.GetComponent<Rigidbody2D>().simulated = false;
                 killMePrompt.SetActive(false);
@@ -194,8 +194,8 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
                 {
                     StunSpriteChanged = true;
                     m_SpriteRenderer.sprite = StunnedSprites[Random.Range(0, StunnedSprites.Length)];
-                    m_MoveClass.GetBodyAnimator().SetTrigger("HavingHeadSmashPullUp");
-
+                    m_MoveClass.GetBodyAnimator().SetBool("Stunned", true);
+                    
                 }
 
                 m_SpriteRenderer.sortingOrder = -4;
@@ -218,7 +218,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
                 //Changes the sprite if stunned.
 
 
-                SetAllAnimatorsFalse();
+                SetAllAnimatorsFalse(true);
                 killMeArea.SetActive(true);
                 PlayerSprite.material.color = Color.cyan;
                 stunBarContainer.SetActive(true);
@@ -245,6 +245,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
                 if (!m_bLeftStun)
                 {
                     m_MoveClass.GetBodyAnimator().SetBool("CancelHeadSmash", true);
+                    m_MoveClass.GetBodyAnimator().SetBool("Stunned", false);
                     m_bLeftStun = true;
                 }
                 //GetComponent<Move>().GetBodyAnimator().enabled = true; //Get the animator(s) from the Move script and enable them
@@ -359,7 +360,8 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         // _rigidbody.velocity = (a * StunedSlide);
         m_MoveClass.StopChoke();
         this.GetComponent<Move>().StatusApplied();
-        SetAllAnimatorsFalse();
+        SetAllAnimatorsFalse(true);                                         //! This was a problem for the animator, edited to take in a if stunned bool.
+        m_MoveClass.GetBodyAnimator().SetBool("Test", true); 
         _rigidbody.velocity = ThrownItemVelocity;
         m_bStunned = true;
         m_iTimesPunched = 0;
@@ -447,7 +449,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         //kill the player, called outside of class (mostly used for downed kills)
         if (/*!m_bInvincible*/true)
         {
-            SetAllAnimatorsFalse();
+            SetAllAnimatorsFalse(false);
             m_iHealth = 0;
             m_bDead = true;
             m_bStunned = false;
@@ -575,7 +577,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
     }
 
     //Turn all animations off in the animator;
-    void SetAllAnimatorsFalse()
+    void SetAllAnimatorsFalse(bool a_Stunned)
     {
         Animator Body = GetComponent<Move>().GetBodyAnimator();
         Animator Feet = GetComponent<Move>().GetFeetAnimator();
@@ -586,7 +588,10 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             foreach (AnimatorControllerParameter parameter in Body.parameters)
             {
                 if (parameter.type == AnimatorControllerParameterType.Bool) //snaity check
+                {
+                    if(a_Stunned == true && parameter.name != "BeingSmashed")
                     Body.SetBool(parameter.name, false);
+                }
             }
         }
         //same with feet
@@ -597,6 +602,10 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
                 if (parameter.type == AnimatorControllerParameterType.Bool) //sanity check
                     Feet.SetBool(parameter.name, false);
             }
+        }
+        if(a_Stunned == true)
+        {
+            Body.SetBool("Stunned", true);
         }
     }
 

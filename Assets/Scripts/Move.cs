@@ -931,8 +931,10 @@ public class Move : MonoBehaviour
                             _rigidBody.velocity = Vector2.zero;
                             BodyAnimator.SetTrigger("HeadSmashPullUp");
                             m_bInChokeMode = true;
-                            chokingPlayer = collidersFound.gameObject;
+                            chokingPlayer = collidersFound.gameObject; // Player getting choked.
+                            playerBeingChoked.transform.GetComponent<Move>().BodyAnimator.SetTrigger("HavingHeadSmashPullUp");
                             playerBeingChoked.Choker = this;
+                            playerBeingChoked.transform.GetComponent<Move>().BodyAnimator.SetBool("BeingSmashed", true);
                             originalPosition = this.transform.position;
                             ThrowWeapon(_rigidBody.velocity, this.transform.up, false);
 
@@ -955,6 +957,7 @@ public class Move : MonoBehaviour
 
             if (chokingPlayerStatus.IsStunned) //if the Player getting choked player is still stunned
             {
+               
                 Vector3 chokePosition = chokingPlayer.transform.root.Find("ChokingSpot").position;
                 this.transform.position = chokePosition;
                 //this.transform.position += this.transform.up * m_fPositionOffset;
@@ -973,6 +976,7 @@ public class Move : MonoBehaviour
                     chokingPlayerStatus.Choker = null;
                     BodyAnimator.SetBool("CancelHeadSmash", true);
                     FeetAnimator.SetBool("Choking", false);
+                    chokingPlayerStatus.transform.GetComponent<Move>().BodyAnimator.SetBool("BeingSmashed", false);
                 }
                 //Check Animator State
                 if (BodyAnimator.GetCurrentAnimatorStateInfo(0).IsName("HeadSmash") && m_bInChokeMode) //if in head smash state
@@ -983,6 +987,7 @@ public class Move : MonoBehaviour
                         m_ChokingTimer.CurrentTime += m_fChokedTimeIncrement; //increase the timer
                         FeetAnimator.SetBool("Choking", true);
                         chokingPlayer.GetComponentInParent<Move>().BodyAnimator.SetTrigger("HavingHeadSmashed");
+                        chokingPlayerStatus.transform.GetComponent<Move>().BodyAnimator.SetBool("BeingSmashed", true);
                         m_HeadAudio.Play();
                     }
                 }
@@ -1016,8 +1021,10 @@ public class Move : MonoBehaviour
 
                 BodyAnimator.SetBool("CancelHeadSmash", true);
                 m_bInChokeMode = false;
+                chokingPlayerStatus.transform.GetComponent<Move>().BodyAnimator.SetBool("BeingSmashed", false);
                 chokingPlayer = null;
                 FeetAnimator.SetBool("Choking", false);
+                
             }
             return true;
         }
@@ -1028,10 +1035,12 @@ public class Move : MonoBehaviour
                 this.transform.position = originalPosition;
                 m_bOutOfChoke = true;
             }
+            
             chokingPlayer = null;
             KillBarContainer.SetActive(false);
             m_ChokingTimer.CurrentTime = 0;
             FeetAnimator.SetBool("Choking", false);
+
             m_bInChokeMode = false;
 
         }
