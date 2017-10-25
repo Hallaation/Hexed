@@ -16,15 +16,15 @@ public class ScreenTransition : MonoBehaviour
     private Image TeamLogo;
 
     private Queue<Image> fadingQueue = new Queue<Image>();
+    
     // Use this for initialization
 
     void Awake()
     {
         m_Animator = this.GetComponent<Animator>();
 
-        if (transform.childCount > 3)
+        if (transform.childCount > 3 && GameManagerc.Instance.m_bDoLogoTransition)
         {
-
             TeamLogo = this.transform.GetChild(3).GetComponent<Image>();
             BlackOut = this.transform.GetChild(4).GetComponent<Image>();
 
@@ -34,7 +34,17 @@ public class ScreenTransition : MonoBehaviour
             StartCoroutine(WakeUp());
         }
         else
+        {
+            if (transform.childCount > 3)
+            {
+                TeamLogo = this.transform.GetChild(3).GetComponent<Image>();
+                BlackOut = this.transform.GetChild(4).GetComponent<Image>();
+                TeamLogo.enabled = false;
+                BlackOut.enabled = false;
+            }
             OpenDoor();
+        }
+
        // OpenDoor();
         _UINavi = UINavigation.Instance;
         _eventSystem = FindObjectOfType<EventSystem>();
