@@ -169,6 +169,7 @@ public class GameManagerc : MonoBehaviour
         //Debug.Log(mInstance.gameObject);
         m_bRoundOver = false;
         Physics.gravity = new Vector3(0, 0, 10); //why
+        m_bRoundReady = true;
     }
 
 
