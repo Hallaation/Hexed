@@ -132,11 +132,8 @@ public class BaseAbility : MonoBehaviour
             //    if (currentMana >= m_fMaximumMana)
             //        currentMana = m_fMaximumMana;
             //}
-            if (m_CoolDownTimer.mfTimeToWait != m_fAbilityCoolDown)
-            {
-                m_CoolDownTimer = new Timer(m_fAbilityCoolDown);
-            }
-            if (m_iCurrentCharges != m_iMaxCharges && ChargeCoolDown)
+            m_CoolDownTimer.mfTimeToWait = m_fAbilityCoolDown;
+            if (m_iCurrentCharges != m_iMaxCharges && ChargeCoolDown && GameManagerc.Instance.RoundReady)
             {
                 if (m_CoolDownTimer.Tick(Time.deltaTime))
                 {

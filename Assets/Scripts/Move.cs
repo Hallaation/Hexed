@@ -220,6 +220,7 @@ public class Move : MonoBehaviour
                 {
                     if (PlayerIsActive)
                     {
+                        movementSpeed = StoredMoveSpeed * System.Convert.ToInt16(GameManagerc.Instance.RoundReady);
                         if (CheckForDownedKill())
                             return;
                         Quack();

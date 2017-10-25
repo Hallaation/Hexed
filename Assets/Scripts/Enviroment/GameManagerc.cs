@@ -52,7 +52,6 @@ public enum Gamemode_type
 //Used to store the game state
 public class GameManagerc : MonoBehaviour
 {
-
     //dictionary mapping XCI index with the XInputDotNet indexes
     Dictionary<XboxController, int> XboxControllerPlayerNumbers = new Dictionary<XboxController, int>
     {
@@ -87,13 +86,19 @@ public class GameManagerc : MonoBehaviour
     public GameObject[] PointContainers;
     public GameObject PointsPanel;
     public GameObject MenuPanel;
+    private PlayerStatus m_WinningPlayer;
     private Animator InGameScreenAnimator;
     public Animator GetScreenAnimator() { return InGameScreenAnimator; }
     private bool mbFinishedShowingScores = false;
     public bool mbInstanceIsMe = false;
     public bool mbMapLoaded = false;
     private bool m_bFirstTimeLoading = true;
+    [SerializeField]
     private bool m_bGamePaused = false;
+    [SerializeField]
+    private bool m_bRoundReady = false;
+    private bool m_bShowReadyFight = true;
+    public bool RoundReady { get { return m_bRoundReady; } }
     private ScreenTransition screenTransition;
 
     public bool Paused { get { return m_bGamePaused; } set { m_bGamePaused = value; } }
@@ -144,6 +149,7 @@ public class GameManagerc : MonoBehaviour
             m_AudioSource.clip = m_DingSound;
             m_AudioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as GameObject).GetComponent<AudioSource>().outputAudioMixerGroup;
         }
+
         SingletonTester.Instance.AddSingleton(this);
         InstanceCreated = true;
         //Find the 
@@ -180,14 +186,17 @@ public class GameManagerc : MonoBehaviour
                 //MapToLoad = null;
                 //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
+
             if (Input.GetKeyDown(KeyCode.H))
             {
                 Rematch();
             }
+
             if (Input.GetKeyDown(KeyCode.F))
             {
                 KillPlayer1();
             }
+
             if (Input.GetKeyDown(KeyCode.E))
             {
                 //Stun all players
@@ -198,15 +207,18 @@ public class GameManagerc : MonoBehaviour
                     InGamePlayers[i].StunPlayer(Vector3.zero);
                 }
             }
+
             if (Input.GetKeyDown(KeyCode.O))
             {
                 StartCoroutine(InterpolateGlitch(false));
             }
+
             if (Input.GetKeyDown(KeyCode.I))
             {
                 StartCoroutine(InterpolateGlitch(true));
             }
-#endif
+#endif 
+
             if (InGamePlayers.Count > 1)
             {
                 StartCoroutine(CheckForRoundEnd());
@@ -354,6 +366,7 @@ public class GameManagerc : MonoBehaviour
                     //Time.timeScale = 0;
                     //open the finish panel, UI manager will set all the children to true, thus rendering them
                     //#finish panel, 
+                    m_bShowReadyFight = false;
                     InGameScreenAnimator.SetTrigger("ShowScreen");
                     PointsPanel.SetActive(false);
                     MenuPanel.SetActive(false);
@@ -361,6 +374,7 @@ public class GameManagerc : MonoBehaviour
                     //TODO Player portraits
                     FinishUIPanel.transform.GetChild(2).GetChild(0).GetComponent<Image>().sprite = player.GetComponent<BaseAbility>().m_CharacterPortrait;
                     FinishUIPanel.transform.GetChild(2).GetChild(1).GetComponent<Image>().color = player.GetComponent<PlayerStatus>()._playerColor;
+                    m_WinningPlayer = player;
                     if (FindObjectOfType<ScreenTransition>())
                         FindObjectOfType<ScreenTransition>().OpenDoor();
 
@@ -445,6 +459,7 @@ public class GameManagerc : MonoBehaviour
 
             }
             MenuPanel = GameObject.Find("PausePanel");
+            UIManager.Instance.SetDefaultPanel(MenuPanel);
             //MenuPanel.SetActive(true);
             //Find the points panel and populate the array.
             PointsPanel = GameObject.Find("PointsPanel");
@@ -467,6 +482,7 @@ public class GameManagerc : MonoBehaviour
             GameObject[] ActivePanels = new GameObject[4 - CharacterSelectionManager.Instance.JoinedPlayers];
             int ActivePanelIndex = 0;
 
+            #region Point panel moving etc.
             //Move the point containers depending on how many points are required.
             for (int i = 0; i < PointsPanel.transform.childCount; i++)
             {
@@ -549,6 +565,16 @@ public class GameManagerc : MonoBehaviour
                     }
                 }
             }
+            #endregion
+
+            PointsPanel.SetActive(false);
+            GameObject ReadyFightContainer = GameObject.Find("StartScreen");
+            GameObject KillAudio = ReadyFightContainer.transform.GetChild(0).gameObject;
+            GameObject GetReady = ReadyFightContainer.transform.GetChild(1).gameObject;
+            if (m_bShowReadyFight)
+            {
+                StartCoroutine(ReadyKill(ReadyFightContainer));
+            }
             m_bDoLogoTransition = false;
             //PointsPanel.SetActive(false);
             //mInstance.mbLoadedIntoGame = true;
@@ -590,7 +616,20 @@ public class GameManagerc : MonoBehaviour
         mbFinishedShowingScores = false;
         //mbFinishedPanelShown = false;
         //reload the current scene
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        FinishUIPanel.SetActive(false);
+        m_bShowReadyFight = true;
+
+
+        //Go through each point and turn them back to white.
+        foreach (var item in PointContainers) //for every point container
+        {
+            for (int i = 0; i < item.transform.childCount - 2; i++)
+            {
+                item.transform.GetChild(i).GetComponent<Image>().color = Color.red;
+            }
+        }
+        //StartCoroutine(ReadyKill(GameObject.Find("StartScreen")));
         //Debug.Log("End of rematch after button");
     }
 
@@ -739,6 +778,52 @@ public class GameManagerc : MonoBehaviour
                 yield return null;
             }
         }
+    }
+
+    IEnumerator ReadyKill(GameObject ReadyFightContainer)
+    {
+        GameObject Kill = ReadyFightContainer.transform.GetChild(0).gameObject;
+        GameObject getReady = ReadyFightContainer.transform.GetChild(1).gameObject;
+
+        m_bRoundReady = false;
+        MenuPanel.SetActive(false);
+        ScreenTransition transition = FindObjectOfType<ScreenTransition>();
+        m_bAllowPause = false;
+        if (transition)
+        {
+            Kill.GetComponent<Image>().enabled = false;
+            getReady.GetComponent<Image>().enabled = false;
+            InGameScreenAnimator.SetTrigger("ShowScreen");
+            while (!transition.DoorOpened) { yield return null; } //while the door hasn't opened yet.
+            yield return new WaitForSeconds(2);
+            if (m_bShowReadyFight)
+            {
+                //Turn kill off
+                Kill.GetComponent<Image>().enabled = false;
+                //turn get ready on
+                getReady.GetComponent<Image>().enabled = true;
+                //play the get ready audio
+                getReady.GetComponent<AudioSource>().Play();
+
+                yield return new WaitForSeconds(2);
+                //Turn get ready off
+                getReady.GetComponent<Image>().enabled = false;
+                //Turn kill on
+                Kill.GetComponent<Image>().enabled = true;
+                //play kill audio
+                Kill.GetComponent<AudioSource>().Play();
+                //remove screen
+                InGameScreenAnimator.SetTrigger("RemoveScreen");
+                m_bRoundReady = true;
+
+                yield return new WaitForSeconds(1);
+                Kill.GetComponent<Image>().enabled = false;
+                m_bAllowPause = true;
+                //ready to play
+            }
+
+        }
+        yield return null;
     }
 }
 
