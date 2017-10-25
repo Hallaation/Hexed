@@ -14,9 +14,10 @@ public class ScreenTransition : MonoBehaviour
 
     private Image BlackOut;
     private Image TeamLogo;
-
     private Queue<Image> fadingQueue = new Queue<Image>();
-    
+    private bool m_bDoorOpened;
+    public bool DoorOpened { get { return m_bDoorOpened; } }
+
     // Use this for initialization
 
     void Awake()
@@ -45,7 +46,7 @@ public class ScreenTransition : MonoBehaviour
             OpenDoor();
         }
 
-       // OpenDoor();
+        // OpenDoor();
         _UINavi = UINavigation.Instance;
         _eventSystem = FindObjectOfType<EventSystem>();
         SceneManager.sceneLoaded += OnSceneLoad;
@@ -57,6 +58,7 @@ public class ScreenTransition : MonoBehaviour
         float maxTime = 3;
         float alphaValue = 0;
 
+        m_bDoorOpened = false;
         while (fadingQueue.Count != 0)
         {
             while (t < maxTime)
@@ -85,6 +87,7 @@ public class ScreenTransition : MonoBehaviour
     {
         if (m_Animator.GetCurrentAnimatorStateInfo(0).IsName("Scene_Transition_Open"))
         {
+            m_bDoorOpened = true;
             if (_eventSystem)
                 _eventSystem.enabled = true;
             if (_UINavi)
