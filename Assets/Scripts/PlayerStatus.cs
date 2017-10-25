@@ -127,7 +127,13 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
 
     void Update()
     {
-
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            if (m_bDead)
+            {
+                ResetPlayer();
+            }
+        }
         if (!GameManagerc.Instance.Paused)
         {
             if (stunBarContainer.activeSelf)
@@ -172,7 +178,18 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
                 }
                 SetAllAnimatorsFalse(false);
                 PlayerSprite.material.color = Color.grey;
-                this.GetComponent<Rigidbody2D>().simulated = false;
+                //this.GetComponent<Rigidbody2D>().simulated = false; wow .
+                foreach (Collider2D item in GetComponentsInChildren<Collider2D>())
+                {
+                    if (item.GetComponentsInChildren<Collider2D>().Length > 0)
+                    {
+                        foreach (Collider2D ChildrenColliders in item.GetComponentsInChildren<Collider2D>() )
+                        {
+                            ChildrenColliders.enabled = false;
+                        }
+                        item.enabled = false;
+                    }
+                }
                 killMePrompt.SetActive(false);
                 killMeArea.SetActive(false);
                 stunBarContainer.SetActive(false);
@@ -420,6 +437,18 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             else if (item.type == AnimatorControllerParameterType.Trigger)
             {
                 m_MoveClass.GetBodyAnimator().ResetTrigger(item.name);
+            }
+        }
+        //Find all colliders and turn them on
+        foreach (Collider2D item in GetComponentsInChildren<Collider2D>())
+        {
+            if (item.GetComponentsInChildren<Collider2D>().Length > 0)
+            {
+                foreach (Collider2D ChildrenColliders in item.GetComponentsInChildren<Collider2D>())
+                {
+                    ChildrenColliders.enabled = true;
+                }
+                item.enabled = true; 
             }
         }
     }

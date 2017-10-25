@@ -11,7 +11,7 @@ public class EmptyHand : Weapon
     public float m_clipVolume = 1;
 
     public float PunchFlinchTime = .3f;
-
+    private int PunchKBForce = 50000;
     private Animator m_BodyAnimator;
     private bool m_bAttacking;
     public int m_PunchesToKnockOut = 2;
@@ -123,7 +123,6 @@ public class EmptyHand : Weapon
                                         hitPlayer.MiniStun(this.transform.up * (KnockBack * 1.5f), PunchFlinchTime);
                                         float tempPitch = (m_bRandomizeHitPitch) ? Random.Range(0.9f, 1.1f) : 1;
                                         hitPlayer.GetComponent<IHitByMelee>().HitByMelee(this, audioClip, m_clipVolume, tempPitch);
-
                                         //Debug.Log("PunchedEnemy");
                                         if (hitPlayer.TimesPunched >= m_PunchesToKnockOut)
                                         {
@@ -132,6 +131,8 @@ public class EmptyHand : Weapon
                                             hitPlayer.GetComponent<Move>().StatusApplied();//GetComponent<Move>().StatusApplied();
                                                                                            //Debug.Log("StunnedEnemy");
                                         }
+                                        else
+                                        { hitPlayer.GetComponent<Rigidbody2D>().AddForce(this.transform.up * PunchKBForce); }
                                     }
                                 }
                             }

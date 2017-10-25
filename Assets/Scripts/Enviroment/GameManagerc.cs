@@ -100,6 +100,8 @@ public class GameManagerc : MonoBehaviour
 
     public int m_iPointsIndex = 0;
     public bool m_bAllowPause = false;
+    [HideInInspector]
+    public bool m_bDoLogoTransition = true;
     GameObject[] PointXPositions;
     GameObject[] PointYPositions;
 
@@ -547,7 +549,7 @@ public class GameManagerc : MonoBehaviour
                     }
                 }
             }
-
+            m_bDoLogoTransition = false;
             //PointsPanel.SetActive(false);
             //mInstance.mbLoadedIntoGame = true;
         }
