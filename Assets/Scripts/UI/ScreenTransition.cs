@@ -22,11 +22,19 @@ public class ScreenTransition : MonoBehaviour
     {
         m_Animator = this.GetComponent<Animator>();
 
-        TeamLogo = this.transform.GetChild(3).GetComponent<Image>();
-        BlackOut = this.transform.GetChild(4).GetComponent<Image>();
-        fadingQueue.Enqueue(BlackOut);
-        fadingQueue.Enqueue(TeamLogo);
-        StartCoroutine(WakeUp());
+        if (transform.childCount > 3)
+        {
+
+            TeamLogo = this.transform.GetChild(3).GetComponent<Image>();
+            BlackOut = this.transform.GetChild(4).GetComponent<Image>();
+
+
+            fadingQueue.Enqueue(BlackOut);
+            fadingQueue.Enqueue(TeamLogo);
+            StartCoroutine(WakeUp());
+        }
+        else
+            OpenDoor();
        // OpenDoor();
         _UINavi = UINavigation.Instance;
         _eventSystem = FindObjectOfType<EventSystem>();
@@ -49,7 +57,7 @@ public class ScreenTransition : MonoBehaviour
                 fadingQueue.Peek().color = new Vector4(1, 1, 1, alphaValue / 255.0f);
                 for (int i = 0; i < 4; i++)
                 {
-                    if (XCI.GetButton(XboxButton.A, XboxController.Any + i))
+                    if (XCI.GetButton(XboxButton.A, XboxController.Any + i) || Input.GetKey(KeyCode.Space))
                     {
                         t = maxTime;
                         fadingQueue.Peek().color = new Vector4(1, 1, 1, 0);
