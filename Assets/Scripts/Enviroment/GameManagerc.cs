@@ -268,8 +268,8 @@ public class GameManagerc : MonoBehaviour
             //If the scores has been shown
             if (mbFinishedShowingScores)
             {
-                if (waitForRoundEnd.Tick(Time.deltaTime))
-                {
+                //if (waitForRoundEnd.Tick(Time.deltaTime))
+                //{
                     //Don't think I need to scramble the spawns here, I'll do it anyway
                     //reload scene
                     ControllerManager.Instance.FindSpawns();
@@ -283,7 +283,7 @@ public class GameManagerc : MonoBehaviour
                     SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //reloads the scene.
                     //TODO instead of reloading scene, just reset E V E R Y T H I N G in the scene.
                     //End of round logic goes here.
-                }
+                //} 
             }
         }
         yield return null;
@@ -782,7 +782,6 @@ public class GameManagerc : MonoBehaviour
         //TODO play ding.
         m_AudioSource.Play();
         yield return new WaitForSeconds(2);
-        mbFinishedShowingScores = true;
         InGameScreenAnimator.SetTrigger("RemoveScreen");
         StartCoroutine(InterpolateGlitch(false));
         //if (FindObjectOfType<ScreenTransition>())
@@ -824,6 +823,29 @@ public class GameManagerc : MonoBehaviour
                 yield return null;
             }
         }
+
+        if (!Reverse)
+        {
+            CurrentGlitchValues = Vector4.Lerp(Vector4.zero, lerpValues, 1);
+            //Debug.Log(CurrentGlitchValues);
+            glitch.scanLineJitter = CurrentGlitchValues.x;
+            glitch.verticalJump = CurrentGlitchValues.y;
+            glitch.horizontalShake = CurrentGlitchValues.z;
+            glitch.colorDrift = CurrentGlitchValues.w;
+            yield return null;
+        }
+        else
+        {
+            CurrentGlitchValues = Vector4.Lerp(lerpValues, Vector4.zero, 1);
+            //Debug.Log(CurrentGlitchValues);
+            glitch.scanLineJitter = CurrentGlitchValues.x;
+            glitch.verticalJump = CurrentGlitchValues.y;
+            glitch.horizontalShake = CurrentGlitchValues.z;
+            glitch.colorDrift = CurrentGlitchValues.w;
+            yield return null;
+        }
+        mbFinishedShowingScores = true;
+        yield return null;
     }
 
     IEnumerator ReadyKill(GameObject ReadyFightContainer)

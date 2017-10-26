@@ -68,11 +68,13 @@ public class ScreenTransition : MonoBehaviour
                 fadingQueue.Peek().color = new Vector4(1, 1, 1, alphaValue / 255.0f);
                 for (int i = 0; i < 4; i++)
                 {
-                    //if (XCI.GetButton(XboxButton.A, XboxController.Any + i) || Input.GetKey(KeyCode.Space))
-                    //{
-                    //    t = m_fTimeBetweenFades;
-                    //    fadingQueue.Peek().color = new Vector4(1, 1, 1, 0);
-                    //}
+#if UNITY_EDITOR
+                    if (XCI.GetButton(XboxButton.A, XboxController.Any + i) || Input.GetKey(KeyCode.Space))
+                    {
+                        t = m_fTimeBetweenFades;
+                        fadingQueue.Peek().color = new Vector4(1, 1, 1, 0);
+                    }
+#endif
                 }
                 yield return null;
             }

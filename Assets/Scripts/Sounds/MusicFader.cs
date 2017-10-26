@@ -58,7 +58,6 @@ public class MusicFader : MonoBehaviour
             {
                 CurrentVolume = -80;
             }
-            Debug.Log(CurrentVolume);
             MenuAudioMasterMixer.SetFloat("Music", CurrentVolume);
             SettingsManager.Instance.musicVolumeSlider.value = CurrentVolume;
 
@@ -84,7 +83,6 @@ public class MusicFader : MonoBehaviour
             {
                 CurrentVolume = MusicOriginalVolume;
             }
-            Debug.Log(CurrentVolume);
             MenuAudioMasterMixer.SetFloat("Music", CurrentVolume);
             SettingsManager.Instance.musicVolumeSlider.value = CurrentVolume;
 

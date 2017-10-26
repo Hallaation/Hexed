@@ -81,12 +81,12 @@ public class SettingsManager : MonoBehaviour
 
     void Update()
     {
-        if (m_bUnsavedChanges)
-        {
-            OnMasterVolumeChange();
-            OnSFXVolumeChange();
-            OnMusicVolumeChange();
-        }
+        //if (m_bUnsavedChanges)
+        //{
+        //    OnMasterVolumeChange();
+        //    OnSFXVolumeChange();
+        //    OnMusicVolumeChange();
+        //}
     }
     public void onFullScreenToggle()
     {
@@ -206,7 +206,6 @@ public class SettingsManager : MonoBehaviour
             OnSFXVolumeChange();
             OnMusicVolumeChange();
 
-            Debug.Log("Settings loaded");
             //onAntialiasingChange();
             //onTextureQualityChange();
         }

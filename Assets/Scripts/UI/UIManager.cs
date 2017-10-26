@@ -439,7 +439,7 @@ public class UIManager : MonoBehaviour
     {
         if (menuStatus.Count >= 1)
         {
-            menuStatus.Peek().SetActive(false);
+           // menuStatus.Peek().SetActive(false);
             menuStatus.Pop();
 
             if (menuStatus.Count >= 1)
