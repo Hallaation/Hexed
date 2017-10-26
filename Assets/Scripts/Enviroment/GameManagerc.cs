@@ -130,6 +130,8 @@ public class GameManagerc : MonoBehaviour
                 if (mInstance == null)
                 {
                     mInstance = (new GameObject("GameManager")).AddComponent<GameManagerc>();
+                    mInstance.gameObject.AddComponent<MusicFader>();
+                    mInstance.GetComponent<MusicFader>().FadeSpeed = 5;
                 }
                 //set to dont destroy on load
                 DontDestroyOnLoad(mInstance.gameObject);
@@ -407,6 +409,7 @@ public class GameManagerc : MonoBehaviour
         {
             m_bAllowPause = true;
             UINavigation LoadInstance = UINavigation.Instance;
+            GetComponent<MusicFader>().FadeIn();
             if (!m_bFirstTimeLoading) //if this isn't the first time loading into the scene
             {
                 if (FindObjectOfType<ScreenTransition>())

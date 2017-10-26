@@ -7,11 +7,12 @@ public class MusicFader : MonoBehaviour
 {
     bool MixerFound = false;
     AudioMixer MenuAudioMasterMixer;
-    float MusicOriginalVolume;
+    float MusicOriginalVolume = 0;
     float CurrentVolume;
-    GameObject SettingsManagerGameObject;
+    Transform SettingsManagerGameObject;
     SettingsManager SettingsManagerScript;
-    float FadeSpeed;
+    public float FadeSpeed = 15;
+    bool MusicFadeInB = false;
     // Use this for initialization
     void Start()
     {
@@ -24,49 +25,70 @@ public class MusicFader : MonoBehaviour
 
     }
 
-   public void DoStuff()
+    public void FadeOut()
     {
         StartCoroutine(MusicFadeOut());
     }
 
-   public IEnumerator MusicFadeOut()
+    public void FadeIn()
+    {
+        StartCoroutine(MusicFadeIn());
+    }
+
+    public IEnumerator MusicFadeOut()
     {
         if (MixerFound == false)
         {
-            MenuAudioMasterMixer = transform.root.Find("SettingsManager").GetComponent<AudioMixer>();
+            MenuAudioMasterMixer = (Resources.Load("AudioMixer/MasterAudio") as GameObject).GetComponent<AudioSource>().outputAudioMixerGroup.audioMixer;
             MixerFound = true;
-
-            SettingsManagerGameObject = transform.root.Find("SettingsManager").gameObject;
-            SettingsManagerScript = SettingsManagerGameObject.GetComponent<SettingsManager>();
-            MusicOriginalVolume = SettingsManagerScript.musicVolumeSlider.value;
+            MenuAudioMasterMixer.GetFloat("Music", out MusicOriginalVolume);
             CurrentVolume = MusicOriginalVolume;
         }
-        while (CurrentVolume != 0)
+        while (CurrentVolume != -80)
         {
-            CurrentVolume = CurrentVolume - (FadeSpeed * Time.deltaTime);
-            if (CurrentVolume < 0)
+            if (MusicFadeInB == true)
             {
-                CurrentVolume = 0;
+                CurrentVolume = MusicOriginalVolume;
+                MenuAudioMasterMixer.SetFloat("Music", CurrentVolume);
+                SettingsManager.Instance.musicVolumeSlider.value = CurrentVolume;
+                yield return null;
             }
+            CurrentVolume = CurrentVolume - (FadeSpeed * Time.deltaTime);
+            if (CurrentVolume < -80)
+            {
+                CurrentVolume = -80;
+            }
+            Debug.Log(CurrentVolume);
             MenuAudioMasterMixer.SetFloat("Music", CurrentVolume);
+            SettingsManager.Instance.musicVolumeSlider.value = CurrentVolume;
+
             yield return new WaitForEndOfFrame();
         }
         yield return null;
     }
-  public  IEnumerator MusicFadeIn()
+    public IEnumerator MusicFadeIn()
     {
-        if (MixerFound != false)
+        if (MixerFound == false)
         {
-            while (CurrentVolume != 0)
+            MenuAudioMasterMixer = (Resources.Load("AudioMixer/MasterAudio") as GameObject).GetComponent<AudioSource>().outputAudioMixerGroup.audioMixer;
+            MixerFound = true;
+            MenuAudioMasterMixer.GetFloat("Music", out MusicOriginalVolume);
+            CurrentVolume = MusicOriginalVolume;
+        }
+        while (CurrentVolume != MusicOriginalVolume)
+        {
+            MusicFadeInB = true;
+            
+            CurrentVolume = CurrentVolume + (FadeSpeed * Time.deltaTime);
+            if (CurrentVolume > MusicOriginalVolume)
             {
-                CurrentVolume = CurrentVolume - (FadeSpeed * Time.deltaTime);
-                if (CurrentVolume < MusicOriginalVolume)
-                {
-                    CurrentVolume += (FadeSpeed * Time.deltaTime);
-                }
-                MenuAudioMasterMixer.SetFloat("Music", CurrentVolume);
-                yield return new WaitForEndOfFrame();
+                CurrentVolume = MusicOriginalVolume;
             }
+            Debug.Log(CurrentVolume);
+            MenuAudioMasterMixer.SetFloat("Music", CurrentVolume);
+            SettingsManager.Instance.musicVolumeSlider.value = CurrentVolume;
+
+            yield return new WaitForEndOfFrame();
         }
         yield return null;
     }
