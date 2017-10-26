@@ -73,6 +73,7 @@ public class SpawnRandomWeapon : MonoBehaviour
         spawnedWeapon.transform.position = this.transform.position;
         spawnedWeapon.transform.rotation = this.transform.rotation;
 
+        GameManagerc.Instance._rbPausers.Add(spawnedWeapon.AddComponent<RigidbodyPauser>());
     }
 
     void Reset()

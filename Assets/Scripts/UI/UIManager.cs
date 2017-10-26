@@ -39,6 +39,7 @@ public class UIManager : MonoBehaviour
     private Animator m_ButtonAnimator;
     private Animator m_bMenuAnimator;
     private bool m_bOpenedPanel;
+
     public bool RemoveLastPanel { get { return m_bRemoveLastPanel; } set { m_bRemoveLastPanel = value; } }
     // Use this for initialization
 
@@ -280,10 +281,12 @@ public class UIManager : MonoBehaviour
                             GameManagerc.Instance.PointsPanel.SetActive(false);
 
                         //Debug.Log(defaultPanel.GetComponentInChildren<DefaultButton>().gameObject.transform.parent);
-                        Debug.Log("trying to show screen");
                         GameManagerc.Instance.GetScreenAnimator().SetTrigger("ShowScreen");
                         GameManagerc.Instance.Paused = true;
-
+                        foreach (RigidbodyPauser item in GameManagerc.Instance._rbPausers)
+                        {
+                            item.PauseRigidbody();
+                        }
                         StartCoroutine(PauseGame()); //Pause the game
 
                         GameObject selectable = defaultPanel.GetComponentInChildren<DefaultButton>().gameObject;
@@ -299,10 +302,6 @@ public class UIManager : MonoBehaviour
 
     IEnumerator PauseGame()
     {
-        foreach (Rigidbody2D item in FindObjectsOfType<Rigidbody2D>())
-        {
-            item.Sleep();
-        }
         yield return new WaitForSeconds(1);
         Time.timeScale = 0;
 
@@ -453,8 +452,14 @@ public class UIManager : MonoBehaviour
                     _eventSystem.SetSelectedGameObject(null);
                     _eventSystem.SetSelectedGameObject(menuStatus.Peek().GetComponentInChildren<Button>().gameObject);
                     defaultToReturnTo = menuStatus.Peek().GetComponentInChildren<Button>().gameObject;
+                    
                 }
             }
+        }
+
+        foreach (RigidbodyPauser item in GameManagerc.Instance._rbPausers)
+        {
+            item.UnpauseRigidbody();
         }
         SettingsManager.Instance.SaveSettings();
         GameManagerc.Instance.GetScreenAnimator().SetTrigger("RemoveScreen");
