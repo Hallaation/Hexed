@@ -97,7 +97,8 @@ public class GameManagerc : MonoBehaviour
     private bool m_bGamePaused = false;
     [SerializeField]
     private bool m_bRoundReady = false;
-    private bool m_bShowReadyFight = true;
+    private bool m_bDoGlitch = true;
+    private bool m_bDoReadyKill = true;
     public bool RoundReady { get { return m_bRoundReady; } }
     private ScreenTransition screenTransition;
 
@@ -367,11 +368,17 @@ public class GameManagerc : MonoBehaviour
                     //Time.timeScale = 0;
                     //open the finish panel, UI manager will set all the children to true, thus rendering them
                     //#finish panel, 
-                    m_bShowReadyFight = false;
+                    m_bDoGlitch = false;
                     InGameScreenAnimator.SetTrigger("ShowScreen");
                     PointsPanel.SetActive(false);
                     MenuPanel.SetActive(false);
                     UIManager.Instance.OpenUIElement(FinishUIPanel, true);
+                    GameObject startscreen;
+                    for (int i = 0; i < (startscreen = GameObject.Find("StartScreen")).transform.childCount; i++)
+                    {
+                        startscreen.transform.GetChild(i).GetComponent<Image>().enabled = false;
+                    }
+                    m_bDoReadyKill = false;
                     //TODO Player portraits
                     FinishUIPanel.transform.GetChild(2).GetChild(0).GetComponent<Image>().sprite = player.GetComponent<BaseAbility>().m_CharacterPortrait;
                     FinishUIPanel.transform.GetChild(2).GetChild(1).GetComponent<Image>().color = player.GetComponent<PlayerStatus>()._playerColor;
@@ -393,9 +400,7 @@ public class GameManagerc : MonoBehaviour
             }
         }
     }
-    void RoundEndDeathMatchTimed()
-    {
-    }
+
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
@@ -417,15 +422,10 @@ public class GameManagerc : MonoBehaviour
                         screenTransition.transform.GetChild(i).GetComponent<Image>().enabled = false;
                     }
                 }
-                AnalogGlitch glitch = FindObjectOfType<AnalogGlitch>();
-                if (glitch)
+                if (m_bDoGlitch)
                 {
-                    glitch.colorDrift = .5f;
-                    glitch.horizontalShake = .5f;
-                    glitch.verticalJump = .5f;
-                    glitch.scanLineJitter = .5f;
+                    StartCoroutine(InterpolateGlitch(true));
                 }
-                StartCoroutine(InterpolateGlitch(true));
             }
             else
             {
@@ -572,10 +572,14 @@ public class GameManagerc : MonoBehaviour
             GameObject ReadyFightContainer = GameObject.Find("StartScreen");
             GameObject KillAudio = ReadyFightContainer.transform.GetChild(0).gameObject;
             GameObject GetReady = ReadyFightContainer.transform.GetChild(1).gameObject;
-            if (m_bShowReadyFight)
+
+            //if (m_bShowReadyFight)
+            Debug.Log(m_bDoReadyKill);
+            if (m_bDoReadyKill)
             {
                 StartCoroutine(ReadyKill(ReadyFightContainer));
             }
+            //m_bRoundReady = true;
             m_bDoLogoTransition = false;
             //PointsPanel.SetActive(false);
             //mInstance.mbLoadedIntoGame = true;
@@ -617,20 +621,20 @@ public class GameManagerc : MonoBehaviour
         mbFinishedShowingScores = false;
         //mbFinishedPanelShown = false;
         //reload the current scene
-        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        m_bDoReadyKill = true;
+        m_bDoGlitch = false;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         FinishUIPanel.SetActive(false);
-        m_bShowReadyFight = true;
-
 
         //Go through each point and turn them back to white.
-        foreach (var item in PointContainers) //for every point container
-        {
-            for (int i = 0; i < item.transform.childCount - 2; i++)
-            {
-                item.transform.GetChild(i).GetComponent<Image>().color = Color.red;
-            }
-        }
-        //StartCoroutine(ReadyKill(GameObject.Find("StartScreen")));
+        //  foreach (var item in PointContainers) //for every point container
+        //  {
+        //      for (int i = 0; i < item.transform.childCount - 2; i++)
+        //      {
+        //          item.transform.GetChild(i).GetComponent<Image>().color = Color.red;
+        //      }
+        //  }
+
         //Debug.Log("End of rematch after button");
     }
 
@@ -734,6 +738,10 @@ public class GameManagerc : MonoBehaviour
 
         int PlayerIndex = XboxControllerPlayerNumbers[player.GetComponent<ControllerSetter>().mXboxController];
         PointContainers[PlayerIndex].transform.GetChild(PlayerWins[player] - 1).GetComponent<Image>().color = Color.blue;
+        if (PlayerWins[player] >= m_iPointsNeeded)
+        {
+            m_bDoReadyKill = false;
+        }
         //TODO play ding.
         m_AudioSource.Play();
         yield return new WaitForSeconds(2);
@@ -783,8 +791,12 @@ public class GameManagerc : MonoBehaviour
 
     IEnumerator ReadyKill(GameObject ReadyFightContainer)
     {
+        Debug.Log("Ready kill called");
         GameObject Kill = ReadyFightContainer.transform.GetChild(0).gameObject;
         GameObject getReady = ReadyFightContainer.transform.GetChild(1).gameObject;
+
+        Image KillImage = Kill.GetComponent<Image>();
+        Image GetReadyImage = getReady.GetComponent<Image>();
 
         m_bRoundReady = false;
         MenuPanel.SetActive(false);
@@ -797,31 +809,31 @@ public class GameManagerc : MonoBehaviour
             InGameScreenAnimator.SetTrigger("ShowScreen");
             while (!transition.DoorOpened) { yield return null; } //while the door hasn't opened yet.
             yield return new WaitForSeconds(2);
-            if (m_bShowReadyFight)
-            {
-                //Turn kill off
-                Kill.GetComponent<Image>().enabled = false;
-                //turn get ready on
-                getReady.GetComponent<Image>().enabled = true;
-                //play the get ready audio
-                getReady.GetComponent<AudioSource>().Play();
+            //if (m_bDoGlitch)
+            //{
+            //Turn kill off
+            KillImage.enabled = false;
+            //turn get ready on
+            GetReadyImage.enabled = true;
+            //play the get ready audio
+            getReady.GetComponent<AudioSource>().Play();
 
-                yield return new WaitForSeconds(2);
-                //Turn get ready off
-                getReady.GetComponent<Image>().enabled = false;
-                //Turn kill on
-                Kill.GetComponent<Image>().enabled = true;
-                //play kill audio
-                Kill.GetComponent<AudioSource>().Play();
-                //remove screen
-                InGameScreenAnimator.SetTrigger("RemoveScreen");
-                m_bRoundReady = true;
+            yield return new WaitForSeconds(2);
+            //Turn get ready off
+            GetReadyImage.enabled = false;
+            //Turn kill on
+            KillImage.enabled = true;
+            //play kill audio
+            Kill.GetComponent<AudioSource>().Play();
+            //remove screen
+            InGameScreenAnimator.SetTrigger("RemoveScreen");
+            m_bRoundReady = true;
 
-                yield return new WaitForSeconds(1);
-                Kill.GetComponent<Image>().enabled = false;
-                m_bAllowPause = true;
-                //ready to play
-            }
+            yield return new WaitForSeconds(1);
+            KillImage.enabled = false;
+            m_bAllowPause = true;
+            //ready to play
+            //}
 
         }
         yield return null;
