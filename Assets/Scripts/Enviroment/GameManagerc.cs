@@ -117,6 +117,7 @@ public class GameManagerc : MonoBehaviour
     //Scan line, Vertical Lines, Horizontal Shake, Colour Drift.
     private Vector4 lerpValues = new Vector4(0.8f, 0.6f, 0.3f, 0.7f);
     private Vector4 CurrentGlitchValues = new Vector4();
+    public List<RigidbodyPauser> _rbPausers;
     //Lazy singleton
     public static GameManagerc Instance
     {
@@ -144,6 +145,9 @@ public class GameManagerc : MonoBehaviour
     {
         m_DingSound = Resources.Load("Audio/SFX/ding-sound-effect") as AudioClip;
         m_AudioSource = this.GetComponent<AudioSource>();
+        _rbPausers = new List<RigidbodyPauser>();
+
+
         if (!m_AudioSource)
         {
             m_AudioSource = this.gameObject.AddComponent<AudioSource>();
@@ -574,10 +578,36 @@ public class GameManagerc : MonoBehaviour
             GameObject GetReady = ReadyFightContainer.transform.GetChild(1).gameObject;
 
             //if (m_bShowReadyFight)
-            Debug.Log(m_bDoReadyKill);
+
             if (m_bDoReadyKill)
             {
                 StartCoroutine(ReadyKill(ReadyFightContainer));
+            }
+            //find weapons and add shit to them
+            _rbPausers.Clear();
+            _rbPausers = new List<RigidbodyPauser>();
+            foreach (Rigidbody2D item in FindObjectsOfType<Rigidbody2D>())
+            {
+                if (item.GetComponentInParent<Weapon>())
+                {
+                    if (!item.GetComponent<RigidbodyPauser>())
+                    {
+                        RigidbodyPauser rbp = item.gameObject.AddComponent<RigidbodyPauser>();
+                        if (!_rbPausers.Contains(rbp))
+                        {
+                            _rbPausers.Add(rbp);
+                        }
+                    }
+                    else
+                    {
+                        RigidbodyPauser rbp = item.gameObject.GetComponent<RigidbodyPauser>();
+                        if (!_rbPausers.Contains(rbp))
+                        {
+                            _rbPausers.Add(rbp);
+                        }
+                    }
+
+                }
             }
             //m_bRoundReady = true;
             m_bDoLogoTransition = false;
@@ -761,7 +791,7 @@ public class GameManagerc : MonoBehaviour
         var t = 0.0f;
         float maxTime = 1;
 
-        while (t < maxTime)
+        while (t < maxTime - 0.5f)
         {
             //Scan line, Vertical Lines, Horizontal Shake, Colour Drift.
             if (!Reverse)
@@ -791,7 +821,7 @@ public class GameManagerc : MonoBehaviour
 
     IEnumerator ReadyKill(GameObject ReadyFightContainer)
     {
-        Debug.Log("Ready kill called");
+
         GameObject Kill = ReadyFightContainer.transform.GetChild(0).gameObject;
         GameObject getReady = ReadyFightContainer.transform.GetChild(1).gameObject;
 
@@ -838,5 +868,7 @@ public class GameManagerc : MonoBehaviour
         }
         yield return null;
     }
+
+
 }
 
