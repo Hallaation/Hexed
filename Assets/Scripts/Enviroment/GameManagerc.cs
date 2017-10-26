@@ -791,7 +791,7 @@ public class GameManagerc : MonoBehaviour
         var t = 0.0f;
         float maxTime = 1;
 
-        while (t < maxTime)
+        while (t < maxTime - 0.5f)
         {
             //Scan line, Vertical Lines, Horizontal Shake, Colour Drift.
             if (!Reverse)

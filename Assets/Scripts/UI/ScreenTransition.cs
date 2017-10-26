@@ -58,6 +58,7 @@ public class ScreenTransition : MonoBehaviour
         float alphaValue = 0;
 
         m_bDoorOpened = false;
+        yield return new WaitForSeconds(1);
         while (fadingQueue.Count != 0)
         {
             while (t < m_fTimeBetweenFades - 0.5f)
@@ -67,11 +68,11 @@ public class ScreenTransition : MonoBehaviour
                 fadingQueue.Peek().color = new Vector4(1, 1, 1, alphaValue / 255.0f);
                 for (int i = 0; i < 4; i++)
                 {
-                    if (XCI.GetButton(XboxButton.A, XboxController.Any + i) || Input.GetKey(KeyCode.Space))
-                    {
-                        t = m_fTimeBetweenFades;
-                        fadingQueue.Peek().color = new Vector4(1, 1, 1, 0);
-                    }
+                    //if (XCI.GetButton(XboxButton.A, XboxController.Any + i) || Input.GetKey(KeyCode.Space))
+                    //{
+                    //    t = m_fTimeBetweenFades;
+                    //    fadingQueue.Peek().color = new Vector4(1, 1, 1, 0);
+                    //}
                 }
                 yield return null;
             }
