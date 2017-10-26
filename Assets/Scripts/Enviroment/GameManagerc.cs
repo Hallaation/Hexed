@@ -117,6 +117,7 @@ public class GameManagerc : MonoBehaviour
     //Scan line, Vertical Lines, Horizontal Shake, Colour Drift.
     private Vector4 lerpValues = new Vector4(0.8f, 0.6f, 0.3f, 0.7f);
     private Vector4 CurrentGlitchValues = new Vector4();
+    public List<RigidbodyPauser> _rbPausers;
     //Lazy singleton
     public static GameManagerc Instance
     {
@@ -131,6 +132,8 @@ public class GameManagerc : MonoBehaviour
                 if (mInstance == null)
                 {
                     mInstance = (new GameObject("GameManager")).AddComponent<GameManagerc>();
+                    mInstance.gameObject.AddComponent<MusicFader>();
+                    mInstance.GetComponent<MusicFader>().FadeSpeed = 5;
                 }
                 //set to dont destroy on load
                 DontDestroyOnLoad(mInstance.gameObject);
@@ -144,6 +147,9 @@ public class GameManagerc : MonoBehaviour
     {
         m_DingSound = Resources.Load("Audio/SFX/ding-sound-effect") as AudioClip;
         m_AudioSource = this.GetComponent<AudioSource>();
+        _rbPausers = new List<RigidbodyPauser>();
+
+
         if (!m_AudioSource)
         {
             m_AudioSource = this.gameObject.AddComponent<AudioSource>();
@@ -412,6 +418,7 @@ public class GameManagerc : MonoBehaviour
         {
             m_bAllowPause = true;
             UINavigation LoadInstance = UINavigation.Instance;
+            GetComponent<MusicFader>().FadeIn();
             if (!m_bFirstTimeLoading) //if this isn't the first time loading into the scene
             {
                 if (FindObjectOfType<ScreenTransition>())
@@ -573,11 +580,39 @@ public class GameManagerc : MonoBehaviour
             GameObject KillAudio = ReadyFightContainer.transform.GetChild(0).gameObject;
             GameObject GetReady = ReadyFightContainer.transform.GetChild(1).gameObject;
 
+            Debug.Log(KillAudio);
+            Debug.Log(GetReady);
             //if (m_bShowReadyFight)
-            Debug.Log(m_bDoReadyKill);
+
             if (m_bDoReadyKill)
             {
                 StartCoroutine(ReadyKill(ReadyFightContainer));
+            }
+            //find weapons and add shit to them
+            _rbPausers.Clear();
+            _rbPausers = new List<RigidbodyPauser>();
+            foreach (Rigidbody2D item in FindObjectsOfType<Rigidbody2D>())
+            {
+                if (item.GetComponentInParent<Weapon>())
+                {
+                    if (!item.GetComponent<RigidbodyPauser>())
+                    {
+                        RigidbodyPauser rbp = item.gameObject.AddComponent<RigidbodyPauser>();
+                        if (!_rbPausers.Contains(rbp))
+                        {
+                            _rbPausers.Add(rbp);
+                        }
+                    }
+                    else
+                    {
+                        RigidbodyPauser rbp = item.gameObject.GetComponent<RigidbodyPauser>();
+                        if (!_rbPausers.Contains(rbp))
+                        {
+                            _rbPausers.Add(rbp);
+                        }
+                    }
+
+                }
             }
             //m_bRoundReady = true;
             m_bDoLogoTransition = false;
@@ -689,6 +724,8 @@ public class GameManagerc : MonoBehaviour
         mbMapLoaded = false;
         m_bGamePaused = false;
         m_bFirstTimeLoading = true;
+        m_bDoReadyKill = true;
+        m_bDoGlitch = true;
         UIManager.Instance.gameObject.SetActive(false);
         ControllerManager.Instance.gameObject.SetActive(false);
         CharacterSelectionManager.Instance.gameObject.SetActive(false);
@@ -791,7 +828,7 @@ public class GameManagerc : MonoBehaviour
 
     IEnumerator ReadyKill(GameObject ReadyFightContainer)
     {
-        Debug.Log("Ready kill called");
+
         GameObject Kill = ReadyFightContainer.transform.GetChild(0).gameObject;
         GameObject getReady = ReadyFightContainer.transform.GetChild(1).gameObject;
 
@@ -838,5 +875,7 @@ public class GameManagerc : MonoBehaviour
         }
         yield return null;
     }
+
+
 }
 

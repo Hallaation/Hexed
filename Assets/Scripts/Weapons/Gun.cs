@@ -129,6 +129,7 @@ public class Gun : Weapon
         //apply an initial force to the bullet's rigidbody based on what direction the bullet is facing,
         Rigidbody2D FiredBulletRigidBody = FiredBullet.GetComponent<Rigidbody2D>();
         FiredBulletRigidBody.AddForce(FiredBullet.transform.up * m_fFiringForce, ForceMode2D.Impulse);
+        GameManagerc.Instance._rbPausers.Add(FiredBullet.AddComponent<RigidbodyPauser>());
 
         Ray2D ray = new Ray2D(this.transform.parent.position, FiredBullet.transform.up);
         Debug.DrawRay(ray.origin, ray.direction * m_fBulletSpawnOffSet * 1.5f, Colors.Azure, 5);
