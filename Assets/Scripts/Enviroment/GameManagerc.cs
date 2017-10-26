@@ -580,6 +580,8 @@ public class GameManagerc : MonoBehaviour
             GameObject KillAudio = ReadyFightContainer.transform.GetChild(0).gameObject;
             GameObject GetReady = ReadyFightContainer.transform.GetChild(1).gameObject;
 
+            Debug.Log(KillAudio);
+            Debug.Log(GetReady);
             //if (m_bShowReadyFight)
 
             if (m_bDoReadyKill)
@@ -722,6 +724,8 @@ public class GameManagerc : MonoBehaviour
         mbMapLoaded = false;
         m_bGamePaused = false;
         m_bFirstTimeLoading = true;
+        m_bDoReadyKill = true;
+        m_bDoGlitch = true;
         UIManager.Instance.gameObject.SetActive(false);
         ControllerManager.Instance.gameObject.SetActive(false);
         CharacterSelectionManager.Instance.gameObject.SetActive(false);
@@ -794,7 +798,7 @@ public class GameManagerc : MonoBehaviour
         var t = 0.0f;
         float maxTime = 1;
 
-        while (t < maxTime - 0.5f)
+        while (t < maxTime)
         {
             //Scan line, Vertical Lines, Horizontal Shake, Colour Drift.
             if (!Reverse)
