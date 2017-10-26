@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: f44b66018693c1747b378a5f19815fcd
-timeCreated: 1508986853
+timeCreated: 1508990357
 licenseType: Pro
 TextureImporter:
   fileIDToRecycleName:
@@ -107,6 +107,7 @@ TextureImporter:
     21300200: EA_Ground_Cement_3X3_009
     21300202: EA_Ground_Cement_3X3_010
     21300204: EA_Ground_Sprite_Sheet_001_4
+    21300206: EA_Ground_Cement_3X3_002
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -1270,8 +1271,8 @@ TextureImporter:
         y: 72
         width: 200
         height: 200
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 1
+      pivot: {x: 0, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -1450,11 +1451,11 @@ TextureImporter:
         serializedVersion: 2
         x: 46
         y: 611
-        width: 382
+        width: 300
         height: 300
       alignment: 1
       pivot: {x: 0, y: 1}
-      border: {x: 300, y: 0, z: 0, w: 0}
+      border: {x: 3, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
@@ -1506,6 +1507,19 @@ TextureImporter:
         height: 1000
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: EA_Ground_Cement_3X3_002
+      rect:
+        serializedVersion: 2
+        x: 252
+        y: 402
+        width: 300
+        height: 300
+      alignment: 1
+      pivot: {x: 0, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
