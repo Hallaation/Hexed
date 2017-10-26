@@ -8,7 +8,7 @@ using XboxCtrlrInput;
 public class ScreenTransition : MonoBehaviour
 {
     public Animator m_Animator;
-
+    public float m_fTimeBetweenFades = 3;
     UINavigation _UINavi;
     EventSystem _eventSystem;
 
@@ -55,24 +55,24 @@ public class ScreenTransition : MonoBehaviour
     IEnumerator WakeUp()
     {
         float t = 0.0f;
-        float maxTime = 3;
         float alphaValue = 0;
 
         m_bDoorOpened = false;
+        yield return new WaitForSeconds(1);
         while (fadingQueue.Count != 0)
         {
-            while (t < maxTime)
+            while (t < m_fTimeBetweenFades - 0.5f)
             {
                 t += Time.deltaTime;
                 alphaValue = Mathf.Lerp(255.0f, 0, t);
                 fadingQueue.Peek().color = new Vector4(1, 1, 1, alphaValue / 255.0f);
                 for (int i = 0; i < 4; i++)
                 {
-                    if (XCI.GetButton(XboxButton.A, XboxController.Any + i) || Input.GetKey(KeyCode.Space))
-                    {
-                        t = maxTime;
-                        fadingQueue.Peek().color = new Vector4(1, 1, 1, 0);
-                    }
+                    //if (XCI.GetButton(XboxButton.A, XboxController.Any + i) || Input.GetKey(KeyCode.Space))
+                    //{
+                    //    t = m_fTimeBetweenFades;
+                    //    fadingQueue.Peek().color = new Vector4(1, 1, 1, 0);
+                    //}
                 }
                 yield return null;
             }

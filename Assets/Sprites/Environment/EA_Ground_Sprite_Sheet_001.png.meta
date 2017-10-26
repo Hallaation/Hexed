@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: f44b66018693c1747b378a5f19815fcd
-timeCreated: 1507242509
+timeCreated: 1508990357
 licenseType: Pro
 TextureImporter:
   fileIDToRecycleName:
@@ -107,6 +107,7 @@ TextureImporter:
     21300200: EA_Ground_Cement_3X3_009
     21300202: EA_Ground_Cement_3X3_010
     21300204: EA_Ground_Sprite_Sheet_001_4
+    21300206: EA_Ground_Cement_3X3_002
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -486,7 +487,7 @@ TextureImporter:
       name: EA_Ground_Tile_Corner_001
       rect:
         serializedVersion: 2
-        x: 717
+        x: 703
         y: 1293
         width: 100
         height: 100
@@ -499,7 +500,7 @@ TextureImporter:
       name: EA_Ground_Tile_Corner_002
       rect:
         serializedVersion: 2
-        x: 834
+        x: 820
         y: 1293
         width: 100
         height: 100
@@ -512,7 +513,7 @@ TextureImporter:
       name: EA_Ground_Tile_Square_001
       rect:
         serializedVersion: 2
-        x: 952
+        x: 938
         y: 1293
         width: 100
         height: 100
@@ -525,7 +526,7 @@ TextureImporter:
       name: EA_Ground_Tile_Square_002
       rect:
         serializedVersion: 2
-        x: 1070
+        x: 1056
         y: 1293
         width: 100
         height: 100
@@ -538,7 +539,7 @@ TextureImporter:
       name: EA_Ground_Tile_Square_003
       rect:
         serializedVersion: 2
-        x: 1190
+        x: 1176
         y: 1293
         width: 100
         height: 100
@@ -551,7 +552,7 @@ TextureImporter:
       name: EA_Ground_Tile_Square_004
       rect:
         serializedVersion: 2
-        x: 1307
+        x: 1293
         y: 1293
         width: 100
         height: 100
@@ -564,7 +565,7 @@ TextureImporter:
       name: EA_Ground_Wood_Short_001
       rect:
         serializedVersion: 2
-        x: 1424
+        x: 1411
         y: 1293
         width: 100
         height: 100
@@ -577,7 +578,7 @@ TextureImporter:
       name: EA_Ground_Wood_Medium_002
       rect:
         serializedVersion: 2
-        x: 1532
+        x: 1525
         y: 1293
         width: 200
         height: 100
@@ -590,7 +591,7 @@ TextureImporter:
       name: EA_Ground_Wood_Long_001
       rect:
         serializedVersion: 2
-        x: 1740
+        x: 1739
         y: 1293
         width: 300
         height: 100
@@ -668,8 +669,8 @@ TextureImporter:
       name: EA_Ground_Cement_Corner_005
       rect:
         serializedVersion: 2
-        x: 1303
-        y: 1038
+        x: 1289
+        y: 1036
         width: 100
         height: 100
       alignment: 1
@@ -681,7 +682,7 @@ TextureImporter:
       name: EA_Ground_Wood_Short_002
       rect:
         serializedVersion: 2
-        x: 1424
+        x: 1411
         y: 1165
         width: 100
         height: 100
@@ -694,7 +695,7 @@ TextureImporter:
       name: EA_Ground_Sprite_Sheet_001_42
       rect:
         serializedVersion: 2
-        x: 1532
+        x: 1525
         y: 1165
         width: 200
         height: 100
@@ -707,7 +708,7 @@ TextureImporter:
       name: EA_Ground_Wood_Long_002
       rect:
         serializedVersion: 2
-        x: 1740
+        x: 1739
         y: 1165
         width: 300
         height: 100
@@ -720,7 +721,7 @@ TextureImporter:
       name: EA_Ground_Wood_Corner_001
       rect:
         serializedVersion: 2
-        x: 1415
+        x: 1402
         y: 1038
         width: 100
         height: 100
@@ -733,7 +734,7 @@ TextureImporter:
       name: EA_Ground_Wood_Corner_002
       rect:
         serializedVersion: 2
-        x: 1532
+        x: 1525
         y: 1038
         width: 100
         height: 100
@@ -854,8 +855,8 @@ TextureImporter:
         y: 533
         width: 100
         height: 100
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 1
+      pivot: {x: 0, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -1008,8 +1009,8 @@ TextureImporter:
         serializedVersion: 2
         x: 76
         y: 409
-        width: 103
-        height: 207
+        width: 100
+        height: 200
       alignment: 1
       pivot: {x: 0, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1021,8 +1022,8 @@ TextureImporter:
         serializedVersion: 2
         x: 831
         y: 219
-        width: 99
-        height: 222
+        width: 100
+        height: 200
       alignment: 1
       pivot: {x: 0, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1270,8 +1271,8 @@ TextureImporter:
         y: 72
         width: 200
         height: 200
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 1
+      pivot: {x: 0, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -1450,11 +1451,11 @@ TextureImporter:
         serializedVersion: 2
         x: 46
         y: 611
-        width: 382
+        width: 300
         height: 300
       alignment: 1
       pivot: {x: 0, y: 1}
-      border: {x: 300, y: 0, z: 0, w: 0}
+      border: {x: 3, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
@@ -1506,6 +1507,19 @@ TextureImporter:
         height: 1000
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: EA_Ground_Cement_3X3_002
+      rect:
+        serializedVersion: 2
+        x: 252
+        y: 402
+        width: 300
+        height: 300
+      alignment: 1
+      pivot: {x: 0, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0

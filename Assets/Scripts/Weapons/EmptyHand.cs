@@ -18,6 +18,7 @@ public class EmptyHand : Weapon
     private int previousAnimatorState;
     private int InitialState;
     private Move _moveClass;
+    private PlayerStatus m_LastPlayerPunched;
     public Animator BodyAnimator { get { return m_BodyAnimator; } set { m_BodyAnimator = value; } }
 
     public override void StartUp()
@@ -87,6 +88,7 @@ public class EmptyHand : Weapon
                 if (BodyAnimator.GetCurrentAnimatorStateInfo(0).fullPathHash != previousAnimatorState && BodyAnimator.GetCurrentAnimatorStateInfo(0).fullPathHash != InitialState && (BodyAnimator.GetCurrentAnimatorStateInfo(0).IsName("Unarmed_LeftPunch") || BodyAnimator.GetCurrentAnimatorStateInfo(0).IsName("Unarmed_RightPunch")))
                 {
                     m_AudioSource.Play();
+                    Debug.Log("Punched");
                     BoxCollider2D PunchHitBox = transform.Find("Punch").GetComponent<BoxCollider2D>();
                     Debug.DrawRay(PunchHitBox.transform.position, PunchHitBox.transform.up * PunchHitBox.size.magnitude, Colors.Azure, 4);
                     //m_AudioSource.Play();
@@ -117,9 +119,10 @@ public class EmptyHand : Weapon
                                 if (HitPlayerFirst && Overlap[i].GetComponentInParent<PlayerStatus>().IsStunned == false)// If wall check returns player first. Punch as normal.
                                 {
                                     PlayerStatus hitPlayer = Overlap[i].GetComponentInParent<PlayerStatus>();
-                                    if (hitPlayer != this.GetComponent<PlayerStatus>())
+                                    if (hitPlayer != this.GetComponent<PlayerStatus>() && !m_LastPlayerPunched)
                                     {
                                         hitPlayer.TimesPunched++;
+                                        m_LastPlayerPunched = hitPlayer;
                                         hitPlayer.MiniStun(this.transform.up * (KnockBack * 1.5f), PunchFlinchTime);
                                         float tempPitch = (m_bRandomizeHitPitch) ? Random.Range(0.9f, 1.1f) : 1;
                                         hitPlayer.GetComponent<IHitByMelee>().HitByMelee(this, audioClip, m_clipVolume, tempPitch);
@@ -140,6 +143,7 @@ public class EmptyHand : Weapon
                     }
                 }
                 previousAnimatorState = BodyAnimator.GetCurrentAnimatorStateInfo(0).fullPathHash; //Store this frames new animation state's hash
+                m_LastPlayerPunched = null;
             }
         }
 

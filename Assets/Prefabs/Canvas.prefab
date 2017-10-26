@@ -2937,7 +2937,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1972174050289180
 GameObject:
   m_ObjectHideFlags: 1
@@ -3383,7 +3383,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: fdae249294c9d504793766fdb3c1b4f8, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6f5e98f4bca1cee40bdfb2432983599c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4670,6 +4670,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Animator: {fileID: 0}
+  m_fTimeBetweenFades: 3
 --- !u!114 &114280043647284352
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4683,7 +4684,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 4
-    m_SelectOnUp: {fileID: 0}
+    m_SelectOnUp: {fileID: 114721164969120628}
     m_SelectOnDown: {fileID: 114833455721461838}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
@@ -6526,7 +6527,7 @@ MonoBehaviour:
   m_Navigation:
     m_Mode: 4
     m_SelectOnUp: {fileID: 114975980948511142}
-    m_SelectOnDown: {fileID: 0}
+    m_SelectOnDown: {fileID: 114280043647284352}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
@@ -6983,7 +6984,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 4
-    m_SelectOnUp: {fileID: 0}
+    m_SelectOnUp: {fileID: 114858606116556932}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
@@ -7396,7 +7397,7 @@ MonoBehaviour:
   m_Navigation:
     m_Mode: 4
     m_SelectOnUp: {fileID: 114833455721461838}
-    m_SelectOnDown: {fileID: 0}
+    m_SelectOnDown: {fileID: 114815997835858788}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
@@ -9983,7 +9984,7 @@ RectTransform:
   m_GameObject: {fileID: 1057711911006080}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 62.893845, y: 40.36107, z: 1.1447921}
+  m_LocalScale: {x: 62.893845, y: 87.31529, z: 1.1447921}
   m_Children: []
   m_Father: {fileID: 224881373476557914}
   m_RootOrder: 4
@@ -11369,7 +11370,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -0.000091552734, y: -0.000061035156}
-  m_SizeDelta: {x: 1980, y: 1080}
+  m_SizeDelta: {x: 1980, y: 2000}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224613970052188162
 RectTransform:

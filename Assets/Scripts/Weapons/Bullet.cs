@@ -30,7 +30,6 @@ public class Bullet : MonoBehaviour, Reset
 
     void Start()
     {
-
         BulletSprite = GetComponent<SpriteRenderer>();
         ParticleSparks = GetComponentInChildren<ParticleSystem>();
         WallCollidedParticles = transform.GetChild(0).GetComponentsInChildren<ParticleSystem>();
@@ -40,7 +39,6 @@ public class Bullet : MonoBehaviour, Reset
         PreviousRotation = GetComponent<Rigidbody2D>().rotation;
         PreviousVelocity = GetComponent<Rigidbody2D>().velocity;
         StartRotation = transform.rotation;
-
 
         Vector2 dir = m_rigidBody.velocity;
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
@@ -90,12 +88,9 @@ public class Bullet : MonoBehaviour, Reset
                             item.HitByBullet(m_rigidBody.velocity, RayHit.point);
                         }
                     }
+                    GameManagerc.Instance._rbPausers.Remove(this.GetComponent<RigidbodyPauser>());
                     m_bStopRayCasts = true;
-                    m_rigidBody.velocity = Vector2.zero;
-                    m_rigidBody.simulated = false;
-                    BulletSprite.enabled = false;
-                    transform.position = RayHit.point;
-                    transform.rotation = StartRotation;
+                    StopBullet(RayHit);
                     //If a wall, play the particle
 
                     //bullet reflection
@@ -118,12 +113,9 @@ public class Bullet : MonoBehaviour, Reset
                             item.HitByBullet(m_rigidBody.velocity, RayHit.point);
                         }
                     }
+                    GameManagerc.Instance._rbPausers.Remove(this.GetComponent<RigidbodyPauser>());
                     m_bStopRayCasts = true;
-                    m_rigidBody.velocity = Vector2.zero;
-                    m_rigidBody.simulated = false;
-                    BulletSprite.enabled = false;
-                    transform.position = RayHit.point;
-                    transform.rotation = StartRotation;
+                    StopBullet(RayHit);
                     Destroy(this.gameObject, 1);
 
                 }
@@ -161,11 +153,7 @@ public class Bullet : MonoBehaviour, Reset
                         if (hitBlood)
                             RayHit.transform.root.Find("Sprites").GetComponent<Blood>().CreateBloodSplatter(RayHit.transform.root.position, PreviousVelocity, StartRotation);
 
-                        m_rigidBody.velocity = Vector2.zero;
-                        m_rigidBody.simulated = false;
-                        BulletSprite.enabled = false;
-                        transform.position = RayHit.point;
-                        transform.rotation = StartRotation;
+                        StopBullet(RayHit);
                         Destroy(this.gameObject, 0.5f); //Destroy me beacuse I have no other purpose, 
                         //? Maybe change the bullets to a pool instead
                     }
@@ -181,6 +169,15 @@ public class Bullet : MonoBehaviour, Reset
         //}
     }
 
+    void StopBullet(RaycastHit2D RayHit)
+    {
+        GameManagerc.Instance._rbPausers.Remove(this.GetComponent<RigidbodyPauser>());
+        m_rigidBody.velocity = Vector2.zero;
+        m_rigidBody.simulated = false;
+        BulletSprite.enabled = false;
+        transform.position = RayHit.point;
+        transform.rotation = StartRotation;
+    }
 
     IEnumerator PlayParticle(Collision2D hit)
     {
