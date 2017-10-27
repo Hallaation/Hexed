@@ -44,7 +44,8 @@ public class MusicFader : MonoBehaviour
             MenuAudioMasterMixer.GetFloat("Music", out MusicOriginalVolume);
             CurrentVolume = MusicOriginalVolume;
         }
-        while (CurrentVolume != -80)
+            
+        while (CurrentVolume != -80 && MusicFadeInB == false)
         {
             if (MusicFadeInB == true)
             {
