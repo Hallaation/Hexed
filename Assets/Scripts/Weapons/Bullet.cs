@@ -133,8 +133,6 @@ public class Bullet : MonoBehaviour, Reset
 
                             }
                         }
-                        //Debug.Log("Hit player");
-                        //Debug.Log("Raycast hit player");
                         m_rigidBody.position = RayHit.point; //Snap the bullet to the collided object
                         RayHit.transform.GetComponent<Rigidbody2D>().position += (Vector2)this.transform.right * m_fBulletImpactKnockBack;
                         PlayerStatus PlayerIHit = RayHit.transform.GetComponent<PlayerStatus>(); //Store the player I hit temporarily
@@ -163,7 +161,7 @@ public class Bullet : MonoBehaviour, Reset
         //if (RayHit.distance < a) 
         //{
         //    m_rigidBody.isKinematic = true;
-        //    //Debug.Log(RayHit.point); 
+
         //    transform.position = RayHit.point;
         //    StartCoroutine(PlayParticle(RayHit.point));
         //}
@@ -181,7 +179,7 @@ public class Bullet : MonoBehaviour, Reset
 
     IEnumerator PlayParticle(Collision2D hit)
     {
-        // Debug.Log("spark");
+
         if (ParticleSparks != null)
         {
 

@@ -30,9 +30,14 @@ public class Glass : MonoBehaviour, IHitByBullet, IHitByMelee, Reset
     bool IsShattered = false;
     BoxCollider2D GlassCollider;
     int StoredSortingLayer;
+    int m_iHealth = 2;
+    public Sprite m_CrackedImage = null;
+    public AudioClip m_crackingSound = null;
+    private AudioSource m_audioSource;
     // Use this for initialization
     void Start()
     {
+        m_audioSource = this.GetComponent<AudioSource>();
         SolidGlass = GetComponent<Sprite>();
         StoredSortingLayer = GetComponent<SpriteRenderer>().sortingOrder;
         //if (this.GetComponent<AudioSource>())
@@ -100,6 +105,25 @@ public class Glass : MonoBehaviour, IHitByBullet, IHitByMelee, Reset
                 }
     }
 
+    public void HitGlass(Vector3 velocity, Vector3 hitPoint, int a_iDamage = 0)
+    {
+        m_iHealth -= a_iDamage;
+        if (m_iHealth <= 0)
+        {
+            HitByBullet(velocity, hitPoint);
+            foreach (IHitByMelee item in this.GetComponents<IHitByMelee>())
+            {
+                item.HitByMelee(null, null);
+            }
+        }
+        if (m_iHealth != 0)
+        {
+            m_audioSource.clip = m_crackingSound;
+            m_audioSource.Play();
+            this.transform.GetComponent<SpriteRenderer>().sprite = m_CrackedImage;
+        }
+    }
+
     void Shatter()
     {
         if (!KeepBreaking)
@@ -139,8 +163,7 @@ public class Glass : MonoBehaviour, IHitByBullet, IHitByMelee, Reset
 
     }
     void SpawnShards(Collider2D hit)
-    {
-      //  Debug.Log("Does this ever get called");
+    { 
         //make a temporary array to hold all the shard objects
         GameObject[] shardObjects = new GameObject[Shards.Length];
         //for every shard, instantiate them and set their rotation and velocity.

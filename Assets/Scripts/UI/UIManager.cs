@@ -187,7 +187,7 @@ public class UIManager : MonoBehaviour
             menuStatus.Pop();
             m_ButtonAnimator = menuStatus.Peek().GetComponent<Animator>();
             DefaultButton temp = menuStatus.Peek().GetComponent<DefaultButton>();
-            //Debug.Log(menuStatus.Peek());
+
             m_bMenuAnimator.SetTrigger(MenuTransitionBoolParameters[menuStatus.Peek().name]);
             _eventSystem.SetSelectedGameObject(null);
             _eventSystem.SetSelectedGameObject(temp.defaultButton);
@@ -280,7 +280,7 @@ public class UIManager : MonoBehaviour
                         if (GameManagerc.Instance.PointsPanel)
                             GameManagerc.Instance.PointsPanel.SetActive(false);
 
-                        //Debug.Log(defaultPanel.GetComponentInChildren<DefaultButton>().gameObject.transform.parent);
+
                         GameManagerc.Instance.GetScreenAnimator().SetTrigger("ShowScreen");
                         GameManagerc.Instance.Paused = true;
                         foreach (RigidbodyPauser item in GameManagerc.Instance._rbPausers)
@@ -292,7 +292,6 @@ public class UIManager : MonoBehaviour
                         GameObject selectable = defaultPanel.GetComponentInChildren<DefaultButton>().gameObject;
                         defaultPanel.transform.GetChild(0).Find("MainMenu").GetChild(0).GetComponent<Button>().onClick.AddListener(delegate { GameManagerc.Instance.GoToStart(); });
                         SetCurrentSelected(selectable);
-                        //Debug.Log(_eventSystem.gameObject);
                     }
                 }
             }
@@ -399,13 +398,12 @@ public class UIManager : MonoBehaviour
     public void OpenUIElement(GameObject ElementToOpen, bool openChildren = false)
     {
 
-        //Debug.Log(current);
+
         if (!menuStatus.Contains(ElementToOpen))
         {
             if (menuStatus.Count > 0)
                 menuStatus.Peek().SetActive(false);
-            //Debug.Log(ElementToOpen);
-            //Debug.Break();
+ 
             ElementToOpen.SetActive(true);
             if (ElementToOpen.transform.childCount > 0 && openChildren)
             {
@@ -418,7 +416,7 @@ public class UIManager : MonoBehaviour
             _eventSystem.SetSelectedGameObject(null);
 
             //find defaults if there are any and set it to my selected.
-            //Debug.Log();
+    
             if (menuStatus.Peek().GetComponentInChildren<DefaultButton>())
             {
                 _eventSystem.SetSelectedGameObject(null);

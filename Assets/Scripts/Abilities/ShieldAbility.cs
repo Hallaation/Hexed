@@ -43,7 +43,6 @@ public class ShieldAbility : BaseAbility
             }
             RegenMana = false;
             currentMana -= repeatedManaCost * Time.deltaTime;
-           // Debug.Log("Depleting mana");
             m_MoveOwner.HideWeapon(true);
             shieldObject.SetActive(true);
         }

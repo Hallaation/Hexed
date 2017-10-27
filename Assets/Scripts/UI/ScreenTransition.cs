@@ -105,7 +105,6 @@ public class ScreenTransition : MonoBehaviour
     }
     public void CloseDoor()
     {
-        Debug.Log("Close Door");
         m_Animator.SetTrigger("CloseDoor");
     }
 

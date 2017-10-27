@@ -119,8 +119,6 @@ public class CharacterSelectionManager : MonoBehaviour
         {
             for (int i = 0; i < 4 - JoinedPlayers; ++i)
             {
-                //Debug.Log(JoinedXboxControllers[i]);
-
                 Vector3 spawnPosition = ControllerManager.Instance.spawnPoints[i].position; //Get the spawn position
                 //Make the gameojbect and keep a reference scoped to the single loop
                 GameObject go = Instantiate(playerSelectedCharacter[JoinedXboxControllers[i]], spawnPosition, Quaternion.identity, null);

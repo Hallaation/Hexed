@@ -84,7 +84,7 @@ public class Melee : Weapon
                         HitPlayerStuff(other, false);
                         //other.transform.parent.GetComponentInParent<PlayerStatus>().HitPlayer(this, false);
                               //! Uses transform right instead of transform up due to using the bats right rather then players 
-                        //Debug.Log("BatEnterStun");
+
                     }
                 }
                 //Find every hitbymelee interface and call its function
@@ -166,12 +166,12 @@ public class Melee : Weapon
                     RaycastHit2D hit = Physics2D.Raycast(this.transform.position, Direction, length + 2, 1 << LayerMask.NameToLayer("Wall"));
                     if (hit)
                     {
-                        Debug.Log("Wall");
+
                         Vector2 Position = new Vector2(transform.position.x, transform.position.y);
                         Vector2 OtherPosition = new Vector2(other.transform.position.x, other.transform.position.y);
                         if ((hit.point - Position).magnitude < (OtherPosition - Position).magnitude) // if RayHit Wall is closer then the other player.
                         {
-                            Debug.Log("WallYYY");
+                          
                         }
 
                         else
@@ -186,7 +186,7 @@ public class Melee : Weapon
                         //other.transform.parent.GetComponentInParent<PlayerStatus>().HitPlayer(this, false);
                         //! Uses transform right instead of transform up due to using the bats right rather then players up
 
-                        //Debug.Log("BatEnterStun");
+               
                     }
                 }
 

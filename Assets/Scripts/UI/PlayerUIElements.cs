@@ -89,7 +89,7 @@ public class PlayerUIArray : MonoBehaviour
     {
        // mInstance = Instance;
         playerElements = this.GetComponentsInChildren<PlayerUIElements>();
-        //Debug.Log(Instance);
+
 
         UpdateArray();
         //foreach (PlayerUIElements UIContainer in playerElements)
