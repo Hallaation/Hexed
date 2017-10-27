@@ -714,7 +714,7 @@ public class GameManagerc : MonoBehaviour
         PointsPanel = null;
         InGameScreenAnimator = null;
         mbFinishedShowingScores = false;
-        MenuPanel.SetActive(true);
+      //  MenuPanel.SetActive(true);
         //mbLoadedIntoGame = false;
         mbInstanceIsMe = false;
         //mbFinishedPanelShown = false;
