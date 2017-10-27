@@ -11,12 +11,18 @@ public class Weapon : MonoBehaviour, Reset
     public float m_iDamage;
     public bool m_bGivePlayersIFrames = false;
     public float KnockBack;
-
+    SpriteRenderer BloomGlow;
+    bool BloomIsGrowing;
     [Space]
     [Header("ShadowRelated")]
     public float MaxShadow; //How high the weapon sprite will move up
     public float MinShadow; //How low the weapon sprite will move down
     public float ShadowGrowthSpeed; //how fast the weapon will move from the min/max
+    [Space]
+    [Header("GlowRelated")]
+    public float MaxAlpha;
+    public float MinAlpha;
+    public float AlphaChangeSpeed;
     [Space]
     protected Timer TimerBetweenFiring;
     protected bool shotReady = true;
@@ -76,7 +82,10 @@ public class Weapon : MonoBehaviour, Reset
         m_AudioSource.clip = m_AudioClip;
         m_AudioSource.volume = clipVolume;
         m_AudioSource.spatialBlend = 0.8f;
-
+        if (transform.Find("Weapon_Glow_001")) 
+        {
+            BloomGlow = transform.Find("Weapon_Glow_001").GetComponent<SpriteRenderer>();
+        }
         hitPlayerAudioSource = this.gameObject.AddComponent<AudioSource>();
         hitPlayerAudioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as GameObject).GetComponent<AudioSource>().outputAudioMixerGroup;
         //hitPlayerAudioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as  AudioSource).outputAudioMixerGroup;
@@ -107,6 +116,7 @@ public class Weapon : MonoBehaviour, Reset
             m_bActive = true;
             if (WeaponSpriteRenderer)
             {
+                
                 if (WeaponSpriteRenderer.sprite != m_DefaultSprite)
                 {
                     WeaponSpriteRenderer.sprite = m_DefaultSprite;
@@ -125,7 +135,7 @@ public class Weapon : MonoBehaviour, Reset
                     m_bMoveWeaponSpriteUp = true;
                 }
                 //If i want to move the weapon sprite up.
-                if (m_bMoveWeaponSpriteUp && _rigidbody.velocity.magnitude < .3f)
+                if (m_bMoveWeaponSpriteUp && _rigidbody.velocity.magnitude < .3f )
                 {
 
 
@@ -151,14 +161,50 @@ public class Weapon : MonoBehaviour, Reset
                     }
                 }
             }
+            if(tag != "Player" && _rigidbody.velocity.magnitude < .1f && BloomGlow != null) //! If weapon is dropped and is not moving Activate bloom settings;
+            {
+                if (BloomGlow.enabled == false) // Activate bloom
+                {
+                    BloomGlow.enabled = true;
+                }
+                if (BloomIsGrowing == true) // Grow bloom
+                {
+                    float NewAlpha = BloomGlow.color.a;
+                    NewAlpha += (Time.deltaTime * AlphaChangeSpeed);
+                    BloomGlow.color = new Color(255, 255, 255, NewAlpha);
+                    if (BloomGlow.color.a > MaxAlpha)
+                    {
+                        BloomIsGrowing = false;
+
+                    }
+                }
+                else // Shrink bloom
+                {
+                    float NewAlpha = BloomGlow.color.a;
+                    NewAlpha -= (Time.deltaTime * AlphaChangeSpeed);
+                    BloomGlow.color = new Color(255, 255, 255, NewAlpha);
+                    if (BloomGlow.color.a < MinAlpha)
+                    {
+                        BloomIsGrowing = true;
+                    }
+                }
+            }
             #endregion
         }
         //If my transform has a parent (its being held by a player)
         else if (transform.parent)
         {
+
             if (m_HeldSprite != null)
             {
                 WeaponSpriteRenderer.sprite = m_HeldSprite;
+            }
+            //! Reset bloom settings so when renabled starts at beginning.
+            if (BloomGlow != null)
+            {
+                BloomGlow.color = new Color(0, 0, 0, MinAlpha);
+                BloomIsGrowing = true;
+                BloomGlow.enabled = false;
             }
             //find the shadow sprite renderer
             if (this.transform.childCount > 2 && tag != "Player")
