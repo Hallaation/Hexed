@@ -86,11 +86,13 @@ public class Move : MonoBehaviour
     private AudioSource m_HeadAudio;
     private GameObject AudioSourcePool;
     public AudioClip HeadSmash;
+    private Teleport TeleportScript;
     #endregion
     //Vector3 movement;
     // Use this for initialization
     void Awake()
     {
+        TeleportScript = GetComponent<Teleport>();
         m_ChokingTimer = new Timer(m_fChokeKillTime);
         // movement = Vector3.zero;
         //pool of audiosources
@@ -443,7 +445,7 @@ public class Move : MonoBehaviour
         }
 
         //If im not stunned, add movement to my rigid body's velocity, allowing it to move, scaling it by a movement speed.
-        if (!m_status.IsStunned)
+        if (!m_status.IsStunned && !TeleportScript.GetDashing())
         {
             _rigidBody.velocity = (movement + KeyboardMovement) * movementSpeed;
         }
