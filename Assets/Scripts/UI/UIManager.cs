@@ -8,6 +8,10 @@ using XboxCtrlrInput;
 using UnityEngine.Audio;
 using System;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 public class UIManager : MonoBehaviour
 {
     Dictionary<string, string> MenuTransitionBoolParameters = new Dictionary<string, string>
@@ -403,7 +407,7 @@ public class UIManager : MonoBehaviour
         {
             if (menuStatus.Count > 0)
                 menuStatus.Peek().SetActive(false);
- 
+
             ElementToOpen.SetActive(true);
             if (ElementToOpen.transform.childCount > 0 && openChildren)
             {
@@ -416,7 +420,7 @@ public class UIManager : MonoBehaviour
             _eventSystem.SetSelectedGameObject(null);
 
             //find defaults if there are any and set it to my selected.
-    
+
             if (menuStatus.Peek().GetComponentInChildren<DefaultButton>())
             {
                 _eventSystem.SetSelectedGameObject(null);
@@ -437,7 +441,7 @@ public class UIManager : MonoBehaviour
     {
         if (menuStatus.Count >= 1)
         {
-           // menuStatus.Peek().SetActive(false);
+            menuStatus.Peek().SetActive(false);
             menuStatus.Pop();
 
             if (menuStatus.Count >= 1)
@@ -450,7 +454,7 @@ public class UIManager : MonoBehaviour
                     _eventSystem.SetSelectedGameObject(null);
                     _eventSystem.SetSelectedGameObject(menuStatus.Peek().GetComponentInChildren<Button>().gameObject);
                     defaultToReturnTo = menuStatus.Peek().GetComponentInChildren<Button>().gameObject;
-                    
+
                 }
             }
         }
@@ -468,6 +472,7 @@ public class UIManager : MonoBehaviour
 
     void OnSceneLoad(Scene scene, LoadSceneMode mode)
     {
+        Debug.Log("Scene load");
         menuStatus.Clear();
         _eventSystem = FindObjectOfType<EventSystem>();
         //very specific scene, if in this scene, I want to remove the last panel
@@ -488,7 +493,19 @@ public class UIManager : MonoBehaviour
         }
         else if (scene.buildIndex == 0) //else if I am in the main scene menu (assuming it is 0 as of right now)
         {
+            m_SettingsPanel = GameObject.Find("Options_Panel");
             m_bInMainMenu = true;
+            GameObject.Find("VS_Button").GetComponent<Button>().onClick.AddListener(delegate { MainMenuChangePanel(GameObject.Find("Second_Panel")); } );
+            GameObject.Find("Settings_Button").GetComponent<Button>().onClick.AddListener(delegate { MenuOpenPanel(m_SettingsPanel, "IsSettings"); });
+            GameObject.Find("Credits_Button");
+            GameObject.Find("Quit_Button").GetComponent<Button>().onClick.AddListener(delegate { QuitGame(); });
+            m_bMenuAnimator = FindObjectOfType<Canvas>().GetComponent<Animator>();
+
+            m_CreditsPanel = GameObject.Find("Credits_Panel"); //Currently null;
+            m_CharacterSelectionPanel = GameObject.Find("Character_Selection");
+            //instance = FindObjectOfType<UIManager>();
+
+            _eventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
             //find the first panel and push it to the stack
             menuStatus.Push(GameObject.Find("First_Panel"));
             m_ButtonAnimator = menuStatus.Peek().GetComponent<Animator>();
@@ -514,4 +531,12 @@ public class UIManager : MonoBehaviour
         m_bRemoveLastPanel = false;
     }
 
+    public void QuitGame()
+    {
+#if UNITY_EDITOR
+        EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
+    }
 }

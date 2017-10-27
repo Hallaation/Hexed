@@ -733,10 +733,10 @@ public class GameManagerc : MonoBehaviour
         //Destroy the singleton objects
 
         ///Destroy(PlayerUIArray.Instance.gameObject);
-        Destroy(UIManager.Instance.gameObject);
-        Destroy(ControllerManager.Instance.gameObject);
-        Destroy(CharacterSelectionManager.Instance.gameObject);
-        Destroy(UINavigation.Instance.gameObject);
+        Destroy(UIManager.Instance);
+        Destroy(ControllerManager.Instance);
+        Destroy(CharacterSelectionManager.Instance);
+        Destroy(UINavigation.Instance);
         Destroy(GameAudioPicker.Instance);
         Destroy(GameAudioPicker.Instance.gameObject);
         StartCoroutine(ReturnToMenu());
