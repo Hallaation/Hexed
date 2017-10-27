@@ -3228,6 +3228,7 @@ GameObject:
   - component: {fileID: 630279060}
   - component: {fileID: 630279059}
   - component: {fileID: 630279058}
+  - component: {fileID: 630279061}
   m_Layer: 5
   m_Name: GET_READY
   m_TagString: Untagged
@@ -3268,7 +3269,7 @@ AudioSource:
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
-  Mute: 0
+  Mute: 1
   Spatialize: 0
   SpatializePostEffects: 0
   Priority: 128
@@ -3367,6 +3368,22 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 630279056}
+--- !u!114 &630279061
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 630279056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 878dd03dd179f944aa3da8e092d84d7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Sprites:
+  - {fileID: 21300000, guid: c52a01c9306a3fc44ace4b0e6e53e6fc, type: 3}
+  - {fileID: 21300004, guid: c52a01c9306a3fc44ace4b0e6e53e6fc, type: 3}
+  lowerLimit: 0
+  upperlimit: 1
 --- !u!1 &664213647
 GameObject:
   m_ObjectHideFlags: 0
@@ -4180,7 +4197,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &853331735
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6017,6 +6034,7 @@ GameObject:
   - component: {fileID: 1169466530}
   - component: {fileID: 1169466529}
   - component: {fileID: 1169466528}
+  - component: {fileID: 1169466531}
   m_Layer: 5
   m_Name: KILL
   m_TagString: Untagged
@@ -6057,7 +6075,7 @@ AudioSource:
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
-  Mute: 0
+  Mute: 1
   Spatialize: 0
   SpatializePostEffects: 0
   Priority: 128
@@ -6156,6 +6174,22 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1169466526}
+--- !u!114 &1169466531
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1169466526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 878dd03dd179f944aa3da8e092d84d7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Sprites:
+  - {fileID: 21300002, guid: c52a01c9306a3fc44ace4b0e6e53e6fc, type: 3}
+  - {fileID: 21300006, guid: c52a01c9306a3fc44ace4b0e6e53e6fc, type: 3}
+  lowerLimit: 0
+  upperlimit: 1
 --- !u!1 &1216072547
 GameObject:
   m_ObjectHideFlags: 0
