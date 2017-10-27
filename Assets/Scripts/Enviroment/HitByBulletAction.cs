@@ -17,6 +17,7 @@ public class HitByBulletAction : MonoBehaviour, IHitByBullet
     {
 
         //m_audioSource.PlayOneShot(m_audioClip , clipVolume);
+        m_audioSource.clip = m_audioClip;
         m_audioSource.Play();
 
         if (PlayParticles)

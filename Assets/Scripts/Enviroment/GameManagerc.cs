@@ -867,7 +867,7 @@ public class GameManagerc : MonoBehaviour
             getReady.GetComponent<Image>().enabled = false;
             InGameScreenAnimator.SetTrigger("ShowScreen");
             while (!transition.DoorOpened) { yield return null; } //while the door hasn't opened yet.
-            yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(0.5f);
             //if (m_bDoGlitch)
             //{
             //Turn kill off
