@@ -47,14 +47,14 @@ public class GamemodeSettings : MonoBehaviour
         else if ((DpadHorizontalTest() < 0) || StickMovement[0])
         {
             StickMovement[0] = false;
-         //   Debug.Log("below 0");
+
             if (PointWinIndex == 0)
             {
                 PointWinIndex = mPointsToWin.Length - 1;
             }
             else
             {
-               // Debug.Log("Decrement");
+
                 PointWinIndex--;
             }
 

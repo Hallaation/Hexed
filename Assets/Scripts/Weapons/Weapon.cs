@@ -9,7 +9,6 @@ public class Weapon : MonoBehaviour, Reset
     public Sprite m_HeldSprite = null;
     public float m_fTimeBetweenShots = 0.01f;
     public float m_iDamage;
-
     public bool m_bGivePlayersIFrames = false;
     public float KnockBack;
 
@@ -89,7 +88,7 @@ public class Weapon : MonoBehaviour, Reset
         if (this.transform.childCount > 2 && tag != "Player")
         {
             WeaponSpriteRenderer = transform.GetChild(0).GetComponent<SpriteRenderer>();
-            //Debug.Log(WeaponSprite.sprite);
+
             m_DefaultSprite = WeaponSpriteRenderer.sprite;
 
             weaponSpriteTransform = transform.GetChild(0).GetComponent<Transform>();

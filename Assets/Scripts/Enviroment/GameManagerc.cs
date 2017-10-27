@@ -173,7 +173,7 @@ public class GameManagerc : MonoBehaviour
             mbInstanceIsMe = true;
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
-        //Debug.Log(mInstance.gameObject);
+
         m_bRoundOver = false;
         Physics.gravity = new Vector3(0, 0, 10); //why
         m_bRoundReady = true;
@@ -370,7 +370,7 @@ public class GameManagerc : MonoBehaviour
                 if (PlayerWins[player] >= m_iPointsNeeded)
                 {
                     //Set the time scale to 0 (essentially pausing the game-ish)
-                    //Debug.LogError("Points required have been reached");
+
                     //Time.timeScale = 0;
                     //open the finish panel, UI manager will set all the children to true, thus rendering them
                     //#finish panel, 
@@ -448,7 +448,7 @@ public class GameManagerc : MonoBehaviour
                 ControllerManager.Instance.FindSpawns();
                 CharacterSelectionManager.Instance.LoadPlayers();
 
-                //Debug.Log("Loaded map and players");
+
             }
             //If I found the finished game panel
             if (GameObject.Find("FinishedGamePanel"))
@@ -511,7 +511,7 @@ public class GameManagerc : MonoBehaviour
             //Load player portraits.
             foreach (var item in CharacterSelectionManager.Instance.playerSelectedCharacter)
             {
-                //Debug.Log(item.Key);
+
                 int playerNumber = (int)item.Key - 1;
 
                 if (item.Value.GetComponent<BaseAbility>().m_CharacterPortrait) //If the character has a portrait
@@ -580,8 +580,6 @@ public class GameManagerc : MonoBehaviour
             GameObject KillAudio = ReadyFightContainer.transform.GetChild(0).gameObject;
             GameObject GetReady = ReadyFightContainer.transform.GetChild(1).gameObject;
 
-            Debug.Log(KillAudio);
-            Debug.Log(GetReady);
             //if (m_bShowReadyFight)
 
             if (m_bDoReadyKill)
@@ -635,7 +633,7 @@ public class GameManagerc : MonoBehaviour
 
     public void Rematch()
     {
-        // Debug.Log("Start of rematch");
+
         //reset the time scale
         GameManagerc.Instance.Paused = false;
         //The round is not over
@@ -670,7 +668,6 @@ public class GameManagerc : MonoBehaviour
         //      }
         //  }
 
-        //Debug.Log("End of rematch after button");
     }
 
     /// <summary>
@@ -804,7 +801,7 @@ public class GameManagerc : MonoBehaviour
             {
                 t += Time.deltaTime / maxTime;
                 CurrentGlitchValues = Vector4.Lerp(Vector4.zero, lerpValues, t);
-                //Debug.Log(CurrentGlitchValues);
+
                 glitch.scanLineJitter = CurrentGlitchValues.x;
                 glitch.verticalJump = CurrentGlitchValues.y;
                 glitch.horizontalShake = CurrentGlitchValues.z;
@@ -815,7 +812,7 @@ public class GameManagerc : MonoBehaviour
             {
                 t += Time.deltaTime / maxTime;
                 CurrentGlitchValues = Vector4.Lerp(lerpValues, Vector4.zero, t);
-                //Debug.Log(CurrentGlitchValues);
+
                 glitch.scanLineJitter = CurrentGlitchValues.x;
                 glitch.verticalJump = CurrentGlitchValues.y;
                 glitch.horizontalShake = CurrentGlitchValues.z;
@@ -827,7 +824,7 @@ public class GameManagerc : MonoBehaviour
         if (!Reverse)
         {
             CurrentGlitchValues = Vector4.Lerp(Vector4.zero, lerpValues, 1);
-            //Debug.Log(CurrentGlitchValues);
+
             glitch.scanLineJitter = CurrentGlitchValues.x;
             glitch.verticalJump = CurrentGlitchValues.y;
             glitch.horizontalShake = CurrentGlitchValues.z;
@@ -837,7 +834,7 @@ public class GameManagerc : MonoBehaviour
         else
         {
             CurrentGlitchValues = Vector4.Lerp(lerpValues, Vector4.zero, 1);
-            //Debug.Log(CurrentGlitchValues);
+ 
             glitch.scanLineJitter = CurrentGlitchValues.x;
             glitch.verticalJump = CurrentGlitchValues.y;
             glitch.horizontalShake = CurrentGlitchValues.z;

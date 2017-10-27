@@ -16,7 +16,6 @@ public class RigidbodyPauser : MonoBehaviour
 
     public void PauseRigidbody()
     {
-        Debug.Log(m_RigidBody.velocity);
         if (!m_RigidBody)
         {
             m_RigidBody = GetComponent<Rigidbody2D>();

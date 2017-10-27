@@ -67,7 +67,6 @@ public class GroundPound : BaseAbility
                     {
                         if (nearBy[k].transform != this.transform)
                         {
-                            //Debug.Log(Vector2.Distance(nearBy[k].transform.position, transform.position));
                             if (Vector2.Distance(nearBy[k].transform.position, transform.position) > GroundPoundCollider.radius - WidthOfRipple)
                             {
                                 PlayerStatus tempStatus = nearBy[k].GetComponentInParent<PlayerStatus>();

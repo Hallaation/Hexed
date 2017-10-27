@@ -63,7 +63,6 @@ public class UINavigation : MonoBehaviour
                     if (XCI.GetButtonDown(XboxButton.DPadDown, XboxController.First + i) )
                     {
                         if (_EventSystem.currentSelectedGameObject.GetComponent<Selectable>().navigation.selectOnDown != null)
-                        //Debug.Log("left is null");
                         {
                             GameObject select = _EventSystem.currentSelectedGameObject.GetComponent<Selectable>().navigation.selectOnDown.gameObject;
                             _EventSystem.SetSelectedGameObject(null);
@@ -73,7 +72,6 @@ public class UINavigation : MonoBehaviour
                     if (XCI.GetButtonDown(XboxButton.DPadUp, XboxController.First + i))
                     {
                         if (_EventSystem.currentSelectedGameObject.GetComponent<Selectable>().navigation.selectOnUp != null)
-                        //Debug.Log("left is null");
                         {
                             //DpadMovement[0, 0] = false;   //useless
                             //temp.CurrentTime = 0;         //useless
@@ -93,7 +91,7 @@ public class UINavigation : MonoBehaviour
                         }
 
                         if (_EventSystem.currentSelectedGameObject.GetComponent<Selectable>().navigation.selectOnLeft != null)
-                        //Debug.Log("left is null");
+
                         {
                             GameObject select = _EventSystem.currentSelectedGameObject.GetComponent<Selectable>().navigation.selectOnLeft.gameObject;
                             _EventSystem.SetSelectedGameObject(null);
@@ -111,7 +109,6 @@ public class UINavigation : MonoBehaviour
                         }
 
                         if (_EventSystem.currentSelectedGameObject.GetComponent<Selectable>().navigation.selectOnRight != null)
-                        //Debug.Log("left is null");
                         {
                             GameObject select = _EventSystem.currentSelectedGameObject.GetComponent<Selectable>().navigation.selectOnRight.gameObject;
                             _EventSystem.SetSelectedGameObject(null);

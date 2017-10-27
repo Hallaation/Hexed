@@ -23,7 +23,7 @@ public class HitByMeleeAction : MonoBehaviour, IHitByMelee
         {
             if (!this.GetComponent<HitByBulletAction>())
             {
-                //Debug.LogError("Hit By Bullet Action script not found!");
+
             }
             else
             {

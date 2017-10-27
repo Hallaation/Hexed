@@ -46,7 +46,7 @@ public class SpawnRandomWeapon : MonoBehaviour
             {
                 foreach (Collider2D item in Colliders)
                 {
-                    //Debug.Log(item);
+
                     if (item.GetComponentInParent<Weapon>())
                     {
                         m_bCanSpawnGun = false;

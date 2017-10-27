@@ -236,7 +236,7 @@ public class Move : MonoBehaviour
                     {
                         if (heldWeapon.GetType() == typeof(Gun))
                         {
-                            //Debug.Log("test");
+             
                             //_AmmoText.text = heldWeapon.GetComponent<Gun>().m_iAmmo.ToString();
                         }
                         else
@@ -517,7 +517,7 @@ public class Move : MonoBehaviour
                 Debug.DrawRay(this.transform.position, throwDirection * ((this.transform.position - GunMountPosition).magnitude + 0.5f), Color.yellow, 5);
                 if (hit)
                 {
-                    Debug.Log("Hit wall");
+
                     heldWeapon.transform.position = this.transform.position - this.transform.up * 0.5f;
                 }
                 heldWeapon.transform.position = this.transform.position;
@@ -656,7 +656,7 @@ public class Move : MonoBehaviour
             }
             else
             {
-                // Debug.Log("WallBlock");
+    
                 //Debug.DrawLine(pos , pos + Dir , Color.red , Mathf.Infinity);
             }
 

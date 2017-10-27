@@ -30,7 +30,6 @@ public class EmptyHand : Weapon
         previousAnimatorState = BodyAnimator.GetCurrentAnimatorStateInfo(0).fullPathHash;
         InitialState = previousAnimatorState;
         BodyAnimator.SetBool("Moving", true);
-        //Debug.Log(BodyAnimator.GetCurrentAnimatorStateInfo(0));
         stunPlayer = false;
         _moveClass = this.GetComponent<Move>();
     }
@@ -57,11 +56,10 @@ public class EmptyHand : Weapon
             //{
             //    if (hit.transform != this.transform)
             //    {
-            //        Debug.Log("Test");
+
             //        temp.Play();
 
             //        hit.transform.GetComponent<PlayerStatus>().TimesPunched++;
-            //        Debug.Log(hit.transform.GetComponent<PlayerStatus>().TimesPunched);
             //        if (hit.transform.GetComponent<PlayerStatus>().TimesPunched >= 3)
             //        {
             //            hit.transform.GetComponent<PlayerStatus>().StunPlayer(this.transform.up * KnockBack * 10);
@@ -97,13 +95,11 @@ public class EmptyHand : Weapon
                     #region Punching player logic
                     if (PunchHitBox.IsTouchingLayers(1 << 8)) // If Punch Hitbox is touching PLayer layer.
                     {
-                        //Debug.Log("Punch");
 
                         Collider2D[] Overlap = Physics2D.OverlapBoxAll(PunchHitBox.transform.position, PunchHitBox.size, 0, LayerMask.GetMask("Player", "Glass")); //An Overlap collider with the punch hitbox. There is probably a better way. 
                         int TotalCollisions = Overlap.Length;
                         for (int i = 0; i < TotalCollisions; ++i)
                         {
-                            Debug.Log(TotalCollisions);
                             if (Overlap[i].transform.tag == "Player" && Overlap[i].transform != this.transform) // If hit another player
                             {
                                 bool HitPlayerFirst = true;
@@ -115,10 +111,9 @@ public class EmptyHand : Weapon
                                     if (DistanceToWall < DistanceToPlayer) // If Hit wall first.
                                     {
                                         HitPlayerFirst = false;
-                                        //Debug.Log("HitWallFirst");
+  
                                     }
-                                    //Debug.Log("HitPlayerFirst");
-                                }
+                              }
                                 if (HitPlayerFirst && Overlap[i].GetComponentInParent<PlayerStatus>().IsStunned == false)// If wall check returns player first. Punch as normal.
                                 {
                                     PlayerStatus hitPlayer = Overlap[i].GetComponentInParent<PlayerStatus>();
@@ -129,13 +124,13 @@ public class EmptyHand : Weapon
                                         hitPlayer.MiniStun(this.transform.up * (KnockBack * 1.5f), PunchFlinchTime);
                                         float tempPitch = (m_bRandomizeHitPitch) ? Random.Range(0.9f, 1.1f) : 1;
                                         hitPlayer.GetComponent<IHitByMelee>().HitByMelee(this, audioClip, m_clipVolume, tempPitch);
-                                        //Debug.Log("PunchedEnemy");
+   
                                         if (hitPlayer.TimesPunched >= m_PunchesToKnockOut)
                                         {
                                             hitPlayer.StunPlayer(transform.up * KnockBack);
                                             hitPlayer.TimesPunched = 0;
                                             hitPlayer.GetComponent<Move>().StatusApplied();//GetComponent<Move>().StatusApplied();
-                                                                                           //Debug.Log("StunnedEnemy");
+                            
                                         }
                                         else
                                         { hitPlayer.GetComponent<Rigidbody2D>().AddForce(this.transform.up * PunchKBForce); }

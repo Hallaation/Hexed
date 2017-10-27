@@ -69,7 +69,7 @@ public class ControllerManager : MonoBehaviour
         //smInstance = Instance;
         //GameObject spawnParent = GameObject.FindGameObjectWithTag("SpawnPoints");
         ////Find the spawn points
-        ////Debug.LogError(spawnParent.transform.childCount);
+
         //spawnPoints = new Transform[spawnParent.transform.childCount];
         //for (int i = 0; i < spawnParent.transform.childCount; ++i)
         //{
@@ -90,7 +90,7 @@ public class ControllerManager : MonoBehaviour
 
     IEnumerator LookForPlayers()
     {
-        // Debug.Log(nextPlayer);
+
         if (DebugMode)
         {
             for (int i = 0; i < maxPlayers; i++)
