@@ -449,6 +449,10 @@ public class Move : MonoBehaviour
         {
             _rigidBody.velocity = (movement + KeyboardMovement) * movementSpeed;
         }
+        else if (TeleportScript.GetDashing())
+        {
+            _rigidBody.velocity = (movement + KeyboardMovement) * TeleportScript.m_DashSpeed;
+        }
 
         //animation checks go here
         if (FeetAnimator != null)
