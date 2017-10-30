@@ -35,6 +35,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
     public float m_fStunTime = 1;
     public float m_fMaximumStunWait = 2;
     public float m_fStunTimerReduction = 0.5f;
+
     Timer stunTimer;
     Timer resetStunTimer;
 
@@ -51,8 +52,11 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
     private GameObject _PlayerCanvas;
     private GameObject _HealthMask;
     private GameObject HealthContainer;
+
     [SerializeField]
     private Image HealthLost;
+    [SerializeField]
+    private float m_fShowHealthMaxTime = 2.0f;
     private Timer healthLossTimer;
     private Timer ShowHealthChangeTimer;
     private bool m_bShowHealthLoss = false;
@@ -83,7 +87,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
     void Start()
     {
         m_MoveClass = this.GetComponent<Move>();
-        ShowHealthChangeTimer = new Timer(1.5f);
+        ShowHealthChangeTimer = new Timer(m_fShowHealthMaxTime);
         healthLossTimer = new Timer(0.9f);
 
         _cameraControlInstance = CameraControl.mInstance;
@@ -127,6 +131,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
 
     void Update()
     {
+        ShowHealthChangeTimer.mfTimeToWait = m_fShowHealthMaxTime;
         if (Input.GetKeyDown(KeyCode.K))
         {
             if (m_bDead)
@@ -178,6 +183,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
                 }
                 SetAllAnimatorsFalse(false);
                 PlayerSprite.material.color = Color.grey;
+
                 //this.GetComponent<Rigidbody2D>().simulated = false; wow .
                 foreach (Collider2D item in GetComponentsInChildren<Collider2D>())
                 {
@@ -190,11 +196,14 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
                         item.enabled = false;
                     }
                 }
+
                 killMePrompt.SetActive(false);
                 killMeArea.SetActive(false);
                 stunBarContainer.SetActive(false);
+
                 m_MoveClass.GetBodyAnimator().enabled = false;
                 m_MoveClass.GetFeetAnimator().enabled = false;
+
                 if (DeadSprites.Length > 0 && !DeathSpriteChanged)
                 {
                     DeathSpriteChanged = true;
@@ -329,9 +338,18 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             //Showing health change is when the health bar shows up. health loss is seperate.
             if (m_bShowHealthChange)
             {
-                HealthContainer.SetActive(true);
-                //HealthContainer.transform.position = -this.transform.up * 0.5f;
 
+                HealthContainer.SetActive(true);
+                if (stunBarContainer.activeSelf)
+                {
+                    HealthContainer.transform.localPosition = new Vector3(0, 150, 0);
+                }
+                else
+                {
+                    HealthContainer.transform.localPosition = new Vector3(0, 100, 0);
+                }
+
+                //HealthContainer.transform.position = -this.transform.up * 0.5f;
                 if (ShowHealthChangeTimer.Tick(Time.deltaTime))
                 {
                     HealthContainer.SetActive(false);

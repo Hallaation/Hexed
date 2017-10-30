@@ -226,6 +226,7 @@ public class Move : MonoBehaviour
                         if (CheckForDownedKill())
                             return;
                         Quack();
+                       // Quack();
                         CalculateMovement();
                         CheckForPickup();
                         Attack(TriggerReleaseCheck());
