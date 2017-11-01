@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayHeadSmashSound : MonoBehaviour {
     public AudioClip HeadSmasheeSound;
-    AudioSource audio;
+    AudioSource m_AudioSource;
     public bool Play;
     // Use this for initialization
     void Start () {
@@ -20,9 +20,9 @@ public class PlayHeadSmashSound : MonoBehaviour {
 
    public void PlaySound()
     {
-        audio = GetComponent<AudioSource>();
-        audio.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as GameObject).GetComponent<AudioSource>().outputAudioMixerGroup;
-        audio.Play();
+        m_AudioSource = GetComponent<AudioSource>();
+        m_AudioSource.outputAudioMixerGroup = AudioManager.RequestMixerGroup(SourceType.SFX);
+        m_AudioSource.Play();
     }
 	// Update is called once per frame
 	void Update () {
