@@ -94,7 +94,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         m_SpriteRenderer = this.transform.Find("Sprites").GetChild(0).GetComponent<SpriteRenderer>();
 
         m_MeleeHitAudioSource = this.gameObject.AddComponent<AudioSource>();
-        m_MeleeHitAudioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as GameObject).GetComponent<AudioSource>().outputAudioMixerGroup;
+        m_MeleeHitAudioSource.outputAudioMixerGroup = AudioManager.RequestMixerGroup(SourceType.SFX);
         //m_MeleeHitAudioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as  AudioSource).outputAudioMixerGroup;
         m_MeleeHitAudioSource.playOnAwake = false;
         m_MeleeHitAudioSource.spatialBlend = 0.8f;

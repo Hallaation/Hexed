@@ -76,7 +76,7 @@ public class Weapon : MonoBehaviour, Reset
     void Awake()
     {
         m_AudioSource = this.gameObject.AddComponent<AudioSource>();
-        m_AudioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as GameObject).GetComponent<AudioSource>().outputAudioMixerGroup;
+        m_AudioSource.outputAudioMixerGroup = AudioManager.RequestMixerGroup(SourceType.SFX);
         //m_AudioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as  AudioSource).outputAudioMixerGroup;
         m_AudioSource.playOnAwake = false;
         m_AudioSource.clip = m_AudioClip;
@@ -87,7 +87,7 @@ public class Weapon : MonoBehaviour, Reset
             BloomGlow = transform.Find("Weapon_Glow_001").GetComponent<SpriteRenderer>();
         }
         hitPlayerAudioSource = this.gameObject.AddComponent<AudioSource>();
-        hitPlayerAudioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as GameObject).GetComponent<AudioSource>().outputAudioMixerGroup;
+        hitPlayerAudioSource.outputAudioMixerGroup = AudioManager.RequestMixerGroup(SourceType.SFX);
         //hitPlayerAudioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as  AudioSource).outputAudioMixerGroup;
         hitPlayerAudioSource.playOnAwake = false;
         hitPlayerAudioSource.spatialBlend = 0.8f;
