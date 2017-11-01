@@ -156,7 +156,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             {
                 m_iScore = GameManagerc.Instance.PlayerWins[this];
             }
-
+            this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, 0);
             //if i've been punched once, start the timer, once the timer has reached the end, reset the amount of times punched.
             if (m_iTimesPunched >= 1)
             {
@@ -176,6 +176,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             if (m_bDead)
             {
                 m_SpriteRenderer.sortingOrder = -4;
+                this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, 0.35f);
                 m_MoveClass.StopChoke();
                 if (m_MoveClass.heldWeapon)
                 {
