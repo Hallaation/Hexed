@@ -42,7 +42,7 @@ public class HitByMeleeAction : MonoBehaviour, IHitByMelee
         if (m_audioSource == null)
         {
             m_audioSource = this.gameObject.AddComponent<AudioSource>();
-            m_audioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as GameObject).GetComponent<AudioSource>().outputAudioMixerGroup;
+            m_audioSource.outputAudioMixerGroup = AudioManager.RequestMixerGroup(SourceType.SFX);
             //m_audioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as  AudioSource).outputAudioMixerGroup;
             m_audioSource.playOnAwake = false;
             m_audioSource.spatialBlend = 0.8f;

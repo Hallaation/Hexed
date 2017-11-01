@@ -41,7 +41,7 @@ public class SelectionUIElements : MonoBehaviour
         if (!m_AudioSource)
         {
             m_AudioSource = this.gameObject.AddComponent<AudioSource>();
-            m_AudioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as GameObject).GetComponent<AudioSource>().outputAudioMixerGroup;
+            m_AudioSource.outputAudioMixerGroup = AudioManager.RequestMixerGroup(SourceType.SFX);
         }
         m_bNotJoined = false;
         m_Animator = GetComponentInChildren<Animator>();

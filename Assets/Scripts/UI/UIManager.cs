@@ -77,10 +77,11 @@ public class UIManager : MonoBehaviour
         //Add me to the singleton tester
         SingletonTester.Instance.AddSingleton(this);
         SceneManager.sceneLoaded += OnSceneLoad;
+
         m_SettingsPanel = GameObject.Find("Options_Panel");
         m_CreditsPanel = GameObject.Find("Credits_Panel"); //Currently null;
         m_CharacterSelectionPanel = GameObject.Find("Character_Selection");
-        m_SettingsPanel.SetActive((!m_SettingsPanel));
+        // m_SettingsPanel.SetActive((!m_SettingsPanel));
 
         //instance = FindObjectOfType<UIManager>();
 
@@ -216,6 +217,9 @@ public class UIManager : MonoBehaviour
     {
         if (!menuStatus.Contains(panelToMove))
         {
+            if (m_SettingsPanel.activeSelf)
+                m_SettingsPanel.SetActive(false);
+
             menuStatus.Push(panelToMove);
             //swap the trigger to the corresponding parameter name
             m_bMenuAnimator.SetTrigger(MenuTransitionBoolParameters[panelToMove.name]);
@@ -441,13 +445,12 @@ public class UIManager : MonoBehaviour
     {
         if (menuStatus.Count >= 1)
         {
-            menuStatus.Peek().SetActive(false);
+            //menuStatus.Peek().SetActive(false);
             menuStatus.Pop();
-
+            _eventSystem.SetSelectedGameObject(null);
             if (menuStatus.Count >= 1)
             {
                 menuStatus.Peek().SetActive(true);
-
                 //find defaults if there are any and set it to my selected.
                 if (menuStatus.Peek().transform.Find("DefaultButton"))
                 {
@@ -495,17 +498,21 @@ public class UIManager : MonoBehaviour
         {
             m_SettingsPanel = GameObject.Find("Options_Panel");
             m_bInMainMenu = true;
-            GameObject.Find("VS_Button").GetComponent<Button>().onClick.AddListener(delegate { MainMenuChangePanel(GameObject.Find("Second_Panel")); } );
-            GameObject.Find("Settings_Button").GetComponent<Button>().onClick.AddListener(delegate { MenuOpenPanel(m_SettingsPanel, "IsSettings"); });
-            GameObject.Find("Credits_Button");
-            GameObject.Find("Quit_Button").GetComponent<Button>().onClick.AddListener(delegate { QuitGame(); });
             m_bMenuAnimator = FindObjectOfType<Canvas>().GetComponent<Animator>();
+            if (!m_SettingsPanel)
+            {
+                m_SettingsPanel = GameObject.Find("Options_Panel");
+            }
 
             m_CreditsPanel = GameObject.Find("Credits_Panel"); //Currently null;
             m_CharacterSelectionPanel = GameObject.Find("Character_Selection");
-            //instance = FindObjectOfType<UIManager>();
-
             _eventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
+            Button vsButton = GameObject.Find("VS_Button").GetComponent<Button>();
+            Button SettingsButton = GameObject.Find("Settings_Button").GetComponent<Button>();
+
+            vsButton.onClick.AddListener(delegate { MainMenuChangePanel(GameObject.Find("Second_Panel")); });
+            SettingsButton.onClick.AddListener(delegate { MenuOpenPanel(m_SettingsPanel, "IsSettings"); });
+
             //find the first panel and push it to the stack
             menuStatus.Push(GameObject.Find("First_Panel"));
             m_ButtonAnimator = menuStatus.Peek().GetComponent<Animator>();
@@ -531,12 +538,9 @@ public class UIManager : MonoBehaviour
         m_bRemoveLastPanel = false;
     }
 
-    public void QuitGame()
+
+    public void TurnActive()
     {
-#if UNITY_EDITOR
-        EditorApplication.isPlaying = false;
-#else
-        Application.Quit();
-#endif
+        m_SettingsPanel.SetActive(true);
     }
 }

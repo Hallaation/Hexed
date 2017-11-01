@@ -177,7 +177,9 @@ public class ControllerManager : MonoBehaviour
                 temp1.PassiveManaRegeneration = mine1.PassiveManaRegeneration;
                 temp1.m_fMinimumManaRequired = mine1.m_fMinimumManaRequired;
                 temp1.m_fMovementSpeedSlowDown = mine1.m_fMovementSpeedSlowDown;
-                temp1.m_TeleportForce = mine1.m_TeleportForce;
+                temp1.m_DashSpeed = mine1.m_DashSpeed;
+                temp1.m_DurationOfDash = mine1.m_DurationOfDash;
+                //temp1.m_TeleportForce = mine1.m_TeleportForce;
                 break;
 
             default: break;

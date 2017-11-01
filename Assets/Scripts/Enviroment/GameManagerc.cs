@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 using XboxCtrlrInput;
 using XInputDotNetPure;
 using Kino;
+using UnityEngine.Audio;
 //?
 //? F R O M
 //? T H E
@@ -111,6 +112,7 @@ public class GameManagerc : MonoBehaviour
     GameObject[] PointXPositions;
     GameObject[] PointYPositions;
 
+    public AudioMixer MasterAudioMixer;
     public AudioClip m_DingSound;
     private AudioSource m_AudioSource;
     //! Screen Glitch lerp values
@@ -118,6 +120,9 @@ public class GameManagerc : MonoBehaviour
     private Vector4 lerpValues = new Vector4(0.8f, 0.6f, 0.3f, 0.7f);
     private Vector4 CurrentGlitchValues = new Vector4();
     public List<RigidbodyPauser> _rbPausers;
+
+    public AudioClip m_GlitchEffect;
+
     //Lazy singleton
     public static GameManagerc Instance
     {
@@ -142,10 +147,19 @@ public class GameManagerc : MonoBehaviour
             return mInstance;
         }
     }
+    IEnumerator SetInitalAudio()
+    {
+        yield return new WaitForSeconds(1);
+        MasterAudioMixer = AudioManager.RequestMixerGroup(SourceType.MASTER).audioMixer;
+        MasterAudioMixer.SetFloat("Music", SettingsManager.Instance.musicVolumeSlider.value);
+        yield return null;
+    }
+
     // Use this for initialization
     void Awake()
     {
         m_DingSound = Resources.Load("Audio/SFX/ding-sound-effect") as AudioClip;
+        m_GlitchEffect = Resources.Load("Audio/SFX/glitch-sound-effect") as AudioClip;
         m_AudioSource = this.GetComponent<AudioSource>();
         _rbPausers = new List<RigidbodyPauser>();
 
@@ -154,8 +168,11 @@ public class GameManagerc : MonoBehaviour
         {
             m_AudioSource = this.gameObject.AddComponent<AudioSource>();
             m_AudioSource.clip = m_DingSound;
-            m_AudioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as GameObject).GetComponent<AudioSource>().outputAudioMixerGroup;
+            m_AudioSource.outputAudioMixerGroup = AudioManager.RequestMixerGroup(SourceType.SFX);
         }
+
+        StartCoroutine(SetInitalAudio());
+        
 
         SingletonTester.Instance.AddSingleton(this);
         InstanceCreated = true;
@@ -726,19 +743,20 @@ public class GameManagerc : MonoBehaviour
         UIManager.Instance.gameObject.SetActive(false);
         ControllerManager.Instance.gameObject.SetActive(false);
         CharacterSelectionManager.Instance.gameObject.SetActive(false);
-        GameAudioPicker.Instance.gameObject.SetActive(false);
+
         //PlayerUIArray.Instance.gameObject.SetActive(false);
 
         UINavigation.Instance.gameObject.SetActive(false);
         //Destroy the singleton objects
 
         ///Destroy(PlayerUIArray.Instance.gameObject);
-        Destroy(UIManager.Instance);
-        Destroy(ControllerManager.Instance);
-        Destroy(CharacterSelectionManager.Instance);
-        Destroy(UINavigation.Instance);
         Destroy(GameAudioPicker.Instance);
+        Destroy(UINavigation.Instance);
+        Destroy(CharacterSelectionManager.Instance);
+        Destroy(ControllerManager.Instance);
+        Destroy(UIManager.Instance);
         Destroy(GameAudioPicker.Instance.gameObject);
+        GetComponent<MusicFader>().FadeOut();
         StartCoroutine(ReturnToMenu());
         //Destroy(GameManagerc.Instance);
         //Destroy(this.gameObject);
@@ -746,8 +764,14 @@ public class GameManagerc : MonoBehaviour
 
     IEnumerator ReturnToMenu()
     {
+
         yield return new WaitForSeconds(2);
+        
+        GameAudioPicker.Instance.gameObject.SetActive(false);
+        Destroy(GameAudioPicker.Instance);
+        Destroy(GameAudioPicker.Instance.gameObject);
         SceneManager.LoadScene(0);
+        StartCoroutine(GetComponent<MusicFader>().MusicFadeIn());
         yield return null;
     }
     IEnumerator WaitForSeconds(float time)
@@ -793,7 +817,9 @@ public class GameManagerc : MonoBehaviour
         AnalogGlitch glitch = FindObjectOfType<AnalogGlitch>();
         var t = 0.0f;
         float maxTime = 1;
-
+        m_AudioSource.clip = m_GlitchEffect;
+        m_AudioSource.loop = true;
+        m_AudioSource.Play();
         while (t < maxTime)
         {
             //Scan line, Vertical Lines, Horizontal Shake, Colour Drift.
@@ -801,7 +827,6 @@ public class GameManagerc : MonoBehaviour
             {
                 t += Time.deltaTime / maxTime;
                 CurrentGlitchValues = Vector4.Lerp(Vector4.zero, lerpValues, t);
-
                 glitch.scanLineJitter = CurrentGlitchValues.x;
                 glitch.verticalJump = CurrentGlitchValues.y;
                 glitch.horizontalShake = CurrentGlitchValues.z;
@@ -842,6 +867,8 @@ public class GameManagerc : MonoBehaviour
             yield return null;
         }
         mbFinishedShowingScores = true;
+        m_AudioSource.loop = false;
+        m_AudioSource.clip = m_DingSound;
         yield return null;
     }
 

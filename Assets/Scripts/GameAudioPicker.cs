@@ -54,7 +54,7 @@ public class GameAudioPicker : MonoBehaviour
             m_AudioSource = this.gameObject.AddComponent<AudioSource>();
         }
 
-        m_AudioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/MusicAudio") as GameObject).GetComponent<AudioSource>().outputAudioMixerGroup;
+        m_AudioSource.outputAudioMixerGroup = AudioManager.RequestMixerGroup(SourceType.MUSIC);
         m_AudioSource.clip = MusicClips[Random.Range(0, MusicClips.Length)];
         m_AudioSource.loop = true;
         m_AudioSource.Play();
