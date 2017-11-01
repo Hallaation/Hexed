@@ -151,7 +151,8 @@ public class GameManagerc : MonoBehaviour
     {
         yield return new WaitForSeconds(1);
         MasterAudioMixer = AudioManager.RequestMixerGroup(SourceType.MASTER).audioMixer;
-        MasterAudioMixer.SetFloat("Music", SettingsManager.Instance.musicVolumeSlider.value);
+        if (SettingsManager.Instance)
+            MasterAudioMixer.SetFloat("Music", SettingsManager.Instance.musicVolumeSlider.value);
         yield return null;
     }
 
@@ -172,7 +173,7 @@ public class GameManagerc : MonoBehaviour
         }
 
         StartCoroutine(SetInitalAudio());
-        
+
 
         SingletonTester.Instance.AddSingleton(this);
         InstanceCreated = true;
@@ -287,20 +288,20 @@ public class GameManagerc : MonoBehaviour
             {
                 //if (waitForRoundEnd.Tick(Time.deltaTime))
                 //{
-                    //Don't think I need to scramble the spawns here, I'll do it anyway
-                    //reload scene
-                    ControllerManager.Instance.FindSpawns();
-                    foreach (PlayerStatus players in InGamePlayers)
-                    {
-                        players.ResetPlayer();
-                    }
-                    m_bRoundOver = false;
-                    if (FindObjectOfType<ScreenTransition>())
-                        FindObjectOfType<ScreenTransition>().OpenDoor();
-                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //reloads the scene.
-                    //TODO instead of reloading scene, just reset E V E R Y T H I N G in the scene.
-                    //End of round logic goes here.
-                //} 
+                //Don't think I need to scramble the spawns here, I'll do it anyway
+                //reload scene
+                ControllerManager.Instance.FindSpawns();
+                foreach (PlayerStatus players in InGamePlayers)
+                {
+                    players.ResetPlayer();
+                }
+                m_bRoundOver = false;
+                if (FindObjectOfType<ScreenTransition>())
+                    FindObjectOfType<ScreenTransition>().OpenDoor();
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //reloads the scene.
+                                                                                  //TODO instead of reloading scene, just reset E V E R Y T H I N G in the scene.
+                                                                                  //End of round logic goes here.
+                                                                                  //} 
             }
         }
         yield return null;
@@ -731,7 +732,7 @@ public class GameManagerc : MonoBehaviour
         PointsPanel = null;
         InGameScreenAnimator = null;
         mbFinishedShowingScores = false;
-      //  MenuPanel.SetActive(true);
+        //  MenuPanel.SetActive(true);
         //mbLoadedIntoGame = false;
         mbInstanceIsMe = false;
         //mbFinishedPanelShown = false;
@@ -766,7 +767,7 @@ public class GameManagerc : MonoBehaviour
     {
 
         yield return new WaitForSeconds(2);
-        
+
         GameAudioPicker.Instance.gameObject.SetActive(false);
         Destroy(GameAudioPicker.Instance);
         Destroy(GameAudioPicker.Instance.gameObject);
@@ -859,7 +860,7 @@ public class GameManagerc : MonoBehaviour
         else
         {
             CurrentGlitchValues = Vector4.Lerp(lerpValues, Vector4.zero, 1);
- 
+
             glitch.scanLineJitter = CurrentGlitchValues.x;
             glitch.verticalJump = CurrentGlitchValues.y;
             glitch.horizontalShake = CurrentGlitchValues.z;
@@ -909,10 +910,9 @@ public class GameManagerc : MonoBehaviour
             //play kill audio
             Kill.GetComponent<AudioSource>().Play();
             //remove screen
+            yield return new WaitForSeconds(1.5f);
             InGameScreenAnimator.SetTrigger("RemoveScreen");
             m_bRoundReady = true;
-
-            yield return new WaitForSeconds(1);
             KillImage.enabled = false;
             m_bAllowPause = true;
             //ready to play
