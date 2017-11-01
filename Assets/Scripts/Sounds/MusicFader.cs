@@ -31,6 +31,7 @@ public class MusicFader : MonoBehaviour
 
     public IEnumerator MusicFadeOut()
     {
+        MasterAudioMixer.GetFloat("Music", out MusicOriginalVolume);
         while (CurrentVolume != -80 && MusicFadeInB == false)
         {
             if (MusicFadeInB == true)

@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 using XboxCtrlrInput;
 using XInputDotNetPure;
 using Kino;
+using UnityEngine.Audio;
 //?
 //? F R O M
 //? T H E
@@ -111,6 +112,7 @@ public class GameManagerc : MonoBehaviour
     GameObject[] PointXPositions;
     GameObject[] PointYPositions;
 
+    public AudioMixer MasterAudioMixer;
     public AudioClip m_DingSound;
     private AudioSource m_AudioSource;
     //! Screen Glitch lerp values
@@ -145,6 +147,14 @@ public class GameManagerc : MonoBehaviour
             return mInstance;
         }
     }
+    IEnumerator SetInitalAudio()
+    {
+        yield return new WaitForSeconds(1);
+        MasterAudioMixer = AudioManager.RequestMixerGroup(SourceType.MASTER).audioMixer;
+        MasterAudioMixer.SetFloat("Music", SettingsManager.Instance.musicVolumeSlider.value);
+        yield return null;
+    }
+
     // Use this for initialization
     void Awake()
     {
@@ -160,6 +170,9 @@ public class GameManagerc : MonoBehaviour
             m_AudioSource.clip = m_DingSound;
             m_AudioSource.outputAudioMixerGroup = AudioManager.RequestMixerGroup(SourceType.SFX);
         }
+
+        StartCoroutine(SetInitalAudio());
+        
 
         SingletonTester.Instance.AddSingleton(this);
         InstanceCreated = true;
@@ -756,6 +769,7 @@ public class GameManagerc : MonoBehaviour
         Destroy(GameAudioPicker.Instance);
         Destroy(GameAudioPicker.Instance.gameObject);
         SceneManager.LoadScene(0);
+        StartCoroutine(GetComponent<MusicFader>().MusicFadeIn());
         yield return null;
     }
     IEnumerator WaitForSeconds(float time)
