@@ -362,6 +362,7 @@ public class GamemodeSelection : MonoBehaviour
         ScreenTransition transitionScreen = FindObjectOfType<ScreenTransition>();
         if (transitionScreen)
             transitionScreen.m_Animator.SetTrigger("CloseDoor");
+        UIManager.Instance.TurnActive();
         StartCoroutine(WaitforTransition());
         //if (transitionScrene.m_Animator.GetCurrentAnimatorStateInfo(0).IsName("Transition_Closed"))
         //{

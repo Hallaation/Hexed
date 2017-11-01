@@ -73,10 +73,11 @@ public class UIManager : MonoBehaviour
         //Add me to the singleton tester
         SingletonTester.Instance.AddSingleton(this);
         SceneManager.sceneLoaded += OnSceneLoad;
+
         m_SettingsPanel = GameObject.Find("Options_Panel");
         m_CreditsPanel = GameObject.Find("Credits_Panel"); //Currently null;
         m_CharacterSelectionPanel = GameObject.Find("Character_Selection");
-        m_SettingsPanel.SetActive((!m_SettingsPanel));
+        // m_SettingsPanel.SetActive((!m_SettingsPanel));
 
         //instance = FindObjectOfType<UIManager>();
 
@@ -212,6 +213,9 @@ public class UIManager : MonoBehaviour
     {
         if (!menuStatus.Contains(panelToMove))
         {
+            if (m_SettingsPanel.activeSelf)
+                m_SettingsPanel.SetActive(false);
+
             menuStatus.Push(panelToMove);
             //swap the trigger to the corresponding parameter name
             m_bMenuAnimator.SetTrigger(MenuTransitionBoolParameters[panelToMove.name]);
@@ -403,7 +407,7 @@ public class UIManager : MonoBehaviour
         {
             if (menuStatus.Count > 0)
                 menuStatus.Peek().SetActive(false);
- 
+
             ElementToOpen.SetActive(true);
             if (ElementToOpen.transform.childCount > 0 && openChildren)
             {
@@ -416,7 +420,7 @@ public class UIManager : MonoBehaviour
             _eventSystem.SetSelectedGameObject(null);
 
             //find defaults if there are any and set it to my selected.
-    
+
             if (menuStatus.Peek().GetComponentInChildren<DefaultButton>())
             {
                 _eventSystem.SetSelectedGameObject(null);
@@ -437,20 +441,19 @@ public class UIManager : MonoBehaviour
     {
         if (menuStatus.Count >= 1)
         {
-           // menuStatus.Peek().SetActive(false);
+            //menuStatus.Peek().SetActive(false);
             menuStatus.Pop();
-
+            _eventSystem.SetSelectedGameObject(null);
             if (menuStatus.Count >= 1)
             {
                 menuStatus.Peek().SetActive(true);
-
                 //find defaults if there are any and set it to my selected.
                 if (menuStatus.Peek().transform.Find("DefaultButton"))
                 {
                     _eventSystem.SetSelectedGameObject(null);
                     _eventSystem.SetSelectedGameObject(menuStatus.Peek().GetComponentInChildren<Button>().gameObject);
                     defaultToReturnTo = menuStatus.Peek().GetComponentInChildren<Button>().gameObject;
-                    
+
                 }
             }
         }
@@ -489,6 +492,21 @@ public class UIManager : MonoBehaviour
         else if (scene.buildIndex == 0) //else if I am in the main scene menu (assuming it is 0 as of right now)
         {
             m_bInMainMenu = true;
+            m_bMenuAnimator = FindObjectOfType<Canvas>().GetComponent<Animator>();
+            if (!m_SettingsPanel)
+            {
+                m_SettingsPanel = GameObject.Find("Options_Panel");
+            }
+
+            m_CreditsPanel = GameObject.Find("Credits_Panel"); //Currently null;
+            m_CharacterSelectionPanel = GameObject.Find("Character_Selection");
+            _eventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
+            Button vsButton = GameObject.Find("VS_Button").GetComponent<Button>();
+            Button SettingsButton = GameObject.Find("Settings_Button").GetComponent<Button>();
+
+            vsButton.onClick.AddListener(delegate { MainMenuChangePanel(GameObject.Find("Second_Panel")); });
+            SettingsButton.onClick.AddListener(delegate { MenuOpenPanel(m_SettingsPanel, "IsSettings"); });
+
             //find the first panel and push it to the stack
             menuStatus.Push(GameObject.Find("First_Panel"));
             m_ButtonAnimator = menuStatus.Peek().GetComponent<Animator>();
@@ -514,4 +532,9 @@ public class UIManager : MonoBehaviour
         m_bRemoveLastPanel = false;
     }
 
+
+    public void TurnActive()
+    {
+        m_SettingsPanel.SetActive(true);
+    }
 }

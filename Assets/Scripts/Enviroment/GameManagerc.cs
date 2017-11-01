@@ -118,6 +118,9 @@ public class GameManagerc : MonoBehaviour
     private Vector4 lerpValues = new Vector4(0.8f, 0.6f, 0.3f, 0.7f);
     private Vector4 CurrentGlitchValues = new Vector4();
     public List<RigidbodyPauser> _rbPausers;
+
+    public AudioClip m_GlitchEffect;
+
     //Lazy singleton
     public static GameManagerc Instance
     {
@@ -146,6 +149,7 @@ public class GameManagerc : MonoBehaviour
     void Awake()
     {
         m_DingSound = Resources.Load("Audio/SFX/ding-sound-effect") as AudioClip;
+        m_GlitchEffect = Resources.Load("Audio/SFX/glitch-sound-effect") as AudioClip;
         m_AudioSource = this.GetComponent<AudioSource>();
         _rbPausers = new List<RigidbodyPauser>();
 
@@ -154,7 +158,7 @@ public class GameManagerc : MonoBehaviour
         {
             m_AudioSource = this.gameObject.AddComponent<AudioSource>();
             m_AudioSource.clip = m_DingSound;
-            m_AudioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as GameObject).GetComponent<AudioSource>().outputAudioMixerGroup;
+            m_AudioSource.outputAudioMixerGroup = AudioManager.RequestMixerGroup(SourceType.SFX);
         }
 
         SingletonTester.Instance.AddSingleton(this);
@@ -797,7 +801,9 @@ public class GameManagerc : MonoBehaviour
         AnalogGlitch glitch = FindObjectOfType<AnalogGlitch>();
         var t = 0.0f;
         float maxTime = 1;
-
+        m_AudioSource.clip = m_GlitchEffect;
+        m_AudioSource.loop = true;
+        m_AudioSource.Play();
         while (t < maxTime)
         {
             //Scan line, Vertical Lines, Horizontal Shake, Colour Drift.
@@ -805,7 +811,6 @@ public class GameManagerc : MonoBehaviour
             {
                 t += Time.deltaTime / maxTime;
                 CurrentGlitchValues = Vector4.Lerp(Vector4.zero, lerpValues, t);
-
                 glitch.scanLineJitter = CurrentGlitchValues.x;
                 glitch.verticalJump = CurrentGlitchValues.y;
                 glitch.horizontalShake = CurrentGlitchValues.z;
@@ -846,6 +851,8 @@ public class GameManagerc : MonoBehaviour
             yield return null;
         }
         mbFinishedShowingScores = true;
+        m_AudioSource.loop = false;
+        m_AudioSource.clip = m_DingSound;
         yield return null;
     }
 
