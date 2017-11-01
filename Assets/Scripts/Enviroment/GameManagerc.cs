@@ -726,7 +726,7 @@ public class GameManagerc : MonoBehaviour
         UIManager.Instance.gameObject.SetActive(false);
         ControllerManager.Instance.gameObject.SetActive(false);
         CharacterSelectionManager.Instance.gameObject.SetActive(false);
-        GameAudioPicker.Instance.gameObject.SetActive(false);
+
         //PlayerUIArray.Instance.gameObject.SetActive(false);
 
         UINavigation.Instance.gameObject.SetActive(false);
@@ -737,8 +737,7 @@ public class GameManagerc : MonoBehaviour
         Destroy(ControllerManager.Instance.gameObject);
         Destroy(CharacterSelectionManager.Instance.gameObject);
         Destroy(UINavigation.Instance.gameObject);
-        Destroy(GameAudioPicker.Instance);
-        Destroy(GameAudioPicker.Instance.gameObject);
+        GetComponent<MusicFader>().FadeOut();
         StartCoroutine(ReturnToMenu());
         //Destroy(GameManagerc.Instance);
         //Destroy(this.gameObject);
@@ -746,7 +745,12 @@ public class GameManagerc : MonoBehaviour
 
     IEnumerator ReturnToMenu()
     {
+
         yield return new WaitForSeconds(2);
+        
+        GameAudioPicker.Instance.gameObject.SetActive(false);
+        Destroy(GameAudioPicker.Instance);
+        Destroy(GameAudioPicker.Instance.gameObject);
         SceneManager.LoadScene(0);
         yield return null;
     }

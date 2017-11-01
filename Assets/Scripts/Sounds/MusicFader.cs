@@ -89,6 +89,7 @@ public class MusicFader : MonoBehaviour
 
             yield return new WaitForEndOfFrame();
         }
+        MusicFadeInB = false;
         yield return null;
     }
 }

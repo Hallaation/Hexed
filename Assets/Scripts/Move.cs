@@ -225,7 +225,7 @@ public class Move : MonoBehaviour
                         movementSpeed = StoredMoveSpeed * System.Convert.ToInt16(GameManagerc.Instance.RoundReady);
                         if (CheckForDownedKill())
                             return;
-                        Quack();
+                       // Quack();
                         CalculateMovement();
                         CheckForPickup();
                         Attack(TriggerReleaseCheck());
