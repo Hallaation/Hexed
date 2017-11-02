@@ -52,10 +52,9 @@ GameObject:
   - component: {fileID: 4104049731936620}
   - component: {fileID: 212894456788606870}
   - component: {fileID: 95210959263218310}
-  - component: {fileID: 114871196914284096}
   - component: {fileID: 114912551670680866}
   m_Layer: 0
-  m_Name: Character001_Body
+  m_Name: Character002_Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -186,7 +185,7 @@ GameObject:
   - component: {fileID: 212658783200579220}
   - component: {fileID: 95851908060712318}
   m_Layer: 0
-  m_Name: Character001_Feet
+  m_Name: Character002_Feet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1286,7 +1285,7 @@ Animator:
   m_GameObject: {fileID: 1094630052173638}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 73d2dc106fdc4814bb82a69f00f59813, type: 2}
+  m_Controller: {fileID: 9100000, guid: a5e5a5c25d650b44a8c9cfc35407ca6d, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -1337,7 +1336,7 @@ Animator:
   m_GameObject: {fileID: 1245101086678656}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: bbaa473fcf8ff5740b32ed73d285a959, type: 2}
+  m_Controller: {fileID: 9100000, guid: e7441454e63a2554a974c1c547a4f313, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -2151,10 +2150,9 @@ MonoBehaviour:
   stunBar: {fileID: 0}
   stunMask: {fileID: 0}
   DeadSprites:
-  - {fileID: 21300098, guid: 41d3dad8bba4e174e8b80cce222ff08e, type: 3}
-  - {fileID: 21300104, guid: 41d3dad8bba4e174e8b80cce222ff08e, type: 3}
-  - {fileID: 21300114, guid: 41d3dad8bba4e174e8b80cce222ff08e, type: 3}
-  - {fileID: 21300116, guid: 41d3dad8bba4e174e8b80cce222ff08e, type: 3}
+  - {fileID: 21300102, guid: f91ad74b68703c840b84a3b7bcda7143, type: 3}
+  - {fileID: 21300104, guid: f91ad74b68703c840b84a3b7bcda7143, type: 3}
+  - {fileID: 21300114, guid: f91ad74b68703c840b84a3b7bcda7143, type: 3}
   StunnedSprites:
   - {fileID: 21300094, guid: 41d3dad8bba4e174e8b80cce222ff08e, type: 3}
   - {fileID: 21300096, guid: 41d3dad8bba4e174e8b80cce222ff08e, type: 3}
@@ -2328,17 +2326,6 @@ MonoBehaviour:
   - {fileID: 1556113154150286, guid: 5ac9d5dc43eac11469de65162dc05e7d, type: 2}
   - {fileID: 1290339145213612, guid: e64bad0f14da79444a1f540b4bd72711, type: 2}
   BloodSpawner: 0
---- !u!114 &114871196914284096
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1094630052173638}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a03d3a00ad09404ab318a9f78ef6498, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114872922223878490
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2594,7 +2581,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300012, guid: 41d3dad8bba4e174e8b80cce222ff08e, type: 3}
+  m_Sprite: {fileID: 21300012, guid: f91ad74b68703c840b84a3b7bcda7143, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -2699,7 +2686,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 4
-  m_Sprite: {fileID: 21300000, guid: 41d3dad8bba4e174e8b80cce222ff08e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4d65f0834c9d9f649917ae54ab6aedab, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
