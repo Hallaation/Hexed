@@ -5,24 +5,18 @@ using UnityEngine.Audio;
 
 public class MusicFader : MonoBehaviour
 {
-    bool MixerFound = false;
-    AudioMixer MenuAudioMasterMixer;
+    AudioMixer MasterAudioMixer;
     float MusicOriginalVolume = 0;
     float CurrentVolume;
-    Transform SettingsManagerGameObject;
-    SettingsManager SettingsManagerScript;
+
     public float FadeSpeed = 15;
     bool MusicFadeInB = false;
     // Use this for initialization
-    void Start()
+    private void Awake()
     {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        MasterAudioMixer = AudioManager.RequestMixerGroup(SourceType.MASTER).audioMixer;
+        MasterAudioMixer.GetFloat("Music", out MusicOriginalVolume);
+        CurrentVolume = MusicOriginalVolume;
     }
 
     public void FadeOut()
@@ -37,19 +31,13 @@ public class MusicFader : MonoBehaviour
 
     public IEnumerator MusicFadeOut()
     {
-        if (MixerFound == false)
-        {
-            MenuAudioMasterMixer = (Resources.Load("AudioMixer/MasterAudio") as GameObject).GetComponent<AudioSource>().outputAudioMixerGroup.audioMixer;
-            MixerFound = true;
-            MenuAudioMasterMixer.GetFloat("Music", out MusicOriginalVolume);
-            CurrentVolume = MusicOriginalVolume;
-        }
-        while (CurrentVolume != -80)
+        MasterAudioMixer.GetFloat("Music", out MusicOriginalVolume);
+        while (CurrentVolume != -80 && MusicFadeInB == false)
         {
             if (MusicFadeInB == true)
             {
                 CurrentVolume = MusicOriginalVolume;
-                MenuAudioMasterMixer.SetFloat("Music", CurrentVolume);
+                MasterAudioMixer.SetFloat("Music", CurrentVolume);
                 SettingsManager.Instance.musicVolumeSlider.value = CurrentVolume;
                 yield return null;
             }
@@ -58,8 +46,7 @@ public class MusicFader : MonoBehaviour
             {
                 CurrentVolume = -80;
             }
-            Debug.Log(CurrentVolume);
-            MenuAudioMasterMixer.SetFloat("Music", CurrentVolume);
+            MasterAudioMixer.SetFloat("Music", CurrentVolume);
             SettingsManager.Instance.musicVolumeSlider.value = CurrentVolume;
 
             yield return new WaitForEndOfFrame();
@@ -68,28 +55,21 @@ public class MusicFader : MonoBehaviour
     }
     public IEnumerator MusicFadeIn()
     {
-        if (MixerFound == false)
-        {
-            MenuAudioMasterMixer = (Resources.Load("AudioMixer/MasterAudio") as GameObject).GetComponent<AudioSource>().outputAudioMixerGroup.audioMixer;
-            MixerFound = true;
-            MenuAudioMasterMixer.GetFloat("Music", out MusicOriginalVolume);
-            CurrentVolume = MusicOriginalVolume;
-        }
         while (CurrentVolume != MusicOriginalVolume)
         {
             MusicFadeInB = true;
-            
+
             CurrentVolume = CurrentVolume + (FadeSpeed * Time.deltaTime);
             if (CurrentVolume > MusicOriginalVolume)
             {
                 CurrentVolume = MusicOriginalVolume;
             }
-            Debug.Log(CurrentVolume);
-            MenuAudioMasterMixer.SetFloat("Music", CurrentVolume);
+            MasterAudioMixer.SetFloat("Music", CurrentVolume);
             SettingsManager.Instance.musicVolumeSlider.value = CurrentVolume;
 
             yield return new WaitForEndOfFrame();
         }
+        MusicFadeInB = false;
         yield return null;
     }
 }

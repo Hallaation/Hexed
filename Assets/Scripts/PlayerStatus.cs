@@ -35,6 +35,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
     public float m_fStunTime = 1;
     public float m_fMaximumStunWait = 2;
     public float m_fStunTimerReduction = 0.5f;
+
     Timer stunTimer;
     Timer resetStunTimer;
 
@@ -51,13 +52,18 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
     private GameObject _PlayerCanvas;
     private GameObject _HealthMask;
     private GameObject HealthContainer;
+
     [SerializeField]
     private Image HealthLost;
+    [SerializeField]
+    private float m_fShowHealthMaxTime = 2.0f;
     private Timer healthLossTimer;
     private Timer ShowHealthChangeTimer;
     private bool m_bShowHealthLoss = false;
     private bool m_bShowHealthChange = false;
     private bool m_bLeftStun = false;
+    [HideInInspector]
+    public bool m_bKilledBySmash;
     Rigidbody2D _rigidbody;
     [HideInInspector]
     public int spawnIndex;
@@ -69,6 +75,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
 
     private GameObject killbarContainer;
 
+    public Sprite HeadSmashDeathSprite;
     public Sprite[] DeadSprites;
     public Sprite[] StunnedSprites;
     private bool DeathSpriteChanged = false;
@@ -83,14 +90,14 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
     void Start()
     {
         m_MoveClass = this.GetComponent<Move>();
-        ShowHealthChangeTimer = new Timer(1.5f);
+        ShowHealthChangeTimer = new Timer(m_fShowHealthMaxTime);
         healthLossTimer = new Timer(0.9f);
 
         _cameraControlInstance = CameraControl.mInstance;
         m_SpriteRenderer = this.transform.Find("Sprites").GetChild(0).GetComponent<SpriteRenderer>();
 
         m_MeleeHitAudioSource = this.gameObject.AddComponent<AudioSource>();
-        m_MeleeHitAudioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as GameObject).GetComponent<AudioSource>().outputAudioMixerGroup;
+        m_MeleeHitAudioSource.outputAudioMixerGroup = AudioManager.RequestMixerGroup(SourceType.SFX);
         //m_MeleeHitAudioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as  AudioSource).outputAudioMixerGroup;
         m_MeleeHitAudioSource.playOnAwake = false;
         m_MeleeHitAudioSource.spatialBlend = 0.8f;
@@ -127,6 +134,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
 
     void Update()
     {
+        ShowHealthChangeTimer.mfTimeToWait = m_fShowHealthMaxTime;
         if (Input.GetKeyDown(KeyCode.K))
         {
             if (m_bDead)
@@ -151,7 +159,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             {
                 m_iScore = GameManagerc.Instance.PlayerWins[this];
             }
-
+            this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, 0);
             //if i've been punched once, start the timer, once the timer has reached the end, reset the amount of times punched.
             if (m_iTimesPunched >= 1)
             {
@@ -171,6 +179,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             if (m_bDead)
             {
                 m_SpriteRenderer.sortingOrder = -4;
+                this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, 0.35f);
                 m_MoveClass.StopChoke();
                 if (m_MoveClass.heldWeapon)
                 {
@@ -178,27 +187,34 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
                 }
                 SetAllAnimatorsFalse(false);
                 PlayerSprite.material.color = Color.grey;
+
                 //this.GetComponent<Rigidbody2D>().simulated = false; wow .
                 foreach (Collider2D item in GetComponentsInChildren<Collider2D>())
                 {
                     if (item.GetComponentsInChildren<Collider2D>().Length > 0)
                     {
-                        foreach (Collider2D ChildrenColliders in item.GetComponentsInChildren<Collider2D>() )
+                        foreach (Collider2D ChildrenColliders in item.GetComponentsInChildren<Collider2D>())
                         {
                             ChildrenColliders.enabled = false;
                         }
                         item.enabled = false;
                     }
                 }
+
                 killMePrompt.SetActive(false);
                 killMeArea.SetActive(false);
                 stunBarContainer.SetActive(false);
+
                 m_MoveClass.GetBodyAnimator().enabled = false;
                 m_MoveClass.GetFeetAnimator().enabled = false;
+
                 if (DeadSprites.Length > 0 && !DeathSpriteChanged)
                 {
                     DeathSpriteChanged = true;
-                    m_SpriteRenderer.sprite = DeadSprites[Random.Range(0, DeadSprites.Length)];
+                    if (!m_bKilledBySmash)
+                        m_SpriteRenderer.sprite = DeadSprites[Random.Range(0, DeadSprites.Length)];
+                    else
+                        m_SpriteRenderer.sprite = HeadSmashDeathSprite;
                 }
 
                 return;
@@ -212,7 +228,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
                     StunSpriteChanged = true;
                     m_SpriteRenderer.sprite = StunnedSprites[Random.Range(0, StunnedSprites.Length)];
                     m_MoveClass.GetBodyAnimator().SetBool("Stunned", true);
-                    
+
                 }
 
                 m_SpriteRenderer.sortingOrder = -4;
@@ -275,7 +291,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
 
                 if (this.transform.GetChild(1).tag == "Stunned")
                 {
-                    // Debug.Log(this.transform.GetChild(0).tag);
+
                     this.transform.GetChild(1).gameObject.GetComponent<Collider2D>().enabled = false;        //? child 0 is weaponSpot... 
                 }
                 else
@@ -329,9 +345,18 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             //Showing health change is when the health bar shows up. health loss is seperate.
             if (m_bShowHealthChange)
             {
-                HealthContainer.SetActive(true);
-                //HealthContainer.transform.position = -this.transform.up * 0.5f;
 
+                HealthContainer.SetActive(true);
+                if (stunBarContainer.activeSelf)
+                {
+                    HealthContainer.transform.localPosition = new Vector3(0, 150, 0);
+                }
+                else
+                {
+                    HealthContainer.transform.localPosition = new Vector3(0, 100, 0);
+                }
+
+                //HealthContainer.transform.position = -this.transform.up * 0.5f;
                 if (ShowHealthChangeTimer.Tick(Time.deltaTime))
                 {
                     HealthContainer.SetActive(false);
@@ -349,18 +374,18 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         //SetAllAnimatorsFalse();
         //        GetComponent<Move>().SetActive(false);
         _rigidbody.velocity = ForceApplied;
-        //Debug.Log("Corotuine should be here");
+
         StartCoroutine(MiniStun(StunTime));
 
     }
 
     public IEnumerator MiniStun(float StunTime)
     {
-        //Debug.Log(StunTime);
+
         yield return new WaitForSeconds(StunTime);
         m_bMiniStun = false;
         yield return null;
-        //Debug.Log("Done");
+
     }
 
     /// <summary>
@@ -378,7 +403,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         m_MoveClass.StopChoke();
         this.GetComponent<Move>().StatusApplied();
         SetAllAnimatorsFalse(true);                                         //! This was a problem for the animator, edited to take in a if stunned bool.
-        m_MoveClass.GetBodyAnimator().SetBool("Test", true); 
+        m_MoveClass.GetBodyAnimator().SetBool("Test", true);
         _rigidbody.velocity = ThrownItemVelocity;
         m_bStunned = true;
         m_iTimesPunched = 0;
@@ -448,7 +473,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
                 {
                     ChildrenColliders.enabled = true;
                 }
-                item.enabled = true; 
+                item.enabled = true;
             }
         }
     }
@@ -618,8 +643,8 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             {
                 if (parameter.type == AnimatorControllerParameterType.Bool) //snaity check
                 {
-                    if(a_Stunned == true && parameter.name != "BeingSmashed")
-                    Body.SetBool(parameter.name, false);
+                    if (a_Stunned == true && parameter.name != "BeingSmashed")
+                        Body.SetBool(parameter.name, false);
                 }
             }
         }
@@ -632,7 +657,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
                     Feet.SetBool(parameter.name, false);
             }
         }
-        if(a_Stunned == true)
+        if (a_Stunned == true)
         {
             Body.SetBool("Stunned", true);
         }

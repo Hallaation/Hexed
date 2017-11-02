@@ -23,7 +23,7 @@ public class HitByMeleeAction : MonoBehaviour, IHitByMelee
         {
             if (!this.GetComponent<HitByBulletAction>())
             {
-                //Debug.LogError("Hit By Bullet Action script not found!");
+
             }
             else
             {
@@ -42,7 +42,7 @@ public class HitByMeleeAction : MonoBehaviour, IHitByMelee
         if (m_audioSource == null)
         {
             m_audioSource = this.gameObject.AddComponent<AudioSource>();
-            m_audioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as GameObject).GetComponent<AudioSource>().outputAudioMixerGroup;
+            m_audioSource.outputAudioMixerGroup = AudioManager.RequestMixerGroup(SourceType.SFX);
             //m_audioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as  AudioSource).outputAudioMixerGroup;
             m_audioSource.playOnAwake = false;
             m_audioSource.spatialBlend = 0.8f;
@@ -53,6 +53,7 @@ public class HitByMeleeAction : MonoBehaviour, IHitByMelee
 
     public void HitByMelee(Weapon meleeWeapon, AudioClip soundEffect, float Volume = 1, float Pitch = 1)
     {
+        m_audioSource.clip = m_audioClip;
         m_audioSource.Play();
     }
 

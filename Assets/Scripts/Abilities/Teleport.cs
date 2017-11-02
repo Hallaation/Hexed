@@ -10,11 +10,12 @@ public class Teleport : BaseAbility
     [Space]
 
     [Header("Teleport Variables")]
-    public float m_TeleportForce = 10;
-
+    public float m_DashSpeed = 50;
+    public float m_DurationOfDash = .15f;
+    bool Dashing; public bool GetDashing() { return Dashing; } 
     Rigidbody2D _rigidBody;
     ControllerSetter m_controller;
-
+    float m_TeleportForce;
 
     // Use this for initialization
     //void Start()
@@ -44,6 +45,35 @@ public class Teleport : BaseAbility
         if (m_iCurrentCharges != 0 && ButtonHasBeenUp == true && UsedAbility == true)
         {
             //otherwise if it is clear, allow the player to teleport
+            Dashing = true;
+
+            ButtonHasBeenUp = false;
+            m_iCurrentCharges--; //deduct from available charges.
+            StartCoroutine(SetDashForDuration());
+            //currentMana -= ManaCost;
+        }
+        if (XCI.GetAxis(XboxAxis.LeftTrigger, m_controller.mXboxController) < 0.1)
+        {
+            ButtonHasBeenUp = true;
+        }
+
+    }
+
+    IEnumerator SetDashForDuration()
+    {
+        yield return new WaitForSeconds(m_DurationOfDash);
+        Dashing = false;
+        yield return null;
+
+    }
+
+    public void TeleportActive(bool UsedAbility)
+    {
+        ////if (currentMana >= ManaCost && ButtonHasBeenUp == true && UsedAbility == true)
+        //{
+        if (m_iCurrentCharges != 0 && ButtonHasBeenUp == true && UsedAbility == true)
+        {
+            //otherwise if it is clear, allow the player to teleport
 
             //makes a quaternion
             Quaternion LeftStickRotation = new Quaternion();
@@ -62,10 +92,10 @@ public class Teleport : BaseAbility
                 {
                     //float Xdistance = ((hitLeftStick.point.x) - (transform.position.x));
                     //float Ydistance = ((hitLeftStick.point.y) - (transform.position.y));
-                    //Debug.Log(this.transform.position - new Vector3(hitLeftStick.point.x, hitLeftStick.point.y));
+
                     _rigidBody.position = hitLeftStick.point + hitLeftStick.normal * 0.5f;
                     //_rigidBody.position = new Vector2(_rigidBody.position.x + Xdistance , _rigidBody.position.y + Ydistance);
-                   // Debug.Log("WallPrevention");
+
                 }
                 else
                     _rigidBody.position += new Vector2(rotation.x * m_TeleportForce, rotation.y * m_TeleportForce);
@@ -81,7 +111,7 @@ public class Teleport : BaseAbility
                     //float Ydistance = ((hit.point.y) - (transform.position.y));
                     //_rigidBody.position = new Vector2(_rigidBody.position.x + Xdistance , _rigidBody.position.y + Ydistance);
                     _rigidBody.position = hit.point + hit.normal * 0.5f;
-                   // Debug.Log("WallPrevention");
+
                 }
                 else
                     _rigidBody.position += new Vector2(this.transform.up.x * m_TeleportForce, this.transform.up.y * m_TeleportForce);  // Teleport full distance
@@ -96,8 +126,9 @@ public class Teleport : BaseAbility
         {
             ButtonHasBeenUp = true;
         }
-    }
 
+
+    }
 
 }
 

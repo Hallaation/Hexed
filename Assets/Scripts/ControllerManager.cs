@@ -69,7 +69,7 @@ public class ControllerManager : MonoBehaviour
         //smInstance = Instance;
         //GameObject spawnParent = GameObject.FindGameObjectWithTag("SpawnPoints");
         ////Find the spawn points
-        ////Debug.LogError(spawnParent.transform.childCount);
+
         //spawnPoints = new Transform[spawnParent.transform.childCount];
         //for (int i = 0; i < spawnParent.transform.childCount; ++i)
         //{
@@ -90,7 +90,7 @@ public class ControllerManager : MonoBehaviour
 
     IEnumerator LookForPlayers()
     {
-        // Debug.Log(nextPlayer);
+
         if (DebugMode)
         {
             for (int i = 0; i < maxPlayers; i++)
@@ -177,7 +177,9 @@ public class ControllerManager : MonoBehaviour
                 temp1.PassiveManaRegeneration = mine1.PassiveManaRegeneration;
                 temp1.m_fMinimumManaRequired = mine1.m_fMinimumManaRequired;
                 temp1.m_fMovementSpeedSlowDown = mine1.m_fMovementSpeedSlowDown;
-                temp1.m_TeleportForce = mine1.m_TeleportForce;
+                temp1.m_DashSpeed = mine1.m_DashSpeed;
+                temp1.m_DurationOfDash = mine1.m_DurationOfDash;
+                //temp1.m_TeleportForce = mine1.m_TeleportForce;
                 break;
 
             default: break;

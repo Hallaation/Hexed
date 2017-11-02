@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 using XboxCtrlrInput;
 using XInputDotNetPure;
 using Kino;
+using UnityEngine.Audio;
 //?
 //? F R O M
 //? T H E
@@ -111,6 +112,7 @@ public class GameManagerc : MonoBehaviour
     GameObject[] PointXPositions;
     GameObject[] PointYPositions;
 
+    public AudioMixer MasterAudioMixer;
     public AudioClip m_DingSound;
     private AudioSource m_AudioSource;
     //! Screen Glitch lerp values
@@ -118,6 +120,9 @@ public class GameManagerc : MonoBehaviour
     private Vector4 lerpValues = new Vector4(0.8f, 0.6f, 0.3f, 0.7f);
     private Vector4 CurrentGlitchValues = new Vector4();
     public List<RigidbodyPauser> _rbPausers;
+
+    public AudioClip m_GlitchEffect;
+
     //Lazy singleton
     public static GameManagerc Instance
     {
@@ -142,10 +147,20 @@ public class GameManagerc : MonoBehaviour
             return mInstance;
         }
     }
+    IEnumerator SetInitalAudio()
+    {
+        yield return new WaitForSeconds(1);
+        MasterAudioMixer = AudioManager.RequestMixerGroup(SourceType.MASTER).audioMixer;
+        if (SettingsManager.Instance)
+            MasterAudioMixer.SetFloat("Music", SettingsManager.Instance.musicVolumeSlider.value);
+        yield return null;
+    }
+
     // Use this for initialization
     void Awake()
     {
         m_DingSound = Resources.Load("Audio/SFX/ding-sound-effect") as AudioClip;
+        m_GlitchEffect = Resources.Load("Audio/SFX/glitch-sound-effect") as AudioClip;
         m_AudioSource = this.GetComponent<AudioSource>();
         _rbPausers = new List<RigidbodyPauser>();
 
@@ -154,8 +169,11 @@ public class GameManagerc : MonoBehaviour
         {
             m_AudioSource = this.gameObject.AddComponent<AudioSource>();
             m_AudioSource.clip = m_DingSound;
-            m_AudioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as GameObject).GetComponent<AudioSource>().outputAudioMixerGroup;
+            m_AudioSource.outputAudioMixerGroup = AudioManager.RequestMixerGroup(SourceType.SFX);
         }
+
+        StartCoroutine(SetInitalAudio());
+
 
         SingletonTester.Instance.AddSingleton(this);
         InstanceCreated = true;
@@ -173,7 +191,7 @@ public class GameManagerc : MonoBehaviour
             mbInstanceIsMe = true;
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
-        //Debug.Log(mInstance.gameObject);
+
         m_bRoundOver = false;
         Physics.gravity = new Vector3(0, 0, 10); //why
         m_bRoundReady = true;
@@ -268,22 +286,22 @@ public class GameManagerc : MonoBehaviour
             //If the scores has been shown
             if (mbFinishedShowingScores)
             {
-                if (waitForRoundEnd.Tick(Time.deltaTime))
+                //if (waitForRoundEnd.Tick(Time.deltaTime))
+                //{
+                //Don't think I need to scramble the spawns here, I'll do it anyway
+                //reload scene
+                ControllerManager.Instance.FindSpawns();
+                foreach (PlayerStatus players in InGamePlayers)
                 {
-                    //Don't think I need to scramble the spawns here, I'll do it anyway
-                    //reload scene
-                    ControllerManager.Instance.FindSpawns();
-                    foreach (PlayerStatus players in InGamePlayers)
-                    {
-                        players.ResetPlayer();
-                    }
-                    m_bRoundOver = false;
-                    if (FindObjectOfType<ScreenTransition>())
-                        FindObjectOfType<ScreenTransition>().OpenDoor();
-                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //reloads the scene.
-                    //TODO instead of reloading scene, just reset E V E R Y T H I N G in the scene.
-                    //End of round logic goes here.
+                    players.ResetPlayer();
                 }
+                m_bRoundOver = false;
+                if (FindObjectOfType<ScreenTransition>())
+                    FindObjectOfType<ScreenTransition>().OpenDoor();
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //reloads the scene.
+                                                                                  //TODO instead of reloading scene, just reset E V E R Y T H I N G in the scene.
+                                                                                  //End of round logic goes here.
+                                                                                  //} 
             }
         }
         yield return null;
@@ -370,7 +388,7 @@ public class GameManagerc : MonoBehaviour
                 if (PlayerWins[player] >= m_iPointsNeeded)
                 {
                     //Set the time scale to 0 (essentially pausing the game-ish)
-                    //Debug.LogError("Points required have been reached");
+
                     //Time.timeScale = 0;
                     //open the finish panel, UI manager will set all the children to true, thus rendering them
                     //#finish panel, 
@@ -448,7 +466,7 @@ public class GameManagerc : MonoBehaviour
                 ControllerManager.Instance.FindSpawns();
                 CharacterSelectionManager.Instance.LoadPlayers();
 
-                //Debug.Log("Loaded map and players");
+
             }
             //If I found the finished game panel
             if (GameObject.Find("FinishedGamePanel"))
@@ -511,7 +529,7 @@ public class GameManagerc : MonoBehaviour
             //Load player portraits.
             foreach (var item in CharacterSelectionManager.Instance.playerSelectedCharacter)
             {
-                //Debug.Log(item.Key);
+
                 int playerNumber = (int)item.Key - 1;
 
                 if (item.Value.GetComponent<BaseAbility>().m_CharacterPortrait) //If the character has a portrait
@@ -580,8 +598,6 @@ public class GameManagerc : MonoBehaviour
             GameObject KillAudio = ReadyFightContainer.transform.GetChild(0).gameObject;
             GameObject GetReady = ReadyFightContainer.transform.GetChild(1).gameObject;
 
-            Debug.Log(KillAudio);
-            Debug.Log(GetReady);
             //if (m_bShowReadyFight)
 
             if (m_bDoReadyKill)
@@ -635,7 +651,7 @@ public class GameManagerc : MonoBehaviour
 
     public void Rematch()
     {
-        // Debug.Log("Start of rematch");
+
         //reset the time scale
         GameManagerc.Instance.Paused = false;
         //The round is not over
@@ -670,7 +686,6 @@ public class GameManagerc : MonoBehaviour
         //      }
         //  }
 
-        //Debug.Log("End of rematch after button");
     }
 
     /// <summary>
@@ -717,7 +732,7 @@ public class GameManagerc : MonoBehaviour
         PointsPanel = null;
         InGameScreenAnimator = null;
         mbFinishedShowingScores = false;
-        MenuPanel.SetActive(true);
+        //  MenuPanel.SetActive(true);
         //mbLoadedIntoGame = false;
         mbInstanceIsMe = false;
         //mbFinishedPanelShown = false;
@@ -729,19 +744,20 @@ public class GameManagerc : MonoBehaviour
         UIManager.Instance.gameObject.SetActive(false);
         ControllerManager.Instance.gameObject.SetActive(false);
         CharacterSelectionManager.Instance.gameObject.SetActive(false);
-        GameAudioPicker.Instance.gameObject.SetActive(false);
+
         //PlayerUIArray.Instance.gameObject.SetActive(false);
 
         UINavigation.Instance.gameObject.SetActive(false);
         //Destroy the singleton objects
 
         ///Destroy(PlayerUIArray.Instance.gameObject);
-        Destroy(UIManager.Instance.gameObject);
-        Destroy(ControllerManager.Instance.gameObject);
-        Destroy(CharacterSelectionManager.Instance.gameObject);
-        Destroy(UINavigation.Instance.gameObject);
         Destroy(GameAudioPicker.Instance);
+        Destroy(UINavigation.Instance);
+        Destroy(CharacterSelectionManager.Instance);
+        Destroy(ControllerManager.Instance);
+        Destroy(UIManager.Instance);
         Destroy(GameAudioPicker.Instance.gameObject);
+        GetComponent<MusicFader>().FadeOut();
         StartCoroutine(ReturnToMenu());
         //Destroy(GameManagerc.Instance);
         //Destroy(this.gameObject);
@@ -749,8 +765,14 @@ public class GameManagerc : MonoBehaviour
 
     IEnumerator ReturnToMenu()
     {
+
         yield return new WaitForSeconds(2);
+
+        GameAudioPicker.Instance.gameObject.SetActive(false);
+        Destroy(GameAudioPicker.Instance);
+        Destroy(GameAudioPicker.Instance.gameObject);
         SceneManager.LoadScene(0);
+        StartCoroutine(GetComponent<MusicFader>().MusicFadeIn());
         yield return null;
     }
     IEnumerator WaitForSeconds(float time)
@@ -782,7 +804,6 @@ public class GameManagerc : MonoBehaviour
         //TODO play ding.
         m_AudioSource.Play();
         yield return new WaitForSeconds(2);
-        mbFinishedShowingScores = true;
         InGameScreenAnimator.SetTrigger("RemoveScreen");
         StartCoroutine(InterpolateGlitch(false));
         //if (FindObjectOfType<ScreenTransition>())
@@ -797,7 +818,9 @@ public class GameManagerc : MonoBehaviour
         AnalogGlitch glitch = FindObjectOfType<AnalogGlitch>();
         var t = 0.0f;
         float maxTime = 1;
-
+        m_AudioSource.clip = m_GlitchEffect;
+        m_AudioSource.loop = true;
+        m_AudioSource.Play();
         while (t < maxTime)
         {
             //Scan line, Vertical Lines, Horizontal Shake, Colour Drift.
@@ -805,7 +828,6 @@ public class GameManagerc : MonoBehaviour
             {
                 t += Time.deltaTime / maxTime;
                 CurrentGlitchValues = Vector4.Lerp(Vector4.zero, lerpValues, t);
-                //Debug.Log(CurrentGlitchValues);
                 glitch.scanLineJitter = CurrentGlitchValues.x;
                 glitch.verticalJump = CurrentGlitchValues.y;
                 glitch.horizontalShake = CurrentGlitchValues.z;
@@ -816,7 +838,7 @@ public class GameManagerc : MonoBehaviour
             {
                 t += Time.deltaTime / maxTime;
                 CurrentGlitchValues = Vector4.Lerp(lerpValues, Vector4.zero, t);
-                //Debug.Log(CurrentGlitchValues);
+
                 glitch.scanLineJitter = CurrentGlitchValues.x;
                 glitch.verticalJump = CurrentGlitchValues.y;
                 glitch.horizontalShake = CurrentGlitchValues.z;
@@ -824,6 +846,31 @@ public class GameManagerc : MonoBehaviour
                 yield return null;
             }
         }
+
+        if (!Reverse)
+        {
+            CurrentGlitchValues = Vector4.Lerp(Vector4.zero, lerpValues, 1);
+
+            glitch.scanLineJitter = CurrentGlitchValues.x;
+            glitch.verticalJump = CurrentGlitchValues.y;
+            glitch.horizontalShake = CurrentGlitchValues.z;
+            glitch.colorDrift = CurrentGlitchValues.w;
+            yield return null;
+        }
+        else
+        {
+            CurrentGlitchValues = Vector4.Lerp(lerpValues, Vector4.zero, 1);
+
+            glitch.scanLineJitter = CurrentGlitchValues.x;
+            glitch.verticalJump = CurrentGlitchValues.y;
+            glitch.horizontalShake = CurrentGlitchValues.z;
+            glitch.colorDrift = CurrentGlitchValues.w;
+            yield return null;
+        }
+        mbFinishedShowingScores = true;
+        m_AudioSource.loop = false;
+        m_AudioSource.clip = m_DingSound;
+        yield return null;
     }
 
     IEnumerator ReadyKill(GameObject ReadyFightContainer)
@@ -845,7 +892,7 @@ public class GameManagerc : MonoBehaviour
             getReady.GetComponent<Image>().enabled = false;
             InGameScreenAnimator.SetTrigger("ShowScreen");
             while (!transition.DoorOpened) { yield return null; } //while the door hasn't opened yet.
-            yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(0.5f);
             //if (m_bDoGlitch)
             //{
             //Turn kill off
@@ -863,10 +910,9 @@ public class GameManagerc : MonoBehaviour
             //play kill audio
             Kill.GetComponent<AudioSource>().Play();
             //remove screen
+            yield return new WaitForSeconds(1.5f);
             InGameScreenAnimator.SetTrigger("RemoveScreen");
             m_bRoundReady = true;
-
-            yield return new WaitForSeconds(1);
             KillImage.enabled = false;
             m_bAllowPause = true;
             //ready to play

@@ -84,8 +84,6 @@ public class GamemodeSelection : MonoBehaviour
             {
                 item.SetActive(false);
             }
-            //Debug.Log(UIManager.Instance);
-            //Debug.Log(UIManager.Instance.defaultPanel);
 
             UIManager.Instance.defaultPanel = this.transform.parent.gameObject;
             UIManager.Instance.menuStatus.Push(UIManager.Instance.defaultPanel);
@@ -206,7 +204,6 @@ public class GamemodeSelection : MonoBehaviour
                                     }
                                     else
                                     {
-                                        //   Debug.Log("Decrement");
                                         m_iMapPickIndex--;
                                     }
 
@@ -242,7 +239,6 @@ public class GamemodeSelection : MonoBehaviour
                                 }
                                 else
                                 {
-                                    // Debug.Log("Decrement");
                                     m_iPointWinIndex--;
                                 }
 
@@ -290,7 +286,6 @@ public class GamemodeSelection : MonoBehaviour
                 if (XCI.GetAxis(XboxAxis.LeftStickX, XboxController.First + i) != 0)
                 {
                     ResetSticks = false;
-                    //Debug.Log("one of them isnt 0");
                     i = int.MaxValue;
                     break;
                 }
@@ -330,7 +325,6 @@ public class GamemodeSelection : MonoBehaviour
         for (int i = 0; i < (int)PlayerIndex.Four; ++i)
         {
             Vector2 StickInput = new Vector2(XCI.GetAxisRaw(XboxAxis.LeftStickX, XboxController.First + i), 0);
-            //Debug.Log(StickInput);
             StickInput = CheckDeadZone(StickInput, 0.12f);
             if (ResetSticks)
             {
@@ -368,6 +362,7 @@ public class GamemodeSelection : MonoBehaviour
         ScreenTransition transitionScreen = FindObjectOfType<ScreenTransition>();
         if (transitionScreen)
             transitionScreen.m_Animator.SetTrigger("CloseDoor");
+        UIManager.Instance.TurnActive();
         StartCoroutine(WaitforTransition());
         //if (transitionScrene.m_Animator.GetCurrentAnimatorStateInfo(0).IsName("Transition_Closed"))
         //{
@@ -388,6 +383,5 @@ public class GamemodeSelection : MonoBehaviour
     }
     public void ButtonTest()
     {
-        //Debug.Log("Test button");
     }
 }

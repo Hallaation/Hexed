@@ -20,11 +20,12 @@ public class Bullet : MonoBehaviour, Reset
     [HideInInspector]
     public PlayerStatus bulletOwner;
     [HideInInspector]
-    public float m_iDamage;
+    public int m_iDamage;
     public bool m_bGiveIFrames = false;
     public float m_fBulletImpactKnockBack = 5;
     public TrailRenderer trail;
     public float m_fMaximumTime = 60;
+    public bool m_bBouncyBullet = false;
     //public GameObject HitParticle;
 
 
@@ -69,14 +70,12 @@ public class Bullet : MonoBehaviour, Reset
             // Ray2D WallCheckRay = new Ray2D(transform.position, transform.right);
             //Raycast from me, to my right vector (because all the rotations are fucked) on the distance I'll travel for the next frame.
             //Only raycast against the player, wall, door and glass 
-            RaycastHit2D RayHit = Physics2D.Raycast(this.transform.position, this.transform.right, m_rigidBody.velocity.magnitude * Time.fixedDeltaTime * 2,
+            RaycastHit2D RayHit = Physics2D.Raycast(this.transform.position, m_rigidBody.velocity.normalized, m_rigidBody.velocity.magnitude * Time.fixedDeltaTime * 2,
                 (/*Player */ 1 << 8 | /*Shield*/ 1 << 9 | /* Wall */1 << 10 |/*Glass*/ 1 << 14 | /*Door*/ 1 << 11));
-            Debug.DrawRay(this.transform.position, this.transform.right * m_rigidBody.velocity.magnitude * Time.fixedDeltaTime * 2, Color.red, 10.0f);
-
+            Debug.DrawRay(this.transform.position, m_rigidBody.velocity.normalized * m_rigidBody.velocity.magnitude * Time.fixedDeltaTime * 2, Color.red, 10.0f);
             //Debug.Break();
             if (RayHit)
             {
-
                 //If I hit a wall, glass or door, snap me to their location and turn me off
                 if (RayHit.transform.gameObject.layer == LayerMask.NameToLayer("Wall") || RayHit.transform.gameObject.layer == LayerMask.NameToLayer("Door") || RayHit.transform.gameObject.layer == LayerMask.NameToLayer("Glass"))
                 {
@@ -89,8 +88,15 @@ public class Bullet : MonoBehaviour, Reset
                         }
                     }
                     GameManagerc.Instance._rbPausers.Remove(this.GetComponent<RigidbodyPauser>());
-                    m_bStopRayCasts = true;
-                    StopBullet(RayHit);
+                    //StopBullet(RayHit);
+                    if (m_bBouncyBullet)
+                    {
+                        ReflectBullet(RayHit);
+                    }
+                    else
+                    {
+                        StopBullet(RayHit);
+                    }
                     //If a wall, play the particle
 
                     //bullet reflection
@@ -100,8 +106,9 @@ public class Bullet : MonoBehaviour, Reset
                     //Vector3 velocity = this.GetComponent<Rigidbody2D>().velocity;
                     //this.GetComponent<Rigidbody2D>().velocity = Vector3.Reflect(velocity, RayHit.transform.up);
                     //this.GetComponent<Bullet>().bulletOwner = null;
+                    if (!m_bBouncyBullet)
+                        StartCoroutine(PlayParticle(RayHit.point));
 
-                    StartCoroutine(PlayParticle(RayHit.point));
                 }
                 else if (RayHit.transform.gameObject.layer != LayerMask.NameToLayer("Player"))
                 {
@@ -133,8 +140,6 @@ public class Bullet : MonoBehaviour, Reset
 
                             }
                         }
-                        //Debug.Log("Hit player");
-                        //Debug.Log("Raycast hit player");
                         m_rigidBody.position = RayHit.point; //Snap the bullet to the collided object
                         RayHit.transform.GetComponent<Rigidbody2D>().position += (Vector2)this.transform.right * m_fBulletImpactKnockBack;
                         PlayerStatus PlayerIHit = RayHit.transform.GetComponent<PlayerStatus>(); //Store the player I hit temporarily
@@ -142,7 +147,7 @@ public class Bullet : MonoBehaviour, Reset
                         PlayerIHit.HitPlayer(this, m_bGiveIFrames);
                         if (PlayerIHit.m_iHealth <= 0)
                         {
-                            PlayerIHit.IsDead = true;       
+                            PlayerIHit.IsDead = true;
                             PlayerIHit.GetComponent<Rigidbody2D>().velocity = m_rigidBody.velocity * m_fBulletImpactKnockBack;
                             float angle = Mathf.Atan2(m_rigidBody.velocity.normalized.x, -m_rigidBody.velocity.normalized.y);
                             PlayerIHit.transform.rotation = Quaternion.AngleAxis(angle * Mathf.Rad2Deg, Vector3.forward);
@@ -163,7 +168,7 @@ public class Bullet : MonoBehaviour, Reset
         //if (RayHit.distance < a) 
         //{
         //    m_rigidBody.isKinematic = true;
-        //    //Debug.Log(RayHit.point); 
+
         //    transform.position = RayHit.point;
         //    StartCoroutine(PlayParticle(RayHit.point));
         //}
@@ -171,6 +176,7 @@ public class Bullet : MonoBehaviour, Reset
 
     void StopBullet(RaycastHit2D RayHit)
     {
+        m_bStopRayCasts = true;
         GameManagerc.Instance._rbPausers.Remove(this.GetComponent<RigidbodyPauser>());
         m_rigidBody.velocity = Vector2.zero;
         m_rigidBody.simulated = false;
@@ -179,9 +185,18 @@ public class Bullet : MonoBehaviour, Reset
         transform.rotation = StartRotation;
     }
 
+    void ReflectBullet(RaycastHit2D a_RayHit)
+    {
+        //m_bStopRayCasts = true;
+        Vector2 bulletVelocity = m_rigidBody.velocity;
+        m_rigidBody.velocity = Vector2.Reflect(bulletVelocity, a_RayHit.normal);
+        Debug.Log(Mathf.Atan2(a_RayHit.normal.x, a_RayHit.normal.y));
+
+    }
+
     IEnumerator PlayParticle(Collision2D hit)
     {
-        // Debug.Log("spark");
+
         if (ParticleSparks != null)
         {
 
@@ -209,7 +224,6 @@ public class Bullet : MonoBehaviour, Reset
     /// <returns></returns>
     IEnumerator PlayParticle(Vector2 HitPoint)
     {
-
         // if (ParticleSparks != null)
         // {
         //     transform.GetChild(0).localEulerAngles = new Vector3(VChildPrevRotation.x, VChildPrevRotation.y, VChildPrevRotation.z); // parent - 90z

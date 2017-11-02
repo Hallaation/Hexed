@@ -81,12 +81,12 @@ public class SettingsManager : MonoBehaviour
 
     void Update()
     {
-        if (m_bUnsavedChanges)
-        {
-            OnMasterVolumeChange();
-            OnSFXVolumeChange();
-            OnMusicVolumeChange();
-        }
+        //if (m_bUnsavedChanges)
+        //{
+        //    OnMasterVolumeChange();
+        //    OnSFXVolumeChange();
+        //    OnMusicVolumeChange();
+        //}
     }
     public void onFullScreenToggle()
     {
@@ -156,7 +156,6 @@ public class SettingsManager : MonoBehaviour
     {
         if (m_bUnsavedChanges)
         {
-            //   Debug.Log("settings saved");
             string jsonData = JsonUtility.ToJson(gameSettings, true);
             File.WriteAllText(Application.persistentDataPath + "/gameSettings.json", jsonData);
             print(Application.persistentDataPath);
@@ -206,7 +205,6 @@ public class SettingsManager : MonoBehaviour
             OnSFXVolumeChange();
             OnMusicVolumeChange();
 
-            Debug.Log("Settings loaded");
             //onAntialiasingChange();
             //onTextureQualityChange();
         }

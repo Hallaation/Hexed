@@ -23,7 +23,7 @@ public class CameraFollow : MonoBehaviour
         {
             RaycastHit hit;
             Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
-            //Debug.Log(ray.origin);
+
             if (Physics.Raycast(ray , out hit))
             {
             }
@@ -36,8 +36,6 @@ public class CameraFollow : MonoBehaviour
 
         Vector3 newCamPosition = midpoint + new Vector3(0 , 0 , -10);
         this.transform.position = Vector3.Lerp(transform.position , newCamPosition , zOffSet);
-
-       // Debug.Log((midpoint - player.transform.position).magnitude);
     }
     void FixedUpdate()
     {

@@ -41,7 +41,7 @@ public class SelectionUIElements : MonoBehaviour
         if (!m_AudioSource)
         {
             m_AudioSource = this.gameObject.AddComponent<AudioSource>();
-            m_AudioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as GameObject).GetComponent<AudioSource>().outputAudioMixerGroup;
+            m_AudioSource.outputAudioMixerGroup = AudioManager.RequestMixerGroup(SourceType.SFX);
         }
         m_bNotJoined = false;
         m_Animator = GetComponentInChildren<Animator>();
@@ -64,8 +64,6 @@ public class SelectionUIElements : MonoBehaviour
         {
             this.transform.parent.gameObject.AddComponent<SelectionUIArray>();
         }
-
-        // Debug.Log(CharacterSelectionManager.instance);
         StickMovement = new bool[2] { false, false };
     }
     //useless, keeping it here in case
@@ -109,7 +107,6 @@ public class SelectionUIElements : MonoBehaviour
                     #region
                     if (XCI.GetButtonDown(XboxButton.B, m_controller))
                     {
-                        //Debug.Log("test");
                         m_bPlayerJoined = false;
                         m_PressAToJoinGO.SetActive(true);
                     }
@@ -241,8 +238,6 @@ public class SelectionUIElements : MonoBehaviour
             float distCovered = (Time.time - StartTime) * m_fLerpSpeed;
             float fracJourney = distCovered / journeyLength;
             transform.position = Vector3.Lerp(startPoint.position, new Vector3(GetComponent<RectTransform>().position.x , EndPosition.position.y , 0) , fracJourney);
-            //Debug.Log("starting point " + startPoint.position.position);
-            //Debug.Log("ending point " + new Vector3(GetComponent<RectTransform>().position.x , EndPosition.position.y , 0));
         }
         //if I don't want to lerp
         
@@ -253,8 +248,6 @@ public class SelectionUIElements : MonoBehaviour
             float fracJourney = distCovered / journeyLength;
             //from the end to the start.
             transform.position = Vector3.Lerp(new Vector3(GetComponent<RectTransform>().position.x , EndPosition.position.y , 0) , startPoint.position , fracJourney);
-            //Debug.Log("reversed starting point " + new Vector3(GetComponent<RectTransform>().position.x , EndPosition.position.y , 0));
-            //Debug.Log("reversed ending point " + startPoint.position.position);
         }
         */
     }

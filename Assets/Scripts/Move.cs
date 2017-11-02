@@ -86,11 +86,13 @@ public class Move : MonoBehaviour
     private AudioSource m_HeadAudio;
     private GameObject AudioSourcePool;
     public AudioClip HeadSmash;
+    private Teleport TeleportScript;
     #endregion
     //Vector3 movement;
     // Use this for initialization
     void Awake()
     {
+        TeleportScript = GetComponent<Teleport>();
         m_ChokingTimer = new Timer(m_fChokeKillTime);
         // movement = Vector3.zero;
         //pool of audiosources
@@ -101,14 +103,14 @@ public class Move : MonoBehaviour
         m_HeadAudio = gameObject.AddComponent<AudioSource>();
         m_HeadAudio.spatialBlend = 0.8f;
         m_HeadAudio.clip = HeadSmash;
-        for (int i = 0; i < m_audioSource.Length; ++i)
-        {
-            m_audioSource[i] = AudioSourcePool.AddComponent<AudioSource>();
-            m_audioSource[i].outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as GameObject).GetComponent<AudioSource>().outputAudioMixerGroup;
-            m_audioSource[i].playOnAwake = false;
-            m_audioSource[i].clip = quack;
-            m_audioSource[i].spatialBlend = 0.8f;
-        }
+        //for (int i = 0; i < m_audioSource.Length; ++i)
+        //{
+        //    m_audioSource[i] = AudioSourcePool.AddComponent<AudioSource>();
+        //    m_audioSource[i].outputAudioMixerGroup = AudioManager.RequestMixer(SourceType.SFX);
+        //    m_audioSource[i].playOnAwake = false;
+        //    m_audioSource[i].clip = quack;
+        //    m_audioSource[i].spatialBlend = 0.8f;
+        //}
 
         if (!ColorDatabase)
         {
@@ -131,13 +133,13 @@ public class Move : MonoBehaviour
         {
             Melee1HandedMount = transform.Find("Sprites").GetChild(0).Find("1HandedMeleeSpot");
             Melee2HandedMount = transform.Find("Sprites").GetChild(0).Find("2HandedMeleeSpot");
-            if (transform.Find("Sprites").transform.Find("Character001_Feet"))
+            if (transform.Find("Sprites").transform.GetChild(1))
             {
-                FeetAnimator = transform.Find("Sprites").transform.Find("Character001_Feet").GetComponent<Animator>();
+                FeetAnimator = transform.Find("Sprites").transform.GetChild(1).GetComponent<Animator>();
             }
-            if (transform.Find("Sprites").transform.Find("Character001_Body"))
+            if (transform.Find("Sprites").transform.transform.GetChild(0))
             {
-                BodyAnimator = transform.Find("Sprites").transform.Find("Character001_Body").GetComponent<Animator>();
+                BodyAnimator = transform.Find("Sprites").transform.GetChild(0).GetComponent<Animator>();
             }
         }
         if (!crosshair.GetComponent<CrosshairClamp>())
@@ -223,7 +225,8 @@ public class Move : MonoBehaviour
                         movementSpeed = StoredMoveSpeed * System.Convert.ToInt16(GameManagerc.Instance.RoundReady);
                         if (CheckForDownedKill())
                             return;
-                        Quack();
+                        //Quack();
+                       // Quack();
                         CalculateMovement();
                         CheckForPickup();
                         Attack(TriggerReleaseCheck());
@@ -236,7 +239,7 @@ public class Move : MonoBehaviour
                     {
                         if (heldWeapon.GetType() == typeof(Gun))
                         {
-                            //Debug.Log("test");
+             
                             //_AmmoText.text = heldWeapon.GetComponent<Gun>().m_iAmmo.ToString();
                         }
                         else
@@ -433,8 +436,8 @@ public class Move : MonoBehaviour
             //! This makes the feet face the left sticks direction. Quaternions are wierd.
             if (m_LeftStickRotation.magnitude != 0 && FeetAnimator)
             {
-                transform.Find("Sprites").transform.Find("Character001_Feet").transform.rotation = transform.Find("Sprites").transform.Find("Character001_Feet").transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(m_LeftStickRotation.x, m_LeftStickRotation.y) * Mathf.Rad2Deg);
-                transform.Find("Sprites").transform.Find("Character001_Feet").transform.rotation *= Quaternion.Euler(0, 0, 90);
+                transform.Find("Sprites").transform.GetChild(1).rotation = transform.Find("Sprites").transform.GetChild(1).rotation = Quaternion.Euler(0, 0, Mathf.Atan2(m_LeftStickRotation.x, m_LeftStickRotation.y) * Mathf.Rad2Deg);
+                transform.Find("Sprites").transform.GetChild(1).rotation *= Quaternion.Euler(0, 0, 90);
             }
         }
         else if (KeyboardMovement != Vector3.zero)
@@ -443,9 +446,13 @@ public class Move : MonoBehaviour
         }
 
         //If im not stunned, add movement to my rigid body's velocity, allowing it to move, scaling it by a movement speed.
-        if (!m_status.IsStunned)
+        if (!m_status.IsStunned && !TeleportScript.GetDashing())
         {
             _rigidBody.velocity = (movement + KeyboardMovement) * movementSpeed;
+        }
+        else if (TeleportScript.GetDashing())
+        {
+            _rigidBody.velocity = (movement + KeyboardMovement) * TeleportScript.m_DashSpeed;
         }
 
         //animation checks go here
@@ -517,7 +524,7 @@ public class Move : MonoBehaviour
                 Debug.DrawRay(this.transform.position, throwDirection * ((this.transform.position - GunMountPosition).magnitude + 0.5f), Color.yellow, 5);
                 if (hit)
                 {
-                    Debug.Log("Hit wall");
+
                     heldWeapon.transform.position = this.transform.position - this.transform.up * 0.5f;
                 }
                 heldWeapon.transform.position = this.transform.position;
@@ -656,7 +663,7 @@ public class Move : MonoBehaviour
             }
             else
             {
-                // Debug.Log("WallBlock");
+    
                 //Debug.DrawLine(pos , pos + Dir , Color.red , Mathf.Infinity);
             }
 
@@ -1007,6 +1014,7 @@ public class Move : MonoBehaviour
                 if (m_ChokingTimer.Tick(Time.deltaTime)) //If timer over, kill player
                 {
                     chokingPlayerStatus.KillPlayer(this.GetComponent<PlayerStatus>());
+                    chokingPlayerStatus.m_bKilledBySmash = true;
                 }
 
                 //Do choking timer here.

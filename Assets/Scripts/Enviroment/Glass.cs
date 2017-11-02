@@ -30,9 +30,14 @@ public class Glass : MonoBehaviour, IHitByBullet, IHitByMelee, Reset
     bool IsShattered = false;
     BoxCollider2D GlassCollider;
     int StoredSortingLayer;
+    int m_iHealth = 2;
+    public Sprite m_CrackedImage = null;
+    public AudioClip m_crackingSound = null;
+    private AudioSource m_audioSource;
     // Use this for initialization
     void Start()
     {
+        m_audioSource = this.GetComponent<AudioSource>();
         SolidGlass = GetComponent<Sprite>();
         StoredSortingLayer = GetComponent<SpriteRenderer>().sortingOrder;
         //if (this.GetComponent<AudioSource>())
@@ -61,14 +66,31 @@ public class Glass : MonoBehaviour, IHitByBullet, IHitByMelee, Reset
 
     void OnCollisionEnter2D(Collision2D hit)                    //! when u throw bat
     {
+        if (hit.gameObject.layer == LayerMask.NameToLayer("Pickup"))
+            {
+            if (hit.transform.tag == "1hMelee" || hit.transform.tag == "2hMelee")
+            {
+                if (hit.transform.GetComponent<Rigidbody2D>().velocity.magnitude > 6 || hit.transform.GetComponent<Melee>().m_bAttacking == true)
+                {
+                    Shatter();
+                    SpawnShards(hit);
+                    m_audioSource.clip = m_crackingSound;
+                    m_audioSource.Play();
+                    //  this.GetComponent<HitByMeleeAction>().HitByMelee(hit.transform.GetComponentInParent<Melee>(), null);
+                }
+            }
+            else
+            {
+                if (hit.transform.GetComponent<Rigidbody2D>().velocity.magnitude > 6)
+                {
+                    Shatter();
+                    SpawnShards(hit);
+                    m_audioSource.clip = m_crackingSound;
+                    m_audioSource.Play();
+                    //  this.GetComponent<HitByMeleeAction>().HitByMelee(hit.transform.GetComponentInParent<Melee>(), null);
+                }
+            }
 
-        if (hit.transform.tag == "2hMelee")
-        {
-
-            Shatter();
-            SpawnShards(hit);
-            
-          //  this.GetComponent<HitByMeleeAction>().HitByMelee(hit.transform.GetComponentInParent<Melee>(), null);
         }
         else if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Bullet") && IsShattered == false)
         {
@@ -100,6 +122,26 @@ public class Glass : MonoBehaviour, IHitByBullet, IHitByMelee, Reset
                 }
     }
 
+    public void HitGlass(Vector3 velocity, Vector3 hitPoint, int a_iDamage = 0)
+    {
+        m_iHealth -= a_iDamage;
+        if (m_iHealth <= 0)
+        {
+            HitByBullet(velocity, hitPoint);
+            foreach (IHitByMelee item in this.GetComponents<IHitByMelee>())
+            {
+                item.HitByMelee(null, null);
+            }
+        }
+        if (m_iHealth != 0)
+        {
+            m_audioSource.clip = m_crackingSound;
+            m_audioSource.pitch = UnityEngine.Random.Range(0.9f, 1.1f);
+            m_audioSource.Play();
+            this.transform.GetComponent<SpriteRenderer>().sprite = m_CrackedImage;
+        }
+    }
+
     void Shatter()
     {
         if (!KeepBreaking)
@@ -108,6 +150,8 @@ public class Glass : MonoBehaviour, IHitByBullet, IHitByMelee, Reset
             GlassCollider.enabled = false;
             IsShattered = true;
             GlassSpriteRenderer.sortingOrder = -10;
+            //m_audioSource.clip = m_crackingSound;
+            //m_audioSource.Play();
             //m_audioSource.PlayOneShot(m_BreakingClip);
         }
     }
@@ -139,8 +183,7 @@ public class Glass : MonoBehaviour, IHitByBullet, IHitByMelee, Reset
 
     }
     void SpawnShards(Collider2D hit)
-    {
-      //  Debug.Log("Does this ever get called");
+    { 
         //make a temporary array to hold all the shard objects
         GameObject[] shardObjects = new GameObject[Shards.Length];
         //for every shard, instantiate them and set their rotation and velocity.
