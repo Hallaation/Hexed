@@ -136,6 +136,7 @@ public class Glass : MonoBehaviour, IHitByBullet, IHitByMelee, Reset
         if (m_iHealth != 0)
         {
             m_audioSource.clip = m_crackingSound;
+            m_audioSource.pitch = UnityEngine.Random.Range(0.9f, 1.1f);
             m_audioSource.Play();
             this.transform.GetComponent<SpriteRenderer>().sprite = m_CrackedImage;
         }
