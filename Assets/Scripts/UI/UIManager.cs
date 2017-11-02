@@ -101,7 +101,8 @@ public class UIManager : MonoBehaviour
         {
             if (m_bMenuAnimator)
             {
-                CharacterSelectionManager.Instance.LetPlayersSelectCharacters = (m_bMenuAnimator.GetCurrentAnimatorStateInfo(0).IsName("Title_Section_Second_Static") && m_bMenuAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.4f);
+                CharacterSelectionManager.Instance.LetPlayersSelectCharacters = (m_bMenuAnimator.GetCurrentAnimatorStateInfo(0).IsName("Title_Section_Second_Static"));
+                Debug.Log(m_bMenuAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime);
             }
         }
         if (menuStatus.Peek().name == "First_Panel")
