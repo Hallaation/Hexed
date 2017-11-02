@@ -66,14 +66,31 @@ public class Glass : MonoBehaviour, IHitByBullet, IHitByMelee, Reset
 
     void OnCollisionEnter2D(Collision2D hit)                    //! when u throw bat
     {
+        if (hit.gameObject.layer == LayerMask.NameToLayer("Pickup"))
+            {
+            if (hit.transform.tag == "1hMelee" || hit.transform.tag == "2hMelee")
+            {
+                if (hit.transform.GetComponent<Rigidbody2D>().velocity.magnitude > 6 || hit.transform.GetComponent<Melee>().m_bAttacking == true)
+                {
+                    Shatter();
+                    SpawnShards(hit);
+                    m_audioSource.clip = m_crackingSound;
+                    m_audioSource.Play();
+                    //  this.GetComponent<HitByMeleeAction>().HitByMelee(hit.transform.GetComponentInParent<Melee>(), null);
+                }
+            }
+            else
+            {
+                if (hit.transform.GetComponent<Rigidbody2D>().velocity.magnitude > 6)
+                {
+                    Shatter();
+                    SpawnShards(hit);
+                    m_audioSource.clip = m_crackingSound;
+                    m_audioSource.Play();
+                    //  this.GetComponent<HitByMeleeAction>().HitByMelee(hit.transform.GetComponentInParent<Melee>(), null);
+                }
+            }
 
-        if (hit.transform.tag == "2hMelee")
-        {
-
-            Shatter();
-            SpawnShards(hit);
-            
-          //  this.GetComponent<HitByMeleeAction>().HitByMelee(hit.transform.GetComponentInParent<Melee>(), null);
         }
         else if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Bullet") && IsShattered == false)
         {
@@ -132,6 +149,8 @@ public class Glass : MonoBehaviour, IHitByBullet, IHitByMelee, Reset
             GlassCollider.enabled = false;
             IsShattered = true;
             GlassSpriteRenderer.sortingOrder = -10;
+            //m_audioSource.clip = m_crackingSound;
+            //m_audioSource.Play();
             //m_audioSource.PlayOneShot(m_BreakingClip);
         }
     }
