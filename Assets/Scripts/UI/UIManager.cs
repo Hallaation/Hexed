@@ -84,7 +84,6 @@ public class UIManager : MonoBehaviour
         // m_SettingsPanel.SetActive((!m_SettingsPanel));
 
         //instance = FindObjectOfType<UIManager>();
-
         _eventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
         selected = _eventSystem.currentSelectedGameObject;
         menuStatus = new Stack<GameObject>();
@@ -114,6 +113,7 @@ public class UIManager : MonoBehaviour
                 switch (_eventSystem.currentSelectedGameObject.name)
                 {
                     case "Credits_Button":
+                        _eventSystem.currentSelectedGameObject.GetComponent<Button>().onClick.AddListener(delegate { MenuOpenPanel(m_CreditsPanel, "IsCredits"); });
                         m_ButtonAnimator.SetTrigger("SelectedCredits");
                         break;
                     case "Settings_Button":
@@ -146,6 +146,7 @@ public class UIManager : MonoBehaviour
     {
         //GetComponent<AudioSource>().outputAudioMixerGroup;
         //If the menu status only has 1 object in it, 
+        Debug.Log(menuStatus.Peek().name);
         if (menuStatus.Count == 1 || CharacterSelectionManager.Instance.JoinedPlayers < 4)
         {
             //If there are joined players and the peek of the stack is the third panel, go back
@@ -219,11 +220,13 @@ public class UIManager : MonoBehaviour
         {
             if (m_SettingsPanel.activeSelf)
                 m_SettingsPanel.SetActive(false);
-
+            if (m_CreditsPanel)
+                m_CreditsPanel.SetActive(false);
             menuStatus.Push(panelToMove);
             //swap the trigger to the corresponding parameter name
             m_bMenuAnimator.SetTrigger(MenuTransitionBoolParameters[panelToMove.name]);
-            m_ButtonAnimator = panelToMove.GetComponent<Animator>();
+            if (panelToMove.GetComponent<Animator>())
+                m_ButtonAnimator = panelToMove.GetComponent<Animator>();
             m_CharacterSelectionPanel.SetActive(true);
             //Find the default button, if none found, set to null
             DefaultButton temp = panelToMove.GetComponent<DefaultButton>();
@@ -242,7 +245,6 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         //If loaded in main menu, run the main menu update
         if (m_bInMainMenu)
         {
@@ -509,10 +511,11 @@ public class UIManager : MonoBehaviour
             _eventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
             Button vsButton = GameObject.Find("VS_Button").GetComponent<Button>();
             Button SettingsButton = GameObject.Find("Settings_Button").GetComponent<Button>();
-
+            Button CreditsButton = GameObject.Find("Credits_Button").GetComponent<Button>();
+            Button QuitBUtton = GameObject.Find("Quit_Button").GetComponent<Button>();
             vsButton.onClick.AddListener(delegate { MainMenuChangePanel(GameObject.Find("Second_Panel")); });
             SettingsButton.onClick.AddListener(delegate { MenuOpenPanel(m_SettingsPanel, "IsSettings"); });
-
+            CreditsButton.onClick.AddListener(delegate { MenuOpenPanel(m_CreditsPanel, "IsCredits"); });
             //find the first panel and push it to the stack
             menuStatus.Push(GameObject.Find("First_Panel"));
             m_ButtonAnimator = menuStatus.Peek().GetComponent<Animator>();
