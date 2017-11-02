@@ -11,7 +11,7 @@ public class ResetTriggers : StateMachineBehaviour {
         animator.ResetTrigger("HavingHeadSmashPullUp");
         animator.ResetTrigger("HeadSmashPullUp");
         animator.ResetTrigger("HeadSmashSmash");
-
+        animator.SetBool("BeingSmashed", false);
         animator.SetBool("CancelHeadSmash", false);
     }
 
