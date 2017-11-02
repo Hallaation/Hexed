@@ -189,7 +189,7 @@ public class UIManager : MonoBehaviour
                 SettingsManager.Instance.OnApplyButtonClick();
             }
             //set the first object on the stack to false
-            menuStatus.Peek().SetActive(false);
+            //menuStatus.Peek().SetActive(false);
             menuStatus.Pop();
             m_ButtonAnimator = menuStatus.Peek().GetComponent<Animator>();
             DefaultButton temp = menuStatus.Peek().GetComponent<DefaultButton>();
@@ -221,7 +221,7 @@ public class UIManager : MonoBehaviour
             if (m_SettingsPanel.activeSelf)
                 m_SettingsPanel.SetActive(false);
             if (m_CreditsPanel)
-                m_CreditsPanel.SetActive(false);
+                m_CreditsPanel.SetActive(false); 
             menuStatus.Push(panelToMove);
             //swap the trigger to the corresponding parameter name
             m_bMenuAnimator.SetTrigger(MenuTransitionBoolParameters[panelToMove.name]);
@@ -373,15 +373,11 @@ public class UIManager : MonoBehaviour
     }
 
 
-    IEnumerator WaitForAnimation(GameObject PanelToOpen, string AnimationParameter = "")
-    {
-        yield return new WaitForSeconds(m_ButtonAnimator.GetCurrentAnimatorStateInfo(0).length - 1.3f /*+ m_ButtonAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime*/);
-        DoLast(PanelToOpen, AnimationParameter);
-    }
 
     void DoLast(GameObject PanelToOpen, string AnimationParameter)
     {
         m_CharacterSelectionPanel.SetActive(false);
+        m_CreditsPanel.SetActive(false);
         m_bMenuAnimator.SetTrigger(MenuTransitionBoolParameters["Second_Panel"]);
         m_bOpenedPanel = true;
 
@@ -546,4 +542,12 @@ public class UIManager : MonoBehaviour
     {
         m_SettingsPanel.SetActive(true);
     }
+
+
+    IEnumerator WaitForAnimation(GameObject PanelToOpen, string AnimationParameter = "")
+    {
+        yield return new WaitForSeconds(m_ButtonAnimator.GetCurrentAnimatorStateInfo(0).length - 1.3f /*+ m_ButtonAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime*/);
+        DoLast(PanelToOpen, AnimationParameter);
+    }
+
 }
