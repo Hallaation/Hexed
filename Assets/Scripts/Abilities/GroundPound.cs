@@ -55,7 +55,7 @@ public class GroundPound : BaseAbility
         // Debug.Break();
         ButtonHasBeenUp = false;
         yield return new WaitForSeconds(Delay);
-        if (!Slamer.IsDead && !Slamer.IsStunned)
+        if (Slamer.m_playerState == PlayerState.NONE)
         {
             while (Corotuine)
             {
@@ -70,7 +70,7 @@ public class GroundPound : BaseAbility
                             if (Vector2.Distance(nearBy[k].transform.position, transform.position) > GroundPoundCollider.radius - WidthOfRipple)
                             {
                                 PlayerStatus tempStatus = nearBy[k].GetComponentInParent<PlayerStatus>();
-                                if (tempStatus.IsStunned == false)
+                                if (tempStatus.m_playerState == PlayerState.NONE)
                                 {
                                    // Vector3 Temp = nearBy[k].GetComponent<Transform>().position;
                                     //Vector3 Tempa = Vector3.RotateTowards(Temp,transform.position,Mathf.Infinity,Mathf.Infinity);

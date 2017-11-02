@@ -5,18 +5,27 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using XboxCtrlrInput;
 using XInputDotNetPure;
+
+public enum PlayerState
+{
+    NONE,
+    STUNNED,
+    CHOKING,
+    DEAD,
+}
+
 public class PlayerStatus : MonoBehaviour, IHitByMelee
 {
     //TODO Cleanup
-
+    public PlayerState m_playerState = new PlayerState();
     private Move m_MoveClass;
     private float m_iMaxHealth;
     public float m_iHealth = 3; //health completely useless right now
     int m_iTimesPunched = 0;
     int m_iPreviousTimesPunched = 0;
 
-    bool m_bDead = false;
-    public bool m_bStunned = false;
+    //bool m_bDead = false;
+    //public bool m_bStunned = false;
     public bool m_bMiniStun;
     public float StunedSlide = 400;
     public int m_iScore;
@@ -28,8 +37,8 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
     public float m_fKillBarOffset = 1.5f;
     private Timer m_InvincibilityTimer;
 
-    public bool IsDead { get { return m_bDead; } set { m_bDead = value; } }
-    public bool IsStunned { get { return m_bStunned; } set { m_bStunned = value; } }
+    public bool IsDead { get { if (m_playerState == PlayerState.DEAD) return true; else return false; }}
+    public bool IsStunned { get { if (m_playerState == PlayerState.STUNNED) return true; else return false; }}
     public int TimesPunched { get { return m_iTimesPunched; } set { m_iTimesPunched = value; } }
 
     public float m_fStunTime = 1;
@@ -135,13 +144,6 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
     void Update()
     {
         ShowHealthChangeTimer.mfTimeToWait = m_fShowHealthMaxTime;
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            if (m_bDead)
-            {
-                ResetPlayer();
-            }
-        }
         if (!GameManagerc.Instance.Paused)
         {
             if (stunBarContainer.activeSelf)
@@ -174,143 +176,154 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
                     m_iPreviousTimesPunched = 0;
                 }
             }
-
-            //if im dead, set my Color to gray, turn of all physics simulations and exit the function
-            if (m_bDead)
+            switch (m_playerState)
             {
-                m_SpriteRenderer.sortingOrder = -4;
-                this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, 0.35f);
-                m_MoveClass.StopChoke();
-                if (m_MoveClass.heldWeapon)
-                {
-                    m_MoveClass.ThrowWeapon(Vector2.zero, Vector2.zero, false);
-                }
-                SetAllAnimatorsFalse(false);
-                PlayerSprite.material.color = Color.grey;
-
-                //this.GetComponent<Rigidbody2D>().simulated = false; wow .
-                foreach (Collider2D item in GetComponentsInChildren<Collider2D>())
-                {
-                    if (item.GetComponentsInChildren<Collider2D>().Length > 0)
+                case PlayerState.NONE:
+                    #region Regular Logic
+                    m_SpriteRenderer.sortingOrder = 4;
+                    Choker = null;
+                    if (!m_bLeftStun)
                     {
-                        foreach (Collider2D ChildrenColliders in item.GetComponentsInChildren<Collider2D>())
-                        {
-                            ChildrenColliders.enabled = false;
-                        }
-                        item.enabled = false;
+                        m_MoveClass.GetBodyAnimator().SetBool("CancelHeadSmash", true);
+                        m_MoveClass.GetBodyAnimator().SetBool("Stunned", false);
+                        m_bLeftStun = true;
                     }
-                }
+                    //GetComponent<Move>().GetBodyAnimator().enabled = true; //Get the animator(s) from the Move script and enable them
+                    //GetComponent<Move>().GetFeetAnimator().enabled = true; //Get the animator(s) from the Move script and enable them
+                    m_Ability.m_ChargeIndicator.SetActive(true); //Turn the ability charge indicator back on
+                    m_Ability.ChargeCoolDown = true; //Continue to tick the timer for more Ability charges
+                    StunSpriteChanged = false;
+                    m_MoveClass.MakeCollidersTriggers(false);
+                    stunBarContainer.SetActive(false);
 
-                killMePrompt.SetActive(false);
-                killMeArea.SetActive(false);
-                stunBarContainer.SetActive(false);
+                    if (this.transform.GetChild(1).tag == "Stunned")
+                    {
 
-                m_MoveClass.GetBodyAnimator().enabled = false;
-                m_MoveClass.GetFeetAnimator().enabled = false;
-
-                if (DeadSprites.Length > 0 && !DeathSpriteChanged)
-                {
-                    DeathSpriteChanged = true;
-                    if (!m_bKilledBySmash)
-                        m_SpriteRenderer.sprite = DeadSprites[Random.Range(0, DeadSprites.Length)];
+                        this.transform.GetChild(1).gameObject.GetComponent<Collider2D>().enabled = false;        //? child 0 is weaponSpot... 
+                    }
                     else
-                        m_SpriteRenderer.sprite = HeadSmashDeathSprite;
-                }
-
-                return;
-            }
-
-            //if im stunned, make me cyan and show any kill prompts (X button and kill radius);
-            if (m_bStunned)
-            {
-                if (StunnedSprites.Length > 0 && !StunSpriteChanged)
-                {
-                    StunSpriteChanged = true;
-                    m_SpriteRenderer.sprite = StunnedSprites[Random.Range(0, StunnedSprites.Length)];
-                    m_MoveClass.GetBodyAnimator().SetBool("Stunned", true);
-
-                }
-
-                m_SpriteRenderer.sortingOrder = -4;
-                if (Choker != null && Choker.chokingPlayer != null)
-                {
-                    if (Choker.chokingPlayer.transform.root != this.gameObject.transform.root)
                     {
-                        Choker = null;
+                        this.transform.GetChild(0).gameObject.GetComponent<Collider2D>().enabled = false;
                     }
-                }
-                if (m_MoveClass.heldWeapon) //if holding weapon;
-                {
-                    m_MoveClass.StatusApplied();
-                }
-                stunTimer.mfTimeToWait = m_fStunTime;
+                    killMeArea.SetActive(false);
+                    killMePrompt.SetActive(false);
+                    //If I find a regular renderer
+                    if (GetComponent<Renderer>())
+                    {
+                        GetComponent<Renderer>().material.color = _playerColor;
+                    }
+                    else //if no rendere was found
+                    {
+                        if (!m_bInvincible)
+                            PlayerSprite.GetComponent<Renderer>().material.color = _playerColor;
+                    }
+                    #endregion
+                    break;
+                case PlayerState.STUNNED:
+                    #region Stunned Logic
+                    if (StunnedSprites.Length > 0 && !StunSpriteChanged)
+                    {
+                        StunSpriteChanged = true;
+                        m_SpriteRenderer.sprite = StunnedSprites[Random.Range(0, StunnedSprites.Length)];
+                        m_MoveClass.GetBodyAnimator().SetBool("Stunned", true);
 
-                m_Ability.m_ChargeIndicator.SetActive(false);
-                m_Ability.ChargeCoolDown = false;
+                    }
 
-                //Changes the sprite if stunned.
+                    m_SpriteRenderer.sortingOrder = -4;
+                    if (Choker != null && Choker.chokingPlayer != null)
+                    {
+                        if (Choker.chokingPlayer.transform.root != this.gameObject.transform.root)
+                        {
+                            Choker = null;
+                        }
+                    }
+                    if (m_MoveClass.heldWeapon) //if holding weapon;
+                    {
+                        m_MoveClass.StatusApplied();
+                    }
+                    stunTimer.mfTimeToWait = m_fStunTime;
+
+                    m_Ability.m_ChargeIndicator.SetActive(false);
+                    m_Ability.ChargeCoolDown = false;
+
+                    //Changes the sprite if stunned.
 
 
-                SetAllAnimatorsFalse(true);
-                killMeArea.SetActive(true);
-                PlayerSprite.material.color = Color.cyan;
-                stunBarContainer.SetActive(true);
+                    SetAllAnimatorsFalse(true);
+                    killMeArea.SetActive(true);
+                    PlayerSprite.material.color = Color.cyan;
+                    stunBarContainer.SetActive(true);
 
-                CheckForButtonMash();
-                //this.GetComponent<Renderer>().material.color = Color.cyan;
-                //Find the collision colliders and turn them on
-                this.transform.Find("Colliders").gameObject.GetComponent<Collider2D>().enabled = true;
-                //this.transform.Find("Colliders").gameObject.GetComponent<Collider2D>().isTrigger = true;
+                    CheckForButtonMash();
+                    //this.GetComponent<Renderer>().material.color = Color.cyan;
+                    //Find the collision colliders and turn them on
+                    this.transform.Find("Colliders").gameObject.GetComponent<Collider2D>().enabled = true;
+                    //this.transform.Find("Colliders").gameObject.GetComponent<Collider2D>().isTrigger = true;
 
 
-                m_MoveClass.MakeCollidersTriggers(true);
-                if (stunTimer.Tick(Time.deltaTime))
-                {
-                    m_bStunned = false;
-                }
-                m_bLeftStun = false; //set to true as it hasn't left stun yet.
+                    m_MoveClass.MakeCollidersTriggers(true);
+                    if (stunTimer.Tick(Time.deltaTime))
+                    {
+                        m_playerState = PlayerState.NONE;
+                    }
+                    m_bLeftStun = false; //set to true as it hasn't left stun yet.
+                    #endregion
+                    break;
+                case PlayerState.CHOKING:
+                    break;
+                case PlayerState.DEAD:
+                    #region DeadLogic
+#if UNITY_EDITOR
+                    if (Input.GetKeyDown(KeyCode.K))
+                    {
+                        ResetPlayer();
+                    }
+#endif
+                    m_SpriteRenderer.sortingOrder = -4;
+                    this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, 0.35f);
+                    m_MoveClass.StopChoke();
+                    if (m_MoveClass.heldWeapon)
+                    {
+                        m_MoveClass.ThrowWeapon(Vector2.zero, Vector2.zero, false);
+                    }
+                    SetAllAnimatorsFalse(false);
+                    PlayerSprite.material.color = Color.grey;
+
+                    //this.GetComponent<Rigidbody2D>().simulated = false; wow .
+                    foreach (Collider2D item in GetComponentsInChildren<Collider2D>())
+                    {
+                        if (item.GetComponentsInChildren<Collider2D>().Length > 0)
+                        {
+                            foreach (Collider2D ChildrenColliders in item.GetComponentsInChildren<Collider2D>())
+                            {
+                                ChildrenColliders.enabled = false;
+                            }
+                            item.enabled = false;
+                        }
+                    }
+
+                    killMePrompt.SetActive(false);
+                    killMeArea.SetActive(false);
+                    stunBarContainer.SetActive(false);
+
+                    m_MoveClass.GetBodyAnimator().enabled = false;
+                    m_MoveClass.GetFeetAnimator().enabled = false;
+
+                    if (DeadSprites.Length > 0 && !DeathSpriteChanged)
+                    {
+                        DeathSpriteChanged = true;
+                        if (!m_bKilledBySmash)
+                            m_SpriteRenderer.sprite = DeadSprites[Random.Range(0, DeadSprites.Length)];
+                        else
+                            m_SpriteRenderer.sprite = HeadSmashDeathSprite;
+                    }
+                    #endregion
+                    break;
+                default:
+                    break;
             }
-            //When not stunned
-            else
-            {
-                m_SpriteRenderer.sortingOrder = 4;
-                Choker = null;
-                if (!m_bLeftStun)
-                {
-                    m_MoveClass.GetBodyAnimator().SetBool("CancelHeadSmash", true);
-                    m_MoveClass.GetBodyAnimator().SetBool("Stunned", false);
-                    m_bLeftStun = true;
-                }
-                //GetComponent<Move>().GetBodyAnimator().enabled = true; //Get the animator(s) from the Move script and enable them
-                //GetComponent<Move>().GetFeetAnimator().enabled = true; //Get the animator(s) from the Move script and enable them
-                m_Ability.m_ChargeIndicator.SetActive(true); //Turn the ability charge indicator back on
-                m_Ability.ChargeCoolDown = true; //Continue to tick the timer for more Ability charges
-                StunSpriteChanged = false;
-                m_MoveClass.MakeCollidersTriggers(false);
-                stunBarContainer.SetActive(false);
-
-                if (this.transform.GetChild(1).tag == "Stunned")
-                {
-
-                    this.transform.GetChild(1).gameObject.GetComponent<Collider2D>().enabled = false;        //? child 0 is weaponSpot... 
-                }
-                else
-                {
-                    this.transform.GetChild(0).gameObject.GetComponent<Collider2D>().enabled = false;
-                }
-                killMeArea.SetActive(false);
-                killMePrompt.SetActive(false);
-                //If I find a regular renderer
-                if (GetComponent<Renderer>())
-                {
-                    GetComponent<Renderer>().material.color = _playerColor;
-                }
-                else //if no rendere was found
-                {
-                    if (!m_bInvincible)
-                        PlayerSprite.GetComponent<Renderer>().material.color = _playerColor;
-                }
-            }
+            return;
+            //if im dead, set my Color to gray, turn of all physics simulations and exit the function
         }
     }
 
@@ -405,7 +418,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         SetAllAnimatorsFalse(true);                                         //! This was a problem for the animator, edited to take in a if stunned bool.
         m_MoveClass.GetBodyAnimator().SetBool("Test", true);
         _rigidbody.velocity = ThrownItemVelocity;
-        m_bStunned = true;
+        m_playerState = PlayerState.STUNNED;
         m_iTimesPunched = 0;
 
     }
@@ -422,8 +435,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
     public void ResetPlayer()
     {
         m_iHealth = 3;
-        m_bDead = false;
-        m_bStunned = false;
+        m_playerState = PlayerState.NONE;
         m_iTimesPunched = 0;
         stunTimer.CurrentTime = 0;
         DeathSpriteChanged = false;
@@ -505,8 +517,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         {
             SetAllAnimatorsFalse(false);
             m_iHealth = 0;
-            m_bDead = true;
-            m_bStunned = false;
+            m_playerState = PlayerState.DEAD;
             //if (GameManagerc.Instance.m_gameMode == Gamemode_type.DEATHMATCH_POINTS)
             //    GameManagerc.Instance.PlayerWins[killer]++;
         }

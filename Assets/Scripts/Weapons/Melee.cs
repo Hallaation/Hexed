@@ -60,7 +60,7 @@ public class Melee : Weapon
                 //}
                 #endregion
             }
-            else if (m_bAttacking == true && other.tag == "Player" && other.transform.root != this.transform.root && other.transform.root.GetComponent<PlayerStatus>().m_bStunned == false)
+            else if (m_bAttacking == true && other.tag == "Player" && other.transform.root != this.transform.root && other.transform.root.GetComponent<PlayerStatus>().m_playerState == PlayerState.NONE)
             {
                 if (BodyAnimator != null)
                 {
@@ -157,7 +157,7 @@ public class Melee : Weapon
                 //    ReverseAnimation = true;
                 //}
             }
-            else if (m_bAttacking == true && other.tag == "Player" && other.transform.root != this.transform.root && other.transform.root.GetComponent<PlayerStatus>().m_bStunned == false)
+            else if (m_bAttacking == true && other.tag == "Player" && other.transform.root != this.transform.root && other.transform.root.GetComponent<PlayerStatus>().m_playerState == PlayerState.NONE)
             {
                 if (BodyAnimator != null)
                 {

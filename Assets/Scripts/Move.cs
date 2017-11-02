@@ -17,6 +17,7 @@ using UnityEngine.SceneManagement;
 public class Move : MonoBehaviour
 {
     #region variables
+    PlayerState m_playerState;
     ControllerSetter m_controller;
     // CharacterController _characterController;
     bool PlayerIsActive = true; public bool getActive() { return PlayerIsActive; }
@@ -47,7 +48,6 @@ public class Move : MonoBehaviour
     public float m_fChokedTimeIncrement = 0.1f; //Everytime the choking is hpapening, increment the time.
     public float m_fChokeKillTime = 0.8f; //Time it takes for the kill to happen
     public float m_fPositionOffset = 0.2f;
-    private bool m_bInChokeMode = false; //Determine if this guy is choking someone
     private bool m_bChoked; //Used to check if the head has been smashed in the entire animation so it only happens once.
     [HideInInspector]
     public GameObject chokingPlayer = null; //the player this guy is choking
@@ -153,6 +153,7 @@ public class Move : MonoBehaviour
         m_NoHandsCollider.enabled = true;
         m_controller = GetComponent<ControllerSetter>();
         m_status = GetComponent<PlayerStatus>();
+        m_playerState = m_status.m_playerState;
         _rigidBody = GetComponent<Rigidbody2D>();
         if (transform.Find("Sprite/Character001_Body") != null)
             playerSpirte = transform.Find("Sprites/Character001_Body").gameObject;
@@ -214,6 +215,38 @@ public class Move : MonoBehaviour
         //If game isn't paused
         if (!GameManagerc.Instance.Paused)
         {
+            switch (m_playerState)
+            {
+                case PlayerState.NONE:
+                    movementSpeed = StoredMoveSpeed * System.Convert.ToInt16(GameManagerc.Instance.RoundReady);
+                    if (KillBarContainer.activeSelf)
+                        KillBarContainer.SetActive(false);
+                    CheckForDownedKill();
+                    CalculateMovement();
+                    CheckForPickup();
+                    Attack(TriggerReleaseCheck());
+                    Special();
+                    break;
+                case PlayerState.STUNNED:
+                    crosshair.SetActive(false);
+                    chokingPlayer = null;
+                    KillBarContainer.SetActive(false);
+                    m_ChokingTimer.CurrentTime = 0;
+                    break;
+                case PlayerState.CHOKING:
+                    ChokePlayer();
+                    break;
+                case PlayerState.DEAD:
+                    crosshair.SetActive(false);
+                    chokingPlayer = null;
+                    KillBarContainer.SetActive(false);
+                    m_ChokingTimer.CurrentTime = 0;
+                    break;
+                default:
+                    break;
+            }
+            return;
+            /*
             //If I'm not dead, or stunned
             if (!m_status.IsDead && !m_status.IsStunned)
             {
@@ -233,35 +266,9 @@ public class Move : MonoBehaviour
 
                         Special();
                     }
-
-                    //! an ammo text changing for UI, move this to another function then change to sprites/masking later
-                    if (heldWeapon)
-                    {
-                        if (heldWeapon.GetType() == typeof(Gun))
-                        {
-             
-                            //_AmmoText.text = heldWeapon.GetComponent<Gun>().m_iAmmo.ToString();
-                        }
-                        else
-                        {
-                            //_AmmoText.text = "Infinite Ammo";
-                        }
-                    }
-                    else
-                    {
-                        //_AmmoText.text = "you punch";
-                    }
-
                 }
-                else //otherwise set the iskilling to false so it can return the animation to idle
-                {
-                    runningAnimation = false;
-                    //   _rigidBody.velocity = Vector2.zero;
-                    GetComponentInChildren<Animator>().SetBool("IsKilling", false);
-                }
-
             }
-            else
+            else //stunned or dead
             {
                 crosshair.SetActive(false);
                 m_bInChokeMode = false;
@@ -270,8 +277,10 @@ public class Move : MonoBehaviour
                 m_ChokingTimer.CurrentTime = 0;
                 //  _rigidBody.velocity = Vector2.zero;
             }
+            */
         }
     }
+
     IEnumerator DelayMovement()
     {
         movementSpeed = 0;
@@ -663,7 +672,7 @@ public class Move : MonoBehaviour
             }
             else
             {
-    
+
                 //Debug.DrawLine(pos , pos + Dir , Color.red , Mathf.Infinity);
             }
 
@@ -854,7 +863,7 @@ public class Move : MonoBehaviour
         m_ChokingTimer.CurrentTime = 0;
         KillBarContainer.SetActive(false);
         BodyAnimator.SetBool("CancelHeadSmash", true);
-        m_bInChokeMode = false;
+        m_playerState = PlayerState.NONE;
         chokingPlayer = null;
     }
     public void StatusApplied()
@@ -910,7 +919,7 @@ public class Move : MonoBehaviour
     bool CheckForDownedKill()
     {
         //look for controller input x
-        if (XCI.GetButtonDown(XboxButton.X, m_controller.mXboxController) && !m_bInChokeMode)
+        if (XCI.GetButtonDown(XboxButton.X, m_controller.mXboxController))
         {
             //look for any colliders around me (will also hit myself)
             Collider2D[] hitCollider = Physics2D.OverlapCircleAll(this.transform.position, 1.0f, 1 << 16); // Layer 16 == stunned.
@@ -932,14 +941,15 @@ public class Move : MonoBehaviour
                             }
                         }
 
-                        if (collidersFound.gameObject.transform.parent.GetComponent<PlayerStatus>().IsStunned && collidersFound.gameObject.transform.parent.GetComponent<PlayerStatus>().Choker == null)
+                        if (collidersFound.gameObject.transform.parent.GetComponent<PlayerStatus>().IsStunned && collidersFound.gameObject.transform.parent.GetComponent<PlayerStatus>().Choker == null
+                            && collidersFound.transform.root.gameObject != this.transform.root.gameObject)
                         {
                             PlayerStatus playerBeingChoked = collidersFound.gameObject.transform.parent.GetComponent<PlayerStatus>();
                             runningAnimation = true;
                             FeetAnimator.SetBool("Choking", true);
                             _rigidBody.velocity = Vector2.zero;
                             BodyAnimator.SetTrigger("HeadSmashPullUp");
-                            m_bInChokeMode = true;
+                            m_playerState = PlayerState.CHOKING;
                             chokingPlayer = collidersFound.gameObject; // Player getting choked.
                             playerBeingChoked.transform.GetComponent<Move>().BodyAnimator.SetTrigger("HavingHeadSmashPullUp");
                             playerBeingChoked.Choker = this;
@@ -948,7 +958,7 @@ public class Move : MonoBehaviour
                             PositionOfDownedPlayer = chokingPlayer.transform.position;
                             ThrowWeapon(_rigidBody.velocity, this.transform.up, false);
 
-                           // chokingPlayer.GetComponentInParent<Move>().BodyAnimator.SetTrigger("HavingHeadSmashPullUp");
+                            // chokingPlayer.GetComponentInParent<Move>().BodyAnimator.SetTrigger("HavingHeadSmashPullUp");
                             //this.GetComponentInChildren<Animator>().SetBool("IsKilling", true);
                             //collidersFound.transform.parent.GetComponent<PlayerStatus>().KillPlayer(this.GetComponent<PlayerStatus>());
                         }
@@ -956,6 +966,7 @@ public class Move : MonoBehaviour
                 }
             }
         }
+        /*
         else if (m_bInChokeMode) //If in choke mode
         {
             // #Head Smash, #Smash Head, #Choking, #smash,
@@ -1039,7 +1050,7 @@ public class Move : MonoBehaviour
             }
             return true;
         }
-        else
+        else 
         {
             if (!m_bOutOfChoke) //not out of choke
             {
@@ -1052,12 +1063,97 @@ public class Move : MonoBehaviour
             m_ChokingTimer.CurrentTime = 0;
             FeetAnimator.SetBool("Choking", false);
 
-            m_bInChokeMode = false;
+            //m_bInChokeMode = false;
+            m_playerState = PlayerState.NONE;
 
         }
+        */
         return false;
     }
 
+    void ChokePlayer() //when the state is choke player need to find an exit point
+    {
+        // #Head Smash, #Smash Head, #Choking, #smash,
+        _rigidBody.WakeUp();
+        m_bOutOfChoke = false;
+        m_ChokingTimer.mfTimeToWait = m_fChokeKillTime; //set the time to wait
+        PlayerStatus chokingPlayerStatus = chokingPlayer.transform.root.GetComponent<PlayerStatus>(); //get the player status of the player GETTING CHOKED
+        KillBarContainer.transform.position = chokingPlayer.transform.root.position - Vector3.up * m_status.m_fKillBarOffset - Vector3.forward * 8;
+
+        if (chokingPlayerStatus.IsStunned) //if the Player getting choked player is still stunned
+        {
+
+            Vector3 chokePosition = chokingPlayer.transform.root.Find("ChokingSpot").position;
+            this.transform.position = chokePosition;
+            //this.transform.position += this.transform.up * m_fPositionOffset;
+            float ZRotation = chokingPlayer.transform.root.rotation.eulerAngles.z - 180;
+            this.transform.rotation = Quaternion.Euler(new Vector3(0, 0, ZRotation));
+            if (XCI.GetButtonDown(XboxButton.X, m_controller.mXboxController)) //look for X button down
+            {
+                BodyAnimator.SetTrigger("HeadSmashSmash"); //Set trigger to do smash
+
+                //TODO Audio Here.
+            }
+            if (XCI.GetButtonDown(XboxButton.B, m_controller.mXboxController)) //look for B button down
+            {
+                KillBarContainer.SetActive(false);
+                m_ChokingTimer.CurrentTime = 0;
+                chokingPlayer = null;  //Set trigger to do smash
+                chokingPlayerStatus.Choker = null;
+                BodyAnimator.SetBool("CancelHeadSmash", true);
+                FeetAnimator.SetBool("Choking", false);
+                chokingPlayerStatus.transform.GetComponent<Move>().BodyAnimator.SetBool("BeingSmashed", false);
+                m_playerState = PlayerState.NONE;
+            }
+            //Check Animator State
+            if (BodyAnimator.GetCurrentAnimatorStateInfo(0).IsName("HeadSmash")) //if in head smash state
+            {
+                if (!m_bChoked) //check if I applied choking logic already
+                {
+                    m_bChoked = true; //set the applied logic to true
+                    m_ChokingTimer.CurrentTime += m_fChokedTimeIncrement; //increase the timer
+                    FeetAnimator.SetBool("Choking", true);
+                    chokingPlayer.GetComponentInParent<Move>().BodyAnimator.SetTrigger("HavingHeadSmashed");
+                    chokingPlayerStatus.transform.GetComponent<Move>().BodyAnimator.SetBool("BeingSmashed", true);
+                    m_HeadAudio.Play();
+                }
+            }
+            else
+            {
+                m_bChoked = false;
+            }
+
+            if (m_ChokingTimer.Tick(Time.deltaTime)) //If timer over, kill player
+            {
+                chokingPlayerStatus.KillPlayer(this.GetComponent<PlayerStatus>());
+                chokingPlayerStatus.m_bKilledBySmash = true;
+            }
+
+            //Do choking timer here.
+            if (KillBarContainer.activeSelf)
+            {
+                float killOffset = m_ChokingTimer.CurrentTime / m_ChokingTimer.mfTimeToWait * 0.23f;
+                killMask.material.SetTextureOffset("_MainTex", new Vector2(0 - killOffset, 0));
+            }
+            else
+                KillBarContainer.SetActive(true);
+        }
+        else //once the player is no longer stunned
+        {
+            if (!m_bOutOfChoke) //not out of choke
+            {
+                this.transform.position = PositionOfDownedPlayer; // used to be    originalPosition;
+                m_bOutOfChoke = true;
+            }
+            chokingPlayer = null;
+            KillBarContainer.SetActive(false);
+            m_ChokingTimer.CurrentTime = 0;
+            FeetAnimator.SetBool("Choking", false);
+            //m_bInChokeMode = false;
+            m_playerState = PlayerState.NONE;
+
+        }
+    }
     Vector2 GetAveragePos(Transform[] transforms)
     {
         Vector3 averagePos = Vector2.zero;

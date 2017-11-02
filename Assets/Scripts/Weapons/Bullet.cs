@@ -129,7 +129,7 @@ public class Bullet : MonoBehaviour, Reset
                 else
                 {
                     //If i hit A player (when all the other cases aren't met), check to see if the bullet doens't own to me
-                    if (!RayHit.transform.GetComponent<PlayerStatus>().IsStunned && RayHit.transform.GetComponent<PlayerStatus>() != bulletOwner)
+                    if (RayHit.transform.GetComponent<PlayerStatus>().m_playerState != PlayerState.STUNNED && RayHit.transform.GetComponent<PlayerStatus>() != bulletOwner)
                     {
                         //If I find any hitbybullet interface, find all, then call its function
                         if (RayHit.transform.gameObject.GetComponent<IHitByBullet>() != null)
@@ -147,7 +147,7 @@ public class Bullet : MonoBehaviour, Reset
                         PlayerIHit.HitPlayer(this, m_bGiveIFrames);
                         if (PlayerIHit.m_iHealth <= 0)
                         {
-                            PlayerIHit.IsDead = true;
+                            PlayerIHit.m_playerState = PlayerState.DEAD;
                             PlayerIHit.GetComponent<Rigidbody2D>().velocity = m_rigidBody.velocity * m_fBulletImpactKnockBack;
                             float angle = Mathf.Atan2(m_rigidBody.velocity.normalized.x, -m_rigidBody.velocity.normalized.y);
                             PlayerIHit.transform.rotation = Quaternion.AngleAxis(angle * Mathf.Rad2Deg, Vector3.forward);
@@ -287,7 +287,7 @@ public class Bullet : MonoBehaviour, Reset
                 hit.transform.GetComponent<PlayerStatus>().HitPlayer(this, m_bGiveIFrames);
                 if (hit.transform.GetComponent<PlayerStatus>().m_iHealth <= 0)
                 {
-                    hit.transform.GetComponent<PlayerStatus>().IsDead = true;
+                    hit.transform.GetComponent<PlayerStatus>().m_playerState = PlayerState.DEAD;
                 }
 
                 Destroy(this.gameObject);

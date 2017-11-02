@@ -72,7 +72,7 @@ public class BaseAbility : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (m_PlayerStatus.IsDead)
+        if (m_PlayerStatus.m_playerState == PlayerState.DEAD)
         {
             m_ChargeIndicator.SetActive(false);
             ChargeHighlighters[0].SetActive(false);
