@@ -345,7 +345,6 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             //Showing health change is when the health bar shows up. health loss is seperate.
             if (m_bShowHealthChange)
             {
-
                 HealthContainer.SetActive(true);
                 if (stunBarContainer.activeSelf)
                 {
@@ -403,7 +402,6 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         m_MoveClass.StopChoke();
         this.GetComponent<Move>().StatusApplied();
         SetAllAnimatorsFalse(true);                                         //! This was a problem for the animator, edited to take in a if stunned bool.
-        m_MoveClass.GetBodyAnimator().SetBool("Test", true);
         _rigidbody.velocity = ThrownItemVelocity;
         m_bStunned = true;
         m_iTimesPunched = 0;
@@ -520,7 +518,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             healthLossTimer.CurrentTime = 0;
             m_bShowHealthLoss = true;
             ShowHealthChangeTimer.CurrentTime = 0;
-            m_bShowHealthChange = true;
+            m_bShowHealthChange = (aBullet.m_iDamage > 0);
             m_iHealth -= aBullet.m_iDamage;
             m_MoveClass.vibrationValue.x = 5;
             //If the game mode is either the timed deathmatch or scores appointed on kills deathmatch, then give them points
@@ -544,7 +542,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             healthLossTimer.CurrentTime = 0;
             m_bShowHealthLoss = true;
             ShowHealthChangeTimer.CurrentTime = 0;
-            m_bShowHealthChange = true;
+            m_bShowHealthChange = (a_weapon.m_iDamage > 0);
             m_iHealth -= a_weapon.m_iDamage;
             m_MoveClass.vibrationValue.x = 5;
             //If the game mode is either the timed deathmatch or scores appointed on kills deathmatch, then give them points
@@ -568,7 +566,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             healthLossTimer.CurrentTime = 0;
             m_bShowHealthLoss = true;
             ShowHealthChangeTimer.CurrentTime = 0;
-            m_bShowHealthChange = true;
+            m_bShowHealthChange = (a_Damage > 0);
             m_iHealth -= a_Damage;
             m_MoveClass.vibrationValue.x = 5;
             //If the game mode is either the timed deathmatch or scores appointed on kills deathmatch, then give them points
