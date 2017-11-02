@@ -100,7 +100,9 @@ public class UIManager : MonoBehaviour
         if (CharacterSelectionManager.Instance)
         {
             if (m_bMenuAnimator)
-                CharacterSelectionManager.Instance.LetPlayersSelectCharacters = m_bMenuAnimator.GetCurrentAnimatorStateInfo(0).IsName("Title_Section_Second_Static");
+            {
+                CharacterSelectionManager.Instance.LetPlayersSelectCharacters = (m_bMenuAnimator.GetCurrentAnimatorStateInfo(0).IsName("Title_Section_Second_Static") && m_bMenuAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.4f);
+            }
         }
         if (menuStatus.Peek().name == "First_Panel")
         {
@@ -155,6 +157,10 @@ public class UIManager : MonoBehaviour
                 menuStatus.Pop();
                 m_bMenuAnimator.SetTrigger(MenuTransitionBoolParameters[menuStatus.Peek().name]);
                 SetCurrentSelected(null);
+            }
+            else if (menuStatus.Peek().name == "First_Panel")
+            {
+                CharacterSelectionManager.Instance.LetPlayersSelectCharacters = false;
             }
             return;
         }
@@ -309,12 +315,6 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    IEnumerator PauseGame()
-    {
-        yield return new WaitForSeconds(1);
-        Time.timeScale = 0;
-
-    }
     public void Back()
     {
         //set the current menu (whatever it is), turn it off then pop it off the stack.
@@ -550,4 +550,9 @@ public class UIManager : MonoBehaviour
         DoLast(PanelToOpen, AnimationParameter);
     }
 
+    IEnumerator PauseGame()
+    {
+        yield return new WaitForSeconds(1);
+        Time.timeScale = 0;
+    }
 }
