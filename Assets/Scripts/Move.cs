@@ -1014,6 +1014,7 @@ public class Move : MonoBehaviour
                 if (m_ChokingTimer.Tick(Time.deltaTime)) //If timer over, kill player
                 {
                     chokingPlayerStatus.KillPlayer(this.GetComponent<PlayerStatus>());
+                    chokingPlayerStatus.m_bKilledBySmash = true;
                 }
 
                 //Do choking timer here.

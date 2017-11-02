@@ -62,6 +62,8 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
     private bool m_bShowHealthLoss = false;
     private bool m_bShowHealthChange = false;
     private bool m_bLeftStun = false;
+    [HideInInspector]
+    public bool m_bKilledBySmash;
     Rigidbody2D _rigidbody;
     [HideInInspector]
     public int spawnIndex;
@@ -73,6 +75,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
 
     private GameObject killbarContainer;
 
+    public Sprite HeadSmashDeathSprite;
     public Sprite[] DeadSprites;
     public Sprite[] StunnedSprites;
     private bool DeathSpriteChanged = false;
@@ -190,7 +193,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
                 {
                     if (item.GetComponentsInChildren<Collider2D>().Length > 0)
                     {
-                        foreach (Collider2D ChildrenColliders in item.GetComponentsInChildren<Collider2D>() )
+                        foreach (Collider2D ChildrenColliders in item.GetComponentsInChildren<Collider2D>())
                         {
                             ChildrenColliders.enabled = false;
                         }
@@ -208,7 +211,10 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
                 if (DeadSprites.Length > 0 && !DeathSpriteChanged)
                 {
                     DeathSpriteChanged = true;
-                    m_SpriteRenderer.sprite = DeadSprites[Random.Range(0, DeadSprites.Length)];
+                    if (!m_bKilledBySmash)
+                        m_SpriteRenderer.sprite = DeadSprites[Random.Range(0, DeadSprites.Length)];
+                    else
+                        m_SpriteRenderer.sprite = HeadSmashDeathSprite;
                 }
 
                 return;
@@ -222,7 +228,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
                     StunSpriteChanged = true;
                     m_SpriteRenderer.sprite = StunnedSprites[Random.Range(0, StunnedSprites.Length)];
                     m_MoveClass.GetBodyAnimator().SetBool("Stunned", true);
-                    
+
                 }
 
                 m_SpriteRenderer.sortingOrder = -4;
@@ -397,7 +403,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         m_MoveClass.StopChoke();
         this.GetComponent<Move>().StatusApplied();
         SetAllAnimatorsFalse(true);                                         //! This was a problem for the animator, edited to take in a if stunned bool.
-        m_MoveClass.GetBodyAnimator().SetBool("Test", true); 
+        m_MoveClass.GetBodyAnimator().SetBool("Test", true);
         _rigidbody.velocity = ThrownItemVelocity;
         m_bStunned = true;
         m_iTimesPunched = 0;
@@ -467,7 +473,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
                 {
                     ChildrenColliders.enabled = true;
                 }
-                item.enabled = true; 
+                item.enabled = true;
             }
         }
     }
@@ -637,8 +643,8 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             {
                 if (parameter.type == AnimatorControllerParameterType.Bool) //snaity check
                 {
-                    if(a_Stunned == true && parameter.name != "BeingSmashed")
-                    Body.SetBool(parameter.name, false);
+                    if (a_Stunned == true && parameter.name != "BeingSmashed")
+                        Body.SetBool(parameter.name, false);
                 }
             }
         }
@@ -651,7 +657,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
                     Feet.SetBool(parameter.name, false);
             }
         }
-        if(a_Stunned == true)
+        if (a_Stunned == true)
         {
             Body.SetBool("Stunned", true);
         }

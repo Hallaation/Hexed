@@ -8,7 +8,7 @@ public class Weapon : MonoBehaviour, Reset
     private Sprite m_DefaultSprite;
     public Sprite m_HeldSprite = null;
     public float m_fTimeBetweenShots = 0.01f;
-    public float m_iDamage;
+    public int m_iDamage;
     public bool m_bGivePlayersIFrames = false;
     public float KnockBack;
     SpriteRenderer BloomGlow;
