@@ -133,13 +133,13 @@ public class Move : MonoBehaviour
         {
             Melee1HandedMount = transform.Find("Sprites").GetChild(0).Find("1HandedMeleeSpot");
             Melee2HandedMount = transform.Find("Sprites").GetChild(0).Find("2HandedMeleeSpot");
-            if (transform.Find("Sprites").transform.Find("Character001_Feet"))
+            if (transform.Find("Sprites").transform.GetChild(1))
             {
-                FeetAnimator = transform.Find("Sprites").transform.Find("Character001_Feet").GetComponent<Animator>();
+                FeetAnimator = transform.Find("Sprites").transform.GetChild(1).GetComponent<Animator>();
             }
-            if (transform.Find("Sprites").transform.Find("Character001_Body"))
+            if (transform.Find("Sprites").transform.transform.GetChild(0))
             {
-                BodyAnimator = transform.Find("Sprites").transform.Find("Character001_Body").GetComponent<Animator>();
+                BodyAnimator = transform.Find("Sprites").transform.GetChild(0).GetComponent<Animator>();
             }
         }
         if (!crosshair.GetComponent<CrosshairClamp>())
@@ -436,8 +436,8 @@ public class Move : MonoBehaviour
             //! This makes the feet face the left sticks direction. Quaternions are wierd.
             if (m_LeftStickRotation.magnitude != 0 && FeetAnimator)
             {
-                transform.Find("Sprites").transform.Find("Character001_Feet").transform.rotation = transform.Find("Sprites").transform.Find("Character001_Feet").transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(m_LeftStickRotation.x, m_LeftStickRotation.y) * Mathf.Rad2Deg);
-                transform.Find("Sprites").transform.Find("Character001_Feet").transform.rotation *= Quaternion.Euler(0, 0, 90);
+                transform.Find("Sprites").transform.GetChild(1).rotation = transform.Find("Sprites").transform.GetChild(1).rotation = Quaternion.Euler(0, 0, Mathf.Atan2(m_LeftStickRotation.x, m_LeftStickRotation.y) * Mathf.Rad2Deg);
+                transform.Find("Sprites").transform.GetChild(1).rotation *= Quaternion.Euler(0, 0, 90);
             }
         }
         else if (KeyboardMovement != Vector3.zero)
