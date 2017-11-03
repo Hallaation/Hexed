@@ -11,7 +11,7 @@ public class BaseAbility : MonoBehaviour
     [Space]
     //abilities are going to cost mana.
     [HideInInspector]
-    protected float currentMana = 0.0f;
+    protected float currentMana = 0.0f; public float GetCurrentMana() { return currentMana; }
     protected bool RegenMana;
 
     [HideInInspector]
@@ -34,8 +34,8 @@ public class BaseAbility : MonoBehaviour
     public float m_fAbilityCoolDown = 12;
     public int m_iMaxCharges = 2;
     [SerializeField]
-    protected int m_iCurrentCharges;
-    protected Timer m_CoolDownTimer;
+    protected int m_iCurrentCharges; public int ReturnCurrentCharges() { return m_iCurrentCharges; }
+    protected Timer m_CoolDownTimer; public Timer GetCoolDownTimer() { return m_CoolDownTimer; }
     public bool findUI = true;
     private PlayerStatus m_PlayerStatus;
     public int AbilityCharges { get { return m_iCurrentCharges; }  set { m_iCurrentCharges = value; } }
