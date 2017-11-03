@@ -193,6 +193,7 @@ public class Bullet : MonoBehaviour, Reset
         Vector2 bulletVelocity = m_rigidBody.velocity;
         m_rigidBody.velocity = Vector2.Reflect(bulletVelocity, a_RayHit.normal);
         m_iCurrentBounces++;
+        bulletOwner = null;
         if (m_iCurrentBounces > m_iMaxBounces)
         {
             StopBullet(a_RayHit);
