@@ -87,6 +87,7 @@ public class Move : MonoBehaviour
     private GameObject AudioSourcePool;
     public AudioClip HeadSmash;
     private Teleport TeleportScript;
+    Vector2 StoredVelocity;
     #endregion
     //Vector3 movement;
     // Use this for initialization
@@ -417,10 +418,20 @@ public class Move : MonoBehaviour
         if (!m_status.IsStunned && !TeleportScript.GetDashing())
         {
             _rigidBody.velocity = (movement + KeyboardMovement) * movementSpeed;
+            StoredVelocity = Vector2.zero;
         }
         else if (TeleportScript.GetDashing())
         {
-            _rigidBody.velocity = (movement + KeyboardMovement) * TeleportScript.m_DashSpeed;
+            if(StoredVelocity == Vector2.zero)
+            {
+                if(movement == Vector3.zero)
+                {
+                    StoredVelocity = transform.up;
+                }
+                else
+                StoredVelocity = _rigidBody.velocity.normalized;
+            }
+            _rigidBody.velocity = (StoredVelocity) * TeleportScript.m_DashSpeed;
         }
 
         //animation checks go here
