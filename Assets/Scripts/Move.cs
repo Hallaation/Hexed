@@ -104,14 +104,14 @@ public class Move : MonoBehaviour
         m_HeadAudio = gameObject.AddComponent<AudioSource>();
         m_HeadAudio.spatialBlend = 0.8f;
         m_HeadAudio.clip = HeadSmash;
-        //for (int i = 0; i < m_audioSource.Length; ++i)
-        //{
-        //    m_audioSource[i] = AudioSourcePool.AddComponent<AudioSource>();
-        //    m_audioSource[i].outputAudioMixerGroup = AudioManager.RequestMixer(SourceType.SFX);
-        //    m_audioSource[i].playOnAwake = false;
-        //    m_audioSource[i].clip = quack;
-        //    m_audioSource[i].spatialBlend = 0.8f;
-        //}
+        for (int i = 0; i < m_audioSource.Length; ++i)
+        {
+            m_audioSource[i] = AudioSourcePool.AddComponent<AudioSource>();
+            m_audioSource[i].outputAudioMixerGroup = AudioManager.RequestMixerGroup(SourceType.SFX);
+            m_audioSource[i].playOnAwake = false;
+            m_audioSource[i].clip = quack;
+            m_audioSource[i].spatialBlend = 0.8f;
+        }
 
         if (!ColorDatabase)
         {
@@ -223,7 +223,7 @@ public class Move : MonoBehaviour
                     movementSpeed = StoredMoveSpeed * System.Convert.ToInt16(GameManagerc.Instance.RoundReady);
                     if (CheckForDownedKill())
                         return;
-                    //Quack();
+                    Quack();
                     CalculateMovement();
                     CheckForPickup();
                     Attack(TriggerReleaseCheck());
