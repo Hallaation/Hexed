@@ -15,6 +15,7 @@ public class Gun : Weapon
     [Space]
     [Header("Gun Specific")]
 
+    private ParticleSystem EmptyClipPS;
     public bool m_bAutomaticGun;
     public bool m_bBurstFire;
     public bool m_b2Handed = false;
@@ -51,6 +52,8 @@ public class Gun : Weapon
         //set the spread jitter to 0
         //make a timer with a wait time of 0.2f, around the human average reaction speed
         spreadTimer = new Timer(0.2f);
+        EmptyClipPS = this.transform.GetChild(this.transform.childCount - 1).GetComponent<ParticleSystem>();
+
     }
 
     public override bool Attack(bool trigger)
@@ -84,7 +87,7 @@ public class Gun : Weapon
             }
             m_AudioSource.PlayOneShot(m_EmptyClipAudio, clipVolume);
             shotReady = false;
-
+            EmptyClipPS.Play();
             //TODO Add an empty chamber sound effect
             //TODO Add gun click sound effect here.
         }
@@ -117,6 +120,11 @@ public class Gun : Weapon
     void FireBullet()
     {
         //Whenever fire bullet mis called, Make the bullet prefab, get the damage from the player that is holding this gun
+        if (MuzzelFlash)
+        {
+            EmptyClipPS.transform.localPosition = MuzzelFlash.transform.localPosition;
+            EmptyClipPS.transform.rotation = MuzzelFlash.transform.rotation;
+        }
         GameObject FiredBullet = Instantiate(bullet, this.transform.parent.position + this.transform.parent.up * m_fBulletSpawnOffSet, this.transform.rotation);
         Bullet bulletComponent = FiredBullet.GetComponent<Bullet>();
         bulletComponent.bulletOwner = GetComponentInParent<PlayerStatus>(); //copy stuff over

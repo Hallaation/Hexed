@@ -109,7 +109,8 @@ public class UIManager : MonoBehaviour
                     m_bInSelect = shortTimer.Tick(Time.deltaTime);
 
                 AnimatorStateInfo stateInfo = m_bMenuAnimator.GetCurrentAnimatorStateInfo(0);
-                //If any of the animators doesn't match up with the peek of the stack
+                //If any of the animators doesn't match up with the peek of the stack 
+                //this is disgusting
                 if (menuStatus.Peek().name == "First_Panel" && !(stateInfo.IsName("Title_Section_First_Static") || stateInfo.IsName("Title_Section_MoveBackToFirstSection"))) 
                 {
                     m_bMenuAnimator.SetTrigger(MenuTransitionBoolParameters["First_Panel"]);
@@ -118,7 +119,7 @@ public class UIManager : MonoBehaviour
                 {
                     m_bMenuAnimator.SetTrigger(MenuTransitionBoolParameters["Second_Panel"]);
                 }
-                else if (menuStatus.Peek().name == "Third_Panel" && !stateInfo.IsName("Title_Section_ThirdSectionStatic")) //if the peek of menu status is the first panel but the state isn't at the first 
+                else if (menuStatus.Peek().name == "Third_Panel" && !stateInfo.IsName("Title_Section_ThirdSectionStatic"))
                 {
                     m_bMenuAnimator.SetTrigger(MenuTransitionBoolParameters["Third_Panel"]);
                 }
