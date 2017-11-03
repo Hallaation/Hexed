@@ -119,12 +119,14 @@ public class Gun : Weapon
 
     void FireBullet()
     {
-        //Whenever fire bullet mis called, Make the bullet prefab, get the damage from the player that is holding this gun
-        if (MuzzelFlash)
+        //Get the owner and set the vibration
+        Move owner;
+        if ((owner = this.transform.root.GetComponent<Move>()))
         {
-            EmptyClipPS.transform.localPosition = MuzzelFlash.transform.localPosition;
-            EmptyClipPS.transform.rotation = MuzzelFlash.transform.rotation;
+            owner.vibrationValue.x = 0.8f;
+            owner.vibrationValue.y = 0.8f;
         }
+        //Whenever fire bullet mis called, Make the bullet prefab, get the damage from the player that is holding this gun
         GameObject FiredBullet = Instantiate(bullet, this.transform.parent.position + this.transform.parent.up * m_fBulletSpawnOffSet, this.transform.rotation);
         if(transform.Find("MuzzelFlash"))
         {

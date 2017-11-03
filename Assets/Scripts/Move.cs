@@ -240,6 +240,8 @@ public class Move : MonoBehaviour
                 //  _rigidBody.velocity = Vector2.zero;
             }
         }
+        vibrationValue *= 0.80f;
+
     }
     IEnumerator DelayMovement()
     {
@@ -263,26 +265,18 @@ public class Move : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (!GameManagerc.Instance.Paused)
-        {
-            //Buggy with XBone controller with high frame rates.
-            //GamePad.SetVibration(m_controller.mPlayerIndex , XCI.GetAxis(XboxAxis.LeftTrigger , m_controller.mXboxController) , XCI.GetAxis(XboxAxis.RightTrigger , m_controller.mXboxController));
-            //vibrationValue = new Vector2(XCI.GetAxis(XboxAxis.LeftTrigger , m_controller.mXboxController) , XCI.GetAxis(XboxAxis.RightTrigger , m_controller.mXboxController));
-            //GamePad.SetVibration(m_controller.mPlayerIndex , vibrationValue.x , vibrationValue.y);
+        //if (!GameManagerc.Instance.Paused)
+        //{
+        //GamePad.SetVibration(m_controller.mPlayerIndex, XCI.GetAxis(XboxAxis.LeftTrigger, m_controller.mXboxController), XCI.GetAxis(XboxAxis.RightTrigger, m_controller.mXboxController));
+        //vibrationValue = new Vector2(XCI.GetAxis(XboxAxis.LeftTrigger, m_controller.mXboxController), XCI.GetAxis(XboxAxis.RightTrigger, m_controller.mXboxController));
+        GamePad.SetVibration(m_controller.mPlayerIndex, vibrationValue.x, vibrationValue.y);
 
-            vibrationValue *= 0.99f; //magic numbers.
-
-            if (vibrationValue.magnitude < 0.4f)
-            {
-                vibrationValue = Vector2.zero;
-            }
-
-            //if (_characterController)
-            //{
-            //    Vector3 gravity = new Vector3(0 , -9.8f , 0);
-            //    _characterController.Move(gravity * (1 - Time.fixedDeltaTime * 0.5f));
-            //}
-        }
+        //if (_characterController)
+        //{
+        //    Vector3 gravity = new Vector3(0 , -9.8f , 0);
+        //    _characterController.Move(gravity * (1 - Time.fixedDeltaTime * 0.5f));
+        //}
+        //}
     }
 
     void Special()
@@ -422,14 +416,14 @@ public class Move : MonoBehaviour
         }
         else if (TeleportScript.GetDashing())
         {
-            if(StoredVelocity == Vector2.zero)
+            if (StoredVelocity == Vector2.zero)
             {
-                if(movement == Vector3.zero)
+                if (movement == Vector3.zero)
                 {
                     StoredVelocity = transform.up;
                 }
                 else
-                StoredVelocity = _rigidBody.velocity.normalized;
+                    StoredVelocity = _rigidBody.velocity.normalized;
             }
             _rigidBody.velocity = (StoredVelocity) * TeleportScript.m_DashSpeed;
         }
@@ -1179,6 +1173,13 @@ public class Move : MonoBehaviour
         //_AmmoText = PlayerUIArray.Instance.playerElements[GetComponent<ControllerSetter>().m_playerNumber].m_AmmoText.GetComponent<Text>();
     }
 
+    public void SetUIBars(Image a_Mask, GameObject a_barContainer)
+    {
+        killMask = a_Mask;
+        KillBarContainer = a_barContainer;
+    }
+
+
     IEnumerator WeaponPickUpDelay(float WaitTime)
     {
         yield return new WaitForSeconds(WaitTime);
@@ -1186,9 +1187,4 @@ public class Move : MonoBehaviour
         yield return null;
     }
 
-    public void SetUIBars(Image a_Mask, GameObject a_barContainer)
-    {
-        killMask = a_Mask;
-        KillBarContainer = a_barContainer;
-    }
 }
