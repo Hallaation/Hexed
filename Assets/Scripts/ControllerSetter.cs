@@ -37,6 +37,27 @@ public class ControllerSetter : MonoBehaviour
     {
         mXboxController = xboxController; 
     }
+
+    void Update()
+    {
+        switch (mXboxController)
+        {
+            case XboxController.First:
+                mPlayerIndex = PlayerIndex.One;
+                break;
+            case XboxController.Second:
+                mPlayerIndex = PlayerIndex.Two;
+                break;
+            case XboxController.Third:
+                mPlayerIndex = PlayerIndex.Three;
+                break;
+            case XboxController.Fourth:
+                mPlayerIndex = PlayerIndex.Four;
+                break;
+            default:
+                break;
+        }
+    }
 }
 
 

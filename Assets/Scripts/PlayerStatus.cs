@@ -10,8 +10,8 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
     //TODO Cleanup
 
     private Move m_MoveClass;
-    private float m_iMaxHealth;
-    public float m_iHealth = 3; //health completely useless right now
+    private int m_iMaxHealth;
+    public int m_iHealth = 3; //health completely useless right now
     int m_iTimesPunched = 0;
     int m_iPreviousTimesPunched = 0;
 
@@ -559,7 +559,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         }
     }
 
-    public void HitPlayer(float a_Damage, PlayerStatus a_Status, bool abGiveIFrames = false) // maybe change to int
+    public void HitPlayer(int a_Damage, PlayerStatus a_Status, bool abGiveIFrames = false) // maybe change to int
     {
         if (!m_bInvincible)
         {
