@@ -6,7 +6,7 @@ public class Melee : Weapon
 {
     [Space]
     [Header("MeleeVariables")]
-    
+
     public bool m_Stun = true;
     public float m_fHitFlinchTime = .3f;
     public bool m_bAttacking;
@@ -38,7 +38,7 @@ public class Melee : Weapon
     {
         if (this.transform.root.tag == "Player" && other.transform.root != this.transform.root)
         {
-            if(m_bAttacking == true && other.tag == "Wall")
+            if (m_bAttacking == true && other.tag == "Wall")
             {
                 #region
                 //float AnimationTime = BodyAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime;
@@ -69,9 +69,9 @@ public class Melee : Weapon
                     RaycastHit2D hit = Physics2D.Raycast(this.transform.position, Direction, length + 2, 1 << LayerMask.NameToLayer("Wall"));
                     if (hit)
                     {
-                        Vector2 Position = new Vector2(transform.position.x,transform.position.y);
+                        Vector2 Position = new Vector2(transform.position.x, transform.position.y);
                         Vector2 OtherPosition = new Vector2(other.transform.position.x, other.transform.position.y);
-                        if((hit.point - Position).magnitude < (OtherPosition - Position).magnitude) // if RayHit Wall is closer then the other player.
+                        if ((hit.point - Position).magnitude < (OtherPosition - Position).magnitude) // if RayHit Wall is closer then the other player.
                         {
                         }
                         else
@@ -83,7 +83,7 @@ public class Melee : Weapon
                     {
                         HitPlayerStuff(other, false);
                         //other.transform.parent.GetComponentInParent<PlayerStatus>().HitPlayer(this, false);
-                              //! Uses transform right instead of transform up due to using the bats right rather then players 
+                        //! Uses transform right instead of transform up due to using the bats right rather then players 
 
                     }
                 }
@@ -108,12 +108,15 @@ public class Melee : Weapon
                 {
 
                     //stun the player
-                    HitPlayerStuff(other, true);      //! Uses transform right instead of transform up due to using the bats right rather then players up
-                    //Play the hit audio
-                    hitPlayerAudioSource.clip = ThrowHitAudio; 
-                    hitPlayerAudioSource.volume = ThrowHitAudioVolume;
-                    hitPlayerAudioSource.pitch = (m_bRandomizeThrowHitPitch) ? Random.Range(0.9f, 1.1f) : 1;
-                    hitPlayerAudioSource.Play();
+                    if (!other.GetComponentInParent<PlayerStatus>().IsStunned)
+                    {
+                        HitPlayerStuff(other, true);      //! Uses transform right instead of transform up due to using the bats right rather then players 
+                        //Play the hit audio
+                        hitPlayerAudioSource.clip = ThrowHitAudio;
+                        hitPlayerAudioSource.volume = ThrowHitAudioVolume;
+                        hitPlayerAudioSource.pitch = (m_bRandomizeThrowHitPitch) ? Random.Range(0.9f, 1.1f) : 1;
+                        hitPlayerAudioSource.Play();
+                    }
                 }
             }
             //Find every hit by melee interface and call its function
@@ -131,7 +134,7 @@ public class Melee : Weapon
         }
 
     }
-    
+
 
     void OnTriggerStay2D(Collider2D other)
     {
@@ -170,10 +173,8 @@ public class Melee : Weapon
                         Vector2 Position = new Vector2(transform.position.x, transform.position.y);
                         Vector2 OtherPosition = new Vector2(other.transform.position.x, other.transform.position.y);
                         if ((hit.point - Position).magnitude < (OtherPosition - Position).magnitude) // if RayHit Wall is closer then the other player.
-                        {
-                          
+                        { 
                         }
-
                         else
                         {
                             HitPlayerStuff(other, false);
@@ -182,14 +183,10 @@ public class Melee : Weapon
                     else
                     {
                         HitPlayerStuff(other, false);
-
                         //other.transform.parent.GetComponentInParent<PlayerStatus>().HitPlayer(this, false);
                         //! Uses transform right instead of transform up due to using the bats right rather then players up
-
-               
                     }
                 }
-
                 //Find every hitbymelee interface and call its function
                 if (other.GetComponent<IHitByMelee>() != null)
                 {
@@ -207,11 +204,15 @@ public class Melee : Weapon
             //Check if the other has a playerstatus to ensure it is a player
             if (other.transform.root.GetComponentInParent<PlayerStatus>())
             {
+                PlayerStatus hitPlayer;
                 //Check my RB velocity's magnitude, if hit another player and the other player isn't the weapon thrower
-                if (GetComponent<Rigidbody2D>().velocity.magnitude >= 10 && other.tag == "Player" && other.GetComponentInParent<PlayerStatus>().gameObject != weaponThrower)
+                if (GetComponent<Rigidbody2D>().velocity.magnitude >= 10 && other.tag == "Player" && (hitPlayer = other.GetComponentInParent<PlayerStatus>()).gameObject != weaponThrower)
                 {
                     //stun the player
-                    HitPlayerStuff(other, true);        //! Uses transform right instead of transform up due to using the bats right rather then players up
+                    if (!hitPlayer.IsStunned)
+                    {
+                        HitPlayerStuff(other, true);        //! Uses transform right instead of transform up due to using the bats right rather then players up
+                    }
                 }
             }
             //Find every hit by melee interface and call its function
@@ -246,7 +247,7 @@ public class Melee : Weapon
             OtherPlayerStatus.StunPlayer(transform.right * KnockBack);
         }
 
-      
+
         if (thrown)
         {
             if (ThrownHit == false)
@@ -254,7 +255,7 @@ public class Melee : Weapon
                 OtherPlayerStatus.HitPlayer(ThrownDamage, this.transform.root.GetComponent<PlayerStatus>(), false);
                 ThrownHit = true;
                 transform.GetComponent<Rigidbody2D>().velocity = -PreviousVelocity * .2f;
-                
+
             }
         }
         else if (m_iDamage > 0)
@@ -273,13 +274,13 @@ public class Melee : Weapon
                 item.HitByMelee(this, null);
             }
         }
-       // m_AudioSource.Play();
+        // m_AudioSource.Play();
 
-       
+
     }
     public override void DoWeaponThings()
     {
-       if( GetComponent<Rigidbody2D>().velocity.magnitude < 10)
+        if (GetComponent<Rigidbody2D>().velocity.magnitude < 10)
         {
             ThrownHit = false;
         }
@@ -328,7 +329,7 @@ public class Melee : Weapon
         {
             m_bPlayedAudio = false;
         }
-       
+
     }
 
     void Reset()

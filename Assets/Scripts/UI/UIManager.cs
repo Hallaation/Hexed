@@ -43,7 +43,9 @@ public class UIManager : MonoBehaviour
     private Animator m_ButtonAnimator;
     private Animator m_bMenuAnimator;
     private bool m_bOpenedPanel;
-
+    private bool m_bInSelect = false;
+    private bool FixAnimator = false;
+    private Timer shortTimer;
     public bool RemoveLastPanel { get { return m_bRemoveLastPanel; } set { m_bRemoveLastPanel = value; } }
     // Use this for initialization
 
@@ -72,6 +74,7 @@ public class UIManager : MonoBehaviour
 
     void Awake()
     {
+        shortTimer = new Timer(0.2f);
         uiNavigationInstance = UINavigation.Instance;
         m_bMenuAnimator = FindObjectOfType<Canvas>().GetComponent<Animator>();
         //Add me to the singleton tester
@@ -100,7 +103,26 @@ public class UIManager : MonoBehaviour
         if (CharacterSelectionManager.Instance)
         {
             if (m_bMenuAnimator)
-                CharacterSelectionManager.Instance.LetPlayersSelectCharacters = m_bMenuAnimator.GetCurrentAnimatorStateInfo(0).IsName("Title_Section_Second_Static");
+            {
+                CharacterSelectionManager.Instance.LetPlayersSelectCharacters = (m_bMenuAnimator.GetCurrentAnimatorStateInfo(0).IsName("Title_Section_Second_Static") && m_bInSelect);
+                if (!m_bInSelect && m_bMenuAnimator.GetCurrentAnimatorStateInfo(0).IsName("Title_Section_Second_Static"))
+                    m_bInSelect = shortTimer.Tick(Time.deltaTime);
+
+                AnimatorStateInfo stateInfo = m_bMenuAnimator.GetCurrentAnimatorStateInfo(0);
+                //If any of the animators doesn't match up with the peek of the stack
+                if (menuStatus.Peek().name == "First_Panel" && !(stateInfo.IsName("Title_Section_First_Static") || stateInfo.IsName("Title_Section_MoveBackToFirstSection"))) 
+                {
+                    m_bMenuAnimator.SetTrigger(MenuTransitionBoolParameters["First_Panel"]);
+                }
+                else if (menuStatus.Peek().name == "Second_Panel" && !(stateInfo.IsName("Title_Section_Second_Static") || stateInfo.IsName("Title_Section_MoveBackToSecondSection"))) 
+                {
+                    m_bMenuAnimator.SetTrigger(MenuTransitionBoolParameters["Second_Panel"]);
+                }
+                else if (menuStatus.Peek().name == "Third_Panel" && !stateInfo.IsName("Title_Section_ThirdSectionStatic")) //if the peek of menu status is the first panel but the state isn't at the first 
+                {
+                    m_bMenuAnimator.SetTrigger(MenuTransitionBoolParameters["Third_Panel"]);
+                }
+            }
         }
         if (menuStatus.Peek().name == "First_Panel")
         {
@@ -146,21 +168,30 @@ public class UIManager : MonoBehaviour
     {
         //GetComponent<AudioSource>().outputAudioMixerGroup;
         //If the menu status only has 1 object in it, 
-        Debug.Log(menuStatus.Peek().name);
+        foreach (AnimatorControllerParameter item in m_bMenuAnimator.parameters)
+        {
+            m_bMenuAnimator.SetBool(item.name, false);
+        }
+        Debug.Log("Main menu back");
+        shortTimer.CurrentTime = 0;
+        m_bInSelect = false;
         if (menuStatus.Count == 1 || CharacterSelectionManager.Instance.JoinedPlayers < 4)
         {
             //If there are joined players and the peek of the stack is the third panel, go back
             if (CharacterSelectionManager.Instance.JoinedPlayers < 4 && menuStatus.Peek().name == "Third_Panel")
             {
                 menuStatus.Pop();
-                m_bMenuAnimator.SetTrigger(MenuTransitionBoolParameters[menuStatus.Peek().name]);
+                m_bMenuAnimator.SetBool(MenuTransitionBoolParameters[menuStatus.Peek().name], true);
                 SetCurrentSelected(null);
+            }
+            else if (menuStatus.Peek().name == "First_Panel")
+            {
+                CharacterSelectionManager.Instance.LetPlayersSelectCharacters = false;
             }
             return;
         }
         else if (m_bOpenedPanel) //only will run If a panel was open (Credits or Settings)
         {
-
             //If I find any dropboxes and they are open, hide them
             foreach (var dropdown in menuStatus.Peek().GetComponentsInChildren<Dropdown>())
             {
@@ -189,12 +220,12 @@ public class UIManager : MonoBehaviour
                 SettingsManager.Instance.OnApplyButtonClick();
             }
             //set the first object on the stack to false
-            menuStatus.Peek().SetActive(false);
+            //menuStatus.Peek().SetActive(false);
             menuStatus.Pop();
             m_ButtonAnimator = menuStatus.Peek().GetComponent<Animator>();
             DefaultButton temp = menuStatus.Peek().GetComponent<DefaultButton>();
 
-            m_bMenuAnimator.SetTrigger(MenuTransitionBoolParameters[menuStatus.Peek().name]);
+            m_bMenuAnimator.SetBool(MenuTransitionBoolParameters[menuStatus.Peek().name], true);
             _eventSystem.SetSelectedGameObject(null);
             _eventSystem.SetSelectedGameObject(temp.defaultButton);
             m_bOpenedPanel = false;
@@ -203,7 +234,7 @@ public class UIManager : MonoBehaviour
         {
             menuStatus.Pop();
             //Swap the trigger to whatever the parameter is.
-            m_bMenuAnimator.SetTrigger(MenuTransitionBoolParameters[menuStatus.Peek().name]);
+            m_bMenuAnimator.SetBool(MenuTransitionBoolParameters[menuStatus.Peek().name], true);
             m_ButtonAnimator = menuStatus.Peek().GetComponent<Animator>();
             DefaultButton temp = menuStatus.Peek().GetComponent<DefaultButton>();
             if (temp)
@@ -218,13 +249,18 @@ public class UIManager : MonoBehaviour
     {
         if (!menuStatus.Contains(panelToMove))
         {
+            foreach (AnimatorControllerParameter item in m_bMenuAnimator.parameters)
+            {
+                m_bMenuAnimator.SetBool(item.name, false);
+            }
+
             if (m_SettingsPanel.activeSelf)
                 m_SettingsPanel.SetActive(false);
             if (m_CreditsPanel)
                 m_CreditsPanel.SetActive(false);
             menuStatus.Push(panelToMove);
             //swap the trigger to the corresponding parameter name
-            m_bMenuAnimator.SetTrigger(MenuTransitionBoolParameters[panelToMove.name]);
+            m_bMenuAnimator.SetBool(MenuTransitionBoolParameters[panelToMove.name], true);
             if (panelToMove.GetComponent<Animator>())
                 m_ButtonAnimator = panelToMove.GetComponent<Animator>();
             m_CharacterSelectionPanel.SetActive(true);
@@ -309,12 +345,6 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    IEnumerator PauseGame()
-    {
-        yield return new WaitForSeconds(1);
-        Time.timeScale = 0;
-
-    }
     public void Back()
     {
         //set the current menu (whatever it is), turn it off then pop it off the stack.
@@ -373,15 +403,11 @@ public class UIManager : MonoBehaviour
     }
 
 
-    IEnumerator WaitForAnimation(GameObject PanelToOpen, string AnimationParameter = "")
-    {
-        yield return new WaitForSeconds(m_ButtonAnimator.GetCurrentAnimatorStateInfo(0).length - 1.3f /*+ m_ButtonAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime*/);
-        DoLast(PanelToOpen, AnimationParameter);
-    }
 
     void DoLast(GameObject PanelToOpen, string AnimationParameter)
     {
         m_CharacterSelectionPanel.SetActive(false);
+        m_CreditsPanel.SetActive(false);
         m_bMenuAnimator.SetTrigger(MenuTransitionBoolParameters["Second_Panel"]);
         m_bOpenedPanel = true;
 
@@ -546,4 +572,19 @@ public class UIManager : MonoBehaviour
     {
         m_SettingsPanel.SetActive(true);
     }
+
+
+    IEnumerator WaitForAnimation(GameObject PanelToOpen, string AnimationParameter = "")
+    {
+        yield return new WaitForSeconds(m_ButtonAnimator.GetCurrentAnimatorStateInfo(0).length - 1.3f /*+ m_ButtonAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime*/);
+        DoLast(PanelToOpen, AnimationParameter);
+    }
+
+    IEnumerator PauseGame()
+    {
+        yield return new WaitForSeconds(1);
+        Time.timeScale = 0;
+    }
+
+
 }

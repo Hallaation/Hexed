@@ -217,49 +217,17 @@ public class Move : MonoBehaviour
             //If I'm not dead, or stunned
             if (!m_status.IsDead && !m_status.IsStunned)
             {
-                //if the walking animation isnt running, do everything else
-                if (!GetComponentInChildren<Animator>().GetCurrentAnimatorStateInfo(0).IsName("WalkingMan") && !runningAnimation)
+                if (PlayerIsActive)
                 {
-                    if (PlayerIsActive)
-                    {
-                        movementSpeed = StoredMoveSpeed * System.Convert.ToInt16(GameManagerc.Instance.RoundReady);
-                        if (CheckForDownedKill())
-                            return;
-                        //Quack();
-                       // Quack();
-                        CalculateMovement();
-                        CheckForPickup();
-                        Attack(TriggerReleaseCheck());
-
-                        Special();
-                    }
-
-                    //! an ammo text changing for UI, move this to another function then change to sprites/masking later
-                    if (heldWeapon)
-                    {
-                        if (heldWeapon.GetType() == typeof(Gun))
-                        {
-             
-                            //_AmmoText.text = heldWeapon.GetComponent<Gun>().m_iAmmo.ToString();
-                        }
-                        else
-                        {
-                            //_AmmoText.text = "Infinite Ammo";
-                        }
-                    }
-                    else
-                    {
-                        //_AmmoText.text = "you punch";
-                    }
-
+                    movementSpeed = StoredMoveSpeed * System.Convert.ToInt16(GameManagerc.Instance.RoundReady);
+                    if (CheckForDownedKill())
+                        return;
+                    //Quack();
+                    CalculateMovement();
+                    CheckForPickup();
+                    Attack(TriggerReleaseCheck());
+                    Special();
                 }
-                else //otherwise set the iskilling to false so it can return the animation to idle
-                {
-                    runningAnimation = false;
-                    //   _rigidBody.velocity = Vector2.zero;
-                    GetComponentInChildren<Animator>().SetBool("IsKilling", false);
-                }
-
             }
             else
             {
@@ -663,7 +631,7 @@ public class Move : MonoBehaviour
             }
             else
             {
-    
+
                 //Debug.DrawLine(pos , pos + Dir , Color.red , Mathf.Infinity);
             }
 
@@ -866,8 +834,6 @@ public class Move : MonoBehaviour
         {
             BodyAnimator.SetBool("UnarmedAttack", false);
             BodyAnimator.SetBool("Moving", false);
-            BodyAnimator.SetBool("IsKilling", false);
-
         }
 
         if (transform.Find("Colliders"))
@@ -948,7 +914,7 @@ public class Move : MonoBehaviour
                             PositionOfDownedPlayer = chokingPlayer.transform.position;
                             ThrowWeapon(_rigidBody.velocity, this.transform.up, false);
 
-                           // chokingPlayer.GetComponentInParent<Move>().BodyAnimator.SetTrigger("HavingHeadSmashPullUp");
+                            // chokingPlayer.GetComponentInParent<Move>().BodyAnimator.SetTrigger("HavingHeadSmashPullUp");
                             //this.GetComponentInChildren<Animator>().SetBool("IsKilling", true);
                             //collidersFound.transform.parent.GetComponent<PlayerStatus>().KillPlayer(this.GetComponent<PlayerStatus>());
                         }
@@ -967,7 +933,7 @@ public class Move : MonoBehaviour
 
             if (chokingPlayerStatus.IsStunned) //if the Player getting choked player is still stunned
             {
-               
+
                 Vector3 chokePosition = chokingPlayer.transform.root.Find("ChokingSpot").position;
                 this.transform.position = chokePosition;
                 //this.transform.position += this.transform.up * m_fPositionOffset;
@@ -1035,7 +1001,7 @@ public class Move : MonoBehaviour
                 chokingPlayerStatus.transform.GetComponent<Move>().BodyAnimator.SetBool("BeingSmashed", false);
                 chokingPlayer = null;
                 FeetAnimator.SetBool("Choking", false);
-                
+
             }
             return true;
         }
@@ -1046,7 +1012,7 @@ public class Move : MonoBehaviour
                 this.transform.position = PositionOfDownedPlayer; // used to be    originalPosition;
                 m_bOutOfChoke = true;
             }
-            
+
             chokingPlayer = null;
             KillBarContainer.SetActive(false);
             m_ChokingTimer.CurrentTime = 0;
