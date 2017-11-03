@@ -46,6 +46,7 @@ using UnityEngine.Audio;
 public enum Gamemode_type
 {
     LAST_MAN_STANDING_DEATHMATCH, //last person to stand earns a point, probably the default
+    HEAD_HUNTERS,
     //DEATHMATCH_POINTS, //killing a player will earn them a point, up to a certain point Currently broken and only semi implemented.
 
 }
@@ -265,6 +266,8 @@ public class GameManagerc : MonoBehaviour
                     CheckPlayersPoints();
                     mbFinishedShowingScores = false;
                     break;
+                case Gamemode_type.HEAD_HUNTERS:
+
                 //case Gamemode_type.DEATHMATCH_POINTS:
                 //    RoundEndDeathMatchMaxPoints();
                 //    CheckPlayersPoints();
@@ -342,41 +345,32 @@ public class GameManagerc : MonoBehaviour
                 if (!player.IsDead)
                 {
                     //increase the winning player's point by 1
-                    PlayerWins[player] += 1;
-                    StartCoroutine(AddPointsToPanel(player));
+                    StartCoroutine(AddPointsToPanel(player, 1));
                     // Debug.Break();
                 }
             }
         }
     }
 
-    //! USELESS FUNCTION
-    void RoundEndDeathMatchMaxPoints()
+    void RoundEndHeadHunters()
     {
-        //! USELESS FUNCTION
+        int DeadCount = 0;
         foreach (PlayerStatus player in InGamePlayers)
         {
             if (player.IsDead)
             {
-                player.ResetPlayer();
+                DeadCount++;
             }
-
-            //If player has reached the points required to win
-            if (PlayerWins[player] >= m_iPointsNeeded)
+        }
+        if (DeadCount >= InGamePlayers.Count - 1)
+        {
+            m_bRoundOver = true;
+            foreach (PlayerStatus player in InGamePlayers)
             {
-                //! USELESS FUNCTION
-                //open the finish panel, UI manager will set all the children to true, thus rendering them
-                UIManager.Instance.OpenUIElement(FinishUIPanel, true);
-                if (FindObjectOfType<ScreenTransition>())
-                    FindObjectOfType<ScreenTransition>().OpenDoor();
-                UIManager.Instance.RemoveLastPanel = false;
-                //Reset the event managers current selected object to the rematch button
-                //FindObjectOfType<EventSystem>().SetSelectedGameObject(FinishUIPanel.transform.Find("Rematch").gameObject);
 
             }
         }
     }
-
     void CheckPlayersPoints()
     {
         //If player has reached the points required to win
@@ -781,7 +775,7 @@ public class GameManagerc : MonoBehaviour
         SceneManager.LoadScene(0);
     }
 
-    IEnumerator AddPointsToPanel(PlayerStatus player)
+    IEnumerator AddPointsToPanel(PlayerStatus player, int PointGain = 0)
     {
         m_bAllowPause = false;
         yield return new WaitForSeconds(m_fTimeTillPoints);
@@ -793,10 +787,19 @@ public class GameManagerc : MonoBehaviour
         go.AddComponent<CanvasRenderer>();
         go.AddComponent<Image>().sprite = PointSprite;
 
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(5);
 
-        int PlayerIndex = XboxControllerPlayerNumbers[player.GetComponent<ControllerSetter>().mXboxController];
-        PointContainers[PlayerIndex].transform.GetChild(PlayerWins[player] - 1).GetComponent<Image>().color = Color.blue;
+        int PlayerIndex = XboxControllerPlayerNumbers[player.GetComponent<ControllerSetter>().mXboxController]; //get the index of player
+                                                                                                                //for the point container that the player owns, 
+        
+        //starting from the current player's points, turn everything after that to blue.
+        for (int i = PlayerWins[player]; i < PlayerWins[player] + PointGain; i++)
+        {
+            Debug.Log(i);
+            PointContainers[PlayerIndex].transform.GetChild(i).GetComponent<Image>().color = Color.blue;
+        }
+        Debug.Log(PlayerWins[player]);
+        PlayerWins[player] += PointGain; //increase the player's points
         if (PlayerWins[player] >= m_iPointsNeeded)
         {
             m_bDoReadyKill = false;
