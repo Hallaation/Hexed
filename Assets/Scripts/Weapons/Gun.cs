@@ -126,6 +126,14 @@ public class Gun : Weapon
             EmptyClipPS.transform.rotation = MuzzelFlash.transform.rotation;
         }
         GameObject FiredBullet = Instantiate(bullet, this.transform.parent.position + this.transform.parent.up * m_fBulletSpawnOffSet, this.transform.rotation);
+        if(transform.Find("MuzzelFlash"))
+        {
+            transform.Find("MuzzelFlash").GetChild(0).GetComponent<ParticleSystem>().Play();
+
+        }
+
+
+
         Bullet bulletComponent = FiredBullet.GetComponent<Bullet>();
         bulletComponent.bulletOwner = GetComponentInParent<PlayerStatus>(); //copy stuff over
         bulletComponent.m_iDamage = this.m_iDamage;
