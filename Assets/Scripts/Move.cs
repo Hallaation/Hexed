@@ -87,6 +87,7 @@ public class Move : MonoBehaviour
     private GameObject AudioSourcePool;
     public AudioClip HeadSmash;
     private Teleport TeleportScript;
+    Vector2 StoredVelocity;
     #endregion
     //Vector3 movement;
     // Use this for initialization
@@ -103,14 +104,14 @@ public class Move : MonoBehaviour
         m_HeadAudio = gameObject.AddComponent<AudioSource>();
         m_HeadAudio.spatialBlend = 0.8f;
         m_HeadAudio.clip = HeadSmash;
-        //for (int i = 0; i < m_audioSource.Length; ++i)
-        //{
-        //    m_audioSource[i] = AudioSourcePool.AddComponent<AudioSource>();
-        //    m_audioSource[i].outputAudioMixerGroup = AudioManager.RequestMixer(SourceType.SFX);
-        //    m_audioSource[i].playOnAwake = false;
-        //    m_audioSource[i].clip = quack;
-        //    m_audioSource[i].spatialBlend = 0.8f;
-        //}
+        for (int i = 0; i < m_audioSource.Length; ++i)
+        {
+            m_audioSource[i] = AudioSourcePool.AddComponent<AudioSource>();
+            m_audioSource[i].outputAudioMixerGroup = AudioManager.RequestMixerGroup(SourceType.SFX);
+            m_audioSource[i].playOnAwake = false;
+            m_audioSource[i].clip = quack;
+            m_audioSource[i].spatialBlend = 0.8f;
+        }
 
         if (!ColorDatabase)
         {
@@ -222,7 +223,7 @@ public class Move : MonoBehaviour
                     movementSpeed = StoredMoveSpeed * System.Convert.ToInt16(GameManagerc.Instance.RoundReady);
                     if (CheckForDownedKill())
                         return;
-                    //Quack();
+                    Quack();
                     CalculateMovement();
                     CheckForPickup();
                     Attack(TriggerReleaseCheck());
@@ -417,10 +418,20 @@ public class Move : MonoBehaviour
         if (!m_status.IsStunned && !TeleportScript.GetDashing())
         {
             _rigidBody.velocity = (movement + KeyboardMovement) * movementSpeed;
+            StoredVelocity = Vector2.zero;
         }
         else if (TeleportScript.GetDashing())
         {
-            _rigidBody.velocity = (movement + KeyboardMovement) * TeleportScript.m_DashSpeed;
+            if(StoredVelocity == Vector2.zero)
+            {
+                if(movement == Vector3.zero)
+                {
+                    StoredVelocity = transform.up;
+                }
+                else
+                StoredVelocity = _rigidBody.velocity.normalized;
+            }
+            _rigidBody.velocity = (StoredVelocity) * TeleportScript.m_DashSpeed;
         }
 
         //animation checks go here
