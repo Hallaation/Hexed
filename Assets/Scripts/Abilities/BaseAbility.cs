@@ -38,7 +38,7 @@ public class BaseAbility : MonoBehaviour
     protected Timer m_CoolDownTimer; public Timer GetCoolDownTimer() { return m_CoolDownTimer; }
     public bool findUI = true;
     private PlayerStatus m_PlayerStatus;
-    public int AbilityCharges { get { return m_iCurrentCharges; }  set { m_iCurrentCharges = value; } }
+    public int AbilityCharges { get { return m_iCurrentCharges; } set { m_iCurrentCharges = value; } }
 
     protected Text _AbilityTypeText;
     public Move m_MoveOwner;
@@ -48,6 +48,7 @@ public class BaseAbility : MonoBehaviour
     public Sprite[] EmptyChargeSprites;
     public GameObject[] ChargeHighlighters;
     protected SpriteRenderer m_IndicatorRenderer;
+    ParticleSystem.MainModule m_indicatorModule;
     protected float m_fIndicatorScale = 0;
     public bool ChargeCoolDown = true;
 
@@ -63,6 +64,7 @@ public class BaseAbility : MonoBehaviour
         ChargeHighlighters[0] = this.transform.Find("Sprites").Find("TeleportIndicator").GetChild(1).gameObject;
         ChargeHighlighters[1] = this.transform.Find("Sprites").Find("TeleportIndicator").GetChild(2).gameObject;
         m_IndicatorRenderer = m_ChargeIndicator.GetComponentInChildren<SpriteRenderer>();
+        m_indicatorModule = m_ChargeIndicator.GetComponent<ParticleSystem>().main;
         // mana = GameObject.Find("Mana").GetComponent<UnityEngine.UI.Text>();
         Initialise();
 
@@ -107,9 +109,18 @@ public class BaseAbility : MonoBehaviour
                     ChargeHighlighters[1].GetComponent<SpriteRenderer>().sprite = EmptyChargeSprites[1];
                     break;
             }
-           // float GlowScale = 1 ;
-            m_fIndicatorScale = (m_CoolDownTimer.CurrentTime / m_CoolDownTimer.mfTimeToWait + m_iCurrentCharges )  * 0.5f;
-            m_ChargeIndicator.transform.localScale = new Vector2(m_fIndicatorScale, m_fIndicatorScale);
+            // float GlowScale = 1 ;
+            //m_fIndicatorScale = (m_CoolDownTimer.CurrentTime / m_CoolDownTimer.mfTimeToWait + m_iCurrentCharges )  * 0.5f;
+            //m_ChargeIndicator.transform.localScale = new Vector2(m_fIndicatorScale, m_fIndicatorScale);
+            if (!m_IndicatorRenderer)
+            {
+                m_indicatorModule.startSizeMultiplier = (m_CoolDownTimer.CurrentTime / m_CoolDownTimer.mfTimeToWait + m_iCurrentCharges + 0.4f);
+            }
+            else
+            {
+                m_fIndicatorScale = (m_CoolDownTimer.CurrentTime / m_CoolDownTimer.mfTimeToWait + m_iCurrentCharges )  * 0.5f;
+                m_ChargeIndicator.transform.localScale = new Vector2(m_fIndicatorScale, m_fIndicatorScale);
+            }
             //! Fuck the mana shit, time to go to cooldowns.
             //if (manaBar == null)
             //{
