@@ -184,7 +184,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1885874890046246}
   m_LocalRotation: {x: -1, y: -0, z: -0, w: 0.0000014603138}
-  m_LocalPosition: {x: 0.993, y: 0.124, z: 0}
+  m_LocalPosition: {x: 1.21, y: 0.011, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4766062031835860}
@@ -319,7 +319,7 @@ MonoBehaviour:
   m_fSpreadJitter: 0
   m_fSpreadIncrease: 7.5
   m_fMaxJitter: 10
-  m_fBulletSpawnOffSet: 1.2
+  m_fBulletSpawnOffSet: 1.1
   m_fFiringForce: 0.25
   m_iBurstFire: 0
   m_fTimeBetweenBurstShots: 0
@@ -330,7 +330,7 @@ ParticleSystem:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1885874890046246}
   serializedVersion: 5
-  lengthInSec: 0.35
+  lengthInSec: 0.15
   simulationSpeed: 1
   looping: 0
   prewarm: 0
@@ -383,7 +383,7 @@ ParticleSystem:
     serializedVersion: 3
     enabled: 1
     startLifetime:
-      scalar: 0.35
+      scalar: 0.15
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -551,10 +551,10 @@ ParticleSystem:
         m_NumColorKeys: 2
         m_NumAlphaKeys: 2
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 1, b: 1, a: 1}
+      maxColor: {r: 0.16470589, g: 0.43529412, b: 0.34117648, a: 1}
       minMaxState: 0
     startSize:
-      scalar: 0.47
+      scalar: 0.55
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -1789,7 +1789,7 @@ ParticleSystem:
     inWorldSpace: 0
     dampen: 1
   NoiseModule:
-    enabled: 1
+    enabled: 0
     strength:
       scalar: 0.35
       maxCurve:
