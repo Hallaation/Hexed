@@ -267,7 +267,10 @@ public class GameManagerc : MonoBehaviour
                     mbFinishedShowingScores = false;
                     break;
                 case Gamemode_type.HEAD_HUNTERS:
-
+                    RoundEndHeadHunters();
+                    CheckPlayersPoints();
+                    mbFinishedShowingScores = false;
+                    break;
                 //case Gamemode_type.DEATHMATCH_POINTS:
                 //    RoundEndDeathMatchMaxPoints();
                 //    CheckPlayersPoints();
@@ -285,6 +288,7 @@ public class GameManagerc : MonoBehaviour
         }
         else
         {
+            Debug.Log("Round over");
             //once the round is over, reset players
             //If the scores has been shown
             if (mbFinishedShowingScores)
@@ -339,16 +343,17 @@ public class GameManagerc : MonoBehaviour
         {
             //the round is now over
             //look for the one player that is 
-            m_bRoundOver = true;
             foreach (PlayerStatus player in InGamePlayers)
             {
                 if (!player.IsDead)
                 {
                     //increase the winning player's point by 1
-                    StartCoroutine(AddPointsToPanel(player, 1));
+                    //StartCoroutine(AddPointsToPanel(player, 1));
                     // Debug.Break();
                 }
             }
+            mbFinishedShowingScores = true;
+            m_bRoundOver = true;
         }
     }
 
@@ -365,12 +370,15 @@ public class GameManagerc : MonoBehaviour
         if (DeadCount >= InGamePlayers.Count - 1)
         {
             m_bRoundOver = true;
-            foreach (PlayerStatus player in InGamePlayers)
-            {
-
-            }
+            StartCoroutine(AddToAllPoints());
+            //foreach (PlayerStatus player in InGamePlayers)
+            //{
+            //    Debug.Log("trying to addpoints");
+            //    AddPointsToPanel(player, player.mIEarnedPoints);
+            //}
         }
     }
+
     void CheckPlayersPoints()
     {
         //If player has reached the points required to win
@@ -791,7 +799,7 @@ public class GameManagerc : MonoBehaviour
 
         int PlayerIndex = XboxControllerPlayerNumbers[player.GetComponent<ControllerSetter>().mXboxController]; //get the index of player
                                                                                                                 //for the point container that the player owns, 
-        
+
         //starting from the current player's points, turn everything after that to blue.
         for (int i = PlayerWins[player]; i < PlayerWins[player] + PointGain; i++)
         {
@@ -804,6 +812,7 @@ public class GameManagerc : MonoBehaviour
         {
             m_bDoReadyKill = false;
         }
+        player.mIEarnedPoints = 0; //set to 0 after the points are added.
         //TODO play ding.
         m_AudioSource.Play();
         yield return new WaitForSeconds(2);
@@ -816,6 +825,54 @@ public class GameManagerc : MonoBehaviour
         //PointsPanel.SetActive(false);
     }
 
+    IEnumerator AddToAllPoints()
+    {
+
+        m_bAllowPause = false;
+        yield return new WaitForSeconds(m_fTimeTillPoints);
+        PointsPanel.SetActive(true);
+        MenuPanel.SetActive(false);
+        InGameScreenAnimator.SetTrigger("ShowScreen");
+        mbFinishedShowingScores = false;
+        GameObject go = new GameObject("Point", typeof(RectTransform));
+        go.AddComponent<CanvasRenderer>();
+        go.AddComponent<Image>().sprite = PointSprite;
+
+        yield return new WaitForSeconds(1);
+        foreach (PlayerStatus player in InGamePlayers)
+        {
+
+
+            int PlayerIndex = XboxControllerPlayerNumbers[player.GetComponent<ControllerSetter>().mXboxController]; //get the index of player
+                                                                                                                    //for the point container that the player owns
+                                                                                                                    //starting from the current player's points, turn everything after that to blue.
+            for (int i = PlayerWins[player]; i < PlayerWins[player] + player.mIEarnedPoints; i++)
+            {
+                if (player.mIEarnedPoints > 0)
+                {
+                    yield return new WaitForSeconds(0.5f);
+                }
+                PointContainers[PlayerIndex].transform.GetChild(i).GetComponent<Image>().color = Color.blue;
+                m_AudioSource.Play();
+            }
+            PlayerWins[player] += player.mIEarnedPoints; //increase the player's points
+            if (PlayerWins[player] >= m_iPointsNeeded)
+            {
+                m_bDoReadyKill = false;
+            }
+            player.mIEarnedPoints = 0; //set to 0 after the points are added.
+        }
+        //TODO play ding.
+        yield return new WaitForSeconds(2);
+        InGameScreenAnimator.SetTrigger("RemoveScreen");
+        StartCoroutine(InterpolateGlitch(false));
+        //if (FindObjectOfType<ScreenTransition>())
+        //    FindObjectOfType<ScreenTransition>().CloseDoor();
+        //Start interpolation.
+        m_bAllowPause = true;
+        //PointsPanel.SetActive(false);
+        yield return null;
+    }
     IEnumerator InterpolateGlitch(bool Reverse)
     {
         AnalogGlitch glitch = FindObjectOfType<AnalogGlitch>();
@@ -904,7 +961,6 @@ public class GameManagerc : MonoBehaviour
             GetReadyImage.enabled = true;
             //play the get ready audio
             getReady.GetComponent<AudioSource>().Play();
-
             yield return new WaitForSeconds(2);
             //Turn get ready off
             GetReadyImage.enabled = false;

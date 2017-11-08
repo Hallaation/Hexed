@@ -144,7 +144,7 @@ public class GamemodeSelection : MonoBehaviour
                     {
                         case PickType.GAMEMODEPICK:
                             #region
-                            /*
+                            
                             GameManagerc.Instance.m_gameMode = Gamemode_type.LAST_MAN_STANDING_DEATHMATCH + m_iGamemodeIndex;
                             //check for right input
                             //If Dpad right, increment through the array
@@ -153,7 +153,7 @@ public class GamemodeSelection : MonoBehaviour
                             if ((DpadHorizontalTest() > 0) || StickMovement[1])
                             {
                                 StickMovement[1] = false;
-                                if (m_iGamemodeIndex == (int)Gamemode_type.DEATHMATCH_POINTS)
+                                if (m_iGamemodeIndex == (int)Gamemode_type.HEAD_HUNTERS)
                                     m_iGamemodeIndex = 0;
                                 else
                                     m_iGamemodeIndex++;
@@ -164,14 +164,12 @@ public class GamemodeSelection : MonoBehaviour
                             {
                                 StickMovement[0] = false;
                                 if (m_iGamemodeIndex == 0)
-                                    m_iGamemodeIndex = (int)Gamemode_type.DEATHMATCH_POINTS;
+                                    m_iGamemodeIndex = (int)Gamemode_type.HEAD_HUNTERS;
                                 else
                                     m_iGamemodeIndex--;
 
                                 m_GamemodeSelected = Gamemode_type.LAST_MAN_STANDING_DEATHMATCH + m_iGamemodeIndex;
                             }
-
-                        */
                             break;
                         #endregion
                         case PickType.MAPPICK:
@@ -260,6 +258,9 @@ public class GamemodeSelection : MonoBehaviour
                     {
                         case Gamemode_type.LAST_MAN_STANDING_DEATHMATCH:
                             _buttonText.text = "Gamemode: Last Man Standing DM";
+                            break;
+                        case Gamemode_type.HEAD_HUNTERS:
+                            _buttonText.text = "GameMode: Head Hunters";
                             break;
                         //case Gamemode_type.DEATHMATCH_POINTS:
                         //    _buttonText.text = "Gamemode: MaxKills Deathmatch";

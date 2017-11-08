@@ -19,6 +19,7 @@ public class Bullet : MonoBehaviour, Reset
     Vector3 VChildPrevRotation;
     [HideInInspector]
     public PlayerStatus bulletOwner;
+    public PlayerStatus m_bShooter;
     [HideInInspector]
     public int m_iDamage;
     public bool m_bGiveIFrames = false;
@@ -150,6 +151,7 @@ public class Bullet : MonoBehaviour, Reset
                         if (PlayerIHit.m_iHealth <= 0)
                         {
                             PlayerIHit.IsDead = true;
+                            m_bShooter.mIEarnedPoints++;
                             PlayerIHit.GetComponent<Rigidbody2D>().velocity = m_rigidBody.velocity * m_fBulletImpactKnockBack;
                             float angle = Mathf.Atan2(m_rigidBody.velocity.normalized.x, -m_rigidBody.velocity.normalized.y);
                             PlayerIHit.transform.rotation = Quaternion.AngleAxis(angle * Mathf.Rad2Deg, Vector3.forward);
@@ -203,7 +205,6 @@ public class Bullet : MonoBehaviour, Reset
 
     IEnumerator PlayParticle(Collision2D hit)
     {
-
         if (ParticleSparks != null)
         {
 

@@ -67,7 +67,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
     Rigidbody2D _rigidbody;
     [HideInInspector]
     public int spawnIndex;
-
+    public int mIEarnedPoints;
     public Image stunBar;
     public Image stunMask;
     private GameObject stunBarContainer;
@@ -501,6 +501,10 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         //kill the player, called outside of class (mostly used for downed kills)
         if (/*!m_bInvincible*/true)
         {
+            if (killer)
+            {
+                killer.mIEarnedPoints++;
+            }
             SetAllAnimatorsFalse(false);
             m_iHealth = 0;
             m_bDead = true;
