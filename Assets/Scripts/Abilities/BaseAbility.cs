@@ -51,7 +51,7 @@ public class BaseAbility : MonoBehaviour
     ParticleSystem.MainModule m_indicatorModule;
     protected float m_fIndicatorScale = 0;
     public bool ChargeCoolDown = true;
-
+    private bool m_bParticlePlayed;
     void Start()
     {
         m_CoolDownTimer = new Timer(m_fAbilityCoolDown);
@@ -91,13 +91,24 @@ public class BaseAbility : MonoBehaviour
             switch (m_iCurrentCharges)
             {
                 case 1: //When there is 1 Charge
+                    if (!m_bParticlePlayed)
+                    {
+                        if (ChargeHighlighters[0].transform.childCount > 0)
+                            ChargeHighlighters[0].GetComponentInChildren<ParticleSystem>().Play();
+                        m_bParticlePlayed = true;
+                    }
                     //Turn on highlight for object 0
                     ChargeHighlighters[0].GetComponent<SpriteRenderer>().sprite = ChargeReadySprites[0];
                     //turn off highlight for object 1
                     ChargeHighlighters[1].GetComponent<SpriteRenderer>().sprite = EmptyChargeSprites[1];
                     break;
                 case 2: //When there is 2 charges
-
+                    if (!m_bParticlePlayed)
+                    {
+                        if (ChargeHighlighters[1].transform.childCount > 0)
+                            ChargeHighlighters[1].GetComponentInChildren<ParticleSystem>().Play();
+                        m_bParticlePlayed = true;
+                    }
                     //turn on highlight for obj 0
                     //turn on highlight for obj 1
                     ChargeHighlighters[0].GetComponent<SpriteRenderer>().sprite = ChargeReadySprites[0];
@@ -118,7 +129,7 @@ public class BaseAbility : MonoBehaviour
             }
             else
             {
-                m_fIndicatorScale = (m_CoolDownTimer.CurrentTime / m_CoolDownTimer.mfTimeToWait + m_iCurrentCharges )  * 0.5f;
+                m_fIndicatorScale = (m_CoolDownTimer.CurrentTime / m_CoolDownTimer.mfTimeToWait + m_iCurrentCharges) * 0.5f;
                 m_ChargeIndicator.transform.localScale = new Vector2(m_fIndicatorScale, m_fIndicatorScale);
             }
             //! Fuck the mana shit, time to go to cooldowns.
@@ -149,6 +160,7 @@ public class BaseAbility : MonoBehaviour
                 if (m_CoolDownTimer.Tick(Time.deltaTime))
                 {
                     m_iCurrentCharges++;
+                    m_bParticlePlayed = false;
                 }
             }
             else if (!ChargeCoolDown)

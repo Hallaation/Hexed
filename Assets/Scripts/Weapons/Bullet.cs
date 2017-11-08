@@ -26,7 +26,7 @@ public class Bullet : MonoBehaviour, Reset
     public TrailRenderer trail;
     public float m_fMaximumTime = 60;
     public bool m_bBouncyBullet = false;
-    public int m_iMaxBounces;
+    public int m_iMaxBounces = 3;
     private int m_iCurrentBounces;
     //public GameObject HitParticle;
 
@@ -193,6 +193,7 @@ public class Bullet : MonoBehaviour, Reset
         Vector2 bulletVelocity = m_rigidBody.velocity;
         m_rigidBody.velocity = Vector2.Reflect(bulletVelocity, a_RayHit.normal);
         m_iCurrentBounces++;
+        bulletOwner = null;
         if (m_iCurrentBounces > m_iMaxBounces)
         {
             StopBullet(a_RayHit);

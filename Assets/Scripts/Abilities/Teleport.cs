@@ -12,11 +12,13 @@ public class Teleport : BaseAbility
     [Header("Teleport Variables")]
     public float m_DashSpeed = 50;
     public float m_DurationOfDash = .15f;
-    bool Dashing; public bool GetDashing() { return Dashing; } 
+    bool Dashing; public bool GetDashing() { return Dashing; }
+    bool m_bDashTrails;
     Rigidbody2D _rigidBody;
     ControllerSetter m_controller;
     float m_TeleportForce;
 
+    GameObject[] m_DashTrails;
     // Use this for initialization
     //void Start()
     //{
@@ -34,7 +36,9 @@ public class Teleport : BaseAbility
         m_controller = GetComponent<ControllerSetter>();
         _rigidBody = GetComponent<Rigidbody2D>();
         RegenMana = true;
-
+        m_DashTrails = new GameObject[2];
+        m_DashTrails[0] = this.transform.Find("TrailSpot01").gameObject;
+        m_DashTrails[1] = this.transform.Find("TrailSpot02").gameObject;
     }
 
     // Update is called once per frame
@@ -46,7 +50,7 @@ public class Teleport : BaseAbility
         {
             //otherwise if it is clear, allow the player to teleport
             Dashing = true;
-
+            m_bDashTrails = true;
             ButtonHasBeenUp = false;
             m_iCurrentCharges--; //deduct from available charges.
             StartCoroutine(SetDashForDuration());
@@ -63,6 +67,8 @@ public class Teleport : BaseAbility
     {
         yield return new WaitForSeconds(m_DurationOfDash);
         Dashing = false;
+        yield return new WaitForSeconds(0.2f);
+        m_bDashTrails = false;
         yield return null;
 
     }
@@ -126,9 +132,12 @@ public class Teleport : BaseAbility
         {
             ButtonHasBeenUp = true;
         }
-
-
     }
 
+    public override void AdditionalLogic()
+    {
+        m_DashTrails[0].SetActive(m_bDashTrails);
+        m_DashTrails[1].SetActive(m_bDashTrails);
+    }
 }
 
