@@ -74,8 +74,11 @@ public class UIManager : MonoBehaviour
 
     void Awake()
     {
+
+#if !UNITY_EDITOR
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+#endif
         shortTimer = new Timer(0.2f);
         uiNavigationInstance = UINavigation.Instance;
         m_bMenuAnimator = FindObjectOfType<Canvas>().GetComponent<Animator>();
