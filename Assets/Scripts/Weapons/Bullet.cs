@@ -151,7 +151,7 @@ public class Bullet : MonoBehaviour, Reset
                         PlayerIHit.HitPlayer(this, m_bGiveIFrames);
                         if (PlayerIHit.m_iHealth <= 0)
                         {
-                            if (!PlayerIHit.IsDead)
+                            if (!PlayerIHit.IsDead && GameManagerc.Instance.m_gameMode == Gamemode_type.HEAD_HUNTERS)
                             {
                                 bulletOwner.KilledAPlayer();
                             }
