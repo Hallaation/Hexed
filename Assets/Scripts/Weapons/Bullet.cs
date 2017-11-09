@@ -151,7 +151,8 @@ public class Bullet : MonoBehaviour, Reset
                         if (PlayerIHit.m_iHealth <= 0)
                         {
                             PlayerIHit.IsDead = true;
-                            m_bShooter.mIEarnedPoints++;
+                            if (GameManagerc.Instance.m_gameMode == Gamemode_type.HEAD_HUNTERS)
+                                m_bShooter.mIEarnedPoints++;
                             GameManagerc.Instance.lastPlayerToEarnPoints = m_bShooter;
                             PlayerIHit.GetComponent<Rigidbody2D>().velocity = m_rigidBody.velocity * m_fBulletImpactKnockBack;
                             float angle = Mathf.Atan2(m_rigidBody.velocity.normalized.x, -m_rigidBody.velocity.normalized.y);

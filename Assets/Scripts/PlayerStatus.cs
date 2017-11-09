@@ -209,7 +209,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
                 }
 
                 return;
-                
+
             }
 
             //if im stunned, make me cyan and show any kill prompts (X button and kill radius);
@@ -447,11 +447,11 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         {
             if (item.type == AnimatorControllerParameterType.Bool)
             {
-                m_MoveClass.GetBodyAnimator().SetBool(item.name, false);
+                m_MoveClass.GetFeetAnimator().SetBool(item.name, false);
             }
             else if (item.type == AnimatorControllerParameterType.Trigger)
             {
-                m_MoveClass.GetBodyAnimator().ResetTrigger(item.name);
+                m_MoveClass.GetFeetAnimator().ResetTrigger(item.name);
             }
         }
         //Find all colliders and turn them on
@@ -485,7 +485,8 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         {
             if (killer)
             {
-                killer.mIEarnedPoints++;
+                if (GameManagerc.Instance.m_gameMode == Gamemode_type.HEAD_HUNTERS)
+                    killer.mIEarnedPoints++;
                 GameManagerc.Instance.lastPlayerToEarnPoints = killer;
             }
             SetAllAnimatorsFalse(false);

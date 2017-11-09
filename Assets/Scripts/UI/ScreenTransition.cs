@@ -95,6 +95,7 @@ public class ScreenTransition : MonoBehaviour
             yield return null;
         }
         OpenDoor();
+
     }
     void Update()
     {
