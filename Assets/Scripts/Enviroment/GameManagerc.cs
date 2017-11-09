@@ -93,7 +93,7 @@ public class GameManagerc : MonoBehaviour
     private bool mbFinishedShowingScores = false;
     public bool mbInstanceIsMe = false;
     public bool mbMapLoaded = false;
-    private bool m_bFirstTimeLoading = true;
+    public bool m_bFirstTimeLoading = true;
     [SerializeField]
     private bool m_bGamePaused = false;
     [SerializeField]
