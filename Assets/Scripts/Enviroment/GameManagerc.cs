@@ -99,6 +99,7 @@ public class GameManagerc : MonoBehaviour
     [SerializeField]
     private bool m_bRoundReady = false;
     private bool m_bDoGlitch = true;
+    private bool m_bPlayedGlitchAudio = false;
     private bool m_bDoReadyKill = true;
     public bool RoundReady { get { return m_bRoundReady; } }
     private ScreenTransition screenTransition;
@@ -449,7 +450,10 @@ public class GameManagerc : MonoBehaviour
                 }
                 if (m_bDoGlitch)
                 {
+                    //Reversee glitch
                     StartCoroutine(InterpolateGlitch(true));
+                    m_bPlayedGlitchAudio = false;
+                    m_AudioSource.clip = m_DingSound;
                 }
             }
             else
@@ -809,7 +813,6 @@ public class GameManagerc : MonoBehaviour
         //if (FindObjectOfType<ScreenTransition>())
         //    FindObjectOfType<ScreenTransition>().CloseDoor();
         //Start interpolation.
-        m_bAllowPause = true;
         //PointsPanel.SetActive(false);
     }
 
@@ -819,8 +822,14 @@ public class GameManagerc : MonoBehaviour
         var t = 0.0f;
         float maxTime = 1;
         m_AudioSource.clip = m_GlitchEffect;
-        m_AudioSource.loop = true;
-        m_AudioSource.Play();
+        //m_AudioSource.loop = true;
+        if (!m_bPlayedGlitchAudio)
+        {
+            m_AudioSource.clip = m_GlitchEffect;
+            m_AudioSource.Play();
+            m_bPlayedGlitchAudio = true;
+        }
+        //m_AudioSource.Play();
         while (t < maxTime)
         {
             //Scan line, Vertical Lines, Horizontal Shake, Colour Drift.
@@ -868,8 +877,12 @@ public class GameManagerc : MonoBehaviour
             yield return null;
         }
         mbFinishedShowingScores = true;
-        m_AudioSource.loop = false;
-        m_AudioSource.clip = m_DingSound;
+        if (!Reverse)
+        {
+
+            m_AudioSource.loop = false;
+            m_AudioSource.clip = m_DingSound;
+        }
         yield return null;
     }
 
