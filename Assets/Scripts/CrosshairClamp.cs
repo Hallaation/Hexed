@@ -5,7 +5,7 @@ using UnityEngine;
 public class CrosshairClamp : MonoBehaviour
 {
 
-    private float m_fRotation = 45;
+    private float m_fRotation = 0;
 
     void Update()
     {
