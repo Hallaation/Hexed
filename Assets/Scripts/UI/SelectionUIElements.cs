@@ -182,11 +182,18 @@ public class SelectionUIElements : MonoBehaviour
 
                 //! change the selected sprite near the end of the frame, after all the processing has been done.
                 bool IsCharacterSelected = selectionManager.CharacterSelectionStatus[selectionManager.CharacterArray[m_iSelectedIndex]];
-                if (!m_bSelectedCharacter)
+                if (!m_bSelectedCharacter) //If i havn't selected a character
                 {
+                    SelectedCharacterImage.sprite = selectionManager.CharacterArray[m_iSelectedIndex].GetComponent<BaseAbility>().SelectionSprites[0];
                     SelectedCharacterImage.color = (!IsCharacterSelected) ? Colors.White : Colors.DimGray;
                 }
-                SelectedCharacterImage.sprite = selectionManager.CharacterArray[m_iSelectedIndex].GetComponent<BaseAbility>().SelectionSprites[0];
+                else
+                {
+                //    SelectedCharacterImage.sprite = selectionManager.CharacterArray[m_iSelectedIndex].GetComponent<BaseAbility>().SelectionSprites[1];
+                    SelectedCharacterImage.color = Color.white;
+                }
+
+
                 //SelectedCharacterImage.sprite = selectionManager.CharacterArray[m_iSelectedIndex].GetComponent<BaseAbility>().SelectionSprites[Convert.ToInt32(IsCharacterSelected)];
                 if (!m_bSelectedCharacter)
                 {
@@ -265,7 +272,7 @@ public class SelectionUIElements : MonoBehaviour
         if (m_Animator.GetCurrentAnimatorStateInfo(0).IsName("Character_Selection_Docked"))
         {
             m_AudioSource.clip = selectionSounds[0];
-            SelectedCharacterImage.color = Colors.DimGray;
+            SelectedCharacterImage.sprite = selectionManager.CharacterArray[m_iSelectedIndex].GetComponent<BaseAbility>().SelectionSprites[1];
             m_AudioSource.Play();
             m_DockLight.sprite = m_BToCancel;
         }
