@@ -48,7 +48,10 @@ public class UIManager : MonoBehaviour
     private Timer shortTimer;
     public bool RemoveLastPanel { get { return m_bRemoveLastPanel; } set { m_bRemoveLastPanel = value; } }
     // Use this for initialization
-
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
 
     public static UIManager Instance
     {
