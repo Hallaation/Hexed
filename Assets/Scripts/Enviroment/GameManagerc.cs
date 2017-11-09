@@ -182,7 +182,7 @@ public class GameManagerc : MonoBehaviour
         StartCoroutine(SetInitalAudio());
 
 
-        SingletonTester.Instance.AddSingleton(this);
+        //SingletonTester.Instance.AddSingleton(this);
         InstanceCreated = true;
         //Find the 
         DontDestroyOnLoad(this.gameObject);
@@ -533,6 +533,7 @@ public class GameManagerc : MonoBehaviour
 
             #region Point panel moving etc.
             //Move the point containers depending on how many points are required.
+
             for (int i = 0; i < PointsPanel.transform.childCount; i++)
             {
                 PointContainers[i] = PointsPanel.transform.GetChild(i).gameObject;
@@ -611,7 +612,7 @@ public class GameManagerc : MonoBehaviour
                     {
                         Image temp = PointContainers[iPlayerIndex].transform.GetChild(j).GetComponent<Image>();
                         pointsOriginalColour = PointContainers[iPlayerIndex].transform.GetChild(j).GetComponent<Image>().color;
-                        PointContainers[iPlayerIndex].transform.GetChild(j).GetComponent<Image>().color = Color.blue;
+                        PointContainers[iPlayerIndex].transform.GetChild(j).GetComponent<Image>().color = Color.blue; //TODO change this to the animation trigger instead.
                     }
                 }
             }

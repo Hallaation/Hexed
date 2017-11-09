@@ -86,7 +86,7 @@ public class UIManager : MonoBehaviour
         uiNavigationInstance = UINavigation.Instance;
         m_bMenuAnimator = FindObjectOfType<Canvas>().GetComponent<Animator>();
         //Add me to the singleton tester
-        SingletonTester.Instance.AddSingleton(this);
+        //SingletonTester.Instance.AddSingleton(this);
         SceneManager.sceneLoaded += OnSceneLoad;
 
         m_SettingsPanel = GameObject.Find("Options_Panel");
