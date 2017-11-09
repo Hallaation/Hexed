@@ -123,7 +123,8 @@ public class GameManagerc : MonoBehaviour
     public List<RigidbodyPauser> _rbPausers;
 
     public AudioClip m_GlitchEffect;
-
+    [HideInInspector]
+    public PlayerStatus lastPlayerToEarnPoints = null;
     //Lazy singleton
     public static GameManagerc Instance
     {
@@ -162,6 +163,7 @@ public class GameManagerc : MonoBehaviour
     {
         m_DingSound = Resources.Load("Audio/SFX/ding-sound-effect") as AudioClip;
         m_GlitchEffect = Resources.Load("Audio/SFX/glitch-sound-effect") as AudioClip;
+        m_GlitchEffect.LoadAudioData();
         m_AudioSource = this.GetComponent<AudioSource>();
         _rbPausers = new List<RigidbodyPauser>();
 
@@ -305,10 +307,11 @@ public class GameManagerc : MonoBehaviour
                 m_bRoundOver = false;
                 if (FindObjectOfType<ScreenTransition>())
                     FindObjectOfType<ScreenTransition>().OpenDoor();
+
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //reloads the scene.
-                                                                                  //TODO instead of reloading scene, just reset E V E R Y T H I N G in the scene.
-                                                                                  //End of round logic goes here.
-                                                                                  //} 
+                                                                                                          //TODO instead of reloading scene, just reset E V E R Y T H I N G in the scene.
+                                                                                                          //End of round logic goes here.
+                                                                                                          //} 
             }
         }
         yield return null;
@@ -348,7 +351,7 @@ public class GameManagerc : MonoBehaviour
                 if (!player.IsDead)
                 {
                     //increase the winning player's point by 1
-                    //StartCoroutine(AddPointsToPanel(player, 1));
+                    StartCoroutine(AddPointsToPanel(player, 1));
                     // Debug.Break();
                 }
             }
@@ -383,6 +386,14 @@ public class GameManagerc : MonoBehaviour
     {
         //If player has reached the points required to win
         //And I havn't shown the finished panel yet, show it, set the show panel to true so this doesnt run again.
+        if (false)
+        {
+            if (PlayerWins[lastPlayerToEarnPoints] + lastPlayerToEarnPoints.mIEarnedPoints >= m_iPointsNeeded)
+            {
+                m_WinningPlayer = lastPlayerToEarnPoints;
+                //m_bRoundOver = trufe;
+            }
+        }
         if (mbFinishedShowingScores)
         {
             foreach (PlayerStatus player in InGamePlayers)
@@ -406,9 +417,9 @@ public class GameManagerc : MonoBehaviour
                     }
                     m_bDoReadyKill = false;
                     //TODO Player portraits
-                    FinishUIPanel.transform.GetChild(2).GetChild(0).GetComponent<Image>().sprite = player.GetComponent<BaseAbility>().m_CharacterPortrait;
-                    FinishUIPanel.transform.GetChild(2).GetChild(1).GetComponent<Image>().color = player.GetComponent<PlayerStatus>()._playerColor;
-                    m_WinningPlayer = player;
+                    FinishUIPanel.transform.GetChild(2).GetChild(0).GetComponent<Image>().sprite = m_WinningPlayer.GetComponent<BaseAbility>().m_CharacterPortrait;
+                    FinishUIPanel.transform.GetChild(2).GetChild(1).GetComponent<Image>().color = m_WinningPlayer.GetComponent<PlayerStatus>()._playerColor;
+                    //  m_WinningPlayer = m_WinningPlayer;
                     if (FindObjectOfType<ScreenTransition>())
                         FindObjectOfType<ScreenTransition>().OpenDoor();
 
@@ -429,6 +440,7 @@ public class GameManagerc : MonoBehaviour
 
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+
     {
         //oh fukc
         //check if the instance is this game object
@@ -795,7 +807,7 @@ public class GameManagerc : MonoBehaviour
         go.AddComponent<CanvasRenderer>();
         go.AddComponent<Image>().sprite = PointSprite;
 
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(1);
 
         int PlayerIndex = XboxControllerPlayerNumbers[player.GetComponent<ControllerSetter>().mXboxController]; //get the index of player
                                                                                                                 //for the point container that the player owns, 
@@ -884,7 +896,7 @@ public class GameManagerc : MonoBehaviour
         while (t < maxTime)
         {
             //Scan line, Vertical Lines, Horizontal Shake, Colour Drift.
-            if (!Reverse)
+            if (!Reverse) //Go into glitch
             {
                 t += Time.deltaTime / maxTime;
                 CurrentGlitchValues = Vector4.Lerp(Vector4.zero, lerpValues, t);
@@ -894,7 +906,7 @@ public class GameManagerc : MonoBehaviour
                 glitch.colorDrift = CurrentGlitchValues.w;
                 yield return null;
             }
-            else
+            else //get out of glitch
             {
                 t += Time.deltaTime / maxTime;
                 CurrentGlitchValues = Vector4.Lerp(lerpValues, Vector4.zero, t);
@@ -905,31 +917,16 @@ public class GameManagerc : MonoBehaviour
                 glitch.colorDrift = CurrentGlitchValues.w;
                 yield return null;
             }
-        }
 
-        if (!Reverse)
-        {
-            CurrentGlitchValues = Vector4.Lerp(Vector4.zero, lerpValues, 1);
+        } //end of while
 
-            glitch.scanLineJitter = CurrentGlitchValues.x;
-            glitch.verticalJump = CurrentGlitchValues.y;
-            glitch.horizontalShake = CurrentGlitchValues.z;
-            glitch.colorDrift = CurrentGlitchValues.w;
-            yield return null;
-        }
-        else
-        {
-            CurrentGlitchValues = Vector4.Lerp(lerpValues, Vector4.zero, 1);
-
-            glitch.scanLineJitter = CurrentGlitchValues.x;
-            glitch.verticalJump = CurrentGlitchValues.y;
-            glitch.horizontalShake = CurrentGlitchValues.z;
-            glitch.colorDrift = CurrentGlitchValues.w;
-            yield return null;
-        }
         mbFinishedShowingScores = true;
-        m_AudioSource.loop = false;
-        m_AudioSource.clip = m_DingSound;
+        if (Reverse)
+        {
+            m_AudioSource.clip = m_DingSound;
+            m_AudioSource.loop = false;
+        }
+
         yield return null;
     }
 

@@ -152,6 +152,7 @@ public class Bullet : MonoBehaviour, Reset
                         {
                             PlayerIHit.IsDead = true;
                             m_bShooter.mIEarnedPoints++;
+                            GameManagerc.Instance.lastPlayerToEarnPoints = m_bShooter;
                             PlayerIHit.GetComponent<Rigidbody2D>().velocity = m_rigidBody.velocity * m_fBulletImpactKnockBack;
                             float angle = Mathf.Atan2(m_rigidBody.velocity.normalized.x, -m_rigidBody.velocity.normalized.y);
                             PlayerIHit.transform.rotation = Quaternion.AngleAxis(angle * Mathf.Rad2Deg, Vector3.forward);

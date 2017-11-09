@@ -209,6 +209,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
                 }
 
                 return;
+                
             }
 
             //if im stunned, make me cyan and show any kill prompts (X button and kill radius);
@@ -485,6 +486,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             if (killer)
             {
                 killer.mIEarnedPoints++;
+                GameManagerc.Instance.lastPlayerToEarnPoints = killer;
             }
             SetAllAnimatorsFalse(false);
             m_iHealth = 0;
