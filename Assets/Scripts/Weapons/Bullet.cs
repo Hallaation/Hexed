@@ -29,6 +29,7 @@ public class Bullet : MonoBehaviour, Reset
     public bool m_bBouncyBullet = false;
     public int m_iMaxBounces = 3;
     private int m_iCurrentBounces;
+
     //public GameObject HitParticle;
 
 
@@ -150,9 +151,11 @@ public class Bullet : MonoBehaviour, Reset
                         PlayerIHit.HitPlayer(this, m_bGiveIFrames);
                         if (PlayerIHit.m_iHealth <= 0)
                         {
+                            if (!PlayerIHit.IsDead)
+                            {
+                                bulletOwner.KilledAPlayer();
+                            }
                             PlayerIHit.IsDead = true;
-                            if (GameManagerc.Instance.m_gameMode == Gamemode_type.HEAD_HUNTERS)
-                                m_bShooter.mIEarnedPoints++;
                             GameManagerc.Instance.lastPlayerToEarnPoints = m_bShooter;
                             PlayerIHit.GetComponent<Rigidbody2D>().velocity = m_rigidBody.velocity * m_fBulletImpactKnockBack;
                             float angle = Mathf.Atan2(m_rigidBody.velocity.normalized.x, -m_rigidBody.velocity.normalized.y);

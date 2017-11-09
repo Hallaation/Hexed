@@ -83,7 +83,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
     private SpriteRenderer m_SpriteRenderer;
     private CameraControl _cameraControlInstance;
 
-
+    
     [Range(0, 0.22f)]
     public float fill;
     //if the player is dead, the renderer will change their Color to gray, and all physics simulation of the player's rigidbody will be turned off.
@@ -720,6 +720,11 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         _PlayerCanvas.transform.SetParent(null); //Set its parent to null so it can properly follow the player's positon.
         HealthContainer.SetActive(false); //turn it off.
         killbarContainer.SetActive(false);
+    }
+
+    public void KilledAPlayer()
+    {
+        mIEarnedPoints += 1;
     }
 }
 
