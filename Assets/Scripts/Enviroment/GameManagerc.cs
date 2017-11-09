@@ -343,7 +343,6 @@ public class GameManagerc : MonoBehaviour
                 DeadCount++;
             }
         }
-
         //If there is only 1 alive
         if (DeadCount >= InGamePlayers.Count - 1)
         {
@@ -356,8 +355,8 @@ public class GameManagerc : MonoBehaviour
                     player.mIEarnedPoints++;
                     lastPlayerToEarnPoints = player;
                     //increase the winning player's point by 1
+                    Debug.Log("add all");
                     StartCoroutine(AddToAllPoints());
-                    // Debug.Break();
                 }
             }
             mbFinishedShowingScores = true;
@@ -377,8 +376,12 @@ public class GameManagerc : MonoBehaviour
         }
         if (DeadCount >= InGamePlayers.Count - 1 || m_WinningPlayer)
         {
+            if (!m_WinningPlayer)
+            {
+                StartCoroutine(AddToAllPoints());
+            }
+            mbFinishedShowingScores = true;
             m_bRoundOver = true;
-            StartCoroutine(AddToAllPoints());
         }
     }
 
@@ -386,13 +389,13 @@ public class GameManagerc : MonoBehaviour
     {
         //If player has reached the points required to win
         //And I havn't shown the finished panel yet, show it, set the show panel to true so this doesnt run again.
-        if (!m_bRoundOver)
+        if (lastPlayerToEarnPoints) //null check
         {
-            if (lastPlayerToEarnPoints)
+            if (!m_WinningPlayer) //if there isn't a winner
             {
-                if (PlayerWins[lastPlayerToEarnPoints] + lastPlayerToEarnPoints.mIEarnedPoints >= m_iPointsNeeded)
+                if (PlayerWins[lastPlayerToEarnPoints] + lastPlayerToEarnPoints.mIEarnedPoints >= m_iPointsNeeded) //if the last player to earn a point has won
                 {
-                    m_WinningPlayer = lastPlayerToEarnPoints;
+                    m_WinningPlayer = lastPlayerToEarnPoints; //set my winning player
                     m_bRoundOver = true;
                     StartCoroutine(AddToAllPoints());
                     //StartCoroutine(AddToAllPoints());
@@ -411,6 +414,7 @@ public class GameManagerc : MonoBehaviour
                 //Time.timeScale = 0;
                 //open the finish panel, UI manager will set all the children to true, thus rendering them
                 //#finish panel, 
+
                 m_bDoGlitch = false;
                 InGameScreenAnimator.SetTrigger("ShowScreen");
                 PointsPanel.SetActive(false);
@@ -687,8 +691,9 @@ public class GameManagerc : MonoBehaviour
         {
             PlayerWins[item] = 0;
         }
-
-        // WinningPlayer = null; // still unsued
+        lastPlayerToEarnPoints.mIEarnedPoints = 0;
+        PlayerWins[lastPlayerToEarnPoints] = 0;
+        lastPlayerToEarnPoints = null;
         m_bRoundOver = false;
         mbFinishedShowingScores = false;
         //mbFinishedPanelShown = false;
