@@ -171,7 +171,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1251493380864032}
   m_LocalRotation: {x: -1, y: -0, z: -0, w: 0.0000014603138}
-  m_LocalPosition: {x: 0.85, y: 0, z: -0}
+  m_LocalPosition: {x: 0.85, y: 0, z: -0.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4872138199487224}
@@ -317,8 +317,8 @@ MonoBehaviour:
   m_fBulletImpactKnockback: 0.1
   bullet: {fileID: 1693009727198110, guid: dd9ebb944ddbbbc4ba0f2fbb8e278610, type: 2}
   m_fSpreadJitter: 0
-  m_fSpreadIncrease: 750
-  m_fMaxJitter: 75
+  m_fSpreadIncrease: 1250
+  m_fMaxJitter: 125
   m_fBulletSpawnOffSet: 1.75
   m_fFiringForce: 0.2
   m_iBurstFire: 5
@@ -2962,7 +2962,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 4
   m_RenderMode: 3
   m_SortMode: 0
   m_MinParticleSize: 0
