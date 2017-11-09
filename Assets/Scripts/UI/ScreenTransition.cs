@@ -18,11 +18,23 @@ public class ScreenTransition : MonoBehaviour
     private bool m_bDoorOpened;
     public bool DoorOpened { get { return m_bDoorOpened; } }
 
+
+    public AudioClip m_OpenClip;
+    public AudioClip m_closeClip;
+    private AudioSource m_AudioSource;
     // Use this for initialization
 
     void Awake()
     {
         m_Animator = this.GetComponent<Animator>();
+        m_AudioSource = this.GetComponent<AudioSource>();
+        if (!m_AudioSource)
+        {
+            m_AudioSource = this.gameObject.AddComponent<AudioSource>();
+            m_AudioSource.loop = false;
+            m_AudioSource.playOnAwake = false;
+            m_AudioSource.outputAudioMixerGroup = AudioManager.RequestMixerGroup(SourceType.SFX);
+        }
 
         if (transform.childCount > 3 && GameManagerc.Instance.m_bDoLogoTransition)
         {
@@ -105,12 +117,17 @@ public class ScreenTransition : MonoBehaviour
     }
     public void CloseDoor()
     {
+        Debug.Log("Closing door");
+        m_AudioSource.clip = m_closeClip;
+        m_AudioSource.Play();
         m_Animator.SetTrigger("CloseDoor");
     }
 
 
     public void OpenDoor()
     {
+        m_AudioSource.clip = m_OpenClip;
+        m_AudioSource.Play();
         m_Animator.SetTrigger("OpenDoor");
     }
 
