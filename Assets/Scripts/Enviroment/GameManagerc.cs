@@ -550,6 +550,9 @@ public class GameManagerc : MonoBehaviour
                             case Gamemode_type.LAST_MAN_STANDING_DEATHMATCH:
                                 PointContainers[i].transform.GetChild(j).GetComponent<Animator>().SetBool("CircuitBreaker", true);
                                 break;
+                            case Gamemode_type.HEAD_HUNTERS:
+                                PointContainers[i].transform.GetChild(j).GetComponent<Animator>().SetBool("HeadHunter", true);
+                                break;
                             default:
                                 break;
                         }
@@ -646,9 +649,9 @@ public class GameManagerc : MonoBehaviour
             #endregion
 
             //PointsPanel.SetActive(false);
-            GameObject ReadyFightContainer = GameObject.Find("StartScreen");
-            GameObject KillAudio = ReadyFightContainer.transform.GetChild(0).gameObject;
-            GameObject GetReady = ReadyFightContainer.transform.GetChild(1).gameObject;
+            ReadyKillContainer = GameObject.Find("StartScreen");
+            GameObject KillAudio = ReadyKillContainer.transform.GetChild(0).gameObject;
+            GameObject GetReady = ReadyKillContainer.transform.GetChild(1).gameObject;
 
             //if (m_bShowReadyFight)
 
@@ -991,7 +994,7 @@ public class GameManagerc : MonoBehaviour
 
     IEnumerator ReadyKill(GameObject ReadyFightContainer)
     {
-
+        Debug.Log(ReadyFightContainer);
         GameObject Kill = ReadyFightContainer.transform.GetChild(0).gameObject;
         GameObject getReady = ReadyFightContainer.transform.GetChild(1).gameObject;
 
