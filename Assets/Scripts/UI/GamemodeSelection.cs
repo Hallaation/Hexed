@@ -153,6 +153,7 @@ public class GamemodeSelection : MonoBehaviour
                             //wrap around if at the bounds of array
                             if ((DpadHorizontalTest() > 0) || StickMovement[1])
                             {
+                                m_animator.SetTrigger("ButtonChangeRight");
                                 StickMovement[1] = false;
                                 if (m_iGamemodeIndex == (int)Gamemode_type.HEAD_HUNTERS)
                                     m_iGamemodeIndex = 0;
@@ -163,6 +164,7 @@ public class GamemodeSelection : MonoBehaviour
                             }
                             else if ((DpadHorizontalTest() < 0) || StickMovement[0])
                             {
+                                m_animator.SetTrigger("ButtonChangeLeft");
                                 StickMovement[0] = false;
                                 if (m_iGamemodeIndex == 0)
                                     m_iGamemodeIndex = (int)Gamemode_type.HEAD_HUNTERS;

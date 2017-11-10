@@ -39,7 +39,7 @@ public class Grenade : Weapon {
         {
             RandomAngle.Set(0,0, Random.Range(0f, 360f));
             
-            Instantiate<Bullet>(BulletForSharpnel, this.transform.position, RandomAngle.);
+            //Instantiate<Bullet>(BulletForSharpnel, this.transform.position, RandomAngle.);
             TotalBulletShrapnel--;
         }
     }

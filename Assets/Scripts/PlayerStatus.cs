@@ -726,6 +726,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
     {
         mIEarnedPoints += 1;
     }
+
 }
 
 
