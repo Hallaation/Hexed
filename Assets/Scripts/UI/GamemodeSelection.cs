@@ -29,6 +29,7 @@ public class GamemodeSelection : MonoBehaviour
     private bool[] StickMovement; // index 0 for left horizontal, index 1 for right horizontal
     private GameObject[] GMSettingObjects;
     private Animator m_animator;
+    public GameObject m_OuterGlow;
     Image _mapSprite;
     public int[] mPointsToWin =
     {
@@ -51,7 +52,6 @@ public class GamemodeSelection : MonoBehaviour
         _buttonText = GetComponentInChildren<Text>();
         _eventSystem = FindObjectOfType<EventSystem>();
         StickMovement = new bool[2] { false, false };
-
         if (m_pickType == PickType.MAPPICK)
         {
             _mapSprite = _button.transform.GetChild(0).GetComponent<Image>();
@@ -140,6 +140,7 @@ public class GamemodeSelection : MonoBehaviour
                 //if the event systems currently selected object is my assigned buttons parent, do the things according to my type.
                 if (_eventSystem.currentSelectedGameObject.transform.parent == _button.transform.parent)
                 {
+                    m_OuterGlow.SetActive(true);
                     switch (m_pickType)
                     {
                         case PickType.GAMEMODEPICK:
@@ -251,7 +252,12 @@ public class GamemodeSelection : MonoBehaviour
                     }
 
                 }
+                else
+                {
+                    m_OuterGlow.SetActive(false);
+                }
             }
+     
             //update button sprite according to pick type
             switch (m_pickType)
             {
