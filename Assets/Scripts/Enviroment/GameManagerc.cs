@@ -46,6 +46,7 @@ using UnityEngine.Audio;
 public enum Gamemode_type
 {
     LAST_MAN_STANDING_DEATHMATCH, //last person to stand earns a point, probably the default
+    HEAD_HUNTERS,
     //DEATHMATCH_POINTS, //killing a player will earn them a point, up to a certain point Currently broken and only semi implemented.
 
 }
@@ -101,6 +102,7 @@ public class GameManagerc : MonoBehaviour
     private bool m_bDoGlitch = true;
     private bool m_bPlayedGlitchAudio = false;
     private bool m_bDoReadyKill = true;
+    private bool m_bRematchPressed = false;
     public bool RoundReady { get { return m_bRoundReady; } }
     private ScreenTransition screenTransition;
 
@@ -123,7 +125,11 @@ public class GameManagerc : MonoBehaviour
     public List<RigidbodyPauser> _rbPausers;
 
     public AudioClip m_GlitchEffect;
+    [HideInInspector]
+    public PlayerStatus lastPlayerToEarnPoints = null;
 
+    private GameObject ReadyKillContainer;
+    private Color pointsOriginalColour;
     //Lazy singleton
     public static GameManagerc Instance
     {
@@ -162,6 +168,7 @@ public class GameManagerc : MonoBehaviour
     {
         m_DingSound = Resources.Load("Audio/SFX/ding-sound-effect") as AudioClip;
         m_GlitchEffect = Resources.Load("Audio/SFX/glitch-sound-effect") as AudioClip;
+        m_GlitchEffect.LoadAudioData();
         m_AudioSource = this.GetComponent<AudioSource>();
         _rbPausers = new List<RigidbodyPauser>();
 
@@ -176,7 +183,7 @@ public class GameManagerc : MonoBehaviour
         StartCoroutine(SetInitalAudio());
 
 
-        SingletonTester.Instance.AddSingleton(this);
+        //SingletonTester.Instance.AddSingleton(this);
         InstanceCreated = true;
         //Find the 
         DontDestroyOnLoad(this.gameObject);
@@ -266,6 +273,11 @@ public class GameManagerc : MonoBehaviour
                     CheckPlayersPoints();
                     mbFinishedShowingScores = false;
                     break;
+                case Gamemode_type.HEAD_HUNTERS:
+                    RoundEndHeadHunters();
+                    CheckPlayersPoints();
+                    mbFinishedShowingScores = false;
+                    break;
                 //case Gamemode_type.DEATHMATCH_POINTS:
                 //    RoundEndDeathMatchMaxPoints();
                 //    CheckPlayersPoints();
@@ -299,6 +311,7 @@ public class GameManagerc : MonoBehaviour
                 m_bRoundOver = false;
                 if (FindObjectOfType<ScreenTransition>())
                     FindObjectOfType<ScreenTransition>().OpenDoor();
+
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //reloads the scene.
                                                                                   //TODO instead of reloading scene, just reset E V E R Y T H I N G in the scene.
                                                                                   //End of round logic goes here.
@@ -331,50 +344,45 @@ public class GameManagerc : MonoBehaviour
                 DeadCount++;
             }
         }
-
         //If there is only 1 alive
         if (DeadCount >= InGamePlayers.Count - 1)
         {
             //the round is now over
             //look for the one player that is 
-            m_bRoundOver = true;
             foreach (PlayerStatus player in InGamePlayers)
             {
                 if (!player.IsDead)
                 {
+                    player.mIEarnedPoints++;
+                    lastPlayerToEarnPoints = player;
                     //increase the winning player's point by 1
-                    PlayerWins[player] += 1;
-                    StartCoroutine(AddPointsToPanel(player));
-                    // Debug.Break();
+                    Debug.Log("add all");
+                    StartCoroutine(AddToAllPoints());
                 }
             }
+            mbFinishedShowingScores = true;
+            m_bRoundOver = true;
         }
     }
 
-    //! USELESS FUNCTION
-    void RoundEndDeathMatchMaxPoints()
+    void RoundEndHeadHunters()
     {
-        //! USELESS FUNCTION
+        int DeadCount = 0;
         foreach (PlayerStatus player in InGamePlayers)
         {
             if (player.IsDead)
             {
-                player.ResetPlayer();
+                DeadCount++;
             }
-
-            //If player has reached the points required to win
-            if (PlayerWins[player] >= m_iPointsNeeded)
+        }
+        if (DeadCount >= InGamePlayers.Count - 1 || m_WinningPlayer)
+        {
+            if (!m_WinningPlayer)
             {
-                //! USELESS FUNCTION
-                //open the finish panel, UI manager will set all the children to true, thus rendering them
-                UIManager.Instance.OpenUIElement(FinishUIPanel, true);
-                if (FindObjectOfType<ScreenTransition>())
-                    FindObjectOfType<ScreenTransition>().OpenDoor();
-                UIManager.Instance.RemoveLastPanel = false;
-                //Reset the event managers current selected object to the rematch button
-                //FindObjectOfType<EventSystem>().SetSelectedGameObject(FinishUIPanel.transform.Find("Rematch").gameObject);
-
+                StartCoroutine(AddToAllPoints());
             }
+            mbFinishedShowingScores = true;
+            m_bRoundOver = true;
         }
     }
 
@@ -382,52 +390,67 @@ public class GameManagerc : MonoBehaviour
     {
         //If player has reached the points required to win
         //And I havn't shown the finished panel yet, show it, set the show panel to true so this doesnt run again.
-        if (mbFinishedShowingScores)
+        if (lastPlayerToEarnPoints) //null check
         {
-            foreach (PlayerStatus player in InGamePlayers)
+            if (!m_WinningPlayer) //if there isn't a winner
             {
-                if (PlayerWins[player] >= m_iPointsNeeded)
+                if (PlayerWins[lastPlayerToEarnPoints] + lastPlayerToEarnPoints.mIEarnedPoints >= m_iPointsNeeded) //if the last player to earn a point has won
                 {
-                    //Set the time scale to 0 (essentially pausing the game-ish)
-
-                    //Time.timeScale = 0;
-                    //open the finish panel, UI manager will set all the children to true, thus rendering them
-                    //#finish panel, 
-                    m_bDoGlitch = false;
-                    InGameScreenAnimator.SetTrigger("ShowScreen");
-                    PointsPanel.SetActive(false);
-                    MenuPanel.SetActive(false);
-                    UIManager.Instance.OpenUIElement(FinishUIPanel, true);
-                    GameObject startscreen;
-                    for (int i = 0; i < (startscreen = GameObject.Find("StartScreen")).transform.childCount; i++)
-                    {
-                        startscreen.transform.GetChild(i).GetComponent<Image>().enabled = false;
-                    }
-                    m_bDoReadyKill = false;
-                    //TODO Player portraits
-                    FinishUIPanel.transform.GetChild(2).GetChild(0).GetComponent<Image>().sprite = player.GetComponent<BaseAbility>().m_CharacterPortrait;
-                    FinishUIPanel.transform.GetChild(2).GetChild(1).GetComponent<Image>().color = player.GetComponent<PlayerStatus>()._playerColor;
-                    m_WinningPlayer = player;
-                    if (FindObjectOfType<ScreenTransition>())
-                        FindObjectOfType<ScreenTransition>().OpenDoor();
-
-                    UIManager.Instance.RemoveLastPanel = false;
-                    GameManagerc.Instance.Paused = true;
-                    //Reset the event managers current selected object to the rematch button
-                    if (FindObjectOfType<EventSystem>().currentSelectedGameObject == null)
-                    {
-                        FindObjectOfType<EventSystem>().SetSelectedGameObject(null);
-                        FindObjectOfType<EventSystem>().SetSelectedGameObject(FinishUIPanel.transform.Find("Main Menu").gameObject);
-                        //mbFinishedPanelShown = true;
-                    }
-
+                    m_WinningPlayer = lastPlayerToEarnPoints; //set my winning player
+                    m_bRoundOver = true;
+                    StartCoroutine(AddToAllPoints());
+                    //StartCoroutine(AddToAllPoints());
                 }
             }
+        }
+
+        if (mbFinishedShowingScores)
+        {
+            //foreach (PlayerStatus player in InGamePlayers)
+            //{
+            if (PlayerWins[lastPlayerToEarnPoints] >= m_iPointsNeeded)
+            {
+                m_WinningPlayer = lastPlayerToEarnPoints;
+                //Set the time scale to 0 (essentially pausing the game-ish)
+                //Time.timeScale = 0;
+                //open the finish panel, UI manager will set all the children to true, thus rendering them
+                //#finish panel, 
+
+                m_bDoGlitch = false;
+                InGameScreenAnimator.SetTrigger("ShowScreen");
+                PointsPanel.SetActive(false);
+                MenuPanel.SetActive(false);
+                UIManager.Instance.OpenUIElement(FinishUIPanel, true);
+                GameObject startscreen;
+                for (int i = 0; i < (startscreen = GameObject.Find("StartScreen")).transform.childCount; i++)
+                {
+                    startscreen.transform.GetChild(i).GetComponent<Image>().enabled = false;
+                }
+                m_bDoReadyKill = false;
+                //TODO Player portraits
+                FinishUIPanel.transform.GetChild(2).GetChild(0).GetComponent<Image>().sprite = m_WinningPlayer.GetComponent<BaseAbility>().m_CharacterPortrait;
+                FinishUIPanel.transform.GetChild(2).GetChild(1).GetComponent<Image>().color = m_WinningPlayer.GetComponent<PlayerStatus>()._playerColor;
+                //  m_WinningPlayer = m_WinningPlayer;
+                if (FindObjectOfType<ScreenTransition>())
+                    FindObjectOfType<ScreenTransition>().OpenDoor();
+
+                UIManager.Instance.RemoveLastPanel = false;
+                GameManagerc.Instance.Paused = true;
+                //Reset the event managers current selected object to the rematch button
+                if (FindObjectOfType<EventSystem>().currentSelectedGameObject == null)
+                {
+                    FindObjectOfType<EventSystem>().SetSelectedGameObject(null);
+                    FindObjectOfType<EventSystem>().SetSelectedGameObject(FinishUIPanel.transform.Find("Main Menu").gameObject);
+                    //mbFinishedPanelShown = true;
+                }
+            }
+            //}
         }
     }
 
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+
     {
         //oh fukc
         //check if the instance is this game object
@@ -514,6 +537,7 @@ public class GameManagerc : MonoBehaviour
 
             #region Point panel moving etc.
             //Move the point containers depending on how many points are required.
+
             for (int i = 0; i < PointsPanel.transform.childCount; i++)
             {
                 PointContainers[i] = PointsPanel.transform.GetChild(i).gameObject;
@@ -525,6 +549,9 @@ public class GameManagerc : MonoBehaviour
                         {
                             case Gamemode_type.LAST_MAN_STANDING_DEATHMATCH:
                                 PointContainers[i].transform.GetChild(j).GetComponent<Animator>().SetBool("CircuitBreaker", true);
+                                break;
+                            case Gamemode_type.HEAD_HUNTERS:
+                                PointContainers[i].transform.GetChild(j).GetComponent<Animator>().SetBool("HeadHunter", true);
                                 break;
                             default:
                                 break;
@@ -622,15 +649,15 @@ public class GameManagerc : MonoBehaviour
             #endregion
 
             //PointsPanel.SetActive(false);
-            GameObject ReadyFightContainer = GameObject.Find("StartScreen");
-            GameObject KillAudio = ReadyFightContainer.transform.GetChild(0).gameObject;
-            GameObject GetReady = ReadyFightContainer.transform.GetChild(1).gameObject;
+            ReadyKillContainer = GameObject.Find("StartScreen");
+            GameObject KillAudio = ReadyKillContainer.transform.GetChild(0).gameObject;
+            GameObject GetReady = ReadyKillContainer.transform.GetChild(1).gameObject;
 
             //if (m_bShowReadyFight)
 
             if (m_bDoReadyKill)
             {
-                StartCoroutine(ReadyKill(ReadyFightContainer));
+                StartCoroutine(ReadyKill(ReadyKillContainer));
             }
             //find weapons and add shit to them
 
@@ -680,9 +707,9 @@ public class GameManagerc : MonoBehaviour
 
     public void Rematch()
     {
-
         //reset the time scale
         GameManagerc.Instance.Paused = false;
+        m_bRematchPressed = true;
         //The round is not over
         m_bRoundOver = false;
         //reset every player
@@ -696,24 +723,30 @@ public class GameManagerc : MonoBehaviour
         {
             PlayerWins[item] = 0;
         }
-        // WinningPlayer = null; // still unsued
+        lastPlayerToEarnPoints.mIEarnedPoints = 0;
+        PlayerWins[lastPlayerToEarnPoints] = 0;
+        lastPlayerToEarnPoints = null;
         m_bRoundOver = false;
         mbFinishedShowingScores = false;
         //mbFinishedPanelShown = false;
         //reload the current scene
         m_bDoReadyKill = true;
-        m_bDoGlitch = false;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        m_bDoGlitch = true;
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         FinishUIPanel.SetActive(false);
+        m_bRoundReady = false;
+        m_WinningPlayer = null;
+        //InGameScreenAnimator.SetTrigger("RemoveScreen");
+        StartCoroutine(ReadyKill(ReadyKillContainer));
 
         //Go through each point and turn them back to white.
-        //  foreach (var item in PointContainers) //for every point container
-        //  {
-        //      for (int i = 0; i < item.transform.childCount - 2; i++)
-        //      {
-        //          item.transform.GetChild(i).GetComponent<Image>().color = Color.red;
-        //      }
-        //  }
+        foreach (var item in PointContainers) //for every point container
+        {
+            for (int i = 0; i < item.transform.childCount - 2; i++)
+            {
+                item.transform.GetChild(i).GetComponent<Image>().color = pointsOriginalColour;
+            }
+        }
 
     }
 
@@ -810,7 +843,7 @@ public class GameManagerc : MonoBehaviour
         SceneManager.LoadScene(0);
     }
 
-    IEnumerator AddPointsToPanel(PlayerStatus player)
+    IEnumerator AddPointsToPanel(PlayerStatus player, int PointGain = 0)
     {
         m_bAllowPause = false;
         yield return new WaitForSeconds(m_fTimeTillPoints);
@@ -827,10 +860,12 @@ public class GameManagerc : MonoBehaviour
         int PlayerIndex = XboxControllerPlayerNumbers[player.GetComponent<ControllerSetter>().mXboxController];
         PointContainers[PlayerIndex].transform.GetChild(PlayerWins[player] - 1).GetComponent<Animator>().SetTrigger("PointGain");
         PointContainers[PlayerIndex].transform.GetChild(PlayerWins[player] - 1).GetComponent<Image>().color = Color.blue;
+
         if (PlayerWins[player] >= m_iPointsNeeded)
         {
             m_bDoReadyKill = false;
         }
+        player.mIEarnedPoints = 0; //set to 0 after the points are added.
         //TODO play ding.
         m_AudioSource.Play();
         yield return new WaitForSeconds(2);
@@ -840,6 +875,56 @@ public class GameManagerc : MonoBehaviour
         //    FindObjectOfType<ScreenTransition>().CloseDoor();
         //Start interpolation.
         //PointsPanel.SetActive(false);
+    }
+
+    IEnumerator AddToAllPoints()
+    {
+
+        m_bAllowPause = false;
+        yield return new WaitForSeconds(m_fTimeTillPoints);
+        PointsPanel.SetActive(true);
+        MenuPanel.SetActive(false);
+        InGameScreenAnimator.SetTrigger("ShowScreen");
+        mbFinishedShowingScores = false;
+        GameObject go = new GameObject("Point", typeof(RectTransform));
+        go.AddComponent<CanvasRenderer>();
+        go.AddComponent<Image>().sprite = PointSprite;
+
+        yield return new WaitForSeconds(1);
+        foreach (PlayerStatus player in InGamePlayers)
+        {
+
+
+            int PlayerIndex = XboxControllerPlayerNumbers[player.GetComponent<ControllerSetter>().mXboxController]; //get the index of player
+                                                                                                                    //for the point container that the player owns
+                                                                                                                    //starting from the current player's points, turn everything after that to blue.
+            for (int i = PlayerWins[player]; i < PlayerWins[player] + player.mIEarnedPoints; i++)
+            {
+                if (player.mIEarnedPoints > 0)
+                {
+                    yield return new WaitForSeconds(0.5f);
+                }
+                PointContainers[PlayerIndex].transform.GetChild(i).GetComponent<Image>().color = Color.blue;
+                PointContainers[PlayerIndex].transform.GetChild(i).GetComponent<Animator>().SetTrigger("PointGain");
+                m_AudioSource.Play();
+            }
+            PlayerWins[player] += player.mIEarnedPoints; //increase the player's points
+            if (PlayerWins[player] >= m_iPointsNeeded)
+            {
+                m_bDoReadyKill = false;
+            }
+            player.mIEarnedPoints = 0; //set to 0 after the points are added.
+        }
+        //TODO play ding.
+        yield return new WaitForSeconds(2);
+        InGameScreenAnimator.SetTrigger("RemoveScreen");
+        StartCoroutine(InterpolateGlitch(false));
+        //if (FindObjectOfType<ScreenTransition>())
+        //    FindObjectOfType<ScreenTransition>().CloseDoor();
+        //Start interpolation.
+        m_bAllowPause = true;
+        //PointsPanel.SetActive(false);
+        yield return null;
     }
 
     IEnumerator InterpolateGlitch(bool Reverse)
@@ -859,7 +944,7 @@ public class GameManagerc : MonoBehaviour
         while (t < maxTime)
         {
             //Scan line, Vertical Lines, Horizontal Shake, Colour Drift.
-            if (!Reverse)
+            if (!Reverse) //Go into glitch
             {
                 t += Time.deltaTime / maxTime;
                 CurrentGlitchValues = Vector4.Lerp(Vector4.zero, lerpValues, t);
@@ -869,7 +954,7 @@ public class GameManagerc : MonoBehaviour
                 glitch.colorDrift = CurrentGlitchValues.w;
                 yield return null;
             }
-            else
+            else //get out of glitch
             {
                 t += Time.deltaTime / maxTime;
                 CurrentGlitchValues = Vector4.Lerp(lerpValues, Vector4.zero, t);
@@ -880,28 +965,22 @@ public class GameManagerc : MonoBehaviour
                 glitch.colorDrift = CurrentGlitchValues.w;
                 yield return null;
             }
-        }
 
-        if (!Reverse)
+        } //end of while
+
+        mbFinishedShowingScores = true;
+        if (Reverse)
         {
-            CurrentGlitchValues = Vector4.Lerp(Vector4.zero, lerpValues, 1);
-
-            glitch.scanLineJitter = CurrentGlitchValues.x;
-            glitch.verticalJump = CurrentGlitchValues.y;
-            glitch.horizontalShake = CurrentGlitchValues.z;
-            glitch.colorDrift = CurrentGlitchValues.w;
-            yield return null;
+            m_AudioSource.clip = m_DingSound;
+            m_AudioSource.loop = false;
         }
-        else
-        {
-            CurrentGlitchValues = Vector4.Lerp(lerpValues, Vector4.zero, 1);
 
-            glitch.scanLineJitter = CurrentGlitchValues.x;
-            glitch.verticalJump = CurrentGlitchValues.y;
-            glitch.horizontalShake = CurrentGlitchValues.z;
-            glitch.colorDrift = CurrentGlitchValues.w;
-            yield return null;
-        }
+        glitch.scanLineJitter = CurrentGlitchValues.x;
+        glitch.verticalJump = CurrentGlitchValues.y;
+        glitch.horizontalShake = CurrentGlitchValues.z;
+        glitch.colorDrift = CurrentGlitchValues.w;
+        yield return null;
+
         mbFinishedShowingScores = true;
         if (!Reverse)
         {
@@ -912,9 +991,10 @@ public class GameManagerc : MonoBehaviour
         yield return null;
     }
 
+
     IEnumerator ReadyKill(GameObject ReadyFightContainer)
     {
-
+        Debug.Log(ReadyFightContainer);
         GameObject Kill = ReadyFightContainer.transform.GetChild(0).gameObject;
         GameObject getReady = ReadyFightContainer.transform.GetChild(1).gameObject;
 
@@ -929,7 +1009,8 @@ public class GameManagerc : MonoBehaviour
         {
             Kill.GetComponent<Image>().enabled = false;
             getReady.GetComponent<Image>().enabled = false;
-            InGameScreenAnimator.SetTrigger("ShowScreen");
+            if (!m_bRematchPressed)
+                InGameScreenAnimator.SetTrigger("ShowScreen");
             while (!transition.DoorOpened) { yield return null; } //while the door hasn't opened yet.
             yield return new WaitForSeconds(0.5f);
             //if (m_bDoGlitch)
@@ -940,7 +1021,6 @@ public class GameManagerc : MonoBehaviour
             GetReadyImage.enabled = true;
             //play the get ready audio
             getReady.GetComponent<AudioSource>().Play();
-
             yield return new WaitForSeconds(2);
             //Turn get ready off
             GetReadyImage.enabled = false;
@@ -950,13 +1030,14 @@ public class GameManagerc : MonoBehaviour
             Kill.GetComponent<AudioSource>().Play();
             //remove screen
             yield return new WaitForSeconds(1.5f);
+            //im sorry
             InGameScreenAnimator.SetTrigger("RemoveScreen");
+            m_bRematchPressed = false;
             m_bRoundReady = true;
             KillImage.enabled = false;
             m_bAllowPause = true;
             //ready to play
             //}
-
         }
         yield return new WaitForSeconds(0.6f);
         for (int i = 0; i < PointsPanel.transform.childCount; i++)

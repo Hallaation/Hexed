@@ -269,7 +269,7 @@ public class Move : MonoBehaviour
         //{
         //GamePad.SetVibration(m_controller.mPlayerIndex, XCI.GetAxis(XboxAxis.LeftTrigger, m_controller.mXboxController), XCI.GetAxis(XboxAxis.RightTrigger, m_controller.mXboxController));
         //vibrationValue = new Vector2(XCI.GetAxis(XboxAxis.LeftTrigger, m_controller.mXboxController), XCI.GetAxis(XboxAxis.RightTrigger, m_controller.mXboxController));
-        GamePad.SetVibration(m_controller.mPlayerIndex, vibrationValue.x, vibrationValue.y);
+        //GamePad.SetVibration(m_controller.mPlayerIndex, vibrationValue.x, vibrationValue.y);
 
         //if (_characterController)
         //{
