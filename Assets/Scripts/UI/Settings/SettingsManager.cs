@@ -65,8 +65,10 @@ public class SettingsManager : MonoBehaviour
         if (musicVolumeSlider)
             musicVolumeSlider.onValueChanged.AddListener(delegate { OnMusicVolumeChange(); });
         if (applyButton)
+        {
             applyButton.onClick.AddListener(delegate { OnApplyButtonClick(); });
-
+            applyButton.onClick.AddListener(delegate { Menuback(); });
+        }
         if (resolutionDropdwon)
         {
             foreach (Resolution reso in resolutions)
@@ -87,6 +89,15 @@ public class SettingsManager : MonoBehaviour
         //    OnSFXVolumeChange();
         //    OnMusicVolumeChange();
         //}
+    }
+
+    public void Menuback()
+    {
+        if (UIManager.Instance.m_bInMainMenu)
+        {
+            UIManager.Instance.MainMenuBack();
+        }
+
     }
     public void onFullScreenToggle()
     {
@@ -149,6 +160,10 @@ public class SettingsManager : MonoBehaviour
         Screen.fullScreen = gameSettings.Fullscreen;
         Screen.SetResolution(resolutions[gameSettings.resolutionIndex].width, resolutions[gameSettings.resolutionIndex].height, gameSettings.Fullscreen);
         QualitySettings.vSyncCount = gameSettings.vSync;
+        //if (UIManager.Instance.m_bInMainMenu)
+        //{
+        //    UIManager.Instance.MainMenuBack();
+        //}
         //AudioListener.volume = gameSettings.masterVolume; Change to the master volume mixer
         SaveSettings();
     }
