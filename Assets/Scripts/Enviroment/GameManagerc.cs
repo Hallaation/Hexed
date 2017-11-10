@@ -857,6 +857,7 @@ public class GameManagerc : MonoBehaviour
         int PlayerIndex = XboxControllerPlayerNumbers[player.GetComponent<ControllerSetter>().mXboxController];
         PointContainers[PlayerIndex].transform.GetChild(PlayerWins[player] - 1).GetComponent<Animator>().SetTrigger("PointGain");
         PointContainers[PlayerIndex].transform.GetChild(PlayerWins[player] - 1).GetComponent<Image>().color = Color.blue;
+
         if (PlayerWins[player] >= m_iPointsNeeded)
         {
             m_bDoReadyKill = false;
@@ -901,6 +902,7 @@ public class GameManagerc : MonoBehaviour
                     yield return new WaitForSeconds(0.5f);
                 }
                 PointContainers[PlayerIndex].transform.GetChild(i).GetComponent<Image>().color = Color.blue;
+                PointContainers[PlayerIndex].transform.GetChild(i).GetComponent<Animator>().SetTrigger("PointGain");
                 m_AudioSource.Play();
             }
             PlayerWins[player] += player.mIEarnedPoints; //increase the player's points
@@ -921,6 +923,7 @@ public class GameManagerc : MonoBehaviour
         //PointsPanel.SetActive(false);
         yield return null;
     }
+
     IEnumerator InterpolateGlitch(bool Reverse)
     {
         AnalogGlitch glitch = FindObjectOfType<AnalogGlitch>();
@@ -969,12 +972,12 @@ public class GameManagerc : MonoBehaviour
             m_AudioSource.loop = false;
         }
 
-            glitch.scanLineJitter = CurrentGlitchValues.x;
-            glitch.verticalJump = CurrentGlitchValues.y;
-            glitch.horizontalShake = CurrentGlitchValues.z;
-            glitch.colorDrift = CurrentGlitchValues.w;
-            yield return null;
-        }
+        glitch.scanLineJitter = CurrentGlitchValues.x;
+        glitch.verticalJump = CurrentGlitchValues.y;
+        glitch.horizontalShake = CurrentGlitchValues.z;
+        glitch.colorDrift = CurrentGlitchValues.w;
+        yield return null;
+
         mbFinishedShowingScores = true;
         if (!Reverse)
         {
@@ -984,6 +987,7 @@ public class GameManagerc : MonoBehaviour
         }
         yield return null;
     }
+
 
     IEnumerator ReadyKill(GameObject ReadyFightContainer)
     {

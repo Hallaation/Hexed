@@ -44,7 +44,8 @@ public class UIManager : MonoBehaviour
     private Animator m_bMenuAnimator;
     private bool m_bOpenedPanel;
     private bool m_bInSelect = false;
-    private bool FixAnimator = false;
+
+    CreditsScroll _creditsScroller;
     private Timer shortTimer;
     public bool RemoveLastPanel { get { return m_bRemoveLastPanel; } set { m_bRemoveLastPanel = value; } }
     // Use this for initialization
@@ -227,7 +228,7 @@ public class UIManager : MonoBehaviour
                     m_ButtonAnimator.SetTrigger("SelectedCredits");
                     GameObject.Find("Credits_Button").transform.parent.GetChild(1).GetComponent<Image>().enabled = false;
                     m_ButtonAnimator.SetBool("IsCredits", false);
-                    FindObjectOfType<CreditsScroll>().m_bInterpolateCredits = false;
+                    _creditsScroller.m_bInterpolateCredits = false;
                     break;
             }
             //Save my changes here
@@ -409,7 +410,7 @@ public class UIManager : MonoBehaviour
                     break;
                 case "IsCredits":
                     m_ButtonAnimator.ResetTrigger("SelectedCredits");
-                    FindObjectOfType<CreditsScroll>().m_bInterpolateCredits = true;
+                    _creditsScroller.m_bInterpolateCredits = true;
                     break;
             }
             m_ButtonAnimator.SetBool(AnimationParameter, true);
@@ -556,6 +557,7 @@ public class UIManager : MonoBehaviour
             Button SettingsButton = GameObject.Find("Settings_Button").GetComponent<Button>();
             Button CreditsButton = GameObject.Find("Credits_Button").GetComponent<Button>();
             Button QuitBUtton = GameObject.Find("Quit_Button").GetComponent<Button>();
+            _creditsScroller = FindObjectOfType<CreditsScroll>();
             vsButton.onClick.AddListener(delegate { MainMenuChangePanel(GameObject.Find("Second_Panel")); });
             SettingsButton.onClick.AddListener(delegate { MenuOpenPanel(m_SettingsPanel, "IsSettings", SettingsButton); });
             CreditsButton.onClick.AddListener(delegate { MenuOpenPanel(m_CreditsPanel, "IsCredits", CreditsButton); });
