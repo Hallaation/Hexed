@@ -227,6 +227,7 @@ public class UIManager : MonoBehaviour
                     m_ButtonAnimator.SetTrigger("SelectedCredits");
                     GameObject.Find("Credits_Button").transform.parent.GetChild(1).GetComponent<Image>().enabled = false;
                     m_ButtonAnimator.SetBool("IsCredits", false);
+                    FindObjectOfType<CreditsScroll>().m_bInterpolateCredits = false;
                     break;
             }
             //Save my changes here
@@ -408,6 +409,7 @@ public class UIManager : MonoBehaviour
                     break;
                 case "IsCredits":
                     m_ButtonAnimator.ResetTrigger("SelectedCredits");
+                    FindObjectOfType<CreditsScroll>().m_bInterpolateCredits = true;
                     break;
             }
             m_ButtonAnimator.SetBool(AnimationParameter, true);
