@@ -21,7 +21,7 @@ public class SingletonTester : MonoBehaviour
             return mInstance;
         }
     }
-    public List<MonoBehaviour> singletons = new List<MonoBehaviour>();
+    //public List<MonoBehaviour> singletons = new List<MonoBehaviour>();
 
     // Use this for initialization
     void Start()
@@ -33,13 +33,5 @@ public class SingletonTester : MonoBehaviour
     void Update()
     {
 
-    }
-
-    public void AddSingleton(MonoBehaviour a_singleton)
-    {
-        if(!singletons.Contains(a_singleton))
-        {
-            singletons.Add(a_singleton);
-        }
     }
 }
