@@ -27,6 +27,11 @@ public class CreditsScroll : MonoBehaviour
             Debug.Log(OriginalPosition);
             Debug.Log(DesiredPosition);
             this.GetComponent<RectTransform>().anchoredPosition = Vector3.Lerp(OriginalPosition, DesiredPosition, _t * m_fSpeed);
+
+            if (this.GetComponent<RectTransform>().anchoredPosition.magnitude >= DesiredPosition.magnitude - 0.3f)
+            {
+                UIManager.Instance.MainMenuBack();
+            }
         }
         else
         {
