@@ -153,7 +153,10 @@ public class Bullet : MonoBehaviour, Reset
                         {
                             if (!PlayerIHit.IsDead && GameManagerc.Instance.m_gameMode == Gamemode_type.HEAD_HUNTERS)
                             {
-                                bulletOwner.KilledAPlayer();
+                                if (PlayerIHit != m_bShooter) //if the hit player doesn't equla my shooter
+                                {
+                                    m_bShooter.KilledAPlayer();
+                                }
                             }
                             PlayerIHit.IsDead = true;
                             GameManagerc.Instance.lastPlayerToEarnPoints = m_bShooter;
