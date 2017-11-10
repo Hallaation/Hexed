@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: f7ffe61a59e884f4490c4949db3a676c
-timeCreated: 1508371710
-licenseType: Pro
+timeCreated: 1510233234
+licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
     21300000: UI_PreGameScreen_ScreenHousing
@@ -14,6 +14,7 @@ TextureImporter:
     21300014: UI_PreGameScreen_Slider_Fill_001
     21300016: UI_PreGameScreen_Slider_001
     21300018: UI_PreGameScreen_Outline Button_001
+    21300020: UI_PreGameScreen_Slider_Surround
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -38,7 +39,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     filterMode: 0
-    aniso: -1
+    aniso: 16
     mipBias: -1
     wrapMode: 1
   nPOTScale: 0
@@ -202,6 +203,19 @@ TextureImporter:
         y: 1012
         width: 500
         height: 68
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: UI_PreGameScreen_Slider_Surround
+      rect:
+        serializedVersion: 2
+        x: 1595
+        y: 1199
+        width: 30
+        height: 63
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

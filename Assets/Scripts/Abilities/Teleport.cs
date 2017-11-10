@@ -53,6 +53,8 @@ public class Teleport : BaseAbility
             m_bDashTrails = true;
             ButtonHasBeenUp = false;
             m_iCurrentCharges--; //deduct from available charges.
+            m_AudioSource.Play();
+            m_AudioSource.pitch = Random.Range(0.9f, 1.2f);
             StartCoroutine(SetDashForDuration());
             //currentMana -= ManaCost;
         }

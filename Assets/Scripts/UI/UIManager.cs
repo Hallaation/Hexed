@@ -50,7 +50,11 @@ public class UIManager : MonoBehaviour
     // Use this for initialization
     public void QuitGame()
     {
+#if UNITY_EDITOR
+        EditorApplication.isPlaying = false;
+#else
         Application.Quit();
+#endif
     }
 
     public static UIManager Instance
@@ -216,11 +220,14 @@ public class UIManager : MonoBehaviour
                 case "Options_Panel":
                     m_ButtonAnimator.SetBool("IsSettings", false);
                     m_ButtonAnimator.SetTrigger("SelectedSettings");
+                    GameObject.Find("Settings_Button").transform.parent.GetChild(1).GetComponent<Image>().enabled = false;
                     SettingsManager.Instance.SaveSettings();
                     break;
                 case "Credits_Panel":
                     m_ButtonAnimator.SetTrigger("SelectedCredits");
+                    GameObject.Find("Credits_Button").transform.parent.GetChild(1).GetComponent<Image>().enabled = false;
                     m_ButtonAnimator.SetBool("IsCredits", false);
+                    FindObjectOfType<CreditsScroll>().m_bInterpolateCredits = false;
                     break;
             }
             //Save my changes here
@@ -390,7 +397,7 @@ public class UIManager : MonoBehaviour
     }
 
 
-    public void MenuOpenPanel(GameObject PanelToOpen, string AnimationParameter = "")
+    public void MenuOpenPanel(GameObject PanelToOpen, string AnimationParameter = "", Button onClickFrom = null)
     {
         if (!menuStatus.Contains(PanelToOpen))
         {
@@ -402,12 +409,13 @@ public class UIManager : MonoBehaviour
                     break;
                 case "IsCredits":
                     m_ButtonAnimator.ResetTrigger("SelectedCredits");
+                    FindObjectOfType<CreditsScroll>().m_bInterpolateCredits = true;
                     break;
             }
             m_ButtonAnimator.SetBool(AnimationParameter, true);
             menuStatus.Push(PanelToOpen);
             //Wait for animations here
-            StartCoroutine(WaitForAnimation(PanelToOpen, AnimationParameter));
+            StartCoroutine(WaitForAnimation(PanelToOpen, AnimationParameter, onClickFrom));
         }
     }
 
@@ -549,8 +557,9 @@ public class UIManager : MonoBehaviour
             Button CreditsButton = GameObject.Find("Credits_Button").GetComponent<Button>();
             Button QuitBUtton = GameObject.Find("Quit_Button").GetComponent<Button>();
             vsButton.onClick.AddListener(delegate { MainMenuChangePanel(GameObject.Find("Second_Panel")); });
-            SettingsButton.onClick.AddListener(delegate { MenuOpenPanel(m_SettingsPanel, "IsSettings"); });
-            CreditsButton.onClick.AddListener(delegate { MenuOpenPanel(m_CreditsPanel, "IsCredits"); });
+            SettingsButton.onClick.AddListener(delegate { MenuOpenPanel(m_SettingsPanel, "IsSettings", SettingsButton); });
+            CreditsButton.onClick.AddListener(delegate { MenuOpenPanel(m_CreditsPanel, "IsCredits", CreditsButton); });
+            QuitBUtton.onClick.AddListener(delegate { QuitGame(); });
             //find the first panel and push it to the stack
             menuStatus.Push(GameObject.Find("First_Panel"));
             m_ButtonAnimator = menuStatus.Peek().GetComponent<Animator>();
@@ -583,10 +592,16 @@ public class UIManager : MonoBehaviour
     }
 
 
-    IEnumerator WaitForAnimation(GameObject PanelToOpen, string AnimationParameter = "")
+    IEnumerator WaitForAnimation(GameObject PanelToOpen, string AnimationParameter = "", Button onClickFrom = null)
     {
-        yield return new WaitForSeconds(m_ButtonAnimator.GetCurrentAnimatorStateInfo(0).length - 1.3f /*+ m_ButtonAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime*/);
+  
+        yield return new WaitForSeconds(m_ButtonAnimator.GetCurrentAnimatorStateInfo(0).length - 1.5f /*+ m_ButtonAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime*/);
+        if (onClickFrom)
+        {
+            onClickFrom.transform.parent.GetChild(1).GetComponent<Image>().enabled = true;
+        }
         DoLast(PanelToOpen, AnimationParameter);
+        
     }
 
     IEnumerator PauseGame()

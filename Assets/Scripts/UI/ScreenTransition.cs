@@ -16,13 +16,14 @@ public class ScreenTransition : MonoBehaviour
     private Image TeamLogo;
     private Image BlackOut2nd;
     private Queue<Image> fadingQueue = new Queue<Image>();
-    private Stack<Image> fadingStack = new Stack<Image>();
     private bool m_bDoorOpened;
+    public bool m_bFirstTimeLoading = true;
     public bool DoorOpened { get { return m_bDoorOpened; } }
 
 
     public AudioClip m_OpenClip;
     public AudioClip m_closeClip;
+    public AudioClip m_LogoClip;
     private AudioSource m_AudioSource;
     // Use this for initialization
 
@@ -42,7 +43,7 @@ public class ScreenTransition : MonoBehaviour
         {
             TeamLogo = this.transform.GetChild(4).GetComponent<Image>();
             BlackOut = this.transform.GetChild(5).GetComponent<Image>();
-            BlackOut2nd = this.transform.GetChild(3).GetComponent<Image>();
+            BlackOut2nd = this.transform.GetChild(3).GetComponent<Image>(); //because render order
 
             fadingQueue.Enqueue(BlackOut);
             fadingQueue.Enqueue(TeamLogo);
@@ -51,14 +52,16 @@ public class ScreenTransition : MonoBehaviour
 
             StartCoroutine(WakeUp());
         }
-        else
+        else //When the game doesn't want to do the logo transition
         {
             if (transform.childCount > 3)
             {
-                TeamLogo = this.transform.GetChild(3).GetComponent<Image>(); //TODO Need to Re-add to the queue so it Fades in and then fades out.
-                BlackOut = this.transform.GetChild(4).GetComponent<Image>();
+                TeamLogo = this.transform.GetChild(4).GetComponent<Image>(); //TODO Need to Re-add to the queue so it Fades in and then fades out.
+                BlackOut = this.transform.GetChild(5).GetComponent<Image>();
+                BlackOut2nd = this.transform.GetChild(3).GetComponent<Image>();
                 TeamLogo.enabled = false;
                 BlackOut.enabled = false;
+                BlackOut2nd.enabled = false;
             }
             OpenDoor();
         }
@@ -78,6 +81,11 @@ public class ScreenTransition : MonoBehaviour
         yield return new WaitForSeconds(1);
         while (fadingQueue.Count != 0)
         {
+            if (fadingQueue.Peek() == BlackOut)
+            {
+                m_AudioSource.clip = m_LogoClip;
+                m_AudioSource.Play();
+            }
             while (t < m_fTimeBetweenFades - 0.5f)
             {
                 t += Time.deltaTime;
@@ -123,6 +131,7 @@ public class ScreenTransition : MonoBehaviour
 
         }
     }
+
     public void CloseDoor()
     {
         Debug.Log("Closing door");
@@ -134,8 +143,11 @@ public class ScreenTransition : MonoBehaviour
 
     public void OpenDoor()
     {
-        m_AudioSource.clip = m_OpenClip;
-        m_AudioSource.Play();
+        if (GameManagerc.Instance.m_bFirstTimeLoading)
+        {
+            m_AudioSource.clip = m_OpenClip;
+            m_AudioSource.Play();
+        }
         m_Animator.SetTrigger("OpenDoor");
     }
 
