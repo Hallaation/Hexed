@@ -545,6 +545,7 @@ public class GameManagerc : MonoBehaviour
                     PointContainers[i].transform.GetChild(j).gameObject.SetActive(false);
                 }
                 //Turn off the containers so they don't show up.
+
             }
 
             //Load player portraits.
@@ -592,6 +593,11 @@ public class GameManagerc : MonoBehaviour
                 PointContainers[(int)item - 1].SetActive(true);
                 ActivePanels[ActivePanelIndex] = PointContainers[(int)item - 1];
                 ActivePanelIndex++;
+            }
+
+            for (int i = PointContainers.Length - 1; i > ActivePanelIndex - 1; i--)
+            {
+                PointContainers[i].SetActive(false);
             }
 
             for (int i = 0; i < 4 - CharacterSelectionManager.Instance.JoinedPlayers; i++)
