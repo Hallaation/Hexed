@@ -430,6 +430,7 @@ public class GameManagerc : MonoBehaviour
                 //TODO Player portraits
                 FinishUIPanel.transform.GetChild(2).GetChild(0).GetComponent<Image>().sprite = m_WinningPlayer.GetComponent<BaseAbility>().m_CharacterPortrait;
                 FinishUIPanel.transform.GetChild(2).GetChild(1).GetComponent<Image>().color = m_WinningPlayer.GetComponent<PlayerStatus>()._playerColor;
+                FinishUIPanel.transform.GetChild(3).GetComponent<Text>().text = "PLAYER " + ((int)m_WinningPlayer.GetComponent<ControllerSetter>().mXboxController) + " WINS";
                 //  m_WinningPlayer = m_WinningPlayer;
                 if (FindObjectOfType<ScreenTransition>())
                     FindObjectOfType<ScreenTransition>().OpenDoor();
