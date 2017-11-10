@@ -16,7 +16,6 @@ public class ScreenTransition : MonoBehaviour
     private Image TeamLogo;
     private Image BlackOut2nd;
     private Queue<Image> fadingQueue = new Queue<Image>();
-    private Stack<Image> fadingStack = new Stack<Image>();
     private bool m_bDoorOpened;
     public bool m_bFirstTimeLoading = true;
     public bool DoorOpened { get { return m_bDoorOpened; } }
@@ -24,6 +23,7 @@ public class ScreenTransition : MonoBehaviour
 
     public AudioClip m_OpenClip;
     public AudioClip m_closeClip;
+    public AudioClip m_LogoClip;
     private AudioSource m_AudioSource;
     // Use this for initialization
 
@@ -81,6 +81,11 @@ public class ScreenTransition : MonoBehaviour
         yield return new WaitForSeconds(1);
         while (fadingQueue.Count != 0)
         {
+            if (fadingQueue.Peek() == BlackOut)
+            {
+                m_AudioSource.clip = m_LogoClip;
+                m_AudioSource.Play();
+            }
             while (t < m_fTimeBetweenFades - 0.5f)
             {
                 t += Time.deltaTime;
