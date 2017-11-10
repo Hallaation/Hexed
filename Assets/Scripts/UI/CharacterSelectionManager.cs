@@ -44,7 +44,7 @@ public class CharacterSelectionManager : MonoBehaviour
     // Use this for initialization
     private void Awake()
     {
-        SingletonTester.Instance.AddSingleton(this);
+        //SingletonTester.Instance.AddSingleton(this);
         SceneManager.sceneLoaded += OnSceneLoaded;
         Object[] temp = Resources.LoadAll("Characters", typeof(GameObject));
         CharacterArray = new GameObject[temp.Length];
