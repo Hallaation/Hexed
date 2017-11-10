@@ -93,12 +93,13 @@ public class GameManagerc : MonoBehaviour
     private bool mbFinishedShowingScores = false;
     public bool mbInstanceIsMe = false;
     public bool mbMapLoaded = false;
-    private bool m_bFirstTimeLoading = true;
+    public bool m_bFirstTimeLoading = true;
     [SerializeField]
     private bool m_bGamePaused = false;
     [SerializeField]
     private bool m_bRoundReady = false;
     private bool m_bDoGlitch = true;
+    private bool m_bPlayedGlitchAudio = false;
     private bool m_bDoReadyKill = true;
     public bool RoundReady { get { return m_bRoundReady; } }
     private ScreenTransition screenTransition;
@@ -449,7 +450,10 @@ public class GameManagerc : MonoBehaviour
                 }
                 if (m_bDoGlitch)
                 {
+                    //Reversee glitch
                     StartCoroutine(InterpolateGlitch(true));
+                    m_bPlayedGlitchAudio = false;
+                    m_AudioSource.clip = m_DingSound;
                 }
             }
             else
@@ -513,6 +517,24 @@ public class GameManagerc : MonoBehaviour
             for (int i = 0; i < PointsPanel.transform.childCount; i++)
             {
                 PointContainers[i] = PointsPanel.transform.GetChild(i).gameObject;
+                for (int j = 0; j < PointContainers[i].transform.childCount; j++)
+                {
+                    if (PointContainers[i].transform.GetChild(j).GetComponent<Animator>())
+                    {
+                        switch (m_gameMode)
+                        {
+                            case Gamemode_type.LAST_MAN_STANDING_DEATHMATCH:
+                                PointContainers[i].transform.GetChild(j).GetComponent<Animator>().SetBool("CircuitBreaker", true);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    foreach (Image imagerenderer in PointContainers[i].transform.GetChild(j).GetComponentsInChildren<Image>())
+                    {
+                        imagerenderer.enabled = false;
+                    }
+                }
                 Vector3 temp = PointContainers[i].transform.position;
                 //Get the last object in container (portrait)
                 PointContainers[i].transform.position = new Vector3(PointXPositions[m_iPointsIndex].transform.position.x, temp.y, temp.z);
@@ -523,7 +545,6 @@ public class GameManagerc : MonoBehaviour
                     PointContainers[i].transform.GetChild(j).gameObject.SetActive(false);
                 }
                 //Turn off the containers so they don't show up.
-                PointContainers[i].SetActive(false);
             }
 
             //Load player portraits.
@@ -587,13 +608,14 @@ public class GameManagerc : MonoBehaviour
                     if (PlayerWins[Player] > 0)
                     {
                         Image temp = PointContainers[iPlayerIndex].transform.GetChild(j).GetComponent<Image>();
+                        PointContainers[iPlayerIndex].transform.GetChild(j).GetComponent<Animator>().SetTrigger("PointGain");
                         PointContainers[iPlayerIndex].transform.GetChild(j).GetComponent<Image>().color = Color.blue;
                     }
                 }
             }
             #endregion
 
-            PointsPanel.SetActive(false);
+            //PointsPanel.SetActive(false);
             GameObject ReadyFightContainer = GameObject.Find("StartScreen");
             GameObject KillAudio = ReadyFightContainer.transform.GetChild(0).gameObject;
             GameObject GetReady = ReadyFightContainer.transform.GetChild(1).gameObject;
@@ -605,6 +627,7 @@ public class GameManagerc : MonoBehaviour
                 StartCoroutine(ReadyKill(ReadyFightContainer));
             }
             //find weapons and add shit to them
+
             _rbPausers.Clear();
             _rbPausers = new List<RigidbodyPauser>();
             foreach (Rigidbody2D item in FindObjectsOfType<Rigidbody2D>())
@@ -796,6 +819,7 @@ public class GameManagerc : MonoBehaviour
         yield return new WaitForSeconds(1);
 
         int PlayerIndex = XboxControllerPlayerNumbers[player.GetComponent<ControllerSetter>().mXboxController];
+        PointContainers[PlayerIndex].transform.GetChild(PlayerWins[player] - 1).GetComponent<Animator>().SetTrigger("PointGain");
         PointContainers[PlayerIndex].transform.GetChild(PlayerWins[player] - 1).GetComponent<Image>().color = Color.blue;
         if (PlayerWins[player] >= m_iPointsNeeded)
         {
@@ -809,7 +833,6 @@ public class GameManagerc : MonoBehaviour
         //if (FindObjectOfType<ScreenTransition>())
         //    FindObjectOfType<ScreenTransition>().CloseDoor();
         //Start interpolation.
-        m_bAllowPause = true;
         //PointsPanel.SetActive(false);
     }
 
@@ -819,8 +842,14 @@ public class GameManagerc : MonoBehaviour
         var t = 0.0f;
         float maxTime = 1;
         m_AudioSource.clip = m_GlitchEffect;
-        m_AudioSource.loop = true;
-        m_AudioSource.Play();
+        //m_AudioSource.loop = true;
+        if (!m_bPlayedGlitchAudio)
+        {
+            m_AudioSource.clip = m_GlitchEffect;
+            m_AudioSource.Play();
+            m_bPlayedGlitchAudio = true;
+        }
+        //m_AudioSource.Play();
         while (t < maxTime)
         {
             //Scan line, Vertical Lines, Horizontal Shake, Colour Drift.
@@ -868,8 +897,12 @@ public class GameManagerc : MonoBehaviour
             yield return null;
         }
         mbFinishedShowingScores = true;
-        m_AudioSource.loop = false;
-        m_AudioSource.clip = m_DingSound;
+        if (!Reverse)
+        {
+
+            m_AudioSource.loop = false;
+            m_AudioSource.clip = m_DingSound;
+        }
         yield return null;
     }
 
@@ -918,6 +951,17 @@ public class GameManagerc : MonoBehaviour
             //ready to play
             //}
 
+        }
+        yield return new WaitForSeconds(0.6f);
+        for (int i = 0; i < PointsPanel.transform.childCount; i++)
+        {
+            for (int j = 0; j < PointContainers[i].transform.childCount; j++)
+            {
+                foreach (Image imagerenderer in PointContainers[i].transform.GetChild(j).GetComponentsInChildren<Image>())
+                {
+                    imagerenderer.enabled = true;
+                }
+            }
         }
         yield return null;
     }
