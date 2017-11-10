@@ -250,7 +250,6 @@ public class GamemodeSelection : MonoBehaviour
                             #endregion
                             break;
                     }
-
                 }
                 else
                 {
@@ -331,7 +330,7 @@ public class GamemodeSelection : MonoBehaviour
         for (int i = 0; i < (int)PlayerIndex.Four; ++i)
         {
             Vector2 StickInput = new Vector2(XCI.GetAxisRaw(XboxAxis.LeftStickX, XboxController.First + i), 0);
-            StickInput = CheckDeadZone(StickInput, 0.12f);
+            StickInput = CheckDeadZone(StickInput, 0.08f);
             if (ResetSticks)
             {
                 if (StickInput.x < 0)
