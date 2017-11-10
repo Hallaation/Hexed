@@ -52,8 +52,17 @@ public class BaseAbility : MonoBehaviour
     protected float m_fIndicatorScale = 0;
     public bool ChargeCoolDown = true;
     private bool m_bParticlePlayed;
+
+    public AudioClip m_SoundEffect;
+    protected AudioSource m_AudioSource;
     void Start()
     {
+        m_AudioSource = this.gameObject.AddComponent<AudioSource>();
+        m_AudioSource.outputAudioMixerGroup = AudioManager.RequestMixerGroup(SourceType.SFX);
+        m_AudioSource.loop = false;
+        m_AudioSource.playOnAwake = false;
+        m_AudioSource.clip = m_SoundEffect;
+
         m_CoolDownTimer = new Timer(m_fAbilityCoolDown);
 
         m_MoveOwner = this.GetComponent<Move>();
