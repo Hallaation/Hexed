@@ -33,7 +33,6 @@ public class CameraShake : MonoBehaviour
                     minstance = (new GameObject("CameraShake")).AddComponent<CameraShake>();
                 }
             }
-            SingletonTester.Instance.AddSingleton(minstance);
             return minstance;
         }
     }

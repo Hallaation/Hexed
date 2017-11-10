@@ -34,7 +34,7 @@ public class UINavigation : MonoBehaviour
     // Use this for initialization
     void Awake()
     {
-        SingletonTester.Instance.AddSingleton(this);
+        //SingletonTester.Instance.AddSingleton(this);
         SceneManager.sceneLoaded += OnSceneLoad;
         //_EventSystem = FindObjectOfType<EventSystem>();
 

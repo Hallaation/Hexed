@@ -138,6 +138,7 @@ public class Gun : Weapon
 
         Bullet bulletComponent = FiredBullet.GetComponent<Bullet>();
         bulletComponent.bulletOwner = GetComponentInParent<PlayerStatus>(); //copy stuff over
+        bulletComponent.m_bShooter = GetComponentInParent<PlayerStatus>();
         bulletComponent.m_iDamage = this.m_iDamage;
         bulletComponent.m_bGiveIFrames = m_bGivePlayersIFrames;
         bulletComponent.m_fBulletImpactKnockBack = m_fBulletImpactKnockback;

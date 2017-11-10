@@ -67,7 +67,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
     Rigidbody2D _rigidbody;
     [HideInInspector]
     public int spawnIndex;
-
+    public int mIEarnedPoints;
     public Image stunBar;
     public Image stunMask;
     private GameObject stunBarContainer;
@@ -83,7 +83,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
     private SpriteRenderer m_SpriteRenderer;
     private CameraControl _cameraControlInstance;
 
-
+    
     [Range(0, 0.22f)]
     public float fill;
     //if the player is dead, the renderer will change their Color to gray, and all physics simulation of the player's rigidbody will be turned off.
@@ -209,6 +209,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
                 }
 
                 return;
+
             }
 
             //if im stunned, make me cyan and show any kill prompts (X button and kill radius);
@@ -446,11 +447,11 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         {
             if (item.type == AnimatorControllerParameterType.Bool)
             {
-                m_MoveClass.GetBodyAnimator().SetBool(item.name, false);
+                m_MoveClass.GetFeetAnimator().SetBool(item.name, false);
             }
             else if (item.type == AnimatorControllerParameterType.Trigger)
             {
-                m_MoveClass.GetBodyAnimator().ResetTrigger(item.name);
+                m_MoveClass.GetFeetAnimator().ResetTrigger(item.name);
             }
         }
         //Find all colliders and turn them on
@@ -482,6 +483,12 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         //kill the player, called outside of class (mostly used for downed kills)
         if (/*!m_bInvincible*/true)
         {
+            if (killer)
+            {
+                if (GameManagerc.Instance.m_gameMode == Gamemode_type.HEAD_HUNTERS)
+                    killer.mIEarnedPoints++;
+                GameManagerc.Instance.lastPlayerToEarnPoints = killer;
+            }
             SetAllAnimatorsFalse(false);
             m_iHealth = 0;
             m_bDead = true;
@@ -713,6 +720,11 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         _PlayerCanvas.transform.SetParent(null); //Set its parent to null so it can properly follow the player's positon.
         HealthContainer.SetActive(false); //turn it off.
         killbarContainer.SetActive(false);
+    }
+
+    public void KilledAPlayer()
+    {
+        mIEarnedPoints += 1;
     }
 }
 
