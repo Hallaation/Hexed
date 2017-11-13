@@ -739,13 +739,28 @@ public class GameManagerc : MonoBehaviour
         m_WinningPlayer = null;
         //InGameScreenAnimator.SetTrigger("RemoveScreen");
         StartCoroutine(ReadyKill(ReadyKillContainer));
-
+        PointsPanel.SetActive(true);
         //Go through each point and turn them back to white.
         foreach (var item in PointContainers) //for every point container
         {
+            item.SetActive(true);
             for (int i = 0; i < item.transform.childCount - 2; i++)
             {
-                item.transform.GetChild(i).GetComponent<Image>().color = pointsOriginalColour;
+                if (item.transform.GetChild(i).GetComponent<Animator>())
+                {
+                    switch (m_gameMode)
+                    {
+                        case Gamemode_type.LAST_MAN_STANDING_DEATHMATCH:
+                            item.transform.GetChild(i).GetComponent<Animator>().SetBool("CircuitBreaker", true);
+                            break;
+                        case Gamemode_type.HEAD_HUNTERS:
+                            item.transform.GetChild(i).GetComponent<Animator>().SetBool("HeadHunter", true);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                //item.transform.GetChild(i).GetComponent<Animator>().SetTrigger("PointReset");
             }
         }
 
