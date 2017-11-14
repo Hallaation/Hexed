@@ -30,6 +30,7 @@ public class GamemodeSelection : MonoBehaviour
     private GameObject[] GMSettingObjects;
     private Animator m_animator;
     public GameObject m_OuterGlow;
+    private float m_fTimeSelected;
     Image _mapSprite;
     public int[] mPointsToWin =
     {
@@ -140,6 +141,7 @@ public class GamemodeSelection : MonoBehaviour
                 //if the event systems currently selected object is my assigned buttons parent, do the things according to my type.
                 if (_eventSystem.currentSelectedGameObject.transform.parent == _button.transform.parent)
                 {
+                    m_fTimeSelected += Time.deltaTime;
                     m_OuterGlow.SetActive(true);
                     switch (m_pickType)
                     {
@@ -253,6 +255,7 @@ public class GamemodeSelection : MonoBehaviour
                 }
                 else
                 {
+                    m_fTimeSelected = 0;
                     m_OuterGlow.SetActive(false);
                 }
             }
@@ -333,8 +336,8 @@ public class GamemodeSelection : MonoBehaviour
         for (int i = 0; i < (int)PlayerIndex.Four; ++i)
         {
             Vector2 StickInput = new Vector2(XCI.GetAxisRaw(XboxAxis.LeftStickX, XboxController.First + i), 0);
-            StickInput = CheckDeadZone(StickInput, 0.08f);
-            if (ResetSticks)
+            StickInput = CheckDeadZone(StickInput, 0.06f);
+            if (ResetSticks && m_fTimeSelected > 0.3f)
             {
                 if (StickInput.x < 0)
                 {
@@ -356,10 +359,14 @@ public class GamemodeSelection : MonoBehaviour
     {
         Vector2 temp = controllerInput;
         //if any of the numbers are below a certain deadzone, they get zeroed.
-        if (temp.magnitude < deadzone)
+        if (Mathf.Abs(controllerInput.x) < deadzone)
         {
-            temp = Vector2.zero;
+            temp.x = 0;
         }
+        //if (temp.magnitude < deadzone)
+        //{
+        //    temp = Vector2.zero;
+        //}
 
         return temp;
     }
