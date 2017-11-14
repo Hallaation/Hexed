@@ -667,6 +667,7 @@ public class Move : MonoBehaviour
                     hitCollider.gameObject.transform.parent.position = Melee1HandedMount.position; //set position to the weapon mount spot
                     hitCollider.gameObject.transform.parent.rotation = Melee1HandedMount.rotation; //set its rotation
                 }
+                if(heldWeapon.GetComponent<Melee>())
                 heldWeapon.GetComponent<Melee>().SetAnimator(BodyAnimator); // Sets animator for bat to know when swinging.
 
 
@@ -771,6 +772,7 @@ public class Move : MonoBehaviour
                 if (BodyAnimator != null) //This check is only if there is a melee weapon.
                 {
                     BodyAnimator.SetBool("UnarmedAttack", false);
+                    if (!heldWeapon.GetComponent<Grenade>())
                     BodyAnimator.SetBool("Attack", true);
                 }
                 //attack using the weapon im holding. if an attack was done, set a vibration on my controller.
