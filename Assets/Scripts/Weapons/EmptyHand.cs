@@ -14,7 +14,7 @@ public class EmptyHand : Weapon
     public int m_iGlassDamage = 1;
     private int PunchKBForce = 50000;
     private Animator m_BodyAnimator;
-    private bool m_bAttacking;
+   // private bool m_bAttacking;
     public int m_PunchesToKnockOut = 2;
     private int previousAnimatorState;
     private int InitialState;

@@ -16,7 +16,7 @@ public class SlidingDoor : MonoBehaviour {
     bool DoorIsOpening;
 
     [Space]
-    Rigidbody2D MyRigidBody;
+    //Rigidbody2D MyRigidBody;
 
     [Space]
     [Header("Door Open Audio")]

@@ -29,7 +29,6 @@ public class Move : MonoBehaviour
     [HideInInspector]
     public bool m_bStopStickRotation = false;
     bool m_bHoldingWeapon = false;
-    bool runningAnimation = false;
     //[HideInInspector]
     public GameObject crosshair;
     protected Animator FeetAnimator; public Animator GetFeetAnimator() { return FeetAnimator; }
@@ -908,7 +907,6 @@ public class Move : MonoBehaviour
                         if (collidersFound.gameObject.transform.parent.GetComponent<PlayerStatus>().IsStunned && collidersFound.gameObject.transform.parent.GetComponent<PlayerStatus>().Choker == null)
                         {
                             PlayerStatus playerBeingChoked = collidersFound.gameObject.transform.parent.GetComponent<PlayerStatus>();
-                            runningAnimation = true;
                             FeetAnimator.SetBool("Choking", true);
                             _rigidBody.velocity = Vector2.zero;
                             BodyAnimator.SetTrigger("HeadSmashPullUp");

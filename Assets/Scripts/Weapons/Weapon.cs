@@ -326,7 +326,7 @@ public class Weapon : MonoBehaviour, Reset
         m_AudioSource.PlayOneShot(PickupAudio, pickupVolume);
     }
 
-    public void Reset()
+    public virtual void Reset()
     {
         Destroy(this);
     }

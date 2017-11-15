@@ -129,7 +129,7 @@ public class GameManagerc : MonoBehaviour
     public PlayerStatus lastPlayerToEarnPoints = null;
 
     private GameObject ReadyKillContainer;
-    private Color pointsOriginalColour;
+    //private Color pointsOriginalColour;
     //Lazy singleton
     public static GameManagerc Instance
     {

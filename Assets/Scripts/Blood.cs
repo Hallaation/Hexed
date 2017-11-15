@@ -9,7 +9,6 @@ public class Blood : MonoBehaviour
     public bool MaxSize;
     SpriteRenderer GlassSpriteRenderer;
     public GameObject[] BloodSprites;
-    private Vector2 StoredVelocity;
     public bool BloodSpawner = false;
     // Use this for initialization
     void Start()

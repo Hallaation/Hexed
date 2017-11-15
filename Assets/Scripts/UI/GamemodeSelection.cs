@@ -27,7 +27,7 @@ public class GamemodeSelection : MonoBehaviour
     private Gamemode_type m_GamemodeSelected = Gamemode_type.LAST_MAN_STANDING_DEATHMATCH;
     private bool ResetSticks = false;
     private bool[] StickMovement; // index 0 for left horizontal, index 1 for right horizontal
-    private GameObject[] GMSettingObjects;
+    //private GameObject[] GMSettingObjects;
     private Animator m_animator;
     public GameObject m_OuterGlow;
     private float m_fTimeSelected;

@@ -173,7 +173,7 @@ public class Melee : Weapon
                         Vector2 Position = new Vector2(transform.position.x, transform.position.y);
                         Vector2 OtherPosition = new Vector2(other.transform.position.x, other.transform.position.y);
                         if ((hit.point - Position).magnitude < (OtherPosition - Position).magnitude) // if RayHit Wall is closer then the other player.
-                        { 
+                        {
                         }
                         else
                         {
@@ -332,9 +332,9 @@ public class Melee : Weapon
 
     }
 
-    void Reset()
+    public override void Reset()
     {
-        Destroy(this);
+        base.Reset();
     }
-
 }
+    
