@@ -69,6 +69,7 @@ public class Weapon : MonoBehaviour, Reset
     public float ThrowHitAudioVolume = 1;
     protected AudioSource hitPlayerAudioSource;
     protected bool m_bPlayedAudio = false; //A fallback incase audio doesn't work, mostly a major fallback for the melee guns.
+    protected Renderer _renderer;
     //[Range(-2, 2)]
     //public float clipPitch;
     protected AudioSource m_AudioSource;
@@ -82,7 +83,7 @@ public class Weapon : MonoBehaviour, Reset
         m_AudioSource.clip = m_AudioClip;
         m_AudioSource.volume = clipVolume;
         m_AudioSource.spatialBlend = 0.8f;
-        if (transform.Find("Weapon_Glow_001")) 
+        if (transform.Find("Weapon_Glow_001"))
         {
             BloomGlow = transform.Find("Weapon_Glow_001").GetComponent<SpriteRenderer>();
         }
@@ -91,6 +92,7 @@ public class Weapon : MonoBehaviour, Reset
         //hitPlayerAudioSource.outputAudioMixerGroup = (Resources.Load("AudioMixer/SFXAudio") as  AudioSource).outputAudioMixerGroup;
         hitPlayerAudioSource.playOnAwake = false;
         hitPlayerAudioSource.spatialBlend = 0.8f;
+        _renderer = GetComponentInChildren<Renderer>();
         //m_AudioSource = AudioManager.RequestAudioSource(m_AudioClip, clipVolume, clipPitch);
         _rigidbody = GetComponent<Rigidbody2D>();
         TimerBetweenFiring = new Timer(m_fTimeBetweenShots);
@@ -116,7 +118,7 @@ public class Weapon : MonoBehaviour, Reset
             m_bActive = true;
             if (WeaponSpriteRenderer)
             {
-                
+
                 if (WeaponSpriteRenderer.sprite != m_DefaultSprite)
                 {
                     WeaponSpriteRenderer.sprite = m_DefaultSprite;
@@ -135,7 +137,7 @@ public class Weapon : MonoBehaviour, Reset
                     m_bMoveWeaponSpriteUp = true;
                 }
                 //If i want to move the weapon sprite up.
-                if (m_bMoveWeaponSpriteUp && _rigidbody.velocity.magnitude < .3f )
+                if (m_bMoveWeaponSpriteUp && _rigidbody.velocity.magnitude < .3f)
                 {
 
 
@@ -161,7 +163,7 @@ public class Weapon : MonoBehaviour, Reset
                     }
                 }
             }
-            if(tag != "Player" && _rigidbody.velocity.magnitude < .1f && BloomGlow != null) //! If weapon is dropped and is not moving Activate bloom settings;
+            if (tag != "Player" && _rigidbody.velocity.magnitude < .1f && BloomGlow != null) //! If weapon is dropped and is not moving Activate bloom settings;
             {
                 if (BloomGlow.enabled == false) // Activate bloom
                 {
@@ -221,20 +223,18 @@ public class Weapon : MonoBehaviour, Reset
             //do weapon things a virtual function, in case any weapons need to do anything extra
             DoWeaponThings();
             if (!GetComponent<Move>())
-                GetComponentInChildren<Renderer>().material.color = Color.white;
-
+                _renderer.material.color = Color.white;
         }
         else
         {
             if (!GetComponent<Move>())
-                GetComponentInChildren<Renderer>().material.color = new Color(0.1f, 0.1f, 0.1f, 0.8f);
-
+                _renderer.material.color = new Color(0.1f, 0.1f, 0.1f, 0.8f);
         }
         //wait for next shot, ticks the timer until it is ready for the next shot
         WaitForNextShot();
 
     }
-    
+
     void WaitForNextShot()
     {
         //once the player has shot a bullet, the timer will start to tick until the desired time. Until the desired time hasn't reached, the player cannot shoot
