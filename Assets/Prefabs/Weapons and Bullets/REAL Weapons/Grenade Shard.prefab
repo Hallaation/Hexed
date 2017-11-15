@@ -73,7 +73,7 @@ GameObject:
   - component: {fileID: 96451947106998368}
   - component: {fileID: 212801529366237002}
   m_Layer: 13
-  m_Name: Bullet_AssaultAutomatic_01
+  m_Name: Grenade Shard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -300,7 +300,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b78a3c0704116a240a2c001312dc27d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CanHurtSelf: 0
   bulletOwner: {fileID: 0}
+  m_bShooter: {fileID: 0}
   m_iDamage: 0
   m_bGiveIFrames: 0
   m_fBulletImpactKnockBack: 5
