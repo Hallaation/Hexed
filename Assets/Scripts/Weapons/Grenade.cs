@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Grenade : Weapon {
+public class Grenade : Weapon
+{
     bool PinPulled;
     PlayerStatus Owner;
     [Space]
@@ -19,16 +20,18 @@ public class Grenade : Weapon {
     public float m_fFiringForce = 1;
     public float GrowthRate = 1f;
     // Use this for initialization
-    override public void StartUp() {
+    override public void StartUp()
+    {
         RandomAngle = Quaternion.identity;
         PinPulled = false;
         BlownUp = false;
         MyRigidBody = transform.GetComponent<Rigidbody2D>();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-        if (PinPulled == true && BlownUp == false) 
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (PinPulled == true && BlownUp == false)
         {
             TimeTillBoom -= Time.deltaTime;
             if (TimeTillBoom <= .5f)
@@ -47,7 +50,7 @@ public class Grenade : Weapon {
     }
     public override bool Attack(bool trigger)
     {
-        if(PinPulled == false)
+        if (PinPulled == false)
         {
             Color Red = new Color(255, 0, 0, 255);
             transform.GetChild(0).GetComponent<SpriteRenderer>().material.color = Color.red;
@@ -60,14 +63,14 @@ public class Grenade : Weapon {
     }
     public void BOOM()
     {
-        while(TotalBulletShrapnel > 0)
+        while (TotalBulletShrapnel > 0)
         {
             m_AudioSource.clip = AudioExplosion;
             m_AudioSource.Play();
             float randomfloat = Random.Range(0f, 360f);
             RandomAngle.eulerAngles = new Vector3(0, 0, randomfloat);
 
-           GameObject FiredBullet = Instantiate(BulletForSharpnel, this.transform.position, RandomAngle);
+            GameObject FiredBullet = Instantiate(BulletForSharpnel, this.transform.position, RandomAngle);
 
             TotalBulletShrapnel--;
             Rigidbody2D BulletRigidBody = FiredBullet.GetComponent<Rigidbody2D>();
