@@ -24,8 +24,6 @@ public class CreditsScroll : MonoBehaviour
         if (m_bInterpolateCredits)
         {
             _t += Time.deltaTime * m_fSpeed;
-            Debug.Log(OriginalPosition);
-            Debug.Log(DesiredPosition);
             this.GetComponent<RectTransform>().anchoredPosition = Vector3.Lerp(OriginalPosition, DesiredPosition, _t * m_fSpeed);
 
             if (this.GetComponent<RectTransform>().anchoredPosition.magnitude >= DesiredPosition.magnitude - 0.3f)

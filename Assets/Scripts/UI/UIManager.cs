@@ -186,7 +186,7 @@ public class UIManager : MonoBehaviour
         {
             m_bMenuAnimator.SetBool(item.name, false);
         }
-        Debug.Log("Main menu back");
+
         shortTimer.CurrentTime = 0;
         m_bInSelect = false;
         if (menuStatus.Count == 1 || CharacterSelectionManager.Instance.JoinedPlayers < 4)
@@ -416,7 +416,7 @@ public class UIManager : MonoBehaviour
             m_ButtonAnimator.SetBool(AnimationParameter, true);
             menuStatus.Push(PanelToOpen);
             //Wait for animations here
-            StartCoroutine(WaitForAnimation(PanelToOpen, AnimationParameter, onClickFrom));
+            StartCoroutine(WaitForAnimation(PanelToOpen, AnimationParameter, onClickFrom)); //settings panel is broken
         }
     }
 
@@ -549,7 +549,6 @@ public class UIManager : MonoBehaviour
             {
                 m_SettingsPanel = GameObject.Find("Options_Panel");
             }
-
             m_CreditsPanel = GameObject.Find("Credits_Panel"); //Currently null;
             m_CharacterSelectionPanel = GameObject.Find("Character_Selection");
             _eventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
@@ -558,10 +557,18 @@ public class UIManager : MonoBehaviour
             Button CreditsButton = GameObject.Find("Credits_Button").GetComponent<Button>();
             Button QuitBUtton = GameObject.Find("Quit_Button").GetComponent<Button>();
             _creditsScroller = FindObjectOfType<CreditsScroll>();
-            vsButton.onClick.AddListener(delegate { MainMenuChangePanel(GameObject.Find("Second_Panel")); });
-            SettingsButton.onClick.AddListener(delegate { MenuOpenPanel(m_SettingsPanel, "IsSettings", SettingsButton); });
-            CreditsButton.onClick.AddListener(delegate { MenuOpenPanel(m_CreditsPanel, "IsCredits", CreditsButton); });
-            QuitBUtton.onClick.AddListener(delegate { QuitGame(); });
+
+            //Clear all listeners
+            //vsButton.onClick.RemoveAllListeners();
+            //SettingsButton.onClick.RemoveAllListeners();
+            //CreditsButton.onClick.RemoveAllListeners();
+            //QuitBUtton.onClick.RemoveAllListeners();
+
+            //Add new listeners
+            vsButton.onClick.AddListener(delegate { UIManager.Instance.MainMenuChangePanel(GameObject.Find("Second_Panel")); });
+            SettingsButton.onClick.AddListener(delegate { UIManager.Instance.MenuOpenPanel(m_SettingsPanel, "IsSettings", SettingsButton); });
+            CreditsButton.onClick.AddListener(delegate { UIManager.Instance.MenuOpenPanel(m_CreditsPanel, "IsCredits", CreditsButton); });
+            QuitBUtton.onClick.AddListener(delegate { UIManager.Instance.QuitGame(); });
             //find the first panel and push it to the stack
             menuStatus.Push(GameObject.Find("First_Panel"));
             m_ButtonAnimator = menuStatus.Peek().GetComponent<Animator>();

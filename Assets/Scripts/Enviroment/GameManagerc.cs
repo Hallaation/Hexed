@@ -819,7 +819,7 @@ public class GameManagerc : MonoBehaviour
         m_bFirstTimeLoading = true;
         m_bDoReadyKill = true;
         m_bDoGlitch = true;
-        UIManager.Instance.gameObject.SetActive(false);
+        //UIManager.Instance.gameObject.SetActive(false);
         ControllerManager.Instance.gameObject.SetActive(false);
         CharacterSelectionManager.Instance.gameObject.SetActive(false);
 
@@ -833,7 +833,7 @@ public class GameManagerc : MonoBehaviour
         Destroy(UINavigation.Instance);
         Destroy(CharacterSelectionManager.Instance);
         Destroy(ControllerManager.Instance);
-        Destroy(UIManager.Instance);
+        //Destroy(UIManager.Instance);
         Destroy(GameAudioPicker.Instance.gameObject);
         GetComponent<MusicFader>().FadeOut();
         StartCoroutine(ReturnToMenu());

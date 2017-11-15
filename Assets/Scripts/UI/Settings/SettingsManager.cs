@@ -173,7 +173,6 @@ public class SettingsManager : MonoBehaviour
         {
             string jsonData = JsonUtility.ToJson(gameSettings, true);
             File.WriteAllText(Application.persistentDataPath + "/gameSettings.json", jsonData);
-            print(Application.persistentDataPath);
         }
     }
 
