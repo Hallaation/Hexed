@@ -462,6 +462,10 @@ public class Move : MonoBehaviour
                 heldWeapon.GetComponent<Melee>().m_bAttacking = false;                             //TODO Update this for melee to stop throw through walls
                 heldWeapon.GetComponent<Melee>().SetAnimator(null);
             }
+            else if(heldWeapon.GetComponent<Grenade>())
+            {
+                GunMountPosition = weapon1HandedMount.position;
+            }
 
             if (/*movement.magnitude == 0 ||*/ !tossWeapon) //if drop weapon
             {
