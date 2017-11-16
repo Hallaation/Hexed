@@ -148,7 +148,7 @@ public class GamemodeSelection : MonoBehaviour
                     {
                         case PickType.GAMEMODEPICK:
                             #region
-                            
+
                             GameManagerc.Instance.m_gameMode = Gamemode_type.LAST_MAN_STANDING_DEATHMATCH + m_iGamemodeIndex;
                             //check for right input
                             //If Dpad right, increment through the array
@@ -260,7 +260,7 @@ public class GamemodeSelection : MonoBehaviour
                     m_OuterGlow.SetActive(false);
                 }
             }
-     
+
             //update button sprite according to pick type
             switch (m_pickType)
             {
@@ -269,14 +269,23 @@ public class GamemodeSelection : MonoBehaviour
                     {
                         case Gamemode_type.LAST_MAN_STANDING_DEATHMATCH:
                             _buttonText.text = "Gamemode: Last Man Standing DM";
-                            if(transform.parent.Find("PointsToWin_Selection"))
-                                if(transform.parent.Find("PointsToWin_Selection").Find("PointsToWin_Button"))
-                                    if(transform.parent.Find("PointsToWin_Selection").Find("PointsToWin_Button").GetChild(0))
-                            transform.parent.Find("PointsToWin_Selection").Find("PointsToWin_Button").GetChild(0).GetComponent<Image>().sprite = GetXToWinSprite[0];
+
+                            /*
+                            if (transform.parent.Find("PointsToWin_Selection"))
+                            {
+                                if (transform.parent.Find("PointsToWin_Selection").Find("PointsToWin_Button"))
+                                {
+                                    if (transform.parent.Find("PointsToWin_Selection").Find("PointsToWin_Button").GetChild(0))
+                                    {
+                                        transform.parent.Find("PointsToWin_Selection").Find("PointsToWin_Button").GetChild(0).GetComponent<Image>().sprite = GetXToWinSprite[0];
+                                    }
+                                }
+                            }
+                            */
                             break;
                         case Gamemode_type.HEAD_HUNTERS:
                             _buttonText.text = "GameMode: Head Hunters";
-                            transform.parent.Find("PointsToWin_Selection").Find("PointsToWin_Button").GetChild(0).GetComponent<Image>().sprite = GetXToWinSprite[1];
+                            //transform.parent.Find("PointsToWin_Selection").Find("PointsToWin_Button").GetChild(0).GetComponent<Image>().sprite = GetXToWinSprite[1];
                             break;
                         //case Gamemode_type.DEATHMATCH_POINTS:
                         //    _buttonText.text = "Gamemode: MaxKills Deathmatch";
@@ -294,6 +303,19 @@ public class GamemodeSelection : MonoBehaviour
                     break;
                 case PickType.MAPPICK:
                     _mapSprite.sprite = mapSprites[m_iMapPickIndex];
+                    break;
+                case PickType.GAMEMODESETTINGS:
+                    switch (GameManagerc.Instance.m_gameMode)
+                    {
+                        case Gamemode_type.LAST_MAN_STANDING_DEATHMATCH:
+                            this.transform.Find("PointsToWin_Button").GetChild(0).GetComponent<Image>().sprite = GetXToWinSprite[0];
+                            break;
+                        case Gamemode_type.HEAD_HUNTERS:
+                            this.transform.Find("PointsToWin_Button").GetChild(0).GetComponent<Image>().sprite = GetXToWinSprite[1];
+                            break;
+                        default:
+                            break;
+                    }
                     break;
             }
 
