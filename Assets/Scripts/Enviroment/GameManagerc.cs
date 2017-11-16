@@ -370,9 +370,8 @@ public class GameManagerc : MonoBehaviour
             m_bRoundOver = true;
         }
 
-        if (DeadCount >= InGamePlayers.Count - 1)
+        if (DeadCount >= InGamePlayers.Count - 1) //once the players have reached a certain amount
         {
-            m_bWinnerFound = true;
             //the round is now over
             //look for the one player that is 
             for (int i = 0; i < InGamePlayers.Count; ++i)
@@ -401,7 +400,7 @@ public class GameManagerc : MonoBehaviour
         }
         if (DeadCount >= InGamePlayers.Count - 1 || m_WinningPlayer)
         {
-            m_bWinnerFound = true;
+            //m_bWinnerFound = true;
             if (!m_WinningPlayer)
             {
                 StartCoroutine(AddToAllPoints());
@@ -421,6 +420,7 @@ public class GameManagerc : MonoBehaviour
             {
                 if (PlayerWins[lastPlayerToEarnPoints] + lastPlayerToEarnPoints.mIEarnedPoints >= m_iPointsNeeded) //if the last player to earn a point has won
                 {
+                    m_bWinnerFound = true;
                     m_WinningPlayer = lastPlayerToEarnPoints; //set my winning player
                     m_bRoundOver = true;
                     StartCoroutine(AddToAllPoints());
