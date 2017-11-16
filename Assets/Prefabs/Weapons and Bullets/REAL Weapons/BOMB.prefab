@@ -290,9 +290,9 @@ MonoBehaviour:
   MinShadow: 0
   ShadowGrowthSpeed: 0.3
   TEMP: 0
-  MaxAlpha: 0
-  MinAlpha: 0
-  AlphaChangeSpeed: 0
+  MaxAlpha: 0.35
+  MinAlpha: 0.25
+  AlphaChangeSpeed: 0.1
   m_bActive: 1
   previousOwner: {fileID: 0}
   weaponThrower: {fileID: 0}
@@ -316,8 +316,13 @@ MonoBehaviour:
   m_fBulletImpactKnockback: 0.1
   AudioPinPull: {fileID: 8300000, guid: c43e8c6ee4c2fd3499975f4d04b97170, type: 3}
   AudioExplosion: {fileID: 8300000, guid: 6792adfe79618df41a3a467743594fb0, type: 3}
+  AudioTickSound: {fileID: 0}
   m_fFiringForce: 0.1
   GrowthRate: 1
+  PinSprite: {fileID: 0}
+  PinPulledSprite: {fileID: 0}
+  TickSprite: {fileID: 0}
+  tick2Sprite: {fileID: 0}
 --- !u!198 &198470879835398760
 ParticleSystem:
   m_ObjectHideFlags: 1

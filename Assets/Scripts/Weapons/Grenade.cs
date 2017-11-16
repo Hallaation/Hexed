@@ -9,6 +9,7 @@ public class Grenade : Weapon
     [Space]
     [Header("Grenade Specific")]
     public float TimeTillBoom;
+    float TimeTillSpriteChange;
     public GameObject BulletForSharpnel;
     public int TotalBulletShrapnel;
     Quaternion RandomAngle;
@@ -16,23 +17,48 @@ public class Grenade : Weapon
     public float m_fBulletImpactKnockback = .1f;
     public AudioClip AudioPinPull;
     public AudioClip AudioExplosion;
+    public AudioClip AudioTickSound;
     Rigidbody2D MyRigidBody;
     public float m_fFiringForce = 1;
     public float GrowthRate = 1f;
+    public Sprite PinSprite;
+    public Sprite PinPulledSprite;
+    public Sprite TickSprite;
+    public Sprite tick2Sprite;
+    Sprite[] SpriteArray = new Sprite[4];
+    Sprite LastSprite;
+    
     // Use this for initialization
     override public void StartUp()
     {
+        LastSprite = PinSprite;
         RandomAngle = Quaternion.identity;
         PinPulled = false;
         BlownUp = false;
         MyRigidBody = transform.GetComponent<Rigidbody2D>();
+
+        SpriteArray[3] = PinSprite;
+        SpriteArray[2] = PinPulledSprite;
+        SpriteArray[1] = TickSprite;
+        SpriteArray[0] = tick2Sprite;
     }
 
     // Update is called once per frame
-    void Update()
+    public override void DoWeaponThings()
     {
+        
         if (PinPulled == true && BlownUp == false)
         {
+            if (TimeTillBoom >= 0)
+            {
+                SetWeaponSpriteRenderer(SpriteArray[(int)TimeTillBoom]);
+                if(LastSprite != SpriteArray[(int)TimeTillBoom])
+                {
+                    LastSprite = SpriteArray[(int)TimeTillBoom];
+                    m_AudioSource.clip = AudioTickSound;
+                    m_AudioSource.Play();
+                }
+            }
             TimeTillBoom -= Time.deltaTime;
             if (TimeTillBoom <= .5f)
             {
@@ -59,7 +85,11 @@ public class Grenade : Weapon
             m_AudioSource.Play();
             PinPulled = true;
         }
-        return true;
+        else
+        {
+      //      this.GetComponent<Move>().SetThrowWeaponOverRide(true);
+        }
+            return true;
     }
     public void BOOM()
     {

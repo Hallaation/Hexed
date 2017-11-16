@@ -201,10 +201,16 @@ public class Bullet : MonoBehaviour, Reset
         transform.rotation = StartRotation;
     }
 
-    void ReflectBullet(RaycastHit2D a_RayHit)
+    public void ReflectBullet(RaycastHit2D a_RayHit)
     {
+        Vector2 bulletVelocity = Vector2.zero;
         //m_bStopRayCasts = true;
-        Vector2 bulletVelocity = m_rigidBody.velocity;
+        if (m_rigidBody)
+        {
+            bulletVelocity = m_rigidBody.velocity;
+        }
+        this.transform.position = a_RayHit.point;
+        
         m_rigidBody.velocity = Vector2.Reflect(bulletVelocity, a_RayHit.normal);
         m_iCurrentBounces++;
         bulletOwner = null;
@@ -212,7 +218,7 @@ public class Bullet : MonoBehaviour, Reset
         {
             StopBullet(a_RayHit);
         }
-
+        StartCoroutine(PlayParticle(a_RayHit.point, a_RayHit, false));
     }
 
     IEnumerator PlayParticle(Collision2D hit)
@@ -242,25 +248,15 @@ public class Bullet : MonoBehaviour, Reset
     /// </summary>
     /// <param name="HitPoint"></param>
     /// <returns></returns>
-    IEnumerator PlayParticle(Vector2 HitPoint)
+    IEnumerator PlayParticle(Vector2 HitPoint, bool destroyBullet = true)
     {
-        // if (ParticleSparks != null)
-        // {
-        //     transform.GetChild(0).localEulerAngles = new Vector3(VChildPrevRotation.x, VChildPrevRotation.y, VChildPrevRotation.z); // parent - 90z
-        //     transform.position = new Vector3(HitPoint.x, HitPoint.y, 0);
-        //     ParticleSparks.Play();
-        //
-        //     //GameObject hitInstance = Instantiate(HitParticle, this.transform.position, Quaternion.identity) as GameObject;
-        //     //hitInstance.transform.up = hit.transform.up;
-        //     //hitInstance.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
-        // }
         float longestParticleDuration = 0;
         if (WallCollidedParticles.Length > 0)
         {
             // transform.GetChild(0).localEulerAngles = new Vector3(VChildPrevRotation.x , VChildPrevRotation.y , VChildPrevRotation.z);
             foreach (ParticleSystem particle in WallCollidedParticles)
             {
-
+                particle.transform.position = HitPoint;
                 if (particle.main.duration > longestParticleDuration)
                     longestParticleDuration = particle.main.duration;
                 particle.Play();
@@ -268,7 +264,35 @@ public class Bullet : MonoBehaviour, Reset
         }
         //Wait for the longest particle
         yield return new WaitForSecondsRealtime(longestParticleDuration);
-        Destroy(this.gameObject);
+        if (destroyBullet)
+        {
+            Destroy(this.gameObject);
+        }
+    }
+
+    IEnumerator PlayParticle(Vector2 HitPoint, RaycastHit2D rayHit, bool destroyBullet = true)
+    {
+        float longestParticleDuration = 0;
+        if (WallCollidedParticles.Length > 0)
+        {
+            // transform.GetChild(0).localEulerAngles = new Vector3(VChildPrevRotation.x , VChildPrevRotation.y , VChildPrevRotation.z);
+            foreach (ParticleSystem particle in WallCollidedParticles)
+            {
+                particle.transform.position = HitPoint;
+                float angle = Mathf.Atan2(-rayHit.normal.y, -rayHit.normal.x) * Mathf.Rad2Deg;
+                particle.transform.rotation = Quaternion.Euler(angle, 270, 0);
+                Debug.DrawRay(rayHit.point, rayHit.normal, Colors.BlanchedAlmond, 1);
+                if (particle.main.duration > longestParticleDuration)
+                    longestParticleDuration = particle.main.duration;
+                particle.Play();
+            }
+        }
+        //Wait for the longest particle
+        yield return new WaitForSecondsRealtime(longestParticleDuration);
+        if (destroyBullet)
+        {
+            Destroy(this.gameObject);
+        }
     }
 
     //This is now all completely useless, 
