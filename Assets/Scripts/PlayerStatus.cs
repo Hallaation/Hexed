@@ -486,7 +486,16 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             if (killer)
             {
                 if (GameManagerc.Instance.m_gameMode == Gamemode_type.HEAD_HUNTERS)
-                    killer.mIEarnedPoints++;
+                {
+                    if (killer != this)
+                    {
+                        killer.mIEarnedPoints++;
+                    }
+                    else
+                    {
+                        killer.mIEarnedPoints--;
+                    }
+                }
                 GameManagerc.Instance.lastPlayerToEarnPoints = killer;
             }
             SetAllAnimatorsFalse(false);
@@ -722,9 +731,17 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
         killbarContainer.SetActive(false);
     }
 
-    public void KilledAPlayer()
+    public void KilledAPlayer(PlayerStatus killedPlayer)
     {
-        mIEarnedPoints += 1;
+        Debug.Log("kiled a player");
+        if (killedPlayer != this)
+        {
+            mIEarnedPoints += 1;
+        }
+        else
+        {
+            mIEarnedPoints -= 1;
+        }
     }
 
 }
