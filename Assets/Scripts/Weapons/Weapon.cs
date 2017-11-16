@@ -33,7 +33,7 @@ public class Weapon : MonoBehaviour, Reset
     //[HideInInspector]
     public GameObject previousOwner; //previous owner used to make sure when the weapon is thrown, it doesnt stun the thrower.
     public GameObject weaponThrower; //Used to store the thrower;
-    private SpriteRenderer WeaponSpriteRenderer; //The sprite rendere of the weapon sprite
+    private SpriteRenderer WeaponSpriteRenderer; public void SetWeaponSpriteRenderer(Sprite NewSprite) { WeaponSpriteRenderer.sprite = NewSprite; } //The sprite rendere of the weapon sprite
     private Transform weaponSpriteTransform; //The transform of the weapon's sprite 
     public bool m_bMoveWeaponSpriteUp; //A bool used to determine if the weapon sprite will move up or down
 
@@ -114,12 +114,17 @@ public class Weapon : MonoBehaviour, Reset
     // Update is called once per frame
     void Update()
     {
+        
+        if(this.GetComponent<Grenade>())
+        {
+            int i = 1;
+        }
 
         if (!transform.parent) // If weapon is not held, Grow and shrink shadow.
         {
             #region
             m_bActive = true;
-            if (WeaponSpriteRenderer)
+            if (WeaponSpriteRenderer && !GetComponent<Grenade>())
             {
 
                 if (WeaponSpriteRenderer.sprite != m_DefaultSprite)
@@ -237,7 +242,7 @@ public class Weapon : MonoBehaviour, Reset
         WaitForNextShot();
 
 
-        TEMP = BloomGlow.color.a;
+       // TEMP = BloomGlow.color.a;
     }
 
     void WaitForNextShot()

@@ -41,7 +41,7 @@ public class Move : MonoBehaviour
     public float movementSpeed = 10.0f;
     public float throwingForce = 100.0f;
     private float StoredMoveSpeed;
-
+    bool ThrowWeaponOverRide = false; public void SetThrowWeaponOverRide(bool Set) { ThrowWeaponOverRide = Set; }
     [Header("Head Smashing Variables")]
     public float m_fChokedTimeIncrement = 0.1f; //Everytime the choking is hpapening, increment the time.
     public float m_fChokeKillTime = 0.8f; //Time it takes for the kill to happen
@@ -533,11 +533,11 @@ public class Move : MonoBehaviour
             PickUpWeaponCheck(movement, throwDirection, false);
         }
         //pressing LB will throw the weapon away at a higher velocity, essentially making a projectile, this throw will be used to stun players.
-        if (XCI.GetButtonDown(XboxButton.LeftBumper, m_controller.mXboxController) || (Input.GetKey(KeyCode.LeftShift) && Input.GetMouseButtonDown(1)))
+        if (XCI.GetButtonDown(XboxButton.LeftBumper, m_controller.mXboxController) || (Input.GetKey(KeyCode.LeftShift) && Input.GetMouseButtonDown(1)) || ThrowWeaponOverRide )
         {
             Vector2 movement = new Vector3(XCI.GetAxis(XboxAxis.LeftStickX, m_controller.mXboxController), XCI.GetAxis(XboxAxis.LeftStickY, m_controller.mXboxController));
             Vector2 throwDirection = new Vector2(this.transform.up.x, this.transform.up.y);
-
+            ThrowWeaponOverRide = false;
             PickUpWeaponCheck(movement, throwDirection, true);
         }
     }
