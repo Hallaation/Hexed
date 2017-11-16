@@ -20,9 +20,7 @@ public class AnimationEventHandler : MonoBehaviour {
 
         AnimatorStateInfo MyCurrentState = MyAnimator.GetCurrentAnimatorStateInfo(0);
         float MyPlaybackTime = MyCurrentState.normalizedTime % 1;
-
-        Debug.Log(MyPlaybackTime);
-        Debug.Log(OtherplaybackTime);
+        
 #endif
     }
 	// Update is called once per frame
