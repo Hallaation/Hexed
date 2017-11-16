@@ -289,7 +289,6 @@ MonoBehaviour:
   MaxShadow: 0.3
   MinShadow: 0
   ShadowGrowthSpeed: 0.3
-  TEMP: 0
   MaxAlpha: 0.35
   MinAlpha: 0.25
   AlphaChangeSpeed: 0.1
@@ -300,11 +299,11 @@ MonoBehaviour:
   m_AudioClip: {fileID: 0}
   m_bRandomizePitch: 1
   clipVolume: 1
-  PickupAudio: {fileID: 0}
+  PickupAudio: {fileID: 8300000, guid: f185634705c096d439209bd18226b6e0, type: 3}
   pickupVolume: 1
-  DropAudioClip: {fileID: 0}
+  DropAudioClip: {fileID: 8300000, guid: ab8bbbf632ce10e4eb4b8a65d53679c0, type: 3}
   DropAudioVolume: 1
-  ThrowAudioClip: {fileID: 0}
+  ThrowAudioClip: {fileID: 8300000, guid: f28b17f274e7bce43b95a99f81b90f01, type: 3}
   ThrowAudioVolume: 1
   ThrowHitAudio: {fileID: 0}
   m_bRandomizeThrowHitPitch: 1
@@ -316,13 +315,13 @@ MonoBehaviour:
   m_fBulletImpactKnockback: 0.1
   AudioPinPull: {fileID: 8300000, guid: c43e8c6ee4c2fd3499975f4d04b97170, type: 3}
   AudioExplosion: {fileID: 8300000, guid: 6792adfe79618df41a3a467743594fb0, type: 3}
-  AudioTickSound: {fileID: 0}
+  AudioTickSound: {fileID: 8300000, guid: c43e8c6ee4c2fd3499975f4d04b97170, type: 3}
   m_fFiringForce: 0.1
   GrowthRate: 1
-  PinSprite: {fileID: 0}
-  PinPulledSprite: {fileID: 0}
-  TickSprite: {fileID: 0}
-  tick2Sprite: {fileID: 0}
+  PinSprite: {fileID: 21300084, guid: b063c0329a4c3ad42a58400a56d129ae, type: 3}
+  PinPulledSprite: {fileID: 21300086, guid: b063c0329a4c3ad42a58400a56d129ae, type: 3}
+  TickSprite: {fileID: 21300088, guid: b063c0329a4c3ad42a58400a56d129ae, type: 3}
+  tick2Sprite: {fileID: 21300090, guid: b063c0329a4c3ad42a58400a56d129ae, type: 3}
 --- !u!198 &198470879835398760
 ParticleSystem:
   m_ObjectHideFlags: 1
@@ -378,7 +377,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: -1574324705
+  randomSeed: 1774841981
   InitialModule:
     serializedVersion: 3
     enabled: 1
