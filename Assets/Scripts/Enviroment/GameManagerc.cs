@@ -98,6 +98,7 @@ public class GameManagerc : MonoBehaviour
     [SerializeField]
     private bool m_bGamePaused = false;
     [SerializeField]
+    public bool m_bWinnerFound = false;
     private bool m_bRoundReady = false;
     private bool m_bDoGlitch = true;
     private bool m_bPlayedGlitchAudio = false;
@@ -367,6 +368,7 @@ public class GameManagerc : MonoBehaviour
 
         if (DeadCount >= InGamePlayers.Count - 1)
         {
+            m_bWinnerFound = true;
             //the round is now over
             //look for the one player that is 
             for (int i = 0; i < InGamePlayers.Count; ++i)
@@ -395,6 +397,7 @@ public class GameManagerc : MonoBehaviour
         }
         if (DeadCount >= InGamePlayers.Count - 1 || m_WinningPlayer)
         {
+            m_bWinnerFound = true;
             if (!m_WinningPlayer)
             {
                 StartCoroutine(AddToAllPoints());
@@ -480,6 +483,7 @@ public class GameManagerc : MonoBehaviour
         //If the map to load isnt null, load it
         if (scene.buildIndex == 1)
         {
+            m_bWinnerFound = false;
             m_bAllowPause = true;
             UINavigation LoadInstance = UINavigation.Instance;
             GetComponent<MusicFader>().FadeIn();
