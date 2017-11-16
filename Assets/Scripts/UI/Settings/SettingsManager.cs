@@ -50,14 +50,14 @@ public class SettingsManager : MonoBehaviour
         resolutions = Screen.resolutions;
 
         //subscribe onfullscreentoggle to value changed event;
-        if (fullscreenToggle)
-            fullscreenToggle.onValueChanged.AddListener(delegate { onFullScreenToggle(); });
-        if (resolutionDropdwon)
-            resolutionDropdwon.onValueChanged.AddListener(delegate { onResolutionChange(); });
+        //if (fullscreenToggle)
+        //    fullscreenToggle.onValueChanged.AddListener(delegate { onFullScreenToggle(); });
+        //if (resolutionDropdwon)
+        //    resolutionDropdwon.onValueChanged.AddListener(delegate { onResolutionChange(); });
         //textureQualityDropdown.onValueChanged.AddListener(delegate { onTextureQualityChange(); });
         //AAdropdown.onValueChanged.AddListener(delegate { onAntialiasingChange(); });
-        if (vSyncDrop)
-            vSyncDrop.onValueChanged.AddListener(delegate { onVsyncChange(); });
+        //if (vSyncDrop)
+        //    vSyncDrop.onValueChanged.AddListener(delegate { onVsyncChange(); });
         if (masterVolumeSlider)
             masterVolumeSlider.onValueChanged.AddListener(delegate { OnMasterVolumeChange(); });
         if (sfxVolumeSlider)
@@ -99,40 +99,40 @@ public class SettingsManager : MonoBehaviour
         }
 
     }
-    public void onFullScreenToggle()
-    {
-        /*Screen.fullScreen = */
-        gameSettings.Fullscreen = fullscreenToggle.isOn;
-        m_bUnsavedChanges = true;
-    }
+    //public void onFullScreenToggle()
+    //{
+    //    /*Screen.fullScreen = */
+    //    gameSettings.Fullscreen = fullscreenToggle.isOn;
+    //    m_bUnsavedChanges = true;
+    //}
 
-    public void onResolutionChange()
-    {
-        gameSettings.resolutionIndex = resolutionDropdwon.value;
-        m_bUnsavedChanges = true;
-    }
+    //public void onResolutionChange()
+    //{
+    //    gameSettings.resolutionIndex = resolutionDropdwon.value;
+    //    m_bUnsavedChanges = true;
+    //}
 
-    public void onTextureQualityChange()
-    {
-        /*QualitySettings.masterTextureLimit =*/
-        gameSettings.textureQuality = textureQualityDropdown.options.Count - textureQualityDropdown.value;
-        m_bUnsavedChanges = true;
-    }
+    //public void onTextureQualityChange()
+    //{
+    //    /*QualitySettings.masterTextureLimit =*/
+    //    gameSettings.textureQuality = textureQualityDropdown.options.Count - textureQualityDropdown.value;
+    //    m_bUnsavedChanges = true;
+    //}
 
-    public void onAntialiasingChange()
-    {
-        /*QualitySettings.antiAliasing = */
-        gameSettings.antiAliasing = (int)AAdropdown.value * (int)AAdropdown.value;
-        m_bUnsavedChanges = true;
-    }
+    //public void onAntialiasingChange()
+    //{
+    //    /*QualitySettings.antiAliasing = */
+    //    gameSettings.antiAliasing = (int)AAdropdown.value * (int)AAdropdown.value;
+    //    m_bUnsavedChanges = true;
+    //}
 
-    public void onVsyncChange()
-    {
-        /*QualitySettings.vSyncCount = */
-        gameSettings.vSync = vSyncDrop.value;
+    //public void onVsyncChange()
+    //{
+    //    /*QualitySettings.vSyncCount = */
+    //    gameSettings.vSync = vSyncDrop.value;
 
-        m_bUnsavedChanges = true;
-    }
+    //    m_bUnsavedChanges = true;
+    //}
 
     public void OnMasterVolumeChange()
     {
@@ -200,19 +200,19 @@ public class SettingsManager : MonoBehaviour
 
             //AAdropdown.value = (int)Mathf.Sqrt(gameSettings.antiAliasing);
             //textureQualityDropdown.value = textureQualityDropdown.options.Count + gameSettings.textureQuality;
-            if (resolutionDropdwon)
-                resolutionDropdwon.value = gameSettings.resolutionIndex;
-
-            if (fullscreenToggle)
-            {
-                fullscreenToggle.isOn = gameSettings.Fullscreen;
-                onFullScreenToggle();
-            }
-
-            if (resolutionDropdwon)
-            {
-                resolutionDropdwon.RefreshShownValue();
-            }
+            //if (resolutionDropdwon)
+            //    resolutionDropdwon.value = gameSettings.resolutionIndex;
+            //
+            //if (fullscreenToggle)
+            //{
+            //    fullscreenToggle.isOn = gameSettings.Fullscreen;
+            //    onFullScreenToggle();
+            //}
+            //
+            //if (resolutionDropdwon)
+            //{
+            //    resolutionDropdwon.RefreshShownValue();
+            //}
 
             //Apply the changes
             OnMasterVolumeChange();
