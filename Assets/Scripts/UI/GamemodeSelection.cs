@@ -41,6 +41,7 @@ public class GamemodeSelection : MonoBehaviour
     public Sprite[] mapSprites;
     public GameObject[] MapObjects;
     public GameObject MapToLoad;
+    public Sprite[] GetXToWinSprite = new Sprite[1];
 
     Text _SettingsValue;
     // Use this for initialization
@@ -268,9 +269,14 @@ public class GamemodeSelection : MonoBehaviour
                     {
                         case Gamemode_type.LAST_MAN_STANDING_DEATHMATCH:
                             _buttonText.text = "Gamemode: Last Man Standing DM";
+                            if(transform.parent.Find("PointsToWin_Selection"))
+                                if(transform.parent.Find("PointsToWin_Selection").Find("PointsToWin_Button"))
+                                    if(transform.parent.Find("PointsToWin_Selection").Find("PointsToWin_Button").GetChild(0))
+                            transform.parent.Find("PointsToWin_Selection").Find("PointsToWin_Button").GetChild(0).GetComponent<Image>().sprite = GetXToWinSprite[0];
                             break;
                         case Gamemode_type.HEAD_HUNTERS:
                             _buttonText.text = "GameMode: Head Hunters";
+                            transform.parent.Find("PointsToWin_Selection").Find("PointsToWin_Button").GetChild(0).GetComponent<Image>().sprite = GetXToWinSprite[1];
                             break;
                         //case Gamemode_type.DEATHMATCH_POINTS:
                         //    _buttonText.text = "Gamemode: MaxKills Deathmatch";
