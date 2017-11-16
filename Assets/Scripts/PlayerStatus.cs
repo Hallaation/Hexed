@@ -84,7 +84,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
     private SpriteRenderer m_SpriteRenderer;
     private CameraControl _cameraControlInstance;
 
-    
+
     [Range(0, 0.22f)]
     public float fill;
     //if the player is dead, the renderer will change their Color to gray, and all physics simulation of the player's rigidbody will be turned off.
@@ -494,7 +494,10 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
                     }
                     else
                     {
-                        killer.mILostPoints++;
+                        if (GameManagerc.Instance.PlayerWins[this] < GameManagerc.Instance.m_iPointsNeeded)
+                        {
+                            killer.mILostPoints++;
+                        }
                     }
                 }
                 GameManagerc.Instance.lastPlayerToEarnPoints = killer;
@@ -735,17 +738,20 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
     public void KilledAPlayer(PlayerStatus killedPlayer)
     {
         Debug.Log("kiled a player");
-        if (!GameManagerc.Instance.m_bWinnerFound)
+        //if (!GameManagerc.Instance.m_bWinnerFound)
+        //{
+        if (killedPlayer != this)
         {
-            if (killedPlayer != this)
-            {
-                mIEarnedPoints += 1;
-            }
-            else
+            mIEarnedPoints += 1;
+        }
+        else
+        {
+            if (GameManagerc.Instance.PlayerWins[this] < GameManagerc.Instance.m_iPointsNeeded)
             {
                 mILostPoints += 1;
             }
         }
+        //}
     }
 
 }
