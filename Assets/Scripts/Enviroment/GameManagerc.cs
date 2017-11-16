@@ -117,7 +117,9 @@ public class GameManagerc : MonoBehaviour
     GameObject[] PointYPositions;
 
     public AudioMixer MasterAudioMixer;
-    public AudioClip m_DingSound;
+    public AudioClip m_LMSDingSound; //Last man standing ding
+    public AudioClip m_HHDingSound; //Head hunters ding
+    private bool m_bDingPlayed = false;
     private AudioSource m_AudioSource;
     //! Screen Glitch lerp values
     //Scan line, Vertical Lines, Horizontal Shake, Colour Drift.
@@ -168,7 +170,9 @@ public class GameManagerc : MonoBehaviour
     // Use this for initialization
     void Awake()
     {
-        m_DingSound = Resources.Load("Audio/SFX/ding-sound-effect") as AudioClip;
+        m_LMSDingSound = Resources.Load("Audio/SFX/ding-sound-effect") as AudioClip;
+        m_HHDingSound = Resources.Load("Audio/SFX/ding-sound-effect") as AudioClip;
+
         m_GlitchEffect = Resources.Load("Audio/SFX/glitch-sound-effect") as AudioClip;
         m_GlitchEffect.LoadAudioData();
         m_AudioSource = this.GetComponent<AudioSource>();
@@ -178,7 +182,7 @@ public class GameManagerc : MonoBehaviour
         if (!m_AudioSource)
         {
             m_AudioSource = this.gameObject.AddComponent<AudioSource>();
-            m_AudioSource.clip = m_DingSound;
+            m_AudioSource.clip = m_LMSDingSound;
             m_AudioSource.outputAudioMixerGroup = AudioManager.RequestMixerGroup(SourceType.SFX);
         }
 
@@ -505,7 +509,7 @@ public class GameManagerc : MonoBehaviour
                     //Reversee glitch
                     StartCoroutine(InterpolateGlitch(true));
                     m_bPlayedGlitchAudio = false;
-                    m_AudioSource.clip = m_DingSound;
+                    m_AudioSource.clip = m_LMSDingSound;
                 }
             }
             else
@@ -958,6 +962,7 @@ public class GameManagerc : MonoBehaviour
 
     IEnumerator AddToAllPoints()
     {
+
         m_bAllowPause = false;
         yield return new WaitForSeconds(m_fTimeTillPoints);
         PointsPanel.SetActive(true);
@@ -967,7 +972,7 @@ public class GameManagerc : MonoBehaviour
         GameObject go = new GameObject("Point", typeof(RectTransform));
         go.AddComponent<CanvasRenderer>();
         go.AddComponent<Image>().sprite = PointSprite;
-
+        m_AudioSource.loop = false;
         yield return new WaitForSeconds(1);
 
 
@@ -978,7 +983,7 @@ public class GameManagerc : MonoBehaviour
             int PlayerIndex = XboxControllerPlayerNumbers[player.GetComponent<ControllerSetter>().mXboxController]; //get the index of player
 
             for (int i = PlayerWins[player]; i < PlayerWins[player] + player.mIEarnedPoints; i++)
-            { 
+            {
                 if (i < m_iPointsNeeded)
                 {
                     if (player.mIEarnedPoints > 0)
@@ -987,10 +992,29 @@ public class GameManagerc : MonoBehaviour
                     }
                     PointContainers[PlayerIndex].transform.GetChild(i).GetComponent<Image>().color = Color.blue;
                     PointContainers[PlayerIndex].transform.GetChild(i).GetComponent<Animator>().SetTrigger("PointGain");
-                    m_AudioSource.Play();
+
+                    switch (m_gameMode)
+                    {
+                        case Gamemode_type.LAST_MAN_STANDING_DEATHMATCH:
+                            m_AudioSource.clip = m_LMSDingSound;
+                            break;
+                        case Gamemode_type.HEAD_HUNTERS:
+                            m_AudioSource.clip = m_HHDingSound;
+                            break;
+                        default:
+                            break;
+                    }
                 }
+                if (!m_bDingPlayed)
+                {
+                    m_AudioSource.Play();
+                    m_bDingPlayed = true;
+                }
+                m_bDingPlayed = false;
+
             }
             PlayerWins[player] += player.mIEarnedPoints; //increase the player's points
+
             yield return new WaitForSeconds(0.5f);
             //for this player's points
             if (player.mILostPoints > 0)
@@ -1002,14 +1026,31 @@ public class GameManagerc : MonoBehaviour
                     Debug.Log(i);
                     if (i >= 0)
                     {
-                        m_AudioSource.Play();
-                        m_AudioSource.time = m_AudioSource.clip.length - 0.4f;
-                        m_AudioSource.pitch = -1;
+                        switch (m_gameMode)
+                        {
+                            case Gamemode_type.LAST_MAN_STANDING_DEATHMATCH:
+                                m_AudioSource.clip = m_LMSDingSound;
+                                break;
+                            case Gamemode_type.HEAD_HUNTERS:
+                                m_AudioSource.clip = m_HHDingSound;
+                                break;
+                            default:
+                                break;
+                        }
+                        Debug.Log("M_audiosource");
+                        if (!m_bDingPlayed)
+                        {
+                            m_AudioSource.Play();
+                            m_AudioSource.time = m_AudioSource.clip.length - 0.4f;
+                            m_AudioSource.pitch = -1;
+                            m_bDingPlayed = true;
+                        }
                         yield return new WaitForSeconds(0.5f);
                         PointContainers[PlayerIndex].transform.GetChild(i).GetComponent<Image>().color = Color.blue;
                         PointContainers[PlayerIndex].transform.GetChild(i).GetComponent<Animator>().SetTrigger("PointReset");
                     }
                 }
+                m_bDingPlayed = false;
             }
 
             PlayerWins[player] -= player.mILostPoints;
@@ -1031,6 +1072,7 @@ public class GameManagerc : MonoBehaviour
             player.mILostPoints = 0;
             m_AudioSource.pitch = 1;
             m_AudioSource.time = 0;
+            m_AudioSource.Stop();
         } //! End Foreach loop
 
         //TODO play ding.
@@ -1091,7 +1133,7 @@ public class GameManagerc : MonoBehaviour
         mbFinishedShowingScores = true;
         if (Reverse)
         {
-            m_AudioSource.clip = m_DingSound;
+            m_AudioSource.clip = m_LMSDingSound;
             m_AudioSource.loop = false;
         }
 
@@ -1106,7 +1148,7 @@ public class GameManagerc : MonoBehaviour
         {
 
             m_AudioSource.loop = false;
-            m_AudioSource.clip = m_DingSound;
+            m_AudioSource.clip = m_LMSDingSound;
         }
         yield return null;
     }
