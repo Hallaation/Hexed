@@ -230,7 +230,10 @@ public class GameManagerc : MonoBehaviour
             {
                 KillPlayer1();
             }
-
+            if (Input.GetKeyDown(KeyCode.J))
+            {
+                KillAllPlayer();
+            }
             if (Input.GetKeyDown(KeyCode.E))
             {
                 //Stun all players
@@ -330,6 +333,13 @@ public class GameManagerc : MonoBehaviour
         }
         //InGamePlayers[0].KillPlayer(InGamePlayers[1]);
     }
+    void KillAllPlayer()
+    {
+        for (int i = 0; i < InGamePlayers.Count; i++)
+        {
+            InGamePlayers[i].KillPlayer(null);
+        }
+    }
     /// <summary>
     /// Points are awarded if a player is the last man standing
     /// </summary>
@@ -337,26 +347,33 @@ public class GameManagerc : MonoBehaviour
     {
         //Find the amount of dead players
         int DeadCount = 0;
-        foreach (PlayerStatus player in InGamePlayers)
+        for (int i = 0; i < InGamePlayers.Count; ++i)
         {
-            if (player.IsDead)
+            if (InGamePlayers[i].IsDead)
             {
                 DeadCount++;
             }
         }
+        Debug.Log(DeadCount);
         //If there is only 1 alive
+        if (DeadCount >= InGamePlayers.Count)
+        {
+            lastPlayerToEarnPoints = null;
+            StartCoroutine(AddToAllPoints());
+            mbFinishedShowingScores = true;
+            m_bRoundOver = true;
+        }
+
         if (DeadCount >= InGamePlayers.Count - 1)
         {
             //the round is now over
             //look for the one player that is 
-            foreach (PlayerStatus player in InGamePlayers)
+            for (int i = 0; i < InGamePlayers.Count; ++i)
             {
-                if (!player.IsDead)
+                if (!InGamePlayers[i].IsDead)
                 {
-                    player.mIEarnedPoints++;
-                    lastPlayerToEarnPoints = player;
-                    //increase the winning player's point by 1
-                    Debug.Log("add all");
+                    InGamePlayers[i].mIEarnedPoints++;
+                    lastPlayerToEarnPoints = InGamePlayers[i];
                     StartCoroutine(AddToAllPoints());
                 }
             }
@@ -408,41 +425,44 @@ public class GameManagerc : MonoBehaviour
         {
             //foreach (PlayerStatus player in InGamePlayers)
             //{
-            if (PlayerWins[lastPlayerToEarnPoints] >= m_iPointsNeeded)
+            if (lastPlayerToEarnPoints)
             {
-                m_WinningPlayer = lastPlayerToEarnPoints;
-                //Set the time scale to 0 (essentially pausing the game-ish)
-                //Time.timeScale = 0;
-                //open the finish panel, UI manager will set all the children to true, thus rendering them
-                //#finish panel, 
-
-                m_bDoGlitch = false;
-                InGameScreenAnimator.SetTrigger("ShowScreen");
-                PointsPanel.SetActive(false);
-                MenuPanel.SetActive(false);
-                UIManager.Instance.OpenUIElement(FinishUIPanel, true);
-                GameObject startscreen;
-                for (int i = 0; i < (startscreen = GameObject.Find("StartScreen")).transform.childCount; i++)
+                if (PlayerWins[lastPlayerToEarnPoints] >= m_iPointsNeeded)
                 {
-                    startscreen.transform.GetChild(i).GetComponent<Image>().enabled = false;
-                }
-                m_bDoReadyKill = false;
-                //TODO Player portraits
-                FinishUIPanel.transform.GetChild(2).GetChild(0).GetComponent<Image>().sprite = m_WinningPlayer.GetComponent<BaseAbility>().m_CharacterPortrait;
-                FinishUIPanel.transform.GetChild(2).GetChild(1).GetComponent<Image>().color = m_WinningPlayer.GetComponent<PlayerStatus>()._playerColor;
-                FinishUIPanel.transform.GetChild(3).GetComponent<Text>().text = "PLAYER " + ((int)m_WinningPlayer.GetComponent<ControllerSetter>().mXboxController) + " WINS";
-                //  m_WinningPlayer = m_WinningPlayer;
-                if (FindObjectOfType<ScreenTransition>())
-                    FindObjectOfType<ScreenTransition>().OpenDoor();
+                    m_WinningPlayer = lastPlayerToEarnPoints;
+                    //Set the time scale to 0 (essentially pausing the game-ish)
+                    //Time.timeScale = 0;
+                    //open the finish panel, UI manager will set all the children to true, thus rendering them
+                    //#finish panel, 
 
-                UIManager.Instance.RemoveLastPanel = false;
-                GameManagerc.Instance.Paused = true;
-                //Reset the event managers current selected object to the rematch button
-                if (FindObjectOfType<EventSystem>().currentSelectedGameObject == null)
-                {
-                    FindObjectOfType<EventSystem>().SetSelectedGameObject(null);
-                    FindObjectOfType<EventSystem>().SetSelectedGameObject(FinishUIPanel.transform.Find("Main Menu").gameObject);
-                    //mbFinishedPanelShown = true;
+                    m_bDoGlitch = false;
+                    InGameScreenAnimator.SetTrigger("ShowScreen");
+                    PointsPanel.SetActive(false);
+                    MenuPanel.SetActive(false);
+                    UIManager.Instance.OpenUIElement(FinishUIPanel, true);
+                    GameObject startscreen;
+                    for (int i = 0; i < (startscreen = GameObject.Find("StartScreen")).transform.childCount; i++)
+                    {
+                        startscreen.transform.GetChild(i).GetComponent<Image>().enabled = false;
+                    }
+                    m_bDoReadyKill = false;
+                    //TODO Player portraits
+                    FinishUIPanel.transform.GetChild(2).GetChild(0).GetComponent<Image>().sprite = m_WinningPlayer.GetComponent<BaseAbility>().m_CharacterPortrait;
+                    FinishUIPanel.transform.GetChild(2).GetChild(1).GetComponent<Image>().color = m_WinningPlayer.GetComponent<PlayerStatus>()._playerColor;
+                    FinishUIPanel.transform.GetChild(3).GetComponent<Text>().text = "PLAYER " + ((int)m_WinningPlayer.GetComponent<ControllerSetter>().mXboxController) + " WINS";
+                    //  m_WinningPlayer = m_WinningPlayer;
+                    if (FindObjectOfType<ScreenTransition>())
+                        FindObjectOfType<ScreenTransition>().OpenDoor();
+
+                    UIManager.Instance.RemoveLastPanel = false;
+                    GameManagerc.Instance.Paused = true;
+                    //Reset the event managers current selected object to the rematch button
+                    if (FindObjectOfType<EventSystem>().currentSelectedGameObject == null)
+                    {
+                        FindObjectOfType<EventSystem>().SetSelectedGameObject(null);
+                        FindObjectOfType<EventSystem>().SetSelectedGameObject(FinishUIPanel.transform.Find("Main Menu").gameObject);
+                        //mbFinishedPanelShown = true;
+                    }
                 }
             }
             //}
@@ -462,6 +482,9 @@ public class GameManagerc : MonoBehaviour
             m_bAllowPause = true;
             UINavigation LoadInstance = UINavigation.Instance;
             GetComponent<MusicFader>().FadeIn();
+
+
+
             if (!m_bFirstTimeLoading) //if this isn't the first time loading into the scene
             {
                 if (FindObjectOfType<ScreenTransition>())
@@ -485,7 +508,7 @@ public class GameManagerc : MonoBehaviour
                 m_bFirstTimeLoading = false;
             }
 
-            if (MapToLoad)
+            if (MapToLoad) //load the map first
             {
                 GameObject go = Instantiate(MapToLoad);
                 go.transform.position = Vector3.zero;
@@ -493,8 +516,6 @@ public class GameManagerc : MonoBehaviour
                 mInstance.mbMapLoaded = true;
                 ControllerManager.Instance.FindSpawns();
                 CharacterSelectionManager.Instance.LoadPlayers();
-
-
             }
             //If I found the finished game panel
             if (GameObject.Find("FinishedGamePanel"))
@@ -516,6 +537,7 @@ public class GameManagerc : MonoBehaviour
             UIManager.Instance.SetDefaultPanel(MenuPanel);
             //MenuPanel.SetActive(true);
             //Find the points panel and populate the array.
+
             PointsPanel = GameObject.Find("PointsPanel");
             InGameScreenAnimator = PointsPanel.GetComponentInParent<Animator>();
             PointXPositions = new GameObject[GameObject.Find("PointXPositions").transform.childCount];
@@ -532,11 +554,13 @@ public class GameManagerc : MonoBehaviour
             }
 
             //Populate the array
+
+            #region Point panel, and point containers
+
             PointContainers = new GameObject[PointsPanel.transform.childCount];
             GameObject[] ActivePanels = new GameObject[4 - CharacterSelectionManager.Instance.JoinedPlayers];
             int ActivePanelIndex = 0;
 
-            #region Point panel moving etc.
             //Move the point containers depending on how many points are required.
 
             for (int i = 0; i < PointsPanel.transform.childCount; i++)
@@ -649,6 +673,7 @@ public class GameManagerc : MonoBehaviour
             }
             #endregion
 
+
             //PointsPanel.SetActive(false);
             ReadyKillContainer = GameObject.Find("StartScreen");
             GameObject KillAudio = ReadyKillContainer.transform.GetChild(0).gameObject;
@@ -661,6 +686,7 @@ public class GameManagerc : MonoBehaviour
                 StartCoroutine(ReadyKill(ReadyKillContainer));
             }
             //find weapons and add shit to them
+
 
             _rbPausers.Clear();
             _rbPausers = new List<RigidbodyPauser>();
@@ -687,6 +713,7 @@ public class GameManagerc : MonoBehaviour
 
                 }
             }
+
             //m_bRoundReady = true;
             m_bDoLogoTransition = false;
             //PointsPanel.SetActive(false);
@@ -895,7 +922,6 @@ public class GameManagerc : MonoBehaviour
 
     IEnumerator AddToAllPoints()
     {
-
         m_bAllowPause = false;
         yield return new WaitForSeconds(m_fTimeTillPoints);
         PointsPanel.SetActive(true);
@@ -907,13 +933,14 @@ public class GameManagerc : MonoBehaviour
         go.AddComponent<Image>().sprite = PointSprite;
 
         yield return new WaitForSeconds(1);
+
+
         foreach (PlayerStatus player in InGamePlayers)
         {
-
-
+            //for the point container that the player owns
+            //starting from the current player's points, turn everything after that to blue.
             int PlayerIndex = XboxControllerPlayerNumbers[player.GetComponent<ControllerSetter>().mXboxController]; //get the index of player
-                                                                                                                    //for the point container that the player owns
-                                                                                                                    //starting from the current player's points, turn everything after that to blue.
+
             for (int i = PlayerWins[player]; i < PlayerWins[player] + player.mIEarnedPoints; i++)
             {
                 if (player.mIEarnedPoints > 0)
@@ -924,13 +951,31 @@ public class GameManagerc : MonoBehaviour
                 PointContainers[PlayerIndex].transform.GetChild(i).GetComponent<Animator>().SetTrigger("PointGain");
                 m_AudioSource.Play();
             }
+
             PlayerWins[player] += player.mIEarnedPoints; //increase the player's points
+
+
+            if (player.mIEarnedPoints < 0)
+            {
+                for (int i = PlayerWins[player]; i > PlayerWins[player] - player.mIEarnedPoints; i--)
+                {
+                    if (player.mIEarnedPoints > 0)
+                    {
+                        yield return new WaitForSeconds(0.5f);
+                    }
+                    PointContainers[PlayerIndex].transform.GetChild(i).GetComponent<Image>().color = Color.blue;
+                    PointContainers[PlayerIndex].transform.GetChild(i).GetComponent<Animator>().SetTrigger("PointReset");
+                    m_AudioSource.Play();
+                }
+            }
+
             if (PlayerWins[player] >= m_iPointsNeeded)
             {
                 m_bDoReadyKill = false;
             }
             player.mIEarnedPoints = 0; //set to 0 after the points are added.
-        }
+        } //! End Foreach loop
+
         //TODO play ding.
         yield return new WaitForSeconds(2);
         InGameScreenAnimator.SetTrigger("RemoveScreen");
@@ -940,6 +985,7 @@ public class GameManagerc : MonoBehaviour
         //Start interpolation.
         m_bAllowPause = true;
         //PointsPanel.SetActive(false);
+
         yield return null;
     }
 
@@ -1056,6 +1102,7 @@ public class GameManagerc : MonoBehaviour
             //}
         }
         yield return new WaitForSeconds(0.6f);
+
         for (int i = 0; i < PointsPanel.transform.childCount; i++)
         {
             for (int j = 0; j < PointContainers[i].transform.childCount; j++)
@@ -1066,6 +1113,7 @@ public class GameManagerc : MonoBehaviour
                 }
             }
         }
+
         yield return null;
     }
 
