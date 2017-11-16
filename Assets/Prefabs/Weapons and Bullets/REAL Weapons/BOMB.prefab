@@ -316,8 +316,13 @@ MonoBehaviour:
   m_fBulletImpactKnockback: 0.1
   AudioPinPull: {fileID: 8300000, guid: c43e8c6ee4c2fd3499975f4d04b97170, type: 3}
   AudioExplosion: {fileID: 8300000, guid: 6792adfe79618df41a3a467743594fb0, type: 3}
+  AudioTickSound: {fileID: 8300000, guid: c43e8c6ee4c2fd3499975f4d04b97170, type: 3}
   m_fFiringForce: 0.1
   GrowthRate: 1
+  PinSprite: {fileID: 21300084, guid: b063c0329a4c3ad42a58400a56d129ae, type: 3}
+  PinPulledSprite: {fileID: 21300086, guid: b063c0329a4c3ad42a58400a56d129ae, type: 3}
+  TickSprite: {fileID: 21300088, guid: b063c0329a4c3ad42a58400a56d129ae, type: 3}
+  tick2Sprite: {fileID: 21300090, guid: b063c0329a4c3ad42a58400a56d129ae, type: 3}
 --- !u!198 &198470879835398760
 ParticleSystem:
   m_ObjectHideFlags: 1
@@ -546,7 +551,7 @@ ParticleSystem:
         m_NumColorKeys: 2
         m_NumAlphaKeys: 2
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 0.5372549, g: 0.38039216, b: 0.09803922, a: 1}
+      maxColor: {r: 0.18431373, g: 0.5372549, b: 0.09803922, a: 1}
       minMaxState: 0
     startSize:
       scalar: 0.47
