@@ -145,7 +145,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1884114606898660}
   m_LocalRotation: {x: -0, y: -0, z: 0.13052596, w: 0.99144495}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -1.5, z: 0}
   m_LocalScale: {x: 0.8, y: 0.8, z: 1}
   m_Children:
   - {fileID: 4797768881395202}
@@ -254,7 +254,7 @@ CapsuleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1, y: 0.85}
+  m_Size: {x: 0.67, y: 0.27}
   m_Direction: 1
 --- !u!70 &70927630978233840
 CapsuleCollider2D:
@@ -267,8 +267,8 @@ CapsuleCollider2D:
   m_Material: {fileID: 6200000, guid: 75593ba3a54ba6848a35ce524a35ce4f, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_Offset: {x: -0.03, y: 0}
-  m_Size: {x: 0.85, y: 0.6}
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 0.93, y: 0.89}
   m_Direction: 1
 --- !u!114 &114887620702761258
 MonoBehaviour:
@@ -312,7 +312,7 @@ MonoBehaviour:
   TimeTillBoom: 3
   BulletForSharpnel: {fileID: 1683184189402540, guid: 82cec82a30c4ed14bb1f35131c893972,
     type: 2}
-  TotalBulletShrapnel: 40
+  TotalBulletShrapnel: 50
   m_fBulletImpactKnockback: 0.1
   AudioPinPull: {fileID: 8300000, guid: 1c7ce7f5694bb4748b598fa4bf2b1ffa, type: 3}
   AudioExplosion: {fileID: 8300000, guid: 97081f0c745f5554cbff5c7a1c0fca98, type: 3}
@@ -546,7 +546,7 @@ ParticleSystem:
         m_NumColorKeys: 2
         m_NumAlphaKeys: 2
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 0.5372549, g: 0.09803922, b: 0.39607844, a: 1}
+      maxColor: {r: 0.5372549, g: 0.38039216, b: 0.09803922, a: 1}
       minMaxState: 0
     startSize:
       scalar: 0.47
@@ -3058,7 +3058,7 @@ SpriteRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 2100000, guid: 525badfcf38c3994e93fcc196e9f03cd, type: 2}
+  - {fileID: 2100000, guid: 9a79075822a26f6499f49388eb99e9d1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3076,7 +3076,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: -2
-  m_Sprite: {fileID: 21300000, guid: 8dfdbb31d70fcff4ea8442af4df0037b, type: 3}
+  m_Sprite: {fileID: 21300084, guid: b063c0329a4c3ad42a58400a56d129ae, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

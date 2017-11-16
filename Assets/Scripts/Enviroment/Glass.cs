@@ -67,7 +67,7 @@ public class Glass : MonoBehaviour, IHitByBullet, IHitByMelee, Reset
     void OnCollisionEnter2D(Collision2D hit)                    //! when u throw bat
     {
         if (hit.gameObject.layer == LayerMask.NameToLayer("Pickup"))
-            {
+        {
             if (hit.transform.tag == "1hMelee" || hit.transform.tag == "2hMelee")
             {
                 if (hit.transform.GetComponent<Rigidbody2D>().velocity.magnitude > 6 || hit.transform.GetComponent<Melee>().m_bAttacking == true)
@@ -108,9 +108,12 @@ public class Glass : MonoBehaviour, IHitByBullet, IHitByMelee, Reset
             if(hit.transform.parent.GetComponent<Melee>())
             if (hit.transform.parent.GetComponent<Melee>().m_bAttacking == true)
             {
-                Shatter();
-                SpawnShards(hit);
-              //  this.GetComponent<HitByMeleeAction>().HitByMelee(null, null);
+                if (hit.transform.parent.GetComponent<Melee>())
+                {
+                    Shatter();
+                    SpawnShards(hit);
+                }
+                //  this.GetComponent<HitByMeleeAction>().HitByMelee(null, null);
             }
         }
         if ((hit.transform.root.tag == "2hMelee" || hit.transform.root.tag == "1hMelee") && IsShattered == false)
@@ -168,8 +171,8 @@ public class Glass : MonoBehaviour, IHitByBullet, IHitByMelee, Reset
 
         for (int i = 0; i < Shards.Length; i++)
         {
-            shardObjects[i] = Instantiate(Shards[i], this.transform.position + this.transform.up * UnityEngine.Random.Range(-1f, 0f), this.transform.rotation,transform);
-           
+            shardObjects[i] = Instantiate(Shards[i], this.transform.position + this.transform.up * UnityEngine.Random.Range(-1f, 0f), this.transform.rotation, transform);
+
             shardObjects[i].transform.rotation = Quaternion.Euler(Vector3.forward * UnityEngine.Random.Range(40, 180));
             //shardObjects[i].GetComponent<Rigidbody2D>().velocity = hit.gameObject.GetComponent<Rigidbody2D>().velocity * UnityEngine.Random.Range(0.03f , .1f);
             if (hit.gameObject.GetComponent<Bullet>())
@@ -184,7 +187,7 @@ public class Glass : MonoBehaviour, IHitByBullet, IHitByMelee, Reset
 
     }
     void SpawnShards(Collider2D hit)
-    { 
+    {
         //make a temporary array to hold all the shard objects
         GameObject[] shardObjects = new GameObject[Shards.Length];
         //for every shard, instantiate them and set their rotation and velocity.
@@ -194,7 +197,7 @@ public class Glass : MonoBehaviour, IHitByBullet, IHitByMelee, Reset
         for (int i = 0; i < Shards.Length; i++)
         {
 
-            shardObjects[i] = Instantiate(Shards[i] , this.transform.position + this.transform.up * UnityEngine.Random.Range(-1f, 0f), this.transform.rotation, transform);
+            shardObjects[i] = Instantiate(Shards[i], this.transform.position + this.transform.up * UnityEngine.Random.Range(-1f, 0f), this.transform.rotation, transform);
             shardObjects[i].transform.rotation = Quaternion.Euler(Vector3.forward * UnityEngine.Random.Range(40, 180));
             //shardObjects[i].GetComponent<Rigidbody2D>().velocity = hit.gameObject.GetComponent<Rigidbody2D>().velocity * UnityEngine.Random.Range(0.03f , .1f);
             if (hit.transform.tag == "2hMelee")
@@ -226,7 +229,7 @@ public class Glass : MonoBehaviour, IHitByBullet, IHitByMelee, Reset
         //The shards will be instantiated along the object's up vector, the range will be UnityEngine.Randomed so they spawn in UnityEngine.Random locations of the glass piece
         for (int i = 0; i < Shards.Length; i++)
         {
-            
+
             shardObjects[i] = Instantiate(Shards[i], this.transform.position + this.transform.up * UnityEngine.Random.Range(-1f, 0f), this.transform.rotation, transform);
             shardObjects[i].transform.rotation = Quaternion.Euler(Vector3.forward * UnityEngine.Random.Range(40, 180));
             //shardObjects[i].GetComponent<Rigidbody2D>().velocity = hit.gameObject.GetComponent<Rigidbody2D>().velocity * UnityEngine.Random.Range(0.03f , .1f);
