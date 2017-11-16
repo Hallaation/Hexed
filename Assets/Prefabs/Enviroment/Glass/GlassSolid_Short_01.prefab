@@ -68,6 +68,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebd90414d5dd1094cb516248c9e5f886, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  KeepBreaking: 0
   Shard1: {fileID: 1225311367282430, guid: cffb2633cc17fbc43acd316b2581de61, type: 2}
   Shard2: {fileID: 1985535643236222, guid: e962cee5a1fd0cc45b5471f2abf669c0, type: 2}
   Shard3: {fileID: 1892843197466164, guid: a0ab298c426213f419abd3e7a63e0741, type: 2}
@@ -77,6 +78,8 @@ MonoBehaviour:
   Shard7: {fileID: 1900600958523060, guid: 75816279637cea74cbfecebc8d19509a, type: 2}
   Shard8: {fileID: 1900600958523060, guid: 7dcff7edb8aae894a8e809f6ae5887ad, type: 2}
   BrokenGlass: {fileID: 21300054, guid: 10a630f0a37b46c4e9c1246135ad631a, type: 3}
+  m_CrackedImage: {fileID: 0}
+  m_crackingSound: {fileID: 8300000, guid: 23c8ff5cf5523884a83de4452cf3ae4b, type: 3}
 --- !u!114 &114979263905301674
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -89,7 +92,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_audioClip: {fileID: 8300000, guid: 23c8ff5cf5523884a83de4452cf3ae4b, type: 3}
+  m_bRandomizePitch: 0
   clipVolume: 0.6
+  m_bShakeCamera: 1
+  PlayParticles: 0
+  ParticlePrefab: {fileID: 0}
 --- !u!212 &212494253667126374
 SpriteRenderer:
   m_ObjectHideFlags: 1

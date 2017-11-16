@@ -56,7 +56,11 @@ public class HitByMeleeAction : MonoBehaviour, IHitByMelee
         m_audioSource.clip = m_audioClip;
         m_audioSource.Play();
     }
-
+    public void PlaySound()
+    {
+        m_audioSource.clip = m_audioClip;
+        m_audioSource.Play();
+    }
 
     IEnumerator MakeAndPlayParticle()
     {

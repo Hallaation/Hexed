@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Glass : MonoBehaviour, IHitByBullet, IHitByMelee, Reset
+public class Glass : MonoBehaviour, IHitByBullet, Reset
 {
     public bool KeepBreaking = false;
     //? What is an array
@@ -68,25 +68,24 @@ public class Glass : MonoBehaviour, IHitByBullet, IHitByMelee, Reset
     {
         if (hit.gameObject.layer == LayerMask.NameToLayer("Pickup"))
         {
-            if (hit.transform.tag == "1hMelee" || hit.transform.tag == "2hMelee")
+            if (hit.transform.tag == "1hMelee" || hit.transform.tag == "2hMelee" && !GetComponent<Grenade>())
             {
-                if (hit.transform.GetComponent<Rigidbody2D>().velocity.magnitude > 6 || hit.transform.GetComponent<Melee>().m_bAttacking == true)
+                if (hit.transform.GetComponent<Rigidbody2D>().velocity.magnitude > 4 || hit.transform.GetComponent<Melee>().m_bAttacking == true)
                 {
                     Shatter();
                     SpawnShards(hit);
-                    m_audioSource.clip = m_crackingSound;
-                    m_audioSource.Play();
+                    GetComponent<HitByMeleeAction>().PlaySound();
+                    
                     //  this.GetComponent<HitByMeleeAction>().HitByMelee(hit.transform.GetComponentInParent<Melee>(), null);
                 }
             }
             else
             {
-                if (hit.transform.GetComponent<Rigidbody2D>().velocity.magnitude > 6)
+                if (hit.transform.GetComponent<Rigidbody2D>().velocity.magnitude > 4)
                 {
                     Shatter();
                     SpawnShards(hit);
-                    m_audioSource.clip = m_crackingSound;
-                    m_audioSource.Play();
+                    GetComponent<HitByMeleeAction>().PlaySound();
                     //  this.GetComponent<HitByMeleeAction>().HitByMelee(hit.transform.GetComponentInParent<Melee>(), null);
                 }
             }
@@ -112,7 +111,8 @@ public class Glass : MonoBehaviour, IHitByBullet, IHitByMelee, Reset
                 {
                     Shatter();
                     SpawnShards(hit);
-                }
+                        GetComponent<HitByMeleeAction>().PlaySound();
+                    }
                 //  this.GetComponent<HitByMeleeAction>().HitByMelee(null, null);
             }
         }
@@ -122,7 +122,7 @@ public class Glass : MonoBehaviour, IHitByBullet, IHitByMelee, Reset
                 {
                     Shatter();
                     SpawnShards(hit);
-                    this.GetComponent<HitByMeleeAction>().HitByMelee(null, null);
+                    GetComponent<HitByMeleeAction>().PlaySound();
                 }
     }
 
@@ -154,9 +154,9 @@ public class Glass : MonoBehaviour, IHitByBullet, IHitByMelee, Reset
             GlassCollider.enabled = false;
             IsShattered = true;
             GlassSpriteRenderer.sortingOrder = -10;
-            //m_audioSource.clip = m_crackingSound;
-            //m_audioSource.Play();
-            //m_audioSource.PlayOneShot(m_BreakingClip);
+
+            m_audioSource.clip = m_crackingSound;
+            m_audioSource.Play();
         }
     }
 
@@ -241,43 +241,7 @@ public class Glass : MonoBehaviour, IHitByBullet, IHitByMelee, Reset
         }
     }
 
-    public void HitByMelee(Weapon meleeWeapon, AudioClip soundEffect, float Volume, float Pitch)
-    {
-        /*
-        Shatter();
 
-        //make a temporary array to hold all the shard objects
-        GameObject[] shardObjects = new GameObject[Shards.Length];
-        //for every shard, instantiate them and set their rotation and velocity.
-        //Their velocity will be based on the velocity of the bullet hitting them
-        //for shards indexes 4 and below, their angular velocity will be changed to the bullet's velocity magnitude.
-        //The shards will be instantiated along the object's up vector, the range will be UnityEngine.Randomed so they spawn in UnityEngine.Random locations of the glass piece
-        for (int i = 0; i < Shards.Length; i++)
-        {
-            shardObjects[i] = Instantiate(Shard1, this.transform.position + this.transform.up * UnityEngine.Random.Range(-1f, 0f), this.transform.rotation);
-            shardObjects[i].transform.rotation = Quaternion.Euler(Vector3.forward * UnityEngine.Random.Range(40, 180));
-
-            if (meleeWeapon.transform.parent)
-            {
-                shardObjects[i].GetComponent<Rigidbody2D>().AddForce(this.transform.up * meleeWeapon.KnockBack * UnityEngine.Random.Range(0.03f, .1f), ForceMode2D.Impulse);
-                if (i < 4)
-                {
-                    shardObjects[i].GetComponent<Rigidbody2D>().angularVelocity = meleeWeapon.KnockBack;
-                }
-            }
-            else
-            {
-                shardObjects[i].GetComponent<Rigidbody2D>().AddForce(meleeWeapon.gameObject.GetComponent<Melee>().GetPreviousVelocity() * UnityEngine.Random.Range(.03f, .1f), ForceMode2D.Impulse);
-                if (i < 4)
-                {
-                    shardObjects[i].GetComponent<Rigidbody2D>().angularVelocity = meleeWeapon.gameObject.GetComponent<Melee>().GetPreviousVelocity().magnitude;
-                }
-            }
-                //shardObjects[i].GetComponent<Rigidbody2D>().velocity = hit.gameObject.GetComponent<Rigidbody2D>().velocity * UnityEngine.Random.Range(0.03f , .1f);
-       
-        
-        }*/
-    }
 
     public void Reset()
     {
