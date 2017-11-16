@@ -20,7 +20,6 @@ public class Weapon : MonoBehaviour, Reset
     public float ShadowGrowthSpeed; //how fast the weapon will move from the min/max
     [Space]
     [Header("GlowRelated")]
-    public float TEMP;
     public float MaxAlpha;
     public float MinAlpha;
     public float AlphaChangeSpeed;
@@ -238,9 +237,6 @@ public class Weapon : MonoBehaviour, Reset
         }
         //wait for next shot, ticks the timer until it is ready for the next shot
         WaitForNextShot();
-
-
-       // TEMP = BloomGlow.color.a;
     }
 
     void WaitForNextShot()
