@@ -68,6 +68,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
     [HideInInspector]
     public int spawnIndex;
     public int mIEarnedPoints;
+    public int mILostPoints;
     public Image stunBar;
     public Image stunMask;
     private GameObject stunBarContainer;
@@ -493,7 +494,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
                     }
                     else
                     {
-                        killer.mIEarnedPoints--;
+                        killer.mILostPoints++;
                     }
                 }
                 GameManagerc.Instance.lastPlayerToEarnPoints = killer;
@@ -742,7 +743,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
             }
             else
             {
-                mIEarnedPoints -= 1;
+                mILostPoints += 1;
             }
         }
     }

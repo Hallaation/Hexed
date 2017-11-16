@@ -670,9 +670,12 @@ public class GameManagerc : MonoBehaviour
                 {
                     if (PlayerWins[Player] > 0)
                     {
-                        Image temp = PointContainers[iPlayerIndex].transform.GetChild(j).GetComponent<Image>();
-                        PointContainers[iPlayerIndex].transform.GetChild(j).GetComponent<Animator>().SetTrigger("PointGain");
-                        PointContainers[iPlayerIndex].transform.GetChild(j).GetComponent<Image>().color = Color.blue;
+                        if (PointContainers[iPlayerIndex].transform.GetChild(j).GetComponent<Animator>())
+                        {
+                            Image temp = PointContainers[iPlayerIndex].transform.GetChild(j).GetComponent<Image>();
+                            PointContainers[iPlayerIndex].transform.GetChild(j).GetComponent<Animator>().SetTrigger("PointGain");
+                            PointContainers[iPlayerIndex].transform.GetChild(j).GetComponent<Image>().color = Color.blue;
+                        }
                     }
                 }
             }
@@ -789,7 +792,7 @@ public class GameManagerc : MonoBehaviour
         foreach (var item in PointContainers) //for every point container
         {
             item.SetActive(true);
-            for (int i = 0; i < item.transform.childCount - 2; i++)
+            for (int i = 0; i < item.transform.childCount - 1; i++)
             {
                 if (item.transform.GetChild(i).GetComponent<Animator>())
                 {
@@ -975,23 +978,28 @@ public class GameManagerc : MonoBehaviour
             int PlayerIndex = XboxControllerPlayerNumbers[player.GetComponent<ControllerSetter>().mXboxController]; //get the index of player
 
             for (int i = PlayerWins[player]; i < PlayerWins[player] + player.mIEarnedPoints; i++)
-            {
-                if (player.mIEarnedPoints > 0)
+            { 
+                if (i < m_iPointsNeeded)
                 {
-                    yield return new WaitForSeconds(0.5f);
+                    if (player.mIEarnedPoints > 0)
+                    {
+                        yield return new WaitForSeconds(0.5f);
+                    }
+                    PointContainers[PlayerIndex].transform.GetChild(i).GetComponent<Image>().color = Color.blue;
+                    PointContainers[PlayerIndex].transform.GetChild(i).GetComponent<Animator>().SetTrigger("PointGain");
+                    m_AudioSource.Play();
                 }
-                PointContainers[PlayerIndex].transform.GetChild(i).GetComponent<Image>().color = Color.blue;
-                PointContainers[PlayerIndex].transform.GetChild(i).GetComponent<Animator>().SetTrigger("PointGain");
-                m_AudioSource.Play();
             }
-
+            PlayerWins[player] += player.mIEarnedPoints; //increase the player's points
+            yield return new WaitForSeconds(0.5f);
             //for this player's points
-            if (player.mIEarnedPoints < 0)
+            if (player.mILostPoints > 0)
             {
-                Debug.Log(player.mIEarnedPoints);
+                Debug.Log(player.mILostPoints);
                 //From my current point position, if my current position is greater than the position with the earned points (when neg), deduct until I reach that point
-                for (int i = PlayerWins[player] - 1; i >= PlayerWins[player] + player.mIEarnedPoints; i--)
+                for (int i = PlayerWins[player] - 1; i >= PlayerWins[player] - player.mILostPoints; i--)
                 {
+                    Debug.Log(i);
                     if (i >= 0)
                     {
                         m_AudioSource.Play();
@@ -1004,7 +1012,11 @@ public class GameManagerc : MonoBehaviour
                 }
             }
 
-            PlayerWins[player] += player.mIEarnedPoints; //increase the player's points
+            PlayerWins[player] -= player.mILostPoints;
+            if (PlayerWins[player] > m_iPointsNeeded)
+            {
+                PlayerWins[player] = m_iPointsNeeded;
+            }
             //check if below 0, if it is, keep it at 0.
             if (PlayerWins[player] < 0)
             {
@@ -1016,13 +1028,14 @@ public class GameManagerc : MonoBehaviour
                 m_bDoReadyKill = false;
             }
             player.mIEarnedPoints = 0; //set to 0 after the points are added.
+            player.mILostPoints = 0;
+            m_AudioSource.pitch = 1;
+            m_AudioSource.time = 0;
         } //! End Foreach loop
 
         //TODO play ding.
         yield return new WaitForSeconds(2);
         //reset pitch and time
-        m_AudioSource.pitch = 1;
-        m_AudioSource.time = 0;
         InGameScreenAnimator.SetTrigger("RemoveScreen");
         StartCoroutine(InterpolateGlitch(false));
         //if (FindObjectOfType<ScreenTransition>())
