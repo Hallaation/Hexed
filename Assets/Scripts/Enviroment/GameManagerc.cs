@@ -129,6 +129,7 @@ public class GameManagerc : MonoBehaviour
     public PlayerStatus lastPlayerToEarnPoints = null;
 
     private GameObject ReadyKillContainer;
+
     //private Color pointsOriginalColour;
     //Lazy singleton
     public static GameManagerc Instance
@@ -768,6 +769,19 @@ public class GameManagerc : MonoBehaviour
         StartCoroutine(ReadyKill(ReadyKillContainer));
         PointsPanel.SetActive(true);
         //Go through each point and turn them back to white.
+
+        XboxController[] JoinedXboxControllers = new XboxController[CharacterSelectionManager.Instance.playerSelectedCharacter.Count];
+        int nextIndex = 0;
+
+        for (int i = 0; i < 4; i++)
+        {
+            if (CharacterSelectionManager.Instance.playerSelectedCharacter.ContainsKey(XboxController.First + i))
+            {
+                JoinedXboxControllers[nextIndex] = XboxController.First + i;
+                nextIndex++;
+            }
+        }
+
         foreach (var item in PointContainers) //for every point container
         {
             item.SetActive(true);
@@ -790,6 +804,21 @@ public class GameManagerc : MonoBehaviour
                 //item.transform.GetChild(i).GetComponent<Animator>().SetTrigger("PointReset");
             }
         }
+        //Repopulate active panels and turn off un used
+        GameObject[] ActivePanels = new GameObject[4 - CharacterSelectionManager.Instance.JoinedPlayers];
+        int ActivePanelIndex = 0;
+        foreach (var item in JoinedXboxControllers)
+        {
+            PointContainers[(int)item - 1].SetActive(true);
+            ActivePanels[ActivePanelIndex] = PointContainers[(int)item - 1];
+            ActivePanelIndex++;
+        }
+
+        for (int i = PointContainers.Length - 1; i > ActivePanelIndex - 1; i--)
+        {
+            PointContainers[i].SetActive(false);
+        }
+
 
     }
 
