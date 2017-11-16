@@ -170,8 +170,8 @@ public class GameManagerc : MonoBehaviour
     // Use this for initialization
     void Awake()
     {
-        m_LMSDingSound = Resources.Load("Audio/SFX/ding-sound-effect") as AudioClip;
-        m_HHDingSound = Resources.Load("Audio/SFX/ding-sound-effect") as AudioClip;
+        m_LMSDingSound = Resources.Load("Audio/SFX/Point_LastManStanding_001") as AudioClip;
+        m_HHDingSound = Resources.Load("Audio/SFX/Point_HeadHunters_001") as AudioClip;
 
         m_GlitchEffect = Resources.Load("Audio/SFX/glitch-sound-effect") as AudioClip;
         m_GlitchEffect.LoadAudioData();
