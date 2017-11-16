@@ -152,6 +152,7 @@ public class Gun : Weapon
 
         Ray2D ray = new Ray2D(this.transform.parent.position, FiredBullet.transform.up);
         Debug.DrawRay(ray.origin, ray.direction * m_fBulletSpawnOffSet * 1.5f, Colors.Azure, 5);
+        //Check if my bullet will hit anything once it spawns
         RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, m_fBulletSpawnOffSet * 1.5f, LayerMask.GetMask("Wall", "Door", "Glass"));
         if (hit)
         {
@@ -159,8 +160,17 @@ public class Gun : Weapon
             {
                 item.HitByBullet(FiredBulletRigidBody.velocity, hit.point);
             }
-            FiredBullet.transform.position = hit.point;
-            FiredBulletRigidBody.velocity = Vector2.zero;
+            if (/*!bulletComponent.m_bBouncyBullet*/true)
+            {
+                FiredBullet.transform.position = hit.point;
+                FiredBulletRigidBody.velocity = Vector2.zero;
+            }
+            else
+            {
+                //FiredBullet.transform.position = hit.point;
+                //FiredBullet.transform.position += this.transform.up;
+                //bulletComponent.ReflectBullet(hit);
+            }
             bulletComponent.PlayParticles(hit.point);
         }
 
@@ -174,7 +184,6 @@ public class Gun : Weapon
         shotReady = false; //set shot ready to false to enable the timer to tick.
         //Copy.CopyComponent(m_AudioSource, FiredBullet);
         m_AudioSource.pitch = (m_bRandomizePitch) ? Random.Range(0.9f, 1.1f) : 1;
-
         m_AudioSource.Play();
         //AudioSource bulletSource = FiredBullet.GetComponent<AudioSource>();
         //bulletSource.clip = m_AudioClip;

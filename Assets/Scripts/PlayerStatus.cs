@@ -734,13 +734,16 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
     public void KilledAPlayer(PlayerStatus killedPlayer)
     {
         Debug.Log("kiled a player");
-        if (killedPlayer != this)
+        if (!GameManagerc.Instance.m_bWinnerFound)
         {
-            mIEarnedPoints += 1;
-        }
-        else
-        {
-            mIEarnedPoints -= 1;
+            if (killedPlayer != this)
+            {
+                mIEarnedPoints += 1;
+            }
+            else
+            {
+                mIEarnedPoints -= 1;
+            }
         }
     }
 
