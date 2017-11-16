@@ -271,10 +271,11 @@ public class UIManager : MonoBehaviour
                 m_bMenuAnimator.SetBool(item.name, false);
             }
 
-            if (m_SettingsPanel.activeSelf)
+            if (m_SettingsPanel)
                 m_SettingsPanel.SetActive(false);
             if (m_CreditsPanel)
                 m_CreditsPanel.SetActive(false);
+
             menuStatus.Push(panelToMove);
             //swap the trigger to the corresponding parameter name
             m_bMenuAnimator.SetBool(MenuTransitionBoolParameters[panelToMove.name], true);
