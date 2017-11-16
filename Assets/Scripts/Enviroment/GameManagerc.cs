@@ -1040,9 +1040,9 @@ public class GameManagerc : MonoBehaviour
                         Debug.Log("M_audiosource");
                         if (!m_bDingPlayed)
                         {
-                            m_AudioSource.Play();
-                            m_AudioSource.time = m_AudioSource.clip.length - 0.4f;
-                            m_AudioSource.pitch = -1;
+                            //m_AudioSource.Play();
+                            //m_AudioSource.time = m_AudioSource.clip.length - 0.4f;
+                            //m_AudioSource.pitch = -1;
                             m_bDingPlayed = true;
                         }
                         yield return new WaitForSeconds(0.5f);
@@ -1070,9 +1070,8 @@ public class GameManagerc : MonoBehaviour
             }
             player.mIEarnedPoints = 0; //set to 0 after the points are added.
             player.mILostPoints = 0;
-            m_AudioSource.pitch = 1;
-            m_AudioSource.time = 0;
-            m_AudioSource.Stop();
+            //m_AudioSource.pitch = 1;
+            //m_AudioSource.time = m_AudioSource.clip.length - 0.05f;
         } //! End Foreach loop
 
         //TODO play ding.
