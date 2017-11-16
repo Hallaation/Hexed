@@ -105,6 +105,7 @@ public class Glass : MonoBehaviour, IHitByBullet, IHitByMelee, Reset
     {
         if ((hit.transform.parent.tag == "2hMelee" || hit.transform.parent.tag == "1hMelee" || hit.transform.gameObject.layer == LayerMask.NameToLayer("Bullet")) && IsShattered == false)
         {
+            if(hit.transform.parent.GetComponent<Melee>())
             if (hit.transform.parent.GetComponent<Melee>().m_bAttacking == true)
             {
                 Shatter();

@@ -135,7 +135,7 @@ public class Bullet : MonoBehaviour, Reset
                 else
                 {
                     //If i hit A player (when all the other cases aren't met), check to see if the bullet doens't own to me
-                    if ((!RayHit.transform.GetComponent<PlayerStatus>().IsStunned || CanHurtKnockedDown) && RayHit.transform.GetComponent<PlayerStatus>() != bulletOwner || CanHurtSelf)
+                    if ((!RayHit.transform.GetComponent<PlayerStatus>().IsStunned || CanHurtKnockedDown) && (RayHit.transform.GetComponent<PlayerStatus>() != bulletOwner || CanHurtSelf) && !RayHit.transform.GetComponent<PlayerStatus>().IsDead)
                     {
                         //If I find any hitbybullet interface, find all, then call its function
                         if (RayHit.transform.gameObject.GetComponent<IHitByBullet>() != null)
