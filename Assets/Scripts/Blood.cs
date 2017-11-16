@@ -38,6 +38,7 @@ public class Blood : MonoBehaviour
         Vector3 NormalizedVelocity = a_Velocity.normalized;
         Vector3 AdjustedPosition = a_Position + (NormalizedVelocity);
         GameObject spawnedBlood = Instantiate(BloodSprites[RandomBlood], AdjustedPosition, a_Rotation);
+        spawnedBlood.transform.rotation = Quaternion.Euler(a_Rotation.x, a_Rotation.y, Mathf.Atan2(a_Velocity.y, a_Velocity.x) * Mathf.Rad2Deg);
         spawnedBlood.transform.localScale *= .2f;
         spawnedBlood.GetComponent<Rigidbody2D>().velocity = new Vector3(0,0,0);
         spawnedBlood.GetComponent<Rigidbody2D>().AddForce(a_Velocity.normalized * BloodTravelSpeed, ForceMode2D.Impulse);
