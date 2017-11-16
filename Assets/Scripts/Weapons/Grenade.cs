@@ -106,8 +106,8 @@ public class Grenade : Weapon
             Rigidbody2D BulletRigidBody = FiredBullet.GetComponent<Rigidbody2D>();
             BulletRigidBody.AddForce(FiredBullet.transform.up * m_fFiringForce, ForceMode2D.Impulse);
             Bullet bulletComponent = FiredBullet.GetComponent<Bullet>();
-            bulletComponent.bulletOwner = GetComponentInParent<PlayerStatus>(); //copy stuff over
-            bulletComponent.m_bShooter = GetComponentInParent<PlayerStatus>();
+            bulletComponent.bulletOwner = Owner;
+            bulletComponent.m_bShooter = Owner; 
             bulletComponent.m_iDamage = this.m_iDamage;
             bulletComponent.m_bGiveIFrames = m_bGivePlayersIFrames;
             bulletComponent.m_fBulletImpactKnockBack = m_fBulletImpactKnockback;

@@ -129,6 +129,7 @@ public class GameManagerc : MonoBehaviour
     public PlayerStatus lastPlayerToEarnPoints = null;
 
     private GameObject ReadyKillContainer;
+
     //private Color pointsOriginalColour;
     //Lazy singleton
     public static GameManagerc Instance
@@ -768,6 +769,19 @@ public class GameManagerc : MonoBehaviour
         StartCoroutine(ReadyKill(ReadyKillContainer));
         PointsPanel.SetActive(true);
         //Go through each point and turn them back to white.
+
+        XboxController[] JoinedXboxControllers = new XboxController[CharacterSelectionManager.Instance.playerSelectedCharacter.Count];
+        int nextIndex = 0;
+
+        for (int i = 0; i < 4; i++)
+        {
+            if (CharacterSelectionManager.Instance.playerSelectedCharacter.ContainsKey(XboxController.First + i))
+            {
+                JoinedXboxControllers[nextIndex] = XboxController.First + i;
+                nextIndex++;
+            }
+        }
+
         foreach (var item in PointContainers) //for every point container
         {
             item.SetActive(true);
@@ -790,6 +804,21 @@ public class GameManagerc : MonoBehaviour
                 //item.transform.GetChild(i).GetComponent<Animator>().SetTrigger("PointReset");
             }
         }
+        //Repopulate active panels and turn off un used
+        GameObject[] ActivePanels = new GameObject[4 - CharacterSelectionManager.Instance.JoinedPlayers];
+        int ActivePanelIndex = 0;
+        foreach (var item in JoinedXboxControllers)
+        {
+            PointContainers[(int)item - 1].SetActive(true);
+            ActivePanels[ActivePanelIndex] = PointContainers[(int)item - 1];
+            ActivePanelIndex++;
+        }
+
+        for (int i = PointContainers.Length - 1; i > ActivePanelIndex - 1; i--)
+        {
+            PointContainers[i].SetActive(false);
+        }
+
 
     }
 
@@ -952,21 +981,30 @@ public class GameManagerc : MonoBehaviour
                 m_AudioSource.Play();
             }
 
-            PlayerWins[player] += player.mIEarnedPoints; //increase the player's points
-
-
+            //for this player's points
             if (player.mIEarnedPoints < 0)
             {
-                for (int i = PlayerWins[player]; i > PlayerWins[player] - player.mIEarnedPoints; i--)
+                Debug.Log(player.mIEarnedPoints);
+                //From my current point position, if my current position is greater than the position with the earned points (when neg), deduct until I reach that point
+                for (int i = PlayerWins[player] - 1; i >= PlayerWins[player] + player.mIEarnedPoints; i--)
                 {
-                    if (player.mIEarnedPoints > 0)
+                    if (i >= 0)
                     {
+                        m_AudioSource.Play();
+                        m_AudioSource.time = m_AudioSource.clip.length - 0.4f;
+                        m_AudioSource.pitch = -1;
                         yield return new WaitForSeconds(0.5f);
+                        PointContainers[PlayerIndex].transform.GetChild(i).GetComponent<Image>().color = Color.blue;
+                        PointContainers[PlayerIndex].transform.GetChild(i).GetComponent<Animator>().SetTrigger("PointReset");
                     }
-                    PointContainers[PlayerIndex].transform.GetChild(i).GetComponent<Image>().color = Color.blue;
-                    PointContainers[PlayerIndex].transform.GetChild(i).GetComponent<Animator>().SetTrigger("PointReset");
-                    m_AudioSource.Play();
                 }
+            }
+
+            PlayerWins[player] += player.mIEarnedPoints; //increase the player's points
+            //check if below 0, if it is, keep it at 0.
+            if (PlayerWins[player] < 0)
+            {
+                PlayerWins[player] = 0;
             }
 
             if (PlayerWins[player] >= m_iPointsNeeded)
@@ -978,6 +1016,9 @@ public class GameManagerc : MonoBehaviour
 
         //TODO play ding.
         yield return new WaitForSeconds(2);
+        //reset pitch and time
+        m_AudioSource.pitch = 1;
+        m_AudioSource.time = 0;
         InGameScreenAnimator.SetTrigger("RemoveScreen");
         StartCoroutine(InterpolateGlitch(false));
         //if (FindObjectOfType<ScreenTransition>())
