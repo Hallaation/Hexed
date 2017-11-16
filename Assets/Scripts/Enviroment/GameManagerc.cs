@@ -976,7 +976,7 @@ public class GameManagerc : MonoBehaviour
         //find a winner so it doesn't deduct points
         for (int i = 0; i < InGamePlayers.Count; i++)
         {
-            if (PlayerWins[InGamePlayers[i]] >= m_iPointsNeeded)
+            if (PlayerWins[InGamePlayers[i]] + InGamePlayers[i].mIEarnedPoints >= m_iPointsNeeded)
             {
                 m_bWinnerFound = true;
             }
