@@ -78,7 +78,7 @@ public class Bullet : MonoBehaviour, Reset
             //Only raycast against the player, wall, door and glass 
             RaycastHit2D RayHit = Physics2D.Raycast(this.transform.position, m_rigidBody.velocity.normalized, m_rigidBody.velocity.magnitude * Time.fixedDeltaTime * 2,
                 (/*Player */ 1 << 8 | /*Shield*/ 1 << 9 | /* Wall */1 << 10 |/*Glass*/ 1 << 14 | /*Door*/ 1 << 11));
-            Debug.DrawRay(this.transform.position, m_rigidBody.velocity.normalized * m_rigidBody.velocity.magnitude * Time.fixedDeltaTime * 2, Color.red, 10.0f);
+            Debug.DrawRay(this.transform.position, m_rigidBody.velocity.normalized * m_rigidBody.velocity.magnitude * Time.fixedDeltaTime * 2, Color.red, 0.5f);
             //Debug.Break();
             if (RayHit)
             {
@@ -155,10 +155,11 @@ public class Bullet : MonoBehaviour, Reset
                         {
                             if (!PlayerIHit.IsDead && GameManagerc.Instance.m_gameMode == Gamemode_type.HEAD_HUNTERS)
                             {
-                                if (PlayerIHit != m_bShooter) //if the hit player doesn't equla my shooter
-                                {
-                                    m_bShooter.KilledAPlayer();
-                                }
+                                //if (PlayerIHit != m_bShooter) //if the hit player doesn't equal my shooter
+                                //{
+                                Debug.Log("player hit");
+                                m_bShooter.KilledAPlayer(PlayerIHit);
+                                //}
                             }
                             PlayerIHit.IsDead = true;
                             GameManagerc.Instance.lastPlayerToEarnPoints = m_bShooter;
@@ -166,6 +167,7 @@ public class Bullet : MonoBehaviour, Reset
                             float angle = Mathf.Atan2(m_rigidBody.velocity.normalized.x, -m_rigidBody.velocity.normalized.y);
                             PlayerIHit.transform.rotation = Quaternion.AngleAxis(angle * Mathf.Rad2Deg, Vector3.forward);
                         }
+
                         //RayHit.transform.GetComponent<Move>().StatusApplied();
                         m_bStopRayCasts = true;
                         Blood hitBlood = RayHit.transform.root.Find("Sprites").GetComponent<Blood>();
