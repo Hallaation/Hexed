@@ -42,7 +42,8 @@ public class GamemodeSelection : MonoBehaviour
     public GameObject[] MapObjects;
     public GameObject MapToLoad;
     public Sprite[] GetXToWinSprite = new Sprite[1];
-
+    public Sprite buttonPressSprite;
+    private GameObject m_Arrows;
     Text _SettingsValue;
     // Use this for initialization
     void Start()
@@ -67,7 +68,7 @@ public class GamemodeSelection : MonoBehaviour
                 mapSprites[i] = (temp[i] as GameObject).GetComponent<Map>().mapSelectionSprite;
             }
         }
-
+        m_Arrows = this.transform.Find("Arrows_Animation").gameObject;
         //If I am a settings type of object, I will open the settings
         if (m_pickType == PickType.GAMEMODESETTINGS)
         {
@@ -142,6 +143,7 @@ public class GamemodeSelection : MonoBehaviour
                 //if the event systems currently selected object is my assigned buttons parent, do the things according to my type.
                 if (_eventSystem.currentSelectedGameObject.transform.parent == _button.transform.parent)
                 {
+                    m_Arrows.SetActive(true);
                     m_fTimeSelected += Time.deltaTime;
                     m_OuterGlow.SetActive(true);
                     switch (m_pickType)
@@ -256,6 +258,7 @@ public class GamemodeSelection : MonoBehaviour
                 }
                 else
                 {
+                    m_Arrows.SetActive(false);
                     m_fTimeSelected = 0;
                     m_OuterGlow.SetActive(false);
                 }
@@ -269,19 +272,6 @@ public class GamemodeSelection : MonoBehaviour
                     {
                         case Gamemode_type.LAST_MAN_STANDING_DEATHMATCH:
                             _buttonText.text = "Gamemode: Last Man Standing DM";
-
-                            /*
-                            if (transform.parent.Find("PointsToWin_Selection"))
-                            {
-                                if (transform.parent.Find("PointsToWin_Selection").Find("PointsToWin_Button"))
-                                {
-                                    if (transform.parent.Find("PointsToWin_Selection").Find("PointsToWin_Button").GetChild(0))
-                                    {
-                                        transform.parent.Find("PointsToWin_Selection").Find("PointsToWin_Button").GetChild(0).GetComponent<Image>().sprite = GetXToWinSprite[0];
-                                    }
-                                }
-                            }
-                            */
                             break;
                         case Gamemode_type.HEAD_HUNTERS:
                             _buttonText.text = "GameMode: Head Hunters";
@@ -400,12 +390,16 @@ public class GamemodeSelection : MonoBehaviour
     }
 
 
-    public void EnterGame()
+    public void EnterGame(GameObject button = null)
     {
         ScreenTransition transitionScreen = FindObjectOfType<ScreenTransition>();
         if (transitionScreen)
             transitionScreen.CloseDoor();
         UIManager.Instance.TurnActive();
+        if (button)
+        {
+            button.GetComponent<Image>().sprite = buttonPressSprite;
+        }
         StartCoroutine(WaitforTransition());
         //if (transitionScrene.m_Animator.GetCurrentAnimatorStateInfo(0).IsName("Transition_Closed"))
         //{
