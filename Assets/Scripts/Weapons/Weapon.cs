@@ -102,9 +102,7 @@ public class Weapon : MonoBehaviour, Reset
         if (this.transform.childCount > 2 && tag != "Player")
         {
             WeaponSpriteRenderer = transform.GetChild(0).GetComponent<SpriteRenderer>();
-
             m_DefaultSprite = WeaponSpriteRenderer.sprite;
-
             weaponSpriteTransform = transform.GetChild(0).GetComponent<Transform>();
         }
         //m_originalPosition = this.transform.position;
