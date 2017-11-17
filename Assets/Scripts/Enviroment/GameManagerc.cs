@@ -973,6 +973,14 @@ public class GameManagerc : MonoBehaviour
         go.AddComponent<CanvasRenderer>();
         go.AddComponent<Image>().sprite = PointSprite;
         m_AudioSource.loop = false;
+        //find a winner so it doesn't deduct points
+        for (int i = 0; i < InGamePlayers.Count; i++)
+        {
+            if (PlayerWins[InGamePlayers[i]] + InGamePlayers[i].mIEarnedPoints >= m_iPointsNeeded)
+            {
+                m_bWinnerFound = true;
+            }
+        }
         yield return new WaitForSeconds(1);
 
 
@@ -1015,45 +1023,53 @@ public class GameManagerc : MonoBehaviour
             }
             PlayerWins[player] += player.mIEarnedPoints; //increase the player's points
 
+
+            if (PlayerWins[player] > +m_iPointsNeeded)
+            {
+                m_bWinnerFound = true;
+            }
             yield return new WaitForSeconds(0.5f);
             //for this player's points
-            if (player.mILostPoints > 0)
+            if (!m_bWinnerFound)
             {
-                Debug.Log(player.mILostPoints);
-                //From my current point position, if my current position is greater than the position with the earned points (when neg), deduct until I reach that point
-                for (int i = PlayerWins[player] - 1; i >= PlayerWins[player] - player.mILostPoints; i--)
+                if (player.mILostPoints > 0)
                 {
-                    Debug.Log(i);
-                    if (i >= 0)
+                    Debug.Log(player.mILostPoints);
+                    //From my current point position, if my current position is greater than the position with the earned points (when neg), deduct until I reach that point
+                    for (int i = PlayerWins[player] - 1; i >= PlayerWins[player] - player.mILostPoints; i--)
                     {
-                        switch (m_gameMode)
+                        Debug.Log(i);
+                        if (i >= 0)
                         {
-                            case Gamemode_type.LAST_MAN_STANDING_DEATHMATCH:
-                                m_AudioSource.clip = m_LMSDingSound;
-                                break;
-                            case Gamemode_type.HEAD_HUNTERS:
-                                m_AudioSource.clip = m_HHDingSound;
-                                break;
-                            default:
-                                break;
+                            switch (m_gameMode)
+                            {
+                                case Gamemode_type.LAST_MAN_STANDING_DEATHMATCH:
+                                    m_AudioSource.clip = m_LMSDingSound;
+                                    break;
+                                case Gamemode_type.HEAD_HUNTERS:
+                                    m_AudioSource.clip = m_HHDingSound;
+                                    break;
+                                default:
+                                    break;
+                            }
+                            Debug.Log("M_audiosource");
+                            if (!m_bDingPlayed)
+                            {
+                                //m_AudioSource.Play();
+                                //m_AudioSource.time = m_AudioSource.clip.length - 0.4f;
+                                //m_AudioSource.pitch = -1;
+                                m_bDingPlayed = true;
+                            }
+                            yield return new WaitForSeconds(0.5f);
+                            PointContainers[PlayerIndex].transform.GetChild(i).GetComponent<Image>().color = Color.blue;
+                            PointContainers[PlayerIndex].transform.GetChild(i).GetComponent<Animator>().SetTrigger("PointReset");
                         }
-                        Debug.Log("M_audiosource");
-                        if (!m_bDingPlayed)
-                        {
-                            //m_AudioSource.Play();
-                            //m_AudioSource.time = m_AudioSource.clip.length - 0.4f;
-                            //m_AudioSource.pitch = -1;
-                            m_bDingPlayed = true;
-                        }
-                        yield return new WaitForSeconds(0.5f);
-                        PointContainers[PlayerIndex].transform.GetChild(i).GetComponent<Image>().color = Color.blue;
-                        PointContainers[PlayerIndex].transform.GetChild(i).GetComponent<Animator>().SetTrigger("PointReset");
                     }
+                    m_bDingPlayed = false;
                 }
-                m_bDingPlayed = false;
+                PlayerWins[player] -= player.mILostPoints;
             }
 
-            PlayerWins[player] -= player.mILostPoints;
             if (PlayerWins[player] > m_iPointsNeeded)
             {
                 PlayerWins[player] = m_iPointsNeeded;
