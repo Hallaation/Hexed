@@ -926,6 +926,7 @@ public class GameManagerc : MonoBehaviour
         SceneManager.LoadScene(0);
     }
 
+    [System.Obsolete("Method has been deprecated, use AddToAllPoints instead")]
     IEnumerator AddPointsToPanel(PlayerStatus player, int PointGain = 0)
     {
         m_bAllowPause = false;
@@ -981,7 +982,7 @@ public class GameManagerc : MonoBehaviour
                 m_bWinnerFound = true;
             }
         }
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.5f);
 
 
         foreach (PlayerStatus player in InGamePlayers)
@@ -1028,12 +1029,12 @@ public class GameManagerc : MonoBehaviour
             {
                 m_bWinnerFound = true;
             }
-            yield return new WaitForSeconds(0.5f);
             //for this player's points
             if (!m_bWinnerFound)
             {
                 if (player.mILostPoints > 0)
                 {
+                    yield return new WaitForSeconds(0.5f);
                     Debug.Log(player.mILostPoints);
                     //From my current point position, if my current position is greater than the position with the earned points (when neg), deduct until I reach that point
                     for (int i = PlayerWins[player] - 1; i >= PlayerWins[player] - player.mILostPoints; i--)
@@ -1091,7 +1092,7 @@ public class GameManagerc : MonoBehaviour
         } //! End Foreach loop
 
         //TODO play ding.
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(0.2f);
         //reset pitch and time
         InGameScreenAnimator.SetTrigger("RemoveScreen");
         StartCoroutine(InterpolateGlitch(false));

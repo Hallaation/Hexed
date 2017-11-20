@@ -101,7 +101,7 @@ public class Grenade : Weapon
             RandomAngle.eulerAngles = new Vector3(0, 0, randomfloat);
 
             GameObject FiredBullet = Instantiate(BulletForSharpnel, this.transform.position, RandomAngle);
-
+            CameraShake.Instance.ShakeCamera();
             TotalBulletShrapnel--;
             Rigidbody2D BulletRigidBody = FiredBullet.GetComponent<Rigidbody2D>();
             BulletRigidBody.AddForce(FiredBullet.transform.up * m_fFiringForce, ForceMode2D.Impulse);
