@@ -6,9 +6,10 @@ public class ElectricField : MonoBehaviour {
    public float TimeTillConstrict;
     float CurrentTime;
 
-    enum Position { TOP, BOTTOM, RIGHT, LEFT };
-    private static Position MyPosition{ get; set; }
-    public int EnumToBe = 0;
+    [SerializeField]
+    enum Position { TOP, BOTTOM, RIGHT, LEFT }; 
+    [SerializeField]
+    private Position mPosition = Position.TOP;
     public float GrowthSpeed;
     Vector3 GrowthY;
     Vector3 GrowthX;
@@ -16,9 +17,9 @@ public class ElectricField : MonoBehaviour {
     void Start ()
     {
         CurrentTime = 0;
-        MyPosition = (Position)EnumToBe;
         GrowthX = new Vector3(GrowthSpeed, 0, 0);
         GrowthY = new Vector3(0, GrowthSpeed, 0);
+        Debug.Log(mPosition);
 	}
 	
 	// Update is called once per frame
@@ -33,7 +34,7 @@ public class ElectricField : MonoBehaviour {
 
     void Constrict()
     {
-        switch (MyPosition)
+        switch (mPosition)
         {
             case Position.TOP:
                 this.transform.localScale += GrowthY* Time.deltaTime;
