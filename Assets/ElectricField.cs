@@ -37,15 +37,9 @@ public class ElectricField : MonoBehaviour {
         switch (mPosition)
         {
             case Position.TOP:
-                this.transform.localScale += GrowthY* Time.deltaTime;
-                break;
-            case Position.BOTTOM:
                 this.transform.localScale += GrowthY * Time.deltaTime;
                 break;
             case Position.RIGHT:
-                this.transform.localScale += GrowthX * Time.deltaTime;
-                break;
-            case Position.LEFT:
                 this.transform.localScale += GrowthX * Time.deltaTime;
                 break;
             default:
