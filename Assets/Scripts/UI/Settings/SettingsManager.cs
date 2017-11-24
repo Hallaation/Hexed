@@ -157,9 +157,9 @@ public class SettingsManager : MonoBehaviour
     }
     public void OnApplyButtonClick()
     {
-        Screen.fullScreen = gameSettings.Fullscreen;
-        Screen.SetResolution(resolutions[gameSettings.resolutionIndex].width, resolutions[gameSettings.resolutionIndex].height, gameSettings.Fullscreen);
-        QualitySettings.vSyncCount = gameSettings.vSync;
+        //Screen.fullScreen = gameSettings.Fullscreen;
+        //Screen.SetResolution(resolutions[gameSettings.resolutionIndex].width, resolutions[gameSettings.resolutionIndex].height, gameSettings.Fullscreen);
+        //QualitySettings.vSyncCount = gameSettings.vSync;
         //if (UIManager.Instance.m_bInMainMenu)
         //{
         //    UIManager.Instance.MainMenuBack();
