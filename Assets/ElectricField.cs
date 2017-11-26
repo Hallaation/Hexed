@@ -5,7 +5,7 @@ using UnityEngine;
 public class ElectricField : MonoBehaviour {
    public float TimeTillConstrict;
     float CurrentTime;
-
+    public bool Kill;
     [SerializeField]
     enum Position { TOP, BOTTOM, RIGHT, LEFT }; 
     [SerializeField]
@@ -28,11 +28,14 @@ public class ElectricField : MonoBehaviour {
         CurrentTime += Time.deltaTime;
         if(CurrentTime > TimeTillConstrict)
         {
-            Constrict();
+            if (Kill)
+                ConstrictScale();
+            else
+                ConstrictPosition();
         }
 	}
 
-    void Constrict()
+    void ConstrictScale()
     {
         switch (mPosition)
         {
@@ -41,6 +44,26 @@ public class ElectricField : MonoBehaviour {
                 break;
             case Position.RIGHT:
                 this.transform.localScale += GrowthX * Time.deltaTime;
+                break;
+            default:
+                break;
+        }
+    }
+    void ConstrictPosition()
+    {
+        switch (mPosition)
+        {
+            case Position.TOP:
+                this.transform.localPosition += GrowthY * Time.deltaTime;
+                break;
+            case Position.RIGHT:
+                this.transform.localPosition += GrowthX * Time.deltaTime;
+                break;
+            case Position.LEFT:
+                this.transform.localPosition -= GrowthX * Time.deltaTime;
+                break;
+            case Position.BOTTOM:
+                this.transform.localPosition -= GrowthY * Time.deltaTime;
                 break;
             default:
                 break;
