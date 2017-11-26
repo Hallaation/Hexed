@@ -59,6 +59,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4099811563066408}
+  - component: {fileID: 114656521867195908}
   m_Layer: 0
   m_Name: ElectricWall V2
   m_TagString: Untagged
@@ -126,7 +127,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1268317993682174}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.27160522, y: -6.379661, z: -91.27402}
+  m_LocalPosition: {x: -2.89627, y: -6.1012864, z: -9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4561015911242544}
@@ -389,7 +390,21 @@ MonoBehaviour:
   TimeTillConstrict: 1
   Kill: 0
   mPosition: 0
-  GrowthSpeed: 1
+  GrowthSpeed: 6
+--- !u!114 &114656521867195908
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1268317993682174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4a4472b5394f364fa8f6f0c83b61842, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TimeTillConstriction: 1
+  ConstrictSeperately: 1
+  TimeBetweenConstrictions: 1
 --- !u!114 &114757645142119498
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -404,7 +419,7 @@ MonoBehaviour:
   TimeTillConstrict: 1
   Kill: 0
   mPosition: 1
-  GrowthSpeed: 1
+  GrowthSpeed: 6
 --- !u!114 &114864792827723404
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -419,7 +434,7 @@ MonoBehaviour:
   TimeTillConstrict: 1
   Kill: 0
   mPosition: 2
-  GrowthSpeed: 1
+  GrowthSpeed: 6
 --- !u!114 &114903769593849138
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -434,7 +449,7 @@ MonoBehaviour:
   TimeTillConstrict: 1
   Kill: 0
   mPosition: 3
-  GrowthSpeed: 1
+  GrowthSpeed: 6
 --- !u!198 &198195178875454978
 ParticleSystem:
   m_ObjectHideFlags: 1
@@ -468,7 +483,7 @@ ParticleSystem:
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: -1011836055
+  randomSeed: 528663202
   InitialModule:
     serializedVersion: 3
     enabled: 1

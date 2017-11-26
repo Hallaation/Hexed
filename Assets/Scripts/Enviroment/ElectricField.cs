@@ -5,6 +5,8 @@ using UnityEngine;
 public class ElectricField : MonoBehaviour {
    public float TimeTillConstrict;
     float CurrentTime;
+    bool EnabledConstriction = false; public void SetEnabledConstriction(bool a_bool) { EnabledConstriction = a_bool; }
+    bool PreventConstriction = false; public bool GetPreventConstriction() {return PreventConstriction; } public void SetPreventConstriction(bool a_bool) { PreventConstriction = a_bool; }
     public bool Kill;
     [SerializeField]
     enum Position { TOP, BOTTOM, RIGHT, LEFT }; 
@@ -25,13 +27,20 @@ public class ElectricField : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        CurrentTime += Time.deltaTime;
-        if(CurrentTime > TimeTillConstrict)
+        if (!PreventConstriction)
         {
-            if (Kill)
-                ConstrictScale();
-            else
-                ConstrictPosition();
+            //CurrentTime += Time.deltaTime;
+            //if (CurrentTime > TimeTillConstrict)
+            //{
+
+                if (EnabledConstriction == true)
+                {
+                if (Kill)
+                    ConstrictScale(); // Constrict but increasing the scale of the field
+                else
+                    ConstrictPosition();  // Constrict by Drawing the position of the field closer to the center.
+                }
+            //}
         }
 	}
 
@@ -53,6 +62,7 @@ public class ElectricField : MonoBehaviour {
     {
         switch (mPosition)
         {
+
             case Position.TOP:
                 this.transform.localPosition += GrowthY * Time.deltaTime;
                 break;
@@ -67,6 +77,11 @@ public class ElectricField : MonoBehaviour {
                 break;
             default:
                 break;
+        }
+        if (Vector3.Distance(transform.position,  transform.parent.transform.position) <= 1 )
+        {
+            PreventConstriction = true;
+            transform.parent.GetComponent<ElectricManager>().SetWallsDisabled();
         }
     }
 
