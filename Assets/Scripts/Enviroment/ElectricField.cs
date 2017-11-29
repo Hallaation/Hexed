@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ElectricField : MonoBehaviour {
-   public float TimeTillConstrict;
+   //public float TimeTillConstrict;
     float CurrentTime;
     bool EnabledConstriction = false; public void SetEnabledConstriction(bool a_bool) { EnabledConstriction = a_bool; }
     bool PreventConstriction = false; public bool GetPreventConstriction() {return PreventConstriction; } public void SetPreventConstriction(bool a_bool) { PreventConstriction = a_bool; }
@@ -11,7 +11,7 @@ public class ElectricField : MonoBehaviour {
     [SerializeField]
     enum Position { TOP, BOTTOM, RIGHT, LEFT }; 
     [SerializeField]
-    private Position mPosition = Position.TOP;
+    private Position AxisToMoveOn = Position.TOP;
     public float GrowthSpeed;
     Vector3 GrowthY;
     Vector3 GrowthX;
@@ -21,7 +21,7 @@ public class ElectricField : MonoBehaviour {
         CurrentTime = 0;
         GrowthX = new Vector3(GrowthSpeed, 0, 0);
         GrowthY = new Vector3(0, GrowthSpeed, 0);
-        Debug.Log(mPosition);
+        Debug.Log(AxisToMoveOn);
 	}
 	
 	// Update is called once per frame
@@ -46,7 +46,7 @@ public class ElectricField : MonoBehaviour {
 
     void ConstrictScale()
     {
-        switch (mPosition)
+        switch (AxisToMoveOn)
         {
             case Position.TOP:
                 this.transform.localScale += GrowthY * Time.deltaTime;
@@ -60,7 +60,7 @@ public class ElectricField : MonoBehaviour {
     }
     void ConstrictPosition()
     {
-        switch (mPosition)
+        switch (AxisToMoveOn)
         {
 
             case Position.TOP:
