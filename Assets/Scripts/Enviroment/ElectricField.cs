@@ -7,12 +7,12 @@ public class ElectricField : MonoBehaviour {
     float CurrentTime;
     bool EnabledConstriction = false; public void SetEnabledConstriction(bool a_bool) { EnabledConstriction = a_bool; }
     bool PreventConstriction = false; public bool GetPreventConstriction() {return PreventConstriction; } public void SetPreventConstriction(bool a_bool) { PreventConstriction = a_bool; }
-    public bool Kill;
+     bool Kill;
     [SerializeField]
     enum Position { TOP, BOTTOM, RIGHT, LEFT }; 
     [SerializeField]
     private Position AxisToMoveOn = Position.TOP;
-    public float GrowthSpeed;
+   float GrowthSpeed;
     Vector3 GrowthY;
     Vector3 GrowthX;
     // Use this for initialization
@@ -22,7 +22,9 @@ public class ElectricField : MonoBehaviour {
         GrowthX = new Vector3(GrowthSpeed, 0, 0);
         GrowthY = new Vector3(0, GrowthSpeed, 0);
         Debug.Log(AxisToMoveOn);
-	}
+        GrowthSpeed = transform.parent.GetComponent<ElectricManager>().GrowthSpeed;
+        Kill = transform.parent.GetComponent<ElectricManager>().Kill;
+    }
 	
 	// Update is called once per frame
 	void Update ()

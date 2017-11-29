@@ -12,7 +12,8 @@ public class ElectricManager : MonoBehaviour {
     public int TimeTillConstriction;
     public bool ConstrictSeperately = true;
     public float TimeBetweenConstrictions;
-    
+    public float GrowthSpeed;
+    public bool Kill;
     // Use this for initialization
     void Start () {
          FieldArray = new ElectricField[4];
