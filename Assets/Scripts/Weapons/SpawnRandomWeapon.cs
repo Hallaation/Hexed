@@ -40,7 +40,7 @@ public class SpawnRandomWeapon : MonoBehaviour
     {
         if (ContinuallySpawnWeapons)
         {
-            Collider2D[] Colliders = Physics2D.OverlapCircleAll(this.transform.position , 1.0f);
+            Collider2D[] Colliders = Physics2D.OverlapCircleAll(this.transform.position, 1.0f);
             //Loop through all the colliders, if any of them are a weapon, I cannot spawn a gun, break out of the loop .
             if (Colliders.Length > 0)
             {
@@ -68,12 +68,15 @@ public class SpawnRandomWeapon : MonoBehaviour
 
     void SpawnARandomWepaon()
     {
-        int randomIndex = Random.Range(0 , Weapons.Length);
-        GameObject spawnedWeapon = Instantiate(Weapons[randomIndex]);
-        spawnedWeapon.transform.position = this.transform.position;
-        spawnedWeapon.transform.rotation = this.transform.rotation;
+        int randomIndex = Random.Range(0, Weapons.Length);
+        if (Weapons[randomIndex])
+        {
+            GameObject spawnedWeapon = Instantiate(Weapons[randomIndex]);
+            spawnedWeapon.transform.position = this.transform.position;
+            spawnedWeapon.transform.rotation = this.transform.rotation;
+            GameManagerc.Instance._rbPausers.Add(spawnedWeapon.AddComponent<RigidbodyPauser>());
+        }
 
-        GameManagerc.Instance._rbPausers.Add(spawnedWeapon.AddComponent<RigidbodyPauser>());
     }
 
     void Reset()
