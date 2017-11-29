@@ -13,19 +13,23 @@ public class ElectricField : MonoBehaviour {
     [SerializeField]
     private Position AxisToMoveOn = Position.TOP;
    float GrowthSpeed;
-    Vector3 GrowthY;
-    Vector3 GrowthX;
+    Vector3 GrowthY; public void SetGrowthY(Vector3 Vector3Y) { GrowthY = Vector3Y ; }
+    Vector3 GrowthX; public void SetGrowthX(Vector3 Vector3X) { GrowthX = Vector3X; }
+
     // Use this for initialization
     void Start ()
     {
         CurrentTime = 0;
-        GrowthX = new Vector3(GrowthSpeed, 0, 0);
-        GrowthY = new Vector3(0, GrowthSpeed, 0);
+      
         Debug.Log(AxisToMoveOn);
         GrowthSpeed = transform.parent.GetComponent<ElectricManager>().GrowthSpeed;
         Kill = transform.parent.GetComponent<ElectricManager>().Kill;
+        GrowthX = new Vector3(GrowthSpeed, 0, 0);
+        GrowthY = new Vector3(0, GrowthSpeed, 0);
     }
-	
+
+   
+
 	// Update is called once per frame
 	void Update ()
     {

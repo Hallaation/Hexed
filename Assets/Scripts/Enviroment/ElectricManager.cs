@@ -53,7 +53,14 @@ public class ElectricManager : MonoBehaviour {
 
         }
 	}
-
+   public void SetGrowth(Vector3 X, Vector3 Y)
+    {
+       for(int i = 0; i < transform.childCount; ++i)
+        {
+            transform.GetChild(i).GetComponent<ElectricField>().SetGrowthX(X);
+            transform.GetChild(i).GetComponent<ElectricField>().SetGrowthY(Y);
+        }
+    }
 
     void Constrict()
     {
