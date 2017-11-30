@@ -998,7 +998,7 @@ public class GameManagerc : MonoBehaviour
                     {
                         yield return new WaitForSeconds(0.5f);
                     }
-                    PointContainers[PlayerIndex].transform.GetChild(i).GetComponent<Image>().color = Color.blue;
+                    //PointContainers[PlayerIndex].transform.GetChild(i).GetComponent<Image>().color = Color.blue;
                     PointContainers[PlayerIndex].transform.GetChild(i).GetComponent<Animator>().SetTrigger("PointGain");
 
                     switch (m_gameMode)
@@ -1024,11 +1024,12 @@ public class GameManagerc : MonoBehaviour
             PlayerWins[player] += player.mIEarnedPoints; //increase the player's points
 
 
-            if (PlayerWins[player] > +m_iPointsNeeded)
+            if (PlayerWins[player] >= m_iPointsNeeded)
             {
                 m_bWinnerFound = true;
             }
             //for this player's points
+            //for point loss
             if (!m_bWinnerFound)
             {
                 if (player.mILostPoints > 0)
@@ -1061,7 +1062,7 @@ public class GameManagerc : MonoBehaviour
                                 m_bDingPlayed = true;
                             }
                             yield return new WaitForSeconds(0.5f);
-                            PointContainers[PlayerIndex].transform.GetChild(i).GetComponent<Image>().color = Color.blue;
+                            //PointContainers[PlayerIndex].transform.GetChild(i).GetComponent<Image>().color = Color.blue;
                             PointContainers[PlayerIndex].transform.GetChild(i).GetComponent<Animator>().SetTrigger("PointReset");
                         }
                     }
