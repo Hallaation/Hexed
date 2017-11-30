@@ -360,7 +360,6 @@ public class GameManagerc : MonoBehaviour
                 DeadCount++;
             }
         }
-        Debug.Log(DeadCount);
         //If there is only 1 alive
         if (DeadCount >= InGamePlayers.Count)
         {

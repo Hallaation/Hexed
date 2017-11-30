@@ -265,6 +265,7 @@ public class Melee : Weapon
         if (other.transform.root.GetComponent<PlayerStatus>().m_iHealth <= .1f)
         {
             OtherPlayerStatus.KillPlayer(this.transform.root.GetComponent<PlayerStatus>());
+            OtherPlayerStatus.transform.rotation = Quaternion.Euler(0,0, Mathf.Atan2(this.transform.root.up.x, -this.transform.root.up.y) * Mathf.Rad2Deg);
         }
         //Play hit by melee sound effect.
         if (OtherPlayerStatus.GetComponentInChildren<IHitByMelee>() != null)
