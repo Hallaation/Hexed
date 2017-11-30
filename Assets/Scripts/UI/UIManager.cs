@@ -266,6 +266,7 @@ public class UIManager : MonoBehaviour
     {
         if (!menuStatus.Contains(panelToMove))
         {
+            Debug.Log("MainMenuChangePanel()");
             foreach (AnimatorControllerParameter item in m_bMenuAnimator.parameters)
             {
                 m_bMenuAnimator.SetBool(item.name, false);
@@ -403,6 +404,14 @@ public class UIManager : MonoBehaviour
     {
         if (!menuStatus.Contains(PanelToOpen))
         {
+            if (m_SettingsPanel)
+            {
+                m_SettingsPanel.SetActive(false);
+            }
+            if (m_CreditsPanel)
+            {
+                m_CreditsPanel.SetActive(false);
+            }
             //Do my animations
             switch (AnimationParameter)
             {
@@ -598,7 +607,7 @@ public class UIManager : MonoBehaviour
 
     public void TurnActive()
     {
-        m_SettingsPanel.SetActive(true);
+        //m_SettingsPanel.SetActive(true);
     }
 
 

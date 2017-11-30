@@ -207,6 +207,7 @@ public class PlayerStatus : MonoBehaviour, IHitByMelee
                         m_SpriteRenderer.sprite = DeadSprites[Random.Range(0, DeadSprites.Length)];
                     else
                         m_SpriteRenderer.sprite = HeadSmashDeathSprite;
+                    transform.Find("Sprites").GetChild(1).GetComponent<SpriteRenderer>().enabled = false;
                 }
 
                 return;

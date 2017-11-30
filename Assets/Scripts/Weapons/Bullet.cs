@@ -77,13 +77,13 @@ public class Bullet : MonoBehaviour, Reset
             //Raycast from me, to my right vector (because all the rotations are fucked) on the distance I'll travel for the next frame.
             //Only raycast against the player, wall, door and glass 
             RaycastHit2D RayHit = Physics2D.Raycast(this.transform.position, m_rigidBody.velocity.normalized, m_rigidBody.velocity.magnitude * Time.fixedDeltaTime * 2,
-                (/*Player */ 1 << 8 | /*Shield*/ 1 << 9 | /* Wall */1 << 10 |/*Glass*/ 1 << 14 | /*Door*/ 1 << 11));
+                (/*Player */ 1 << 8 | /*Shield*/ 1 << 9 | /* Wall */1 << 10 |/*Glass*/ 1 << 14 | /*Door*/ 1 << 11 | /*Dumpster*/ 1 << 23));
             Debug.DrawRay(this.transform.position, m_rigidBody.velocity.normalized * m_rigidBody.velocity.magnitude * Time.fixedDeltaTime * 2, Color.red, 0.5f);
             //Debug.Break();
             if (RayHit)
             {
                 //If I hit a wall, glass or door, snap me to their location and turn me off
-                if (RayHit.transform.gameObject.layer == LayerMask.NameToLayer("Wall") || RayHit.transform.gameObject.layer == LayerMask.NameToLayer("Door") || RayHit.transform.gameObject.layer == LayerMask.NameToLayer("Glass"))
+                if (RayHit.transform.gameObject.layer == LayerMask.NameToLayer("Wall") || RayHit.transform.gameObject.layer == LayerMask.NameToLayer("Door") || RayHit.transform.gameObject.layer == LayerMask.NameToLayer("Glass") || RayHit.transform.gameObject.layer == LayerMask.NameToLayer("Dumpster"))
                 {
                     //If I find any hitbybullet interface, find all, then call its function
                     if (RayHit.transform.gameObject.GetComponent<IHitByBullet>() != null)
