@@ -1092,7 +1092,7 @@ public class GameManagerc : MonoBehaviour
         } //! End Foreach loop
 
         //TODO play ding.
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.4f);
         //reset pitch and time
         InGameScreenAnimator.SetTrigger("RemoveScreen");
         StartCoroutine(InterpolateGlitch(false));
