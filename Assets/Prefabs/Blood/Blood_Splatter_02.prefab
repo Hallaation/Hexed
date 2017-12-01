@@ -73,14 +73,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80fbde53d6702144db74bf815c075fb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BloodTravelSpeed: 99
-  GrowthSpeed: 5
-  Blood1: {fileID: 0}
-  Blood2: {fileID: 0}
-  Blood3: {fileID: 0}
-  Blood4: {fileID: 0}
-  Blood5: {fileID: 0}
+  BloodTravelSpeed: 0.1
+  GrowthSpeed: 10
   MaxSize: 1
+  BloodSprites: []
+  BloodSpawner: 0
 --- !u!212 &212373612830919754
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -113,6 +110,6 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingOrder: -7
   m_Sprite: {fileID: 21300022, guid: e402584371c90fa4a9ca1a419657a4c9, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.6862745}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.936}
   m_FlipX: 0
   m_FlipY: 0

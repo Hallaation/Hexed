@@ -2618,7 +2618,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3c90d49e5289ca438daff1445e2af0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mXboxController: 2
+  mXboxController: 1
   mPlayerIndex: 0
   m_playerNumber: 0
 --- !u!114 &114832075317070100
@@ -2632,14 +2632,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80fbde53d6702144db74bf815c075fb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BloodTravelSpeed: 0.75
-  GrowthSpeed: 2
+  BloodTravelSpeed: 0.25
+  GrowthSpeed: 1
   MaxSize: 1
   BloodSprites:
   - {fileID: 1824629749766284, guid: f339c4f3fc53d894f93f756fd1fbf08e, type: 2}
   - {fileID: 1684398446899704, guid: a550b67997b8aa9488fd5e42ec0fbea8, type: 2}
   - {fileID: 1556113154150286, guid: 5ac9d5dc43eac11469de65162dc05e7d, type: 2}
   - {fileID: 1290339145213612, guid: e64bad0f14da79444a1f540b4bd72711, type: 2}
+  - {fileID: 1059244047924568, guid: 885e9a1cb23948c478e3cf0294212531, type: 2}
+  - {fileID: 1059244047924568, guid: 2b51763954ce2944b8ae8bf6088c9fb6, type: 2}
   BloodSpawner: 1
 --- !u!114 &114872922223878490
 MonoBehaviour:

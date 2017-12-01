@@ -20,6 +20,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4951288881104504}
   - component: {fileID: 212594571463115410}
+  - component: {fileID: 50790770939544056}
+  - component: {fileID: 114897313908437752}
   m_Layer: 0
   m_Name: Blood_Splatter_07
   m_TagString: Untagged
@@ -40,6 +42,42 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!50 &50790770939544056
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1059244047924568}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 1
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
+--- !u!114 &114897313908437752
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1059244047924568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80fbde53d6702144db74bf815c075fb7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BloodTravelSpeed: 0.1
+  GrowthSpeed: 10
+  MaxSize: 1
+  BloodSprites: []
+  BloodSpawner: 0
 --- !u!212 &212594571463115410
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -72,6 +110,6 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingOrder: -7
   m_Sprite: {fileID: 21300000, guid: e402584371c90fa4a9ca1a419657a4c9, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.6862745}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.936}
   m_FlipX: 0
   m_FlipY: 0
