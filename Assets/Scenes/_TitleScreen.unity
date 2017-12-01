@@ -11790,9 +11790,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 475fbb908ff44114c89db12450182fc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ButtonImage: {fileID: 0}
   m_pickType: 2
   m_OuterGlow: {fileID: 496136580}
   mPointsToWin: 050000000a0000000f00000014000000
+  GamemodeSprites: []
   mapSprites: []
   MapObjects: []
   MapToLoad: {fileID: 0}
@@ -11937,9 +11939,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 475fbb908ff44114c89db12450182fc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ButtonImage: {fileID: 0}
   m_pickType: 0
   m_OuterGlow: {fileID: 2072686846}
   mPointsToWin: 050000000a0000000f00000014000000
+  GamemodeSprites:
+  - {fileID: 21300000, guid: c946ffdb3b8d65b4e883b5d8ac59253e, type: 3}
+  - {fileID: 21300002, guid: c946ffdb3b8d65b4e883b5d8ac59253e, type: 3}
   mapSprites: []
   MapObjects: []
   MapToLoad: {fileID: 0}
@@ -12235,9 +12241,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 475fbb908ff44114c89db12450182fc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ButtonImage: {fileID: 0}
   m_pickType: 1
   m_OuterGlow: {fileID: 1179767843}
   mPointsToWin: 050000000a0000000100000003000000
+  GamemodeSprites: []
   mapSprites: []
   MapObjects: []
   MapToLoad: {fileID: 0}
