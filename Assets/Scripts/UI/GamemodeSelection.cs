@@ -17,6 +17,7 @@ public class GamemodeSelection : MonoBehaviour
 {
     private Button _button;
     private Text _buttonText;
+    public Image ButtonImage;
     private EventSystem _eventSystem;
     //private Text _pointText;
 
@@ -38,7 +39,9 @@ public class GamemodeSelection : MonoBehaviour
     };
 
 
+    public Sprite[] GamemodeSprites;
     public Sprite[] mapSprites;
+
     public GameObject[] MapObjects;
     public GameObject MapToLoad;
     public Sprite[] GetXToWinSprite = new Sprite[1];
@@ -93,9 +96,10 @@ public class GamemodeSelection : MonoBehaviour
             _button.onClick.AddListener(delegate () { UIManager.Instance.OpenUIElement(GMSettingObjects[(int)GameManagerc.Instance.m_gameMode]); });
             */
         }
-
-
-
+        else if (m_pickType == PickType.GAMEMODEPICK)
+        {
+            ButtonImage = _button.transform.Find("Image").GetComponent<Image>();
+        }
     }
 
     //?
@@ -271,10 +275,10 @@ public class GamemodeSelection : MonoBehaviour
                     switch (m_GamemodeSelected)
                     {
                         case Gamemode_type.LAST_MAN_STANDING_DEATHMATCH:
-                            _buttonText.text = "Gamemode: Last Man Standing DM";
+                            ButtonImage.sprite = GamemodeSprites[0];
                             break;
                         case Gamemode_type.HEAD_HUNTERS:
-                            _buttonText.text = "GameMode: Head Hunters";
+                            ButtonImage.sprite = GamemodeSprites[1];
                             //transform.parent.Find("PointsToWin_Selection").Find("PointsToWin_Button").GetChild(0).GetComponent<Image>().sprite = GetXToWinSprite[1];
                             break;
                         //case Gamemode_type.DEATHMATCH_POINTS:
