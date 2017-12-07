@@ -107,6 +107,12 @@ public class SelectionUIElements : MonoBehaviour
                     #region
                     if (XCI.GetButtonDown(XboxButton.B, m_controller))
                     {
+
+                        if (selectionManager.playerSelectedCharacter.ContainsKey(m_controller))
+                        {
+                            selectionManager.playerSelectedCharacter.Remove(m_controller);
+                        }
+                        m_bNotJoined = false;
                         m_bPlayerJoined = false;
                         m_PressAToJoinGO.SetActive(true);
                     }
@@ -167,10 +173,11 @@ public class SelectionUIElements : MonoBehaviour
                 //If I pressed B and I have selected a character 
                 else if (XCI.GetButtonDown(XboxButton.B, m_controller) && selectionManager.CharacterSelectionStatus[selectionManager.CharacterArray[m_iSelectedIndex]])
                 {
+                    Debug.Log("hlep");
                     //reset my selected status
+                    selectionManager.playerSelectedCharacter.Remove(m_controller); // ??????????????????
                     m_bSelectedCharacter = false;
                     //remove me from the selected character list
-                    selectionManager.playerSelectedCharacter.Remove(m_controller);
                     //reset the selection status
                     selectionManager.CharacterSelectionStatus[selectionManager.CharacterArray[m_iSelectedIndex]] = false;
                     m_Animator.SetBool("IsSelected", false);
@@ -189,7 +196,7 @@ public class SelectionUIElements : MonoBehaviour
                 }
                 else
                 {
-                //    SelectedCharacterImage.sprite = selectionManager.CharacterArray[m_iSelectedIndex].GetComponent<BaseAbility>().SelectionSprites[1];
+                    //    SelectedCharacterImage.sprite = selectionManager.CharacterArray[m_iSelectedIndex].GetComponent<BaseAbility>().SelectionSprites[1];
                     SelectedCharacterImage.color = Color.white;
                 }
 

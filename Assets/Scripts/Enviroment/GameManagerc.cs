@@ -655,11 +655,39 @@ public class GameManagerc : MonoBehaviour
                 ActivePanelIndex++;
             }
 
-            for (int i = PointContainers.Length - 1; i > ActivePanelIndex - 1; i--)
+            //for (int i = PointContainers.Length - 1; i > ActivePanelIndex - 1; i--)
+            //{
+            //    PointContainers[i].SetActive(false);
+            //}
+            for (int i = 0; i < PointContainers.Length; i++)
             {
                 PointContainers[i].SetActive(false);
             }
-
+            foreach (var item in JoinedXboxControllers)
+            {
+                PointContainers[(int)item - 1].SetActive(true);
+                for (int j = 0; j < PointContainers[(int)item - 1].transform.childCount; j++)
+                {
+                    if (PointContainers[(int)item - 1].transform.GetChild(j).GetComponent<Animator>())
+                    {
+                        switch (m_gameMode)
+                        {
+                            case Gamemode_type.LAST_MAN_STANDING_DEATHMATCH:
+                                PointContainers[(int)item - 1].transform.GetChild(j).GetComponent<Animator>().SetBool("CircuitBreaker", true);
+                                break;
+                            case Gamemode_type.HEAD_HUNTERS:
+                                PointContainers[(int)item - 1].transform.GetChild(j).GetComponent<Animator>().SetBool("HeadHunter", true);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    foreach (Image imagerenderer in PointContainers[(int)item - 1].transform.GetChild(j).GetComponentsInChildren<Image>())
+                    {
+                        imagerenderer.enabled = false;
+                    }
+                }
+            }
             for (int i = 0; i < 4 - CharacterSelectionManager.Instance.JoinedPlayers; i++)
             {
                 Vector3 temp = ActivePanels[i].transform.position;
@@ -829,6 +857,35 @@ public class GameManagerc : MonoBehaviour
             PointContainers[i].SetActive(false);
         }
 
+        for (int i = 0; i < PointContainers.Length; i++)
+        {
+            PointContainers[i].SetActive(false);
+        }
+        foreach (var item in JoinedXboxControllers)
+        {
+            PointContainers[(int)item - 1].SetActive(true);
+            for (int j = 0; j < PointContainers[(int)item - 1].transform.childCount; j++)
+            {
+                if (PointContainers[(int)item - 1].transform.GetChild(j).GetComponent<Animator>())
+                {
+                    switch (m_gameMode)
+                    {
+                        case Gamemode_type.LAST_MAN_STANDING_DEATHMATCH:
+                            PointContainers[(int)item - 1].transform.GetChild(j).GetComponent<Animator>().SetBool("CircuitBreaker", true);
+                            break;
+                        case Gamemode_type.HEAD_HUNTERS:
+                            PointContainers[(int)item - 1].transform.GetChild(j).GetComponent<Animator>().SetBool("HeadHunter", true);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                foreach (Image imagerenderer in PointContainers[(int)item - 1].transform.GetChild(j).GetComponentsInChildren<Image>())
+                {
+                    imagerenderer.enabled = false;
+                }
+            }
+        }
 
     }
 
