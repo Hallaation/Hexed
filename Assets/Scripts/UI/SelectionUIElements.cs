@@ -22,8 +22,8 @@ public class SelectionUIElements : MonoBehaviour
     //Varaibles to do UI stuff
     private CharacterSelectionManager selectionManager;
     public bool m_bNotJoined = false;
+    public bool m_bSelectedCharacter = false;
     private bool m_bPlayerJoined = false;
-    private bool m_bSelectedCharacter = false;
     private bool[] StickMovement; // index 0 for left horizontal, index 1 for right horizontal
     private bool ResetSticks = false;
     private GameObject m_PressAToJoinGO;
@@ -107,7 +107,6 @@ public class SelectionUIElements : MonoBehaviour
                     #region
                     if (XCI.GetButtonDown(XboxButton.B, m_controller))
                     {
-
                         if (selectionManager.playerSelectedCharacter.ContainsKey(m_controller))
                         {
                             selectionManager.playerSelectedCharacter.Remove(m_controller);
@@ -173,7 +172,6 @@ public class SelectionUIElements : MonoBehaviour
                 //If I pressed B and I have selected a character 
                 else if (XCI.GetButtonDown(XboxButton.B, m_controller) && selectionManager.CharacterSelectionStatus[selectionManager.CharacterArray[m_iSelectedIndex]])
                 {
-                    Debug.Log("hlep");
                     //reset my selected status
                     selectionManager.playerSelectedCharacter.Remove(m_controller); // ??????????????????
                     m_bSelectedCharacter = false;
@@ -189,6 +187,7 @@ public class SelectionUIElements : MonoBehaviour
 
                 //! change the selected sprite near the end of the frame, after all the processing has been done.
                 bool IsCharacterSelected = selectionManager.CharacterSelectionStatus[selectionManager.CharacterArray[m_iSelectedIndex]];
+                //All visual stuff down here
                 if (!m_bSelectedCharacter) //If i havn't selected a character
                 {
                     SelectedCharacterImage.sprite = selectionManager.CharacterArray[m_iSelectedIndex].GetComponent<BaseAbility>().SelectionSprites[0];
@@ -199,8 +198,6 @@ public class SelectionUIElements : MonoBehaviour
                     //    SelectedCharacterImage.sprite = selectionManager.CharacterArray[m_iSelectedIndex].GetComponent<BaseAbility>().SelectionSprites[1];
                     SelectedCharacterImage.color = Color.white;
                 }
-
-
                 //SelectedCharacterImage.sprite = selectionManager.CharacterArray[m_iSelectedIndex].GetComponent<BaseAbility>().SelectionSprites[Convert.ToInt32(IsCharacterSelected)];
                 if (!m_bSelectedCharacter)
                 {
@@ -292,18 +289,27 @@ public class SelectionUIArray : MonoBehaviour
 {
     SelectionUIElements[] array;
 
-    private void Awake()
+    void Awake()
     {
         array = GetComponentsInChildren<SelectionUIElements>();
     }
 
-    private void Update()
+    void Update()
     {
         int count = 0;
         foreach (var item in array)
         {
-            //If item is not joined, they have pressed B
-            if (!item.m_bNotJoined)
+            //if the item (selectionUi) has joined
+            //if (!item.m_bNotJoined)
+            //{
+            //    count++;
+            //}
+            //if (!item.m_bSelectedCharacter)
+            //{
+            //    count--;
+            //}
+            //if the selection has a character selected
+            if (item.m_bSelectedCharacter)
             {
                 count++;
             }
